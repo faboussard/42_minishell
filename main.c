@@ -1,3 +1,8 @@
-//
-// Created by juba on 09/03/24.
-//
+
+void fizzbuzz();
+
+int main()
+{
+	fizzbuzz();
+	return 0;
+}
