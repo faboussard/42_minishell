@@ -7,7 +7,7 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main
+LIST_SRCS		=  main lexer
 
 LIST_HEADERS	=
 
