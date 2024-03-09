@@ -30,7 +30,7 @@ jobs:
           fi
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}_PERSONAL_ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
               "state": "'"$state"'",
