@@ -10,15 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "../libft/inc/libft.h"
+#include "lexer.h"
 
-void	fizzbuzz(void)
-{
-	ft_printf("blabla");
-}
 
-int	main()
+int main()
 {
-	fizzbuzz();
-	return (0);
+	const char *input = "ls -l $HOME";
+	g_line_t g_line = lexer(input);
+
+	printf("Tokens:\n");
+	for (int i = 0; i < g_line.count; i++) {
+		printf("Type: %d, Value: %s\n", g_line.tokens[i].type, g_line.tokens[i].value);
+	}
+	free_g_line(g_line);
+	return 0;
 }
