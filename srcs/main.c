@@ -1,4 +1,5 @@
 #include <unistd.h>
+//ajout com
 
 void writenumber(int n)
 {
