@@ -1,0 +1,28 @@
+name: Check Norminette
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  norminette:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Norminette
+        id: norminette
+        run: |
+          find . -name "*.c" -o -name "*.h" | xargs norminette || echo "::set-output name=norminette-passed::false"
+
+      - name: Check Norminette results
+        run: |
+          if [ "${{ steps.norminette.outputs.norminette-passed }}" == "false" ]; then
+            echo "Norminette check failed. Please fix the coding standard issues."
+            exit 1
+          else
+            echo "Norminette check passed successfully."
+          fi

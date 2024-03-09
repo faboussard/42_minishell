@@ -1,0 +1,26 @@
+name: Compile C files
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Compile files with Makefile
+        run: make
+
+      - name: Check compilation result
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Compilation succeeded."
+          else
+            echo "Compilation failed."
+            exit 1
+          fi
