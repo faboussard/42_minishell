@@ -18,6 +18,7 @@ void	writenumber(int n)
 		writenumber(n / 10);
 	write(1, &"0123456789"[n % 10], 1);
 }
+//blabla
 
 void	fizzbuzz(void)
 {
