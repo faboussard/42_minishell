@@ -1,33 +1,29 @@
-#*******************************  VARIABLES  **********************************#
 
 NAME			=	minishell
-
-# --------------- FILES --------------- #
 
 #-------------  VPATH  ---------------#
 
 vpath %c srcs
 
+# --------------- FILES --------------- #
 
-LIST_SRCS		=
+LIST_SRCS		=  main
 
-LIST_HEADERS	=	main.c \
-					fizzbuzz.c
+LIST_HEADERS	=
 
 # ------------ DIRECTORIES ------------ #
 
 DIR_BUILD		=	.build/
 DIR_HEADERS		=	includes/
 DIR_LIBFT		=	libft/
-libft = $(DIR_LIBFT)libft.a
-mlx = $(DIR_MLX)libmlx.a
+libft			=	$(DIR_LIBFT)libft.a
 
 # ------------- SHORTCUTS ------------- #
 
 OBJS            = $(addprefix $(DIR_BUILD), $(addsuffix .o, $(LIST_SRCS)))
-HEADERS		= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
+HEADERS			= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
 DEPS            = ${OBJS:.o=.d}
-INCLUDES        = -I $(DIR_MLX) -I $(DIR_HEADERS) -I $(DIR_LIBFT)
+INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT)
 
 # ------------ COMPILATION ------------ #
 
@@ -39,35 +35,26 @@ DEPS_FLAGS		=	-MMD -MP
 RM				=	rm -rf
 MKDIR			=	mkdir -p
 
-# -------------  MLX ------------- #
-
-OS				= $(shell uname -s)
-
-DIR_MLX		=	mlx_linux/
-MLX_FLAGS	=	-lXext -lX11 -lm
-
-
 #***********************************  RULES  **********************************#
 
 all:			 $(NAME)
 
 # ---------- VARIABLES RULES ---------- #
 
-$(NAME):		 $(OBJS) $(mlx) $(libft)
-				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -L $(DIR_MLX) -lmlx $(MLX_FLAGS) -o $(NAME)
+$(NAME):		 $(OBJS) $(libft)
+				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -o $(NAME)
 
 # ---------- COMPILED RULES ----------- #
 
-$(DIR_BUILD)%.o: %.c ${HEADERS} | $(DIR_BUILD)
+$(DIR_BUILD)%.o: %.c $(DIR_BUILD)
 				$(CC) $(CFLAGS) $(DEPS_FLAGS) $(INCLUDES) -O3 -c $< -o $@
 
+#---------- CREATE REPO OBJS ---------#
 
-$(mlx): FORCE
-	            		$(MAKE) -C $(DIR_MLX)
-
-#------------------CREATE REPO OBJS ---------#
 $(DIR_BUILD):
+		@echo "Création du répertoire $(DIR_BUILD)"
 		$(MKDIR) $(DIR_BUILD)
+
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
@@ -75,7 +62,6 @@ $(libft): FORCE
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean
-				$(MAKE) -C $(DIR_MLX) clean
 				$(RM) $(DIR_BUILD)
 
 fclean: clean
@@ -85,4 +71,4 @@ fclean: clean
 re:				fclean all
 				$(MAKE) -C ./
 
-.PHONY: all clean fclean re FORCE mlx libft
+.PHONY: all clean fclean re FORCE libft

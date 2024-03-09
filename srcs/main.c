@@ -24,3 +24,9 @@ void fizzbuzz()
 		n++;
 	}
 }
+
+int main()
+{
+	fizzbuzz();
+	return 0;
+}
