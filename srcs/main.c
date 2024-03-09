@@ -14,6 +14,8 @@
 
 void	fizzbuzz(void)
 {
+
+	//
 	ft_printf("blabla");
 }
 
