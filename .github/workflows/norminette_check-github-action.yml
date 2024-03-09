@@ -15,6 +15,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install Norminette
+        run: |
+            sudo gem install norminette
+
       - name: Run Norminette
         id: norminette
         run: norminette || echo "::set-output name=norminette-passed::false"
