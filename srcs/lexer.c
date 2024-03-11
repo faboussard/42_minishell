@@ -1,9 +1,23 @@
-#include <lexer.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                               		        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
+/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+//structure de bbuilint + options
+//cd with only a relative or absolute path
+#include "../includes/lexer.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
-#include "inc/libft.h"
+#include "../libft/inc/libft.h"
 
 // Function to check if a character is a delimiter
 int is_delimiter(char c)
@@ -11,55 +25,54 @@ int is_delimiter(char c)
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\0');
 }
 
-// Function to add a token to g_line_t
-void add_token(g_line_t *g_line, token_type type, char *value)
+void define_from_string(t_token *token)
 {
-	token_t token;
-	token.type = type;
-	ft_strlcpy(token.value, value, MAX_TOKEN_LENGTH);
-	g_line->tokens[g_line->count++] = token;
+	if (token->content == "echo" || (token->content == "cd" && token->content + 1 == "-n") || token->content == "pwd"
+		|| token->content == "export" || token->content == "unset" || token->content == "env"
+		|| token->content == "exit")
+		token->group.e_type = builtin;
+	if ()
+
 }
 
-// Main lexer function
-g_line_t lexer(const char *input)
+void define_token_type(t_token *token)
 {
-	g_line_t g_line;
-	int token_start;
-	int i;
-	token_type type;
+	if (token->group.e_type == builtin || token->group.e_type == delimiter
+			|| token->group.e_type == redirect || token->group.e_type == pipe
+					|| token->group.e_type == path_env)
+		token->group.e_group = COMMAND;
+//	if (token->group.e_type == builtin || token->group.e_type == delimiter
+//		|| token->group.e_type == redirect || token->group.e_type == pipe
+//		|| token->group.e_type == path_env)
+//		token->group.e_group = ARGUMENT;
+}
 
-	g_line.tokens = malloc(sizeof(token_t) * strlen(input));
-	g_line.count = 0;
+// Function to add a token. objectif : tous les token sont bine dans la struc et saffichent bien.
+void new_token(t_token new_token, char *string)
+{
+	//ajouter une condition pour faire le split que sil ny a pas despace avec des guillets. sinon on retirera ce token avant de resplit.
+	char	**split;
+	t_token	token;
+	int 	i;
+
 	i = 0;
-	while (input[i] != '\0')
+	split = ft_split(string, ' ');
+	ft_memset(&token, 0, sizeof(t_token));
+	while (split[i])
 	{
-		while (is_delimiter(input[i]))
-			i++;
-		if (input[i] == '\0')
-			break;
-		token_start = i;
-		if (input[i] == '$')
-			type = ENVIRONMENT;
-		else if (isalpha(input[i]))
-			type = COMMAND;
-		else
-			type = ARGUMENT;
-		while (!is_delimiter(input[i]) && input[i] != '\0')
-			i++;
-		int token_length = i - token_start;
-		char token_value[MAX_TOKEN_LENGTH];
-		ft_strlcpy(token_value, input + token_start, token_length);
-		token_value[token_length] = '\0';
-		add_token(&g_line, type, token_value);
+		token.content = split[i];
+		define_from_string(&token);
+		define_token_type(&token);
+		define_token_group(&token);
+		add_token_to_list(&token);
+		i++;
 	}
-	return g_line;
 }
 
-// Function to free memory allocated for g_line_t
-void free_g_line(g_line_t g_line)
-{
-	free(g_line.tokens);
-}
+//void add_token_to_list(t_token new_token)
+//{
+//}
+
 
 
 

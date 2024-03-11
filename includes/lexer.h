@@ -1,35 +1,57 @@
-//
-// Created by fanny on 09/03/24.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.h                               		        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
+/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_LEXER_H
 #define MINISHELL_LEXER_H
 
-// macro a malloc
-#define MAX_TOKEN_LENGTH 100
-
+typedef enum
+{
+	cd,
+	echo,
+	pwd,
+	export,
+	unset,
+	env,
+	exit
+} e_token_builtin;
 
 typedef enum
 {
 	ARGUMENT,
 	COMMAND,
 	ENVIRONMENT
-} token_type;
+} e_token_group;
 
-typedef struct
+typedef enum
 {
-	token_type type;
-	char value[MAX_TOKEN_LENGTH];
-} token_t;
+	builtin,
+	delimiter,
+	redirect,
+	pipe,
+	path_env,
+} e_token_type;
 
-// Structure to store tokenized line
-typedef struct
+typedef struct s_token_group
 {
-	token_t *tokens;
-	int count;
-} g_line_t;
+	e_token_group	e_group;
+	e_token_type	e_type;
+} t_token_group;
 
-g_line_t lexer(const char *input);
-void free_g_line(g_line_t g_line);
+typedef struct s_token
+{
+	t_token_group	group;
+	struct s_token	*next;
+	struct s_token	*prev;
+	char			*content;
+}	t_token;
 
 #endif //MINISHELL_LEXER_H
