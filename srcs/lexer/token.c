@@ -17,7 +17,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "libft.h"
+#include "../libft/inc/libft.h"
 
 t_token	*create_token(enum e_type type, enum e_operators operator, char *name)
 {

@@ -15,13 +15,13 @@
 
 typedef enum
 {
-	cd,
-	echo,
-	pwd,
-	export,
-	unset,
-	env,
-	exit
+	CD,
+	ECHO,
+	PWD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXIT
 } e_token_builtin;
 
 typedef enum
@@ -34,11 +34,11 @@ typedef enum
 
 typedef enum
 {
-	builtin,
-	delimiter,
-	redirect,
-	pipe,
-	path_env
+	BUILTIN,
+	DELIMITER,
+	REDIRECT,
+	PIPE,
+	PATH
 } e_token_type;
 
 typedef struct s_token_group
@@ -52,7 +52,7 @@ typedef struct s_token
 	t_token_group	group;
 	struct s_token	*next;
 	struct s_token	*prev;
-	char			*content;
+	char			content[];
 }	t_token;
 
 #endif //MINISHELL_LEXER_H
