@@ -21,7 +21,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "libft.h"
+#include "../libft/inc/libft.h"
 
 // Function to check if a character is a delimiter
 int is_delimiter(char c)
@@ -41,14 +41,14 @@ static bool	is_builtin(t_token *new_token)
 void define_from_string(t_token *new_token)
 {
 	if (is_builtin == TRUE)
-		new_token->group.e_type = builtin;
+	new_token->group.e_type = BUILTIN;
 }
 
 void define_token_type(t_token *new_token)
 {
-	if (new_token->group.e_type == builtin || new_token->group.e_type == delimiter
-			|| new_token->group.e_type == redirect || new_token->group.e_type == pipe
-					|| new_token->group.e_type == path_env)
+	if (new_token->group.e_type == BUILTIN || new_token->group.e_type == DELIMITER
+			|| new_token->group.e_type == REDIRECT || new_token->group.e_type == pipe
+					|| new_token->group.e_type == PATH)
 		new_token->group.e_group = COMMAND;
 //	if (token->group.e_type == builtin || token->group.e_type == delimiter
 //		|| token->group.e_type == redirect || token->group.e_type == pipe
