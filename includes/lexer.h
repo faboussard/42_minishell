@@ -13,46 +13,67 @@
 #ifndef MINISHELL_LEXER_H
 #define MINISHELL_LEXER_H
 
-typedef enum
-{
-	CD,
-	ECHO,
-	PWD,
-	EXPORT,
-	UNSET,
-	ENV,
-	EXIT
-} e_token_builtin;
+/****************** 1. tree top - GROUP ******************/
 
-typedef enum
+typedef enum e_token_type
 {
-	ARGUMENT,
-	COMMAND,
-	ENVIRONMENT,
-	OPERATOR
-} e_token_group;
-
-typedef enum
-{
-	BUILTIN,
-	DELIMITER,
-	REDIRECT,
-	PIPE,
-	PATH
+	COMMAND = 0,
+	ARGUMENT = 1,
+	ENVIRONMENT = 2,
+	OPERATOR = 3
 } e_token_type;
 
-typedef struct s_token_group
+/****************** 2. tree node - TYPE ******************/
+
+typedef enum e_token_command
 {
-	e_token_group	e_group;
+	BUILTIN_COMMAND,
+	PATH_COMMAND,
+} e_token_command;
+
+// pour lenveronnement ca provint du path voir apres
+
+typedef enum e_token_operators
+{
+	OPEN_PARENTHESES = 0,
+	CLOSE_PARENTHESES = 1,
+	PIPE = 2,
+	INPUT_REDIRECT = 3,
+	OUTPUT_REDIRECT = 4,
+	HERE_DOC = 5,
+	APPEND = 6
+} e_token_operators;
+
+/****************** 3. tree leaf******************/
+
+typedef enum e_token_builtin
+{
+	CD = 0,
+	LS = 1,
+	ECHO = 2,
+	PWD = 3,
+	EXPORT = 4,
+	UNSET =	5,
+	ENV = 6,
+	EXIT = 7
+} e_token_builtin;
+
+/****************** STRCUTURES ******************/
+
+//voir comment mettre les structures sous forme darbre . le groupe doit contenir les commandes et elles meme les param
+typedef struct s_token_type
+{
 	e_token_type	e_type;
-} t_token_group;
+	e_token_builtin e_builtin;
+	e_token_command e_command;
+	e_token_operators e_operator;
+} s_token_type;
 
 typedef struct s_token
 {
-	t_token_group	group;
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			content[];
+	s_token_type	t_type;
+	struct s_token	*right;
+	struct s_token	*left;
 }	t_token;
 
 #endif //MINISHELL_LEXER_H

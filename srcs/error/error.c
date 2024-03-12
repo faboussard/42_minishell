@@ -17,7 +17,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "libft.h"
+#include "inc/libft.h"
 
 void	ft_free_split(char **tab)
 {

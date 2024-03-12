@@ -23,25 +23,27 @@
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
 
-// Function to check if a character is a delimiter
-int is_delimiter(char c)
+static bool	is_builtin(char *string)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\0');
-}
-
-static bool	is_builtin(t_token *new_token)
-{
-	if (*new_token->content == "echo" || new_token->content == "cd" || new_token->content == "pwd"
-		|| new_token->content == "export" || new_token->content == "unset" || new_token->content == "env"
-		|| new_token->content == "exit")
+	if (!ft_strncmp(string, "echo", ft_strlen(string)) || !ft_strncmp(string, "cd", ft_strlen(string))
+		|| !ft_strncmp(string, "ls", ft_strlen(string)) || !ft_strncmp(string, "pwd", ft_strlen(string))
+		|| !ft_strncmp(string, "export", ft_strlen(string)) || !ft_strncmp(string, "unset", ft_strlen(string))
+		|| !ft_strncmp(string, "env", ft_strlen(string)) || !ft_strncmp(string, "exit", ft_strlen(string)))
 		return (TRUE);
 	return (FALSE);
 }
 
-void define_from_string(t_token *new_token)
+void define_from_string(t_token *new_token, char *string)
 {
-	if (is_builtin == TRUE)
-	new_token->group.e_type = BUILTIN;
+	if (is_builtin(string) == TRUE)
+		new_token->t_type.e_command = BUILTIN_COMMAND;
+}
+
+t_token	*create_token(t_token *token, enum e_token_group group, enum e_token_type type, enum e_token_operators operator)
+{
+	token->group.e_type = type;
+	token->group.e_group = group;
+	return (token);
 }
 
 void define_token_type(t_token *new_token)
@@ -70,10 +72,9 @@ void new_token( char *string)
 //	if (split == NULL)
 //		raise_error(MALLOC_FAILURE);
 	ft_memset(&token, 0, sizeof(t_token));
-	while (split[i])
+	while (*split)
 	{
-		token->content = split[i];
-		define_from_string(token);
+		define_from_string(token, *split);
 		define_token_type(token);
 
 		printf("token groupe is %s and tocken type is %s\n", token->group.e_group, token->group.e_type);

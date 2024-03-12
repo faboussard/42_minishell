@@ -13,6 +13,7 @@
 #ifndef MINISHELL_ERROR_H
 #define MINISHELL_ERROR_H
 
-
+void	ft_free_split(char **tab);
+void	ft_free_tab(void **tab, int j);
 
 #endif //MINISHELL_ERROR_H
