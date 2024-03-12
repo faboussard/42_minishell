@@ -7,7 +7,7 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main lexer/lexer lexer/token
+LIST_SRCS		=  main lexer/lexer lexer/token error/error
 
 LIST_HEADERS	= error general lexer
 

@@ -1,0 +1,8 @@
+1> decouper la phrase en token et les creer.
+2. decider si la logique de la phrase fait sens (avant ou pendant ou apres avoir lie les token entre eux ?)
+2. a parsing : lier les token entreeux en arbre binaire.
+3. faire un fichier excel en decidant si on met le noeud en bas ou a droite ou a gauche,
+tockenier : definir les mots ,
+ les operateurs. o bien directement tockenizer en buildtin etc.
+
+ 4.envoyer les feuilles ds arbres a ;elodie ? comment on passe du parsing a lexec ?
