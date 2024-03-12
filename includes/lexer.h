@@ -28,7 +28,8 @@ typedef enum
 {
 	ARGUMENT,
 	COMMAND,
-	ENVIRONMENT
+	ENVIRONMENT,
+	OPERATOR
 } e_token_group;
 
 typedef enum
@@ -37,7 +38,7 @@ typedef enum
 	delimiter,
 	redirect,
 	pipe,
-	path_env,
+	path_env
 } e_token_type;
 
 typedef struct s_token_group
