@@ -25,9 +25,11 @@
 
 static void define_
 
-static bool	is_builtin(char *string)
+static bool	is_builtin(t_char *string)
 {
-	if (!ft_strncmp(string, "echo", ft_strlen(string)) || !ft_strncmp(string, "cd", ft_strlen(string))
+	if (!ft_strncmp(string, "echo", ft_strlen(string)))
+
+        || !ft_strncmp(string, "cd", ft_strlen(string))
 		|| !ft_strncmp(string, "ls", ft_strlen(string)) || !ft_strncmp(string, "pwd", ft_strlen(string))
 		|| !ft_strncmp(string, "export", ft_strlen(string)) || !ft_strncmp(string, "unset", ft_strlen(string))
 		|| !ft_strncmp(string, "env", ft_strlen(string)) || !ft_strncmp(string, "exit", ft_strlen(string)))
