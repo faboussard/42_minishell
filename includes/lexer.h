@@ -21,7 +21,6 @@ typedef enum
 	export,
 	unset,
 	env,
-	exit
 } e_token_builtin;
 
 typedef enum
@@ -37,7 +36,6 @@ typedef enum
 	builtin,
 	delimiter,
 	redirect,
-	pipe,
 	path_env
 } e_token_type;
 

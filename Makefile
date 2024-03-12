@@ -7,9 +7,9 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main lexer
+LIST_SRCS		=  main
 
-LIST_HEADERS	=
+LIST_HEADERS	= error general lexer
 
 # ------------ DIRECTORIES ------------ #
 
@@ -47,7 +47,7 @@ $(NAME):		 $(OBJS) $(libft)
 # ---------- COMPILED RULES ----------- #
 
 $(DIR_BUILD)%.o: %.c $(DIR_BUILD)
-				$(CC) $(CFLAGS) $(DEPS_FLAGS) $(INCLUDES) -O3 -c $< -o $@
+				$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
 
 #---------- CREATE REPO OBJS ---------#
 
