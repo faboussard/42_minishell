@@ -23,6 +23,8 @@
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
 
+static void define_
+
 static bool	is_builtin(char *string)
 {
 	if (!ft_strncmp(string, "echo", ft_strlen(string)) || !ft_strncmp(string, "cd", ft_strlen(string))
@@ -33,18 +35,21 @@ static bool	is_builtin(char *string)
 	return (FALSE);
 }
 
+static bool is_operator(char *string)
+{
+	if (!ft_strncmp(string, "(", ft_strlen(string)) || !ft_strncmp(string, ")", ft_strlen(string)) )
+}
+
 void define_from_string(t_token *new_token, char *string)
 {
 	if (is_builtin(string) == TRUE)
 		new_token->t_type.e_command = BUILTIN_COMMAND;
+	if (is_operator(string) == TRUE)
+		new_token->t_type.e_operator = OPERATOR;
+	if (is_redirect(string) == TRUE)
+		new_token->t_type.e_redirect = REDIRECT;
 }
 
-t_token	*create_token(t_token *token, enum e_token_group group, enum e_token_type type, enum e_token_operators operator)
-{
-	token->group.e_type = type;
-	token->group.e_group = group;
-	return (token);
-}
 
 void define_token_type(t_token *new_token)
 {
