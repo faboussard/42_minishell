@@ -27,8 +27,8 @@ typedef enum e_token_type
 
 typedef enum e_token_command
 {
-	BUILTIN_COMMAND,
-	PATH_COMMAND,
+	BUILTIN_COMMAND = 0,
+	PATH_COMMAND = 1
 } e_token_command;
 
 // pour lenveronnement ca provint du path voir apres
