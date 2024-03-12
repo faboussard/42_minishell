@@ -14,17 +14,13 @@
 #include "../libft/inc/libft.h"
 #include "../includes/lexer.h"
 
+void is_delimiter()
+{
+	printf("hello word !");
+}
+
 int main()
 {
-	const char *input = "ls -l $HOME";
-	g_line_t g_line;
-
-	g_line = lexer(input);
-
-	printf("Tokens:\n");
-	for (int i = 0; i < g_line.count; i++) {
-		printf("Type: %d, Value: %s\n", g_line.tokens[i].group, g_line.tokens[i].content);
-	}
-	free_g_line(g_line);
+	is_delimiter();
 	return 0;
 }
