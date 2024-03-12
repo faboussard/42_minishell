@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                               		        :+:      :+:    :+:   */
+/*   token.c                               		        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,49 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_LEXER_H
-#define MINISHELL_LEXER_H
+#include "lexer.h"
+#include "general.h"
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "libft.h"
 
-typedef enum
+t_token	*create_token(enum e_type type, enum e_operators operator, char *name)
 {
-	cd,
-	echo,
-	pwd,
-	export,
-	unset,
-	env,
-	exit
-} e_token_builtin;
+	t_token	*token;
 
-typedef enum
+	token = ft_calloc(1, sizeof(*token));
+	if (token == NULL)
+		return (NULL);
+	token->type = type;
+	token->operator = operator;
+	token->name = name;
+	return (token);
+}
+
+void	free_token(void *token_void)
 {
-	ARGUMENT,
-	COMMAND,
-	ENVIRONMENT,
-	OPERATOR
-} e_token_group;
+	t_token	*token;
 
-typedef enum
-{
-	builtin,
-	delimiter,
-	redirect,
-	pipe,
-	path_env
-} e_token_type;
-
-typedef struct s_token_group
-{
-	e_token_group	e_group;
-	e_token_type	e_type;
-} t_token_group;
-
-typedef struct s_token
-{
-	t_token_group	group;
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*content;
-}	t_token;
-
-#endif //MINISHELL_LEXER_H
+	if (token_void == NULL)
+		return ;
+	token = token_void;
+	free(token->name);
+	ft_free_split(token->args);
+	ft_lstclear(&token->files, &free_token);
+	ft_lstclear(&token->subshell, &free_token);
+	free(token);
+}

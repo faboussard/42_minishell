@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                               		        :+:      :+:    :+:   */
+/*   error.c                               		        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,49 +10,42 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_LEXER_H
-#define MINISHELL_LEXER_H
+#include "lexer.h"
+#include "general.h"
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "libft.h"
 
-typedef enum
+void	ft_free_split(char **tab)
 {
-	cd,
-	echo,
-	pwd,
-	export,
-	unset,
-	env,
-	exit
-} e_token_builtin;
+	int	i;
 
-typedef enum
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+void	ft_free_tab(void **tab, int j)
 {
-	ARGUMENT,
-	COMMAND,
-	ENVIRONMENT,
-	OPERATOR
-} e_token_group;
+	int	i;
 
-typedef enum
-{
-	builtin,
-	delimiter,
-	redirect,
-	pipe,
-	path_env
-} e_token_type;
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (i < j)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
 
-typedef struct s_token_group
-{
-	e_token_group	e_group;
-	e_token_type	e_type;
-} t_token_group;
-
-typedef struct s_token
-{
-	t_token_group	group;
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*content;
-}	t_token;
-
-#endif //MINISHELL_LEXER_H

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                               		        :+:      :+:    :+:   */
+/*   error.h                               		        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,49 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_LEXER_H
-#define MINISHELL_LEXER_H
+#ifndef MINISHELL_ERROR_H
+#define MINISHELL_ERROR_H
 
-typedef enum
-{
-	cd,
-	echo,
-	pwd,
-	export,
-	unset,
-	env,
-	exit
-} e_token_builtin;
 
-typedef enum
-{
-	ARGUMENT,
-	COMMAND,
-	ENVIRONMENT,
-	OPERATOR
-} e_token_group;
 
-typedef enum
-{
-	builtin,
-	delimiter,
-	redirect,
-	pipe,
-	path_env
-} e_token_type;
-
-typedef struct s_token_group
-{
-	e_token_group	e_group;
-	e_token_type	e_type;
-} t_token_group;
-
-typedef struct s_token
-{
-	t_token_group	group;
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*content;
-}	t_token;
-
-#endif //MINISHELL_LEXER_H
+#endif //MINISHELL_ERROR_H
