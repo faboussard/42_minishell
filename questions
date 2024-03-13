@@ -6,3 +6,14 @@ tockenier : definir les mots ,
  les operateurs. o bien directement tockenizer en buildtin etc.
 
  4.envoyer les feuilles ds arbres a ;elodie ? comment on passe du parsing a lexec ?
+
+ RESULTAT BASH
+ un operateur : zsh: parse error near `)'
+ une commande not found : command not found
+ un argument -l en debut de argument: command not found
+ un argument ls -z pas en debut de argument : ls: invalid option -- 'z'
+ si / nimport dans la string avec des char autour : file not found
+ si decolle des char et avant : / hallo : permission denied: /
+ si a la  fin ou milieu : rien ne se passe
+
+

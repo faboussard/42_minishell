@@ -17,10 +17,10 @@
 
 typedef enum e_token_type
 {
-	COMMAND = 0,
-	ARGUMENT = 1,
-	ENVIRONMENT = 2,
-	OPERATOR = 3
+	COMMAND = 1,
+	ARGUMENT = 2,
+	ENVIRONMENT = 3,
+	OPERATOR = 4
 } e_token_type;
 
 /****************** 2. tree node - TYPE ******************/
@@ -35,27 +35,28 @@ typedef enum e_token_command
 
 typedef enum e_token_operators
 {
-	OPEN_PARENTHESES = 0,
-	CLOSE_PARENTHESES = 1,
-	PIPE = 2,
-	INPUT_REDIRECT = 3,
-	OUTPUT_REDIRECT = 4,
-	HERE_DOC = 5,
-	APPEND = 6
+	OPEN_PARENTHESES = 1,
+	CLOSE_PARENTHESES = 2,
+	PIPE = 3,
+	INPUT_REDIRECT = 4,
+	OUTPUT_REDIRECT = 5,
+	HERE_DOC = 6,
+	APPEND = 7,
+	GUILLEMET = 8
 } e_token_operators;
 
 /****************** 3. tree leaf******************/
 
 typedef enum e_token_builtin
 {
-	CD = 0,
-	LS = 1,
-	ECHO = 2,
-	PWD = 3,
-	EXPORT = 4,
-	UNSET =	5,
-	ENV = 6,
-	EXIT = 7
+	CD = 1,
+	LS = 2,
+	ECHO = 3,
+	PWD = 4,
+	EXPORT = 5,
+	UNSET =	6,
+	ENV = 7,
+	EXIT = 8
 } e_token_builtin;
 
 /****************** STRCUTURES ******************/
