@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                               		        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: faboussa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/13 16:26:16 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/13 16:26:32 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_LEXER_H
-#define MINISHELL_LEXER_H
+#ifndef LEXER_H
+# define LEXER_H
 
-typedef enum
+enum e_token_builtin
 {
 	cd,
 	echo,
@@ -21,29 +21,29 @@ typedef enum
 	export,
 	unset,
 	env,
-} e_token_builtin;
+};
 
-typedef enum
+enum e_token_group
 {
 	ARGUMENT,
 	COMMAND,
 	ENVIRONMENT,
 	OPERATOR
-} e_token_group;
+};
 
-typedef enum
+enum e_token_type
 {
 	builtin,
 	delimiter,
 	redirect,
 	path_env
-} e_token_type;
+};
 
 typedef struct s_token_group
 {
-	e_token_group	e_group;
-	e_token_type	e_type;
-} t_token_group;
+	enum e_token_group	e_group;
+	enum e_token_type	e_type;
+}					t_token_group;
 
 typedef struct s_token
 {
@@ -51,6 +51,6 @@ typedef struct s_token
 	struct s_token	*next;
 	struct s_token	*prev;
 	char			*content;
-}	t_token;
+}					t_token;
 
-#endif //MINISHELL_LEXER_H
+#endif //LEXER_H
