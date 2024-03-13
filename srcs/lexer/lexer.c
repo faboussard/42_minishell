@@ -122,6 +122,7 @@ void define_from_string(t_token *new_token, char *string)
 	else
 		//creer le token command (un alpha)
 }
+//fedine  <<{delimiter}
 
 void define_token_type(t_token *new_token)
 {
