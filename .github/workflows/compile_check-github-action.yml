@@ -1,41 +1,24 @@
-name: Compile C files
+name: Compile and check norm
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master"]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master"]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Compile files with Makefile
         run: make
 
-      - name: Check compilation result
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "Compilation succeeded."
-            state="success"
-            description="Build has completed successfully"
-          else
-            echo "Compilation failed."
-            state="failure"
-            description="Build has failed"
-          fi
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}_PERSONAL_ACCESS_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "state": "'"$state"'",
-              "description": "'"$description"'",
-              "context": "compile-check"
-            }' \
-            "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
+      - name: norminette
+        uses: alexandregv/norminette-action@v3
+        with:
+          flags: '.'
 
