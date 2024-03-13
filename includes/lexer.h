@@ -10,30 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_LEXER_H
-#define MINISHELL_LEXER_H
+#ifndef LEXER_H
+#define LEXER_H
 
 /****************** 1. tree top - GROUP ******************/
 
-typedef enum e_token_type
+enum e_token_type
 {
 	COMMAND = 1,
 	ARGUMENT = 2,
 	ENVIRONMENT = 3,
 	OPERATOR = 4
-} e_token_type;
+};
 
 /****************** 2. tree node - TYPE ******************/
 
-typedef enum e_token_command
+enum e_token_command
 {
 	BUILTIN_COMMAND = 0,
 	PATH_COMMAND = 1
-} e_token_command;
+};
 
 // pour lenveronnement ca provint du path voir apres
 
-typedef enum e_token_operators
+enum e_token_operators
 {
 	OPEN_PARENTHESES = 1,
 	CLOSE_PARENTHESES = 2,
@@ -43,11 +43,11 @@ typedef enum e_token_operators
 	HERE_DOC = 6,
 	APPEND = 7,
 	GUILLEMET = 8
-} e_token_operators;
+};
 
 /****************** 3. tree leaf******************/
 
-typedef enum e_token_builtin
+enum e_token_builtin
 {
 	CD = 1,
 	LS = 2,
@@ -57,17 +57,17 @@ typedef enum e_token_builtin
 	UNSET =	6,
 	ENV = 7,
 	EXIT = 8
-} e_token_builtin;
+};
 
 /****************** STRCUTURES ******************/
 
 //voir comment mettre les structures sous forme darbre . le groupe doit contenir les commandes et elles meme les param
 typedef struct s_token_type
 {
-	e_token_type	e_type;
-	e_token_builtin e_builtin;
-	e_token_command e_command;
-	e_token_operators e_operator;
+	enum e_token_type	e_type;
+	enum e_token_builtin e_builtin;
+	enum e_token_command e_command;
+	enum e_token_operators e_operator;
 } s_token_type;
 
 typedef struct s_token
@@ -77,4 +77,6 @@ typedef struct s_token
 	struct s_token	*left;
 }	t_token;
 
-#endif //MINISHELL_LEXER_H
+void new_token( char *string);
+
+#endif //LEXER_H

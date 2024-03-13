@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                               		        :+:      :+:    :+:   */
+/*   error.c                               		        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,6 @@
 
 #include "lexer.h"
 #include "general.h"
-#include "error.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -20,18 +19,33 @@
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
 
+void	ft_free_split(char **tab)
+{
+	int	i;
 
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
 
-//void	free_token(void *token_void)
-//{
-//	t_token	*token;
-//
-//	if (token_void == NULL)
-//		return ;
-//	token = token_void;
-//	free(token->content);
-//	ft_free_split(&token->group.e_group);
-//	ft_lstclear(&token->files, &free_token);
-//	ft_lstclear(&token->subshell, &free_token);
-//	free(token);
-//}
+void	ft_free_tab(void **tab, int j)
+{
+	int	i;
+
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (i < j)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+

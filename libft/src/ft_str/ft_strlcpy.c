@@ -30,3 +30,19 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	return_value = ft_strlen(src);
 	return (return_value);
 }
+
+size_t	ft_strcpy(char *dest, const char *src)
+{
+	size_t	i;
+	size_t	return_value;
+
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return_value = ft_strlen(src);
+	return (return_value);
+}

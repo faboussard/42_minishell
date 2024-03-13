@@ -13,8 +13,12 @@
 #include <stdio.h>
 #include "../libft/inc/libft.h"
 #include "../includes/lexer.h"
+#include "lexer.h"
 
 int main()
 {
+	char *string;
 
+	string = "exit";
+	new_token(string);
 }
