@@ -3,11 +3,11 @@ NAME			=	minishell
 
 #-------------  VPATH  ---------------#
 
-vpath %c srcs
+vpath %c srcs lexer error
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main lexer/lexer lexer/token error/error
+LIST_SRCS		=  main lexer error
 
 LIST_HEADERS	= error general lexer
 
@@ -53,12 +53,14 @@ $(DIR_BUILD)%.o: %.c $(DIR_BUILD)
 
 $(DIR_BUILD):
 		@echo "Création du répertoire $(DIR_BUILD)"
-		$(MKDIR) $(DIR_BUILD)
+		$(MKDIR) -p $(DIR_BUILD)
 
+$(DIR_BUILD)lexer/:
+	 @echo "Création du répertoire $(DIR_BUILD)lexer/"
+	$(MKDIR) -p $(DIR_BUILD)lexer/
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
--include $(DEPS)
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean
