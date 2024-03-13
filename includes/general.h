@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.h                            		        :+:      :+:    :+:   */
+/*   general.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: faboussa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/13 16:30:16 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_GENERAL_H
-#define MINISHELL_GENERAL_H
+#ifndef GENERAL_H
+# define GENERAL_H
 
-typedef enum
+enum e_bool
 {
 	FALSE = 0,
 	TRUE = 1,
-} e_bool;
+}	e_bool;
 
 #endif //MINISHELL_GENERAL_H
