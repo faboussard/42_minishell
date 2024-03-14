@@ -13,22 +13,12 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-/****************** 1. tree top - GROUP ******************/
-
 enum e_token_type
 {
 	COMMAND = 1,
 	ARGUMENT = 2,
 	ENVIRONMENT = 3,
 	OPERATOR = 4
-};
-
-/****************** 2. tree node - TYPE ******************/
-
-enum e_token_command
-{
-	BUILTIN_COMMAND = 0,
-	PATH_COMMAND = 1
 };
 
 // pour lenveronnement ca provint du path voir apres
@@ -41,11 +31,9 @@ enum e_token_operators
 	INPUT_REDIRECT = 4,
 	OUTPUT_REDIRECT = 5,
 	HERE_DOC = 6,
-	APPEND = 7,
-	GUILLEMET = 8
+	DOUBLE_QUOTE = 7,
+	SINGLE_QUOTE = 8
 };
-
-/****************** 3. tree leaf******************/
 
 enum e_token_builtin
 {
@@ -61,20 +49,12 @@ enum e_token_builtin
 
 /****************** STRCUTURES ******************/
 
-//voir comment mettre les structures sous forme darbre . le groupe doit contenir les commandes et elles meme les param
-typedef struct s_token_type
-{
-	enum e_token_type	e_type;
-	enum e_token_builtin e_builtin;
-	enum e_token_command e_command;
-	enum e_token_operators e_operator;
-} s_token_type;
 
 typedef struct s_token
 {
-	s_token_type	t_type;
-	struct s_token	*right;
-	struct s_token	*left;
+	enum e_token_type	e_type;
+	enum e_token_builtin e_builtin;
+	enum e_token_operators e_operator;
 }	t_token;
 
 void new_token( char *string);
