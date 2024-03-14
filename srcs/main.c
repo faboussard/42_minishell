@@ -19,6 +19,6 @@ int main()
 {
 	char *string;
 
-	string = "exit";
+	string = "ls | ls";
 	new_token(string);
 }
