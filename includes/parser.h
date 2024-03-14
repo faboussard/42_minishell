@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                		                       :+:      :+:    :+:   */
+/*   parser.h                               		    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,20 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../libft/inc/libft.h"
-#include "../includes/lexer.h"
-#include "lexer.h"
-#include "parser.h"
+#ifndef PARSER_H
+#define PARSER_H
 
-int main()
-{
-	char	*string;
-	t_node 	*list_tokens;
+#include "libft.h"
 
-	list_tokens = NULL;
-	string = "-ls";
-	transform_to_token(string, &list_tokens);
-	parse(list_tokens);
-	print_list(list_tokens);
-}
+void	parse(t_node *list_tokens);
+
+#endif //PARSER_H

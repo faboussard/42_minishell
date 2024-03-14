@@ -10,21 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                               		        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 //structure de bbuilint + options
 //cd with only a relative or absolute path -> faire un strjoin
-//&& new_token->content + 1 == "-n" ->faire un strjoin
+//&& transform_to_token->content + 1 == "-n" ->faire un strjoin
 
 #include "lexer.h"
 #include "general.h"
@@ -34,6 +22,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
+#include "error.h"
 
 void define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token)
 {
@@ -42,11 +31,8 @@ void define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_t
 	new_token->e_operator = operator;
 }
 
-bool	define_builtin(t_token *new_token, char *string)
+void cpy_string_builtin(char builtins[7][10])
 {
-	int		i;
-	char	builtins[8][10];
-
 	ft_strcpy(builtins[LS], "ls");
 	ft_strcpy(builtins[ECHO], "echo");
 	ft_strcpy(builtins[CD], "cd");
@@ -55,27 +41,37 @@ bool	define_builtin(t_token *new_token, char *string)
 	ft_strcpy(builtins[ENV], "env");
 	ft_strcpy(builtins[EXPORT], "export");
 	ft_strcpy(builtins[UNSET], "unset");
+}
+
+bool	define_builtin(t_token *new_token, char *string)
+{
+	int		i;
+	char	builtins[8][10];
+
+	cpy_string_builtin(builtins);
 	i = 0;
-	while (i++ < 8)
+	while (i < 8)
 	{
 		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
+		{
 			define_token(COMMAND, i, 0, new_token);
-		return (TRUE);
+			return (TRUE);
+		}
+		i++;
 	}
 	return (FALSE);
 }
 
-void cpy_string_operator(char operator[9][10])
+void cpy_string_operator(char operator[7][10])
 {
-	ft_strcpy(operator[0], "cd");
-	ft_strcpy(operator[1], "ls");
-	ft_strcpy(operator[2], "echo");
-	ft_strcpy(operator[3], "pwd");
-	ft_strcpy(operator[4], "exit");
-	ft_strcpy(operator[5], "env");
-	ft_strcpy(operator[6], "export");
-	ft_strcpy(operator[7], "unset");
-	ft_strcpy(operator[8], "|");
+	ft_strcpy(operator[OPEN_PARENTHESES], "(");
+	ft_strcpy(operator[CLOSE_PARENTHESES], ")");
+	ft_strcpy(operator[PIPE], "|");
+	ft_strcpy(operator[INPUT_REDIRECT], ">");
+	ft_strcpy(operator[OUTPUT_REDIRECT], "<");
+	ft_strcpy(operator[HERE_DOC], ">>");
+	ft_strcpy(operator[DOUBLE_QUOTE], "\"");
+	ft_strcpy(operator[SINGLE_QUOTE], "'");
 }
 
 bool	define_operator(t_token *new_token, char *string)
@@ -85,36 +81,35 @@ bool	define_operator(t_token *new_token, char *string)
 
 	i = 0;
 	cpy_string_operator(operator);
-	while (i++ < 9)
+	while (i < 8)
 	{
 		if (!ft_strncmp(string, operator[i], ft_strlen(string)))
+		{
 			define_token(OPERATOR, 0, i, new_token);
-		return (TRUE);
+			return (TRUE);
+		}
+		i++;
 	}
 	return (FALSE);
 }
 
-static bool	define_arg(t_token *new_token, char *string)
-{
-	if (string[0] == '-')
-	{
-		define_token(ARGUMENT, 0, 0, new_token);
-		return (TRUE);
-	}
-	return (FALSE);
-}
-
-void create_token(t_node **tokens, t_token *new_token, char *string)
+void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 {
 	t_node	*new_node;
+	void	*content;
 
+	if (new_token == NULL)
+		return;
+	if (string[0] == '-')
+		define_token(ARGUMENT, 0, 0, new_token);
 	if (define_builtin(new_token, string) == FALSE
-		|| define_operator(new_token, string) == FALSE)
+		&& define_operator(new_token, string) == FALSE && string[0] != '-')
 		define_token(COMMAND, 0, 0, new_token);
-	new_node = ft_lstnew(new_token);
+	content = new_token;
+	new_node = ft_lstnew(content);
 	if (new_node == NULL)
 	{
-		free(new_token);
+		ft_lstclear(&new_node, &free);
 		return;
 	}
 	ft_lstadd_back(tokens, new_node);
@@ -122,22 +117,6 @@ void create_token(t_node **tokens, t_token *new_token, char *string)
 
 //a mettre dans parser
 // fonction redefine from position in chain list.
-void redefine_to_argument(t_node *list_tokens)
-{
-	t_node  *iterator;
-	t_token *token;
-	t_token *token_next;
-
-	iterator = list_tokens;
-	token = (t_token *)(iterator)->content;
-	token_next = (t_token *)(iterator)->next->content;
-	while (iterator->next != NULL)
-	{
-		if (token_next->e_type == COMMAND && token_next->e_operator == OPTION && token->e_type == COMMAND)
-			token_next->e_type = ARGUMENT;
-		iterator = iterator->next;
-	}
-}
 
 void print_list(t_node *list_tokens)
 {
@@ -154,28 +133,27 @@ void print_list(t_node *list_tokens)
 }
 
 
-void new_token( char *string)
+void transform_to_token(char *string, t_node **list_tokens)
 {
 	int 	i;
 	t_token	*token;
-	t_node 	*list_tokens;
+
 	//ajouter une condition pour faire le split que sil ny a pas despace avec des guillets. sinon on retirera ce token avant de resplit.
 	char	**split;
 
-	list_tokens = NULL;
 	split = ft_split(string, ' ');
 	if (split == NULL)
 		return;
-
 	i = 0;
 	while (split[i])
 	{
 		token = malloc(sizeof(t_token));
 		ft_memset(token, 0, sizeof(t_token));
-		create_token(&list_tokens, token, split[i]);
+		create_token_to_list(list_tokens, token, split[i]);
 		i++;
 	}
-	print_list(list_tokens);
+	ft_free_split(split);
+	print_list(*list_tokens);
 }
 
 

@@ -3,13 +3,13 @@ NAME			=	minishell
 
 #-------------  VPATH  ---------------#
 
-vpath %c srcs lexer error
+vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main lexer error
+LIST_SRCS		=  main lexer error parser
 
-LIST_HEADERS	= error general lexer
+LIST_HEADERS	= error general lexer parser
 
 # ------------ DIRECTORIES ------------ #
 
