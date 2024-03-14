@@ -22,7 +22,8 @@ enum e_token_type
 	COMMAND = 0,
 	ARGUMENT = 1,
 	ENVIRONMENT = 2,
-	OPERATOR = 3
+	OPERATOR = 3,
+	END_WORD = 4
 };
 
 // pour lenveronnement ca provint du path voir apres
