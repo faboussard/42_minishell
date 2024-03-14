@@ -31,68 +31,6 @@ void define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_t
 	new_token->e_operator = operator;
 }
 
-void cpy_string_builtin(char builtins[7][10])
-{
-	ft_strcpy(builtins[LS], "ls");
-	ft_strcpy(builtins[ECHO], "echo");
-	ft_strcpy(builtins[CD], "cd");
-	ft_strcpy(builtins[PWD], "pwd");
-	ft_strcpy(builtins[EXIT], "exit");
-	ft_strcpy(builtins[ENV], "env");
-	ft_strcpy(builtins[EXPORT], "export");
-	ft_strcpy(builtins[UNSET], "unset");
-}
-
-bool	define_builtin(t_token *new_token, char *string)
-{
-	int		i;
-	char	builtins[8][10];
-
-	cpy_string_builtin(builtins);
-	i = 0;
-	while (i < 8)
-	{
-		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
-		{
-			define_token(COMMAND, i, 0, new_token);
-			return (TRUE);
-		}
-		i++;
-	}
-	return (FALSE);
-}
-
-void cpy_string_operator(char operator[7][10])
-{
-	ft_strcpy(operator[OPEN_PARENTHESES], "(");
-	ft_strcpy(operator[CLOSE_PARENTHESES], ")");
-	ft_strcpy(operator[PIPE], "|");
-	ft_strcpy(operator[INPUT_REDIRECT], ">");
-	ft_strcpy(operator[OUTPUT_REDIRECT], "<");
-	ft_strcpy(operator[HERE_DOC], ">>");
-	ft_strcpy(operator[DOUBLE_QUOTE], "\"");
-	ft_strcpy(operator[SINGLE_QUOTE], "'");
-}
-
-bool	define_operator(t_token *new_token, char *string)
-{
-	int		i;
-	char	operator[9][10];
-
-	i = 0;
-	cpy_string_operator(operator);
-	while (i < 8)
-	{
-		if (!ft_strncmp(string, operator[i], ft_strlen(string)))
-		{
-			define_token(OPERATOR, 0, i, new_token);
-			return (TRUE);
-		}
-		i++;
-	}
-	return (FALSE);
-}
-
 void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 {
 	t_node	*new_node;

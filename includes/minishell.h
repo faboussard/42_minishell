@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.h                            		        :+:      :+:    :+:   */
+/*   minishell.h                            		    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_GENERAL_H
-#define MINISHELL_GENERAL_H
+#ifndef RUN_MINISHELLRC_H
+# define RUN_MINISHELLRC_H
 
-typedef enum
+#include "libft.h"
+
+typedef struct s_minishell
 {
-	FALSE = 0,
-	TRUE = 1,
-} e_bool;
+	t_hashmap		env_variables;
+	t_node			*tokens;
+	t_node			*here_docs;
+}	t_minishell;
 
-void	ft_free_split(char **tab);
-void	ft_free_tab(void **tab, int j);
-
-#endif //MINISHELL_GENERAL_H
+#endif
