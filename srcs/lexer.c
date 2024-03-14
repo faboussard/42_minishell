@@ -39,10 +39,10 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 	if (string == NULL)
 		return;
 	if (string[0] == '-')
-		define_token(ARGUMENT, 0, 0, new_token);
+		define_token(ARGUMENT, NO_OPERATOR, NO_BUILTIN, new_token);
 	if (define_builtin(new_token, string) == FALSE
 		&& define_operator(new_token, string) == FALSE && string[0] != '-')
-		define_token(COMMAND, 0, 0, new_token);
+		define_token(COMMAND, NO_OPERATOR, NO_BUILTIN, new_token);
 	content = new_token;
 	new_node = ft_lstnew(content);
 	if (new_node == NULL)
@@ -91,7 +91,6 @@ void transform_to_token(char *string, t_node **list_tokens)
 		i++;
 	}
 	ft_free_split(split);
-	print_list(*list_tokens);
 }
 
 
