@@ -15,8 +15,12 @@ tockenier : definir les mots ,
  si / nimport dans la string avec des char autour : file not found
  si decolle des char et avant : / hallo : permission denied: /
  si a la  fin ou milieu : rien ne se passe
+ | -ls
+ bash: erreur de syntaxe près du symbole inattendu « | »
 
 
+donc au moment de parser : si on a une commande + une commande qui commence par - -> on le redefinit en argument
+on peut fair eun nouveau type qui dit que string0 = - alors on indique (e.type temp_argument).
 Faire une hashmap pour les variables denvironnement
 
 
