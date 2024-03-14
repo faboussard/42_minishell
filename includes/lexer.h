@@ -32,7 +32,8 @@ enum e_token_operators
 	OUTPUT_REDIRECT = 5,
 	HERE_DOC = 6,
 	DOUBLE_QUOTE = 7,
-	SINGLE_QUOTE = 8
+	SINGLE_QUOTE = 8,
+	OPTION = 9
 };
 
 enum e_token_builtin
