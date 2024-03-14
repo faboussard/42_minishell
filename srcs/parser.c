@@ -38,6 +38,20 @@ void redefine_to_cmd_if_first(t_node *list_tokens)
 }
 
 
+void check_syntax(t_node *list_tokens)
+{
+	t_node	*iterator;
+	t_token	*token;
+
+	iterator = list_tokens;
+	while (iterator != NULL)
+	{
+		token = (t_token *)(list_tokens)->content;
+		print_operator_syntax_error(token);
+		iterator = iterator->next;
+	}
+}
+
 void parse(t_node *list_tokens)
 {
 	int 	i;
@@ -46,6 +60,7 @@ void parse(t_node *list_tokens)
 	first_token = (t_token *)(list_tokens)->content;
 	if (first_token->e_type == ARGUMENT)
 		first_token->e_type = COMMAND;
+	check_syntax(list_tokens);
 	//ajouter une condition pour faire le split que sil ny a pas despace avec des guillets. sinon on retirera ce token avant de resplit.
 }
 

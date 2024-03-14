@@ -7,16 +7,22 @@ tockenier : definir les mots ,
 
  4.envoyer les feuilles ds arbres a ;elodie ? comment on passe du parsing a lexec ?
 
+---------------------------- OPERATORS --------------------------------
  RESULTAT BASH
  un operateur : zsh: parse error near `)'
- une commande not found : command not found
- un argument -l en debut de argument: command not found
+
+ ------------------------ ARGUMENTS ---------------------------------
+
+ un argument -l en debut de argument: command not found = OK
+
  un argument ls -z pas en debut de argument : ls: invalid option -- 'z'
+
+ ------------------------------- FILES ------------------------------------------------
  si / nimport dans la string avec des char autour : file not found
  si decolle des char et avant : / hallo : permission denied: /
  si a la  fin ou milieu : rien ne se passe
- | -ls
- bash: erreur de syntaxe près du symbole inattendu « | »
+
+
 
 
 donc au moment de parser : si on a une commande + une commande qui commence par - -> on le redefinit en argument

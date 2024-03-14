@@ -49,3 +49,11 @@ void	ft_free_tab(void **tab, int j)
 	free(tab);
 }
 
+void	print_error(const char *error)
+{
+	if (error != NULL)
+		ft_putstr_fd(error, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+}
+
+
