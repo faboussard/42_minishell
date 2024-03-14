@@ -14,11 +14,16 @@
 #include "../libft/inc/libft.h"
 #include "../includes/lexer.h"
 #include "lexer.h"
+#include "parser.h"
 
 int main()
 {
-	char *string;
+	char	*string;
+	t_node 	*list_tokens;
 
-	string = "ls | ls";
-	new_token(string);
+	list_tokens = NULL;
+	string = "-ls";
+	transform_to_token(string, &list_tokens);
+	parse(list_tokens);
+	print_list(list_tokens);
 }
