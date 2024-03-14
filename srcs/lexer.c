@@ -98,7 +98,7 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 	t_node	*new_node;
 	void	*content;
 
-	if (new_token == NULL)
+	if (string == NULL)
 		return;
 	if (string[0] == '-')
 		define_token(ARGUMENT, 0, 0, new_token);
