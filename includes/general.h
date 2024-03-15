@@ -21,5 +21,6 @@ typedef enum
 
 void	ft_free_split(char **tab);
 void	ft_free_tab(void **tab, int j);
+t_token	*return_last_token(t_node *list_tokens);
 
 #endif //MINISHELL_GENERAL_H
