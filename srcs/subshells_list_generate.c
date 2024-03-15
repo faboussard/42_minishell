@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                		                       :+:      :+:    :+:   */
+/*   subshells_list_generate.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../libft/inc/libft.h"
-#include "../includes/lexer.h"
 #include "lexer.h"
-#include "parser.h"
-
-int main()
-{
-	char	*string;
-	t_node 	*list_tokens;
-
-	list_tokens = NULL;
-	string = "(ls -l)";
-	transform_to_token(string, &list_tokens);
-	print_list(list_tokens);
-	token_rework(list_tokens);
-	print_list(list_tokens);
-	ft_lstclear(&list_tokens, &free);
-}
+#include "general.h"
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "../libft/inc/libft.h"
+#include "error.h"

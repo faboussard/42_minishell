@@ -7,7 +7,7 @@ tockenier : definir les mots ,
 
 ---------------------------- OPERATORS --------------------------------
  RESULTAT BASH
- un operateur : zsh: requalification error near `)'
+ un operateur : zsh: token_rework error near `)'
 
   2 ❯ ls << ( bla
  bash: erreur de syntaxe près du symbole inattendu
