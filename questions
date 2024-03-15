@@ -1,16 +1,10 @@
-1> decouper la phrase en token et les creer.
-2. decider si la logique de la phrase fait sens (avant ou pendant ou apres avoir lie les token entre eux ?)
-2. a parsing : lier les token entreeux en arbre binaire.
-3. faire un fichier excel en decidant si on met le noeud en bas ou a droite ou a gauche,
-tockenier : definir les mots ,
- les operateurs. o bien directement tockenizer en buildtin etc.
+--------------------- A FAIRE -----------------------------------------------
+
+traiter les pathfiles
+traiter les guillemets
 
 ---------------------------- OPERATORS --------------------------------
- RESULTAT BASH
- un operateur : zsh: token_rework error near `)'
 
-  2 ❯ ls << ( bla
- bash: erreur de syntaxe près du symbole inattendu
 
 
  ------------------------ ARGUMENTS ---------------------------------
@@ -19,16 +13,18 @@ tockenier : definir les mots ,
 
  un argument ls -z pas en debut de argument : ls: invalid option -- 'z'
 
+ un argument qui suit une commande de subtype subshell doit etre aussi substype subshell ?
+
  ------------------------------- FILES ------------------------------------------------
  si / nimport dans la string avec des char autour : file not found
  si decolle des char et avant : / hallo : permission denied: /
  si a la  fin ou milieu : rien ne se passe
 
-
-
-
-donc au moment de parser : si on a une commande + une commande qui commence par - -> on le redefinit en argument
-on peut fair eun nouveau type qui dit que string0 = - alors on indique (e.type temp_argument).
 Faire une hashmap pour les variables denvironnement
+
+---------------------------------- ERRORS ---------------------------------------------------
+
+  2 ❯ ls << ( bla
+ bash: erreur de syntaxe près du symbole inattendu
 
 
