@@ -40,6 +40,11 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 		return;
 	if (string[0] == '-')
 		define_token(ARGUMENT, NO_OPERATOR, NO_BUILTIN, new_token);
+	if (string[0] == '(')
+	{
+		define_token(COMMAND, OPEN_PARENTHESES, NO_BUILTIN, new_token);
+		new_token->e_subtype = SUBSHELL;
+	}
 	if (define_builtin(new_token, string) == FALSE
 		&& define_operator(new_token, string) == FALSE && string[0] != '-')
 		define_token(COMMAND, NO_OPERATOR, NO_BUILTIN, new_token);
@@ -65,7 +70,7 @@ void print_list(t_node *list_tokens)
 	while (iterator != NULL)
 	{
 		token = (t_token *)(iterator)->content;
-		printf("Type: %d, Builtin: %d, Operator: %d\n", token->e_type, token->e_builtin, token->e_operator);
+		printf("Type: %d, Builtin: %d, Operator: %d, Subtype: %d\n", token->e_type, token->e_builtin, token->e_operator, token->e_subtype);
 		iterator = iterator->next;
 	}
 }

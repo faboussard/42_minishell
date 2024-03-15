@@ -22,10 +22,10 @@ int main()
 	t_node 	*list_tokens;
 
 	list_tokens = NULL;
-	string = "<< ( la";
+	string = "(ls -l)";
 	transform_to_token(string, &list_tokens);
 	print_list(list_tokens);
-	requalification(list_tokens);
+	token_rework(list_tokens);
 	print_list(list_tokens);
 	ft_lstclear(&list_tokens, &free);
 }

@@ -66,29 +66,6 @@ bool	is_redirect_token(t_token *token)
 			|| token->e_operator == HERE_DOC);
 }
 
-void	print_operator_syntax_error(t_token *token)
-{
-	enum e_token_operators	error;
-
-	if (token == NULL)
-		return (print_error("syntax error near unexpected token `newline'"));
-	error = token->e_operator;
-	if (error == OPEN_PARENTHESES)
-		print_error("syntax error near unexpected token `('");
-	else if (error == CLOSE_PARENTHESES)
-		print_error("syntax error near unexpected token `)'");
-	else if (error == PIPE)
-		print_error("syntax error near unexpected token `|'");
-	else if (error == INPUT_REDIRECT)
-		print_error("syntax error near unexpected token `<'");
-	else if (error == OUTPUT_REDIRECT)
-		print_error("syntax error near unexpected token `>'");
-	else if (error == HERE_DOC)
-		print_error("syntax error near unexpected token `<<'");
-	else if (error == APPEND)
-		print_error("syntax error near unexpected token `>>'");
-}
-
 
 
 
