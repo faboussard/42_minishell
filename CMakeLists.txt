@@ -72,5 +72,5 @@ add_executable(minishell
         includes/minishell.h
         srcs/operator.c
         srcs/builtin.c
-        srcs/subshells_list_generate.c
+        srcs/env_variables.c
         srcs/utils.c)

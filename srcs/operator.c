@@ -63,7 +63,8 @@ bool	is_redirect_token(t_token *token)
 		return (0);
 	return (token->e_operator == INPUT_REDIRECT
 			|| token->e_operator == OUTPUT_REDIRECT
-			|| token->e_operator == HERE_DOC);
+			|| token->e_operator == HERE_DOC
+			|| token->e_operator == APPEND);
 }
 
 
