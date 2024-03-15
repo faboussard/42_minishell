@@ -23,13 +23,15 @@ enum e_token_type
 	ARGUMENT = 2,
 	PATH_FILE = 3,
 	OPERATOR = 4,
+	TO_APPEND = 5,
+	SUBSHELL = 6,
 };
 
 enum e_token_subtype
 {
 	NO_SUBTYPE = 0,
-	END_WORD = 1,
-	SUBSHELL = 2,
+
+
 	BEGIN_SUBSHELL = 3
 };
 
@@ -69,7 +71,6 @@ typedef struct s_token
 	enum e_token_type		e_type;
 	enum e_token_builtin	e_builtin;
 	enum e_token_operators	e_operator;
-	enum e_token_subtype	e_subtype;
 }	t_token;
 
 /****************** LEXER ******************/

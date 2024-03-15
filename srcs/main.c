@@ -33,7 +33,7 @@ int main()
 	char	*string;
 	t_node 	*list_tokens_for_exec;
 
-	string = "ls (-l)";
+	string = "echo hello >> output.txt";
 	list_tokens_for_exec = return_list_tokens(string);
 	//ft_lstclear(&list_tokens, &free);
 	return (0);

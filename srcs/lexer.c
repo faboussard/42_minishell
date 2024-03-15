@@ -43,7 +43,7 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 	if (string[0] == '(')
 	{
 		define_token(COMMAND, OPEN_PARENTHESES, NO_BUILTIN, new_token);
-		new_token->e_subtype = SUBSHELL;
+		new_token->e_type = SUBSHELL;
 	}
 	if (define_builtin(new_token, string) == FALSE
 		&& define_operator(new_token, string) == FALSE && string[0] != '-')
@@ -70,7 +70,7 @@ void print_list(t_node *list_tokens)
 	while (iterator != NULL)
 	{
 		token = (t_token *)(iterator)->content;
-		printf("Type: %d, Builtin: %d, Operator: %d, Subtype: %d\n", token->e_type, token->e_builtin, token->e_operator, token->e_subtype);
+		printf("Type: %d, Builtin: %d, Operator: %d\n", token->e_type, token->e_builtin, token->e_operator);
 		iterator = iterator->next;
 	}
 	printf("\n");
@@ -131,7 +131,7 @@ void check_string_syntax(const char *string)
 	if (string[0] == '\0')
 		return;
 	if (string[0] == ' ')
-		return;;
+		return;
 	if (parentheses_error(string) == -1 || parentheses_on_arg(string) == -1)
 		exit(EXIT_FAILURE);
 }
