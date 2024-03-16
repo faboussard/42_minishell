@@ -15,6 +15,6 @@
 
 #include "libft.h"
 
-void	parse(t_node *list_tokens);
+void	token_rework(t_node *list_tokens);
 
 #endif //PARSER_H
