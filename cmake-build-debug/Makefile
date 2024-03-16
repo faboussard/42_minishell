@@ -1353,6 +1353,198 @@ libft/src/gnl/get_next_line_utils.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/gnl/get_next_line_utils.c.s
 .PHONY : libft/src/gnl/get_next_line_utils.c.s
 
+libft/src/hashmap/hm_add_elem.o: libft/src/hashmap/hm_add_elem.c.o
+.PHONY : libft/src/hashmap/hm_add_elem.o
+
+# target to build an object file
+libft/src/hashmap/hm_add_elem.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_add_elem.c.o
+.PHONY : libft/src/hashmap/hm_add_elem.c.o
+
+libft/src/hashmap/hm_add_elem.i: libft/src/hashmap/hm_add_elem.c.i
+.PHONY : libft/src/hashmap/hm_add_elem.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_add_elem.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_add_elem.c.i
+.PHONY : libft/src/hashmap/hm_add_elem.c.i
+
+libft/src/hashmap/hm_add_elem.s: libft/src/hashmap/hm_add_elem.c.s
+.PHONY : libft/src/hashmap/hm_add_elem.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_add_elem.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_add_elem.c.s
+.PHONY : libft/src/hashmap/hm_add_elem.c.s
+
+libft/src/hashmap/hm_clear.o: libft/src/hashmap/hm_clear.c.o
+.PHONY : libft/src/hashmap/hm_clear.o
+
+# target to build an object file
+libft/src/hashmap/hm_clear.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_clear.c.o
+.PHONY : libft/src/hashmap/hm_clear.c.o
+
+libft/src/hashmap/hm_clear.i: libft/src/hashmap/hm_clear.c.i
+.PHONY : libft/src/hashmap/hm_clear.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_clear.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_clear.c.i
+.PHONY : libft/src/hashmap/hm_clear.c.i
+
+libft/src/hashmap/hm_clear.s: libft/src/hashmap/hm_clear.c.s
+.PHONY : libft/src/hashmap/hm_clear.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_clear.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_clear.c.s
+.PHONY : libft/src/hashmap/hm_clear.c.s
+
+libft/src/hashmap/hm_delete_elem.o: libft/src/hashmap/hm_delete_elem.c.o
+.PHONY : libft/src/hashmap/hm_delete_elem.o
+
+# target to build an object file
+libft/src/hashmap/hm_delete_elem.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_delete_elem.c.o
+.PHONY : libft/src/hashmap/hm_delete_elem.c.o
+
+libft/src/hashmap/hm_delete_elem.i: libft/src/hashmap/hm_delete_elem.c.i
+.PHONY : libft/src/hashmap/hm_delete_elem.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_delete_elem.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_delete_elem.c.i
+.PHONY : libft/src/hashmap/hm_delete_elem.c.i
+
+libft/src/hashmap/hm_delete_elem.s: libft/src/hashmap/hm_delete_elem.c.s
+.PHONY : libft/src/hashmap/hm_delete_elem.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_delete_elem.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_delete_elem.c.s
+.PHONY : libft/src/hashmap/hm_delete_elem.c.s
+
+libft/src/hashmap/hm_get_content.o: libft/src/hashmap/hm_get_content.c.o
+.PHONY : libft/src/hashmap/hm_get_content.o
+
+# target to build an object file
+libft/src/hashmap/hm_get_content.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_content.c.o
+.PHONY : libft/src/hashmap/hm_get_content.c.o
+
+libft/src/hashmap/hm_get_content.i: libft/src/hashmap/hm_get_content.c.i
+.PHONY : libft/src/hashmap/hm_get_content.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_get_content.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_content.c.i
+.PHONY : libft/src/hashmap/hm_get_content.c.i
+
+libft/src/hashmap/hm_get_content.s: libft/src/hashmap/hm_get_content.c.s
+.PHONY : libft/src/hashmap/hm_get_content.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_get_content.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_content.c.s
+.PHONY : libft/src/hashmap/hm_get_content.c.s
+
+libft/src/hashmap/hm_get_elem.o: libft/src/hashmap/hm_get_elem.c.o
+.PHONY : libft/src/hashmap/hm_get_elem.o
+
+# target to build an object file
+libft/src/hashmap/hm_get_elem.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_elem.c.o
+.PHONY : libft/src/hashmap/hm_get_elem.c.o
+
+libft/src/hashmap/hm_get_elem.i: libft/src/hashmap/hm_get_elem.c.i
+.PHONY : libft/src/hashmap/hm_get_elem.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_get_elem.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_elem.c.i
+.PHONY : libft/src/hashmap/hm_get_elem.c.i
+
+libft/src/hashmap/hm_get_elem.s: libft/src/hashmap/hm_get_elem.c.s
+.PHONY : libft/src/hashmap/hm_get_elem.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_get_elem.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_elem.c.s
+.PHONY : libft/src/hashmap/hm_get_elem.c.s
+
+libft/src/hashmap/hm_get_index.o: libft/src/hashmap/hm_get_index.c.o
+.PHONY : libft/src/hashmap/hm_get_index.o
+
+# target to build an object file
+libft/src/hashmap/hm_get_index.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_index.c.o
+.PHONY : libft/src/hashmap/hm_get_index.c.o
+
+libft/src/hashmap/hm_get_index.i: libft/src/hashmap/hm_get_index.c.i
+.PHONY : libft/src/hashmap/hm_get_index.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_get_index.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_index.c.i
+.PHONY : libft/src/hashmap/hm_get_index.c.i
+
+libft/src/hashmap/hm_get_index.s: libft/src/hashmap/hm_get_index.c.s
+.PHONY : libft/src/hashmap/hm_get_index.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_get_index.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_get_index.c.s
+.PHONY : libft/src/hashmap/hm_get_index.c.s
+
+libft/src/hashmap/hm_init.o: libft/src/hashmap/hm_init.c.o
+.PHONY : libft/src/hashmap/hm_init.o
+
+# target to build an object file
+libft/src/hashmap/hm_init.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_init.c.o
+.PHONY : libft/src/hashmap/hm_init.c.o
+
+libft/src/hashmap/hm_init.i: libft/src/hashmap/hm_init.c.i
+.PHONY : libft/src/hashmap/hm_init.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_init.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_init.c.i
+.PHONY : libft/src/hashmap/hm_init.c.i
+
+libft/src/hashmap/hm_init.s: libft/src/hashmap/hm_init.c.s
+.PHONY : libft/src/hashmap/hm_init.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_init.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_init.c.s
+.PHONY : libft/src/hashmap/hm_init.c.s
+
+libft/src/hashmap/hm_size.o: libft/src/hashmap/hm_size.c.o
+.PHONY : libft/src/hashmap/hm_size.o
+
+# target to build an object file
+libft/src/hashmap/hm_size.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_size.c.o
+.PHONY : libft/src/hashmap/hm_size.c.o
+
+libft/src/hashmap/hm_size.i: libft/src/hashmap/hm_size.c.i
+.PHONY : libft/src/hashmap/hm_size.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_size.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_size.c.i
+.PHONY : libft/src/hashmap/hm_size.c.i
+
+libft/src/hashmap/hm_size.s: libft/src/hashmap/hm_size.c.s
+.PHONY : libft/src/hashmap/hm_size.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_size.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_size.c.s
+.PHONY : libft/src/hashmap/hm_size.c.s
+
 libft/src/utils.o: libft/src/utils.c.o
 .PHONY : libft/src/utils.o
 
@@ -1683,6 +1875,30 @@ help:
 	@echo "... libft/src/gnl/get_next_line_utils.o"
 	@echo "... libft/src/gnl/get_next_line_utils.i"
 	@echo "... libft/src/gnl/get_next_line_utils.s"
+	@echo "... libft/src/hashmap/hm_add_elem.o"
+	@echo "... libft/src/hashmap/hm_add_elem.i"
+	@echo "... libft/src/hashmap/hm_add_elem.s"
+	@echo "... libft/src/hashmap/hm_clear.o"
+	@echo "... libft/src/hashmap/hm_clear.i"
+	@echo "... libft/src/hashmap/hm_clear.s"
+	@echo "... libft/src/hashmap/hm_delete_elem.o"
+	@echo "... libft/src/hashmap/hm_delete_elem.i"
+	@echo "... libft/src/hashmap/hm_delete_elem.s"
+	@echo "... libft/src/hashmap/hm_get_content.o"
+	@echo "... libft/src/hashmap/hm_get_content.i"
+	@echo "... libft/src/hashmap/hm_get_content.s"
+	@echo "... libft/src/hashmap/hm_get_elem.o"
+	@echo "... libft/src/hashmap/hm_get_elem.i"
+	@echo "... libft/src/hashmap/hm_get_elem.s"
+	@echo "... libft/src/hashmap/hm_get_index.o"
+	@echo "... libft/src/hashmap/hm_get_index.i"
+	@echo "... libft/src/hashmap/hm_get_index.s"
+	@echo "... libft/src/hashmap/hm_init.o"
+	@echo "... libft/src/hashmap/hm_init.i"
+	@echo "... libft/src/hashmap/hm_init.s"
+	@echo "... libft/src/hashmap/hm_size.o"
+	@echo "... libft/src/hashmap/hm_size.i"
+	@echo "... libft/src/hashmap/hm_size.s"
 	@echo "... libft/src/utils.o"
 	@echo "... libft/src/utils.i"
 	@echo "... libft/src/utils.s"
