@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.h                            		        :+:      :+:    :+:   */
+/*   parser.c                                            :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_GENERAL_H
-#define MINISHELL_GENERAL_H
 
-typedef enum
+#include "lexer.h"
+#include "general.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "../libft/inc/libft.h"
+
+t_token *return_last_token(t_node *list_tokens)
 {
-	FALSE = 0,
-	TRUE = 1,
-} e_bool;
+	t_node *iterator;
+	t_token *last_token;
 
-void	ft_free_split(char **tab);
-void	ft_free_tab(void **tab, int j);
-t_token	*return_last_token(t_node *list_tokens);
-
-#endif //MINISHELL_GENERAL_H
+	iterator = list_tokens;
+	while (iterator->next != NULL)
+		iterator = iterator->next;
+	last_token = (t_token *) (iterator)->content;
+	return (last_token);
+}

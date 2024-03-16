@@ -16,15 +16,25 @@
 #include "lexer.h"
 #include "parser.h"
 
-int main()
+t_node *return_list_tokens(char *string)
 {
-	char	*string;
 	t_node 	*list_tokens;
 
 	list_tokens = NULL;
-	string = "-ls";
 	transform_to_token(string, &list_tokens);
-	parse(list_tokens);
 	print_list(list_tokens);
-	ft_lstclear(&list_tokens, &free);
+	token_rework(list_tokens);
+	print_list(list_tokens);
+	return (list_tokens);
+}
+
+int main()
+{
+	char	*string;
+	t_node 	*list_tokens_for_exec;
+
+	string = "echo hello >> output.txt";
+	list_tokens_for_exec = return_list_tokens(string);
+	//ft_lstclear(&list_tokens, &free);
+	return (0);
 }

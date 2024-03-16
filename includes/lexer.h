@@ -18,49 +18,59 @@
 
 enum e_token_type
 {
-	NO_TYPE = -1,
-	COMMAND = 0,
-	ARGUMENT = 1,
-	ENVIRONMENT = 2,
-	OPERATOR = 3
+	NO_TYPE = 0,
+	COMMAND = 1,
+	ARGUMENT = 2,
+	PATH_FILE = 3,
+	OPERATOR = 4,
+	TO_APPEND = 5,
+	SUBSHELL = 6,
+};
+
+enum e_token_subtype
+{
+	NO_SUBTYPE = 0,
+
+
+	BEGIN_SUBSHELL = 3
 };
 
 // pour lenveronnement ca provint du path voir apres
 
 enum e_token_operators
 {
-	NO_OPERATOR = -1,
-	OPEN_PARENTHESES = 0,
-	CLOSE_PARENTHESES = 1,
-	PIPE = 2,
-	INPUT_REDIRECT = 3,
-	OUTPUT_REDIRECT = 4,
-	HERE_DOC = 5,
-	APPEND = 6,
-	DOUBLE_QUOTE = 7,
-	SINGLE_QUOTE = 8,
+	NO_OPERATOR = 0,
+	OPEN_PARENTHESES = 1,
+	CLOSE_PARENTHESES = 2,
+	PIPE = 3,
+	INPUT_REDIRECT = 4,
+	OUTPUT_REDIRECT = 5,
+	HERE_DOC = 6,
+	APPEND = 7,
+	DOUBLE_QUOTE = 8,
+	SINGLE_QUOTE = 9,
 };
 
 enum e_token_builtin
 {
-	NO_BUILTIN = -1,
-	CD = 0,
-	LS = 1,
-	ECHO = 2,
-	PWD = 3,
-	EXPORT = 4,
-	UNSET =	5,
-	ENV = 6,
-	EXIT = 7
+	NO_BUILTIN = 0,
+	CD = 1,
+	LS = 2,
+	ECHO = 3,
+	PWD = 4,
+	EXPORT = 5,
+	UNSET =	6,
+	ENV = 7,
+	EXIT = 8
 };
 
 /****************** STRCUTURES ******************/
 
 typedef struct s_token
 {
-	enum e_token_type	e_type;
-	enum e_token_builtin e_builtin;
-	enum e_token_operators e_operator;
+	enum e_token_type		e_type;
+	enum e_token_builtin	e_builtin;
+	enum e_token_operators	e_operator;
 }	t_token;
 
 /****************** LEXER ******************/

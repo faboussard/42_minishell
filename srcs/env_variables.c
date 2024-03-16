@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.h                            		        :+:      :+:    :+:   */
+/*   subshells_list_generate.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_GENERAL_H
-#define MINISHELL_GENERAL_H
-
-typedef enum
-{
-	FALSE = 0,
-	TRUE = 1,
-} e_bool;
-
-void	ft_free_split(char **tab);
-void	ft_free_tab(void **tab, int j);
-t_token	*return_last_token(t_node *list_tokens);
-
-#endif //MINISHELL_GENERAL_H
+#include "lexer.h"
+#include "general.h"
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "../libft/inc/libft.h"
+#include "error.h"
