@@ -1593,6 +1593,30 @@ srcs/builtin.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/builtin.c.s
 .PHONY : srcs/builtin.c.s
 
+srcs/env_variables.o: srcs/env_variables.c.o
+.PHONY : srcs/env_variables.o
+
+# target to build an object file
+srcs/env_variables.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/env_variables.c.o
+.PHONY : srcs/env_variables.c.o
+
+srcs/env_variables.i: srcs/env_variables.c.i
+.PHONY : srcs/env_variables.i
+
+# target to preprocess a source file
+srcs/env_variables.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/env_variables.c.i
+.PHONY : srcs/env_variables.c.i
+
+srcs/env_variables.s: srcs/env_variables.c.s
+.PHONY : srcs/env_variables.s
+
+# target to generate assembly for a file
+srcs/env_variables.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/env_variables.c.s
+.PHONY : srcs/env_variables.c.s
+
 srcs/error.o: srcs/error.c.o
 .PHONY : srcs/error.o
 
@@ -1712,6 +1736,30 @@ srcs/parser.s: srcs/parser.c.s
 srcs/parser.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/parser.c.s
 .PHONY : srcs/parser.c.s
+
+srcs/utils.o: srcs/utils.c.o
+.PHONY : srcs/utils.o
+
+# target to build an object file
+srcs/utils.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/utils.c.o
+.PHONY : srcs/utils.c.o
+
+srcs/utils.i: srcs/utils.c.i
+.PHONY : srcs/utils.i
+
+# target to preprocess a source file
+srcs/utils.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/utils.c.i
+.PHONY : srcs/utils.c.i
+
+srcs/utils.s: srcs/utils.c.s
+.PHONY : srcs/utils.s
+
+# target to generate assembly for a file
+srcs/utils.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/utils.c.s
+.PHONY : srcs/utils.c.s
 
 # Help Target
 help:
@@ -1905,6 +1953,9 @@ help:
 	@echo "... srcs/builtin.o"
 	@echo "... srcs/builtin.i"
 	@echo "... srcs/builtin.s"
+	@echo "... srcs/env_variables.o"
+	@echo "... srcs/env_variables.i"
+	@echo "... srcs/env_variables.s"
 	@echo "... srcs/error.o"
 	@echo "... srcs/error.i"
 	@echo "... srcs/error.s"
@@ -1920,6 +1971,9 @@ help:
 	@echo "... srcs/parser.o"
 	@echo "... srcs/parser.i"
 	@echo "... srcs/parser.s"
+	@echo "... srcs/utils.o"
+	@echo "... srcs/utils.i"
+	@echo "... srcs/utils.s"
 .PHONY : help
 
 
