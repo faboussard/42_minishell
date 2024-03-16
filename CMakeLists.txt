@@ -71,4 +71,12 @@ add_executable(minishell
         includes/parser.h
         includes/minishell.h
         srcs/operator.c
-        srcs/builtin.c)
+        srcs/builtin.c
+        libft/src/hashmap/hm_add_elem.c
+        libft/src/hashmap/hm_clear.c
+        libft/src/hashmap/hm_delete_elem.c
+        libft/src/hashmap/hm_get_content.c
+        libft/src/hashmap/hm_get_elem.c
+        libft/src/hashmap/hm_get_index.c
+        libft/src/hashmap/hm_init.c
+        libft/src/hashmap/hm_size.c)
