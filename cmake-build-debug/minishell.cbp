@@ -284,6 +284,9 @@
 		<Unit filename="/home/juba/minishell/srcs/builtin.c">
 			<Option target="minishell"/>
 		</Unit>
+		<Unit filename="/home/juba/minishell/srcs/env_variables.c">
+			<Option target="minishell"/>
+		</Unit>
 		<Unit filename="/home/juba/minishell/srcs/error.c">
 			<Option target="minishell"/>
 		</Unit>
@@ -297,6 +300,9 @@
 			<Option target="minishell"/>
 		</Unit>
 		<Unit filename="/home/juba/minishell/srcs/parser.c">
+			<Option target="minishell"/>
+		</Unit>
+		<Unit filename="/home/juba/minishell/srcs/utils.c">
 			<Option target="minishell"/>
 		</Unit>
 		<Unit filename="/home/juba/minishell/CMakeLists.txt">
