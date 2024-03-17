@@ -23,7 +23,7 @@ t_node *get_list_tokens(char *string)
 
 	list_tokens = NULL;
 	transform_to_token(string, &list_tokens);
-	print_list(list_tokens);
+	print_token(list_tokens);
 	token_rework(list_tokens);
 	return (list_tokens);
 }
@@ -40,7 +40,7 @@ int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
 	char			*string; //char **argv
-	char			**envp = {
+	char			*envp[] = {
 			"PATH=/bin:/usr/bin",
 			"HOME=/home/user",
 			"USER=user",
@@ -54,9 +54,9 @@ int main()
 	string = "echo hello >> output.txt";
 	tmp = minishell_init(&minishell, envp, argv[0]);
 	minishell.list_tokens = get_list_tokens(string);
-	print_list(	minishell.list_tokens);
+	print_token(minishell.list_tokens);
 	minishell.hm_env_variables = get_hm_env_variables(envp);
-//	print_hashmap(	minishell->hm_env_variables);
+	print_hashmap(minishell.hm_env_variables);
 	//ft_lstclear(&list_tokens, &free);
 	return (0);
 }

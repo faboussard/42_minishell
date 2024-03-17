@@ -30,3 +30,22 @@ t_token *return_last_token(t_node *list_tokens)
 	last_token = (t_token *) (iterator)->content;
 	return (last_token);
 }
+
+void print_token(t_node *list_tokens)
+{
+	t_node  *iterator;
+	t_token *token;
+
+	ft_printf("PRINT LIST\n");
+	iterator = list_tokens;
+	while (iterator != NULL)
+	{
+		token = (t_token *)(iterator)->content;
+		ft_printf("Type: %d, Builtin: %d, Operator: %d\n", token->e_type, token->e_builtin, token->e_operator);
+		iterator = iterator->next;
+	}
+	ft_printf("\n");
+}
+
+
+

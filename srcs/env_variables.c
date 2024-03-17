@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   subshells_list_generate.c                          :+:      :+:    :+:   */
+/*   env_variables.c		                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,38 +22,40 @@
 
 int get_target_and_content(char **envp, t_hashmap hm)
 {
-	size_t	i;
-	size_t	j;
+	size_t i;
 
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
-	((t_hashmap_node *)hm)->target = ft_substr(*envp, 0, i);
-	if (((t_hashmap_node *)hm)->target == NULL)
+	((t_hashmap_content *)hm)->target = ft_substr(*envp, 0, i);
+	if (((t_hashmap_content *)hm)->target == NULL)
 		return (-1);
-	j = i + 1;
-	while ((*envp)[j] && (*envp)[j] != '=')
-		j++;
-	((t_hashmap_node *)hm)->content = ft_substr(*envp, j + 1, ft_strlen(*envp) - j);
-	if (((t_hashmap_node *)hm)->content == NULL)
-		return (-1);
+	if ((*envp)[i] == '=')
+	{
+		i++;
+		((t_hashmap_content *)hm)->content = ft_substr(*envp, i, ft_strlen(*envp) - i);
+		if (((t_hashmap_content *)hm)->content == NULL)
+			return (-1);
+	}
 	return (0);
 }
+
 
 int add_env_variable(t_hashmap hm, char **envp)
 {
 	char	*key;
 	char	*value;
 
+	if (envp == NULL || *envp == NULL)
+		return (-1);
 	while (*envp)
 	{
 		if (ft_strchr(*envp, '='))
 		{
 			if (get_target_and_content(envp, hm) == -1)
 				return (-1);
-			key = ((t_hashmap_node *) hm)->target;
-			value = ((t_hashmap_node *) hm)->content;
-			printf("key = %s, value = %s\n", key, value);
+			key = ((t_hashmap_content *) hm)->target;
+			value = ((t_hashmap_content *) hm)->content;
 			if (ft_hm_add_elem(hm, key, value, &free) == -1)
 				return (ft_hm_clear(&hm, &free), -1);
 			free(key);

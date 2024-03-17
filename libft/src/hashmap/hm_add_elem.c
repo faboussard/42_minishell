@@ -35,26 +35,26 @@ static int	modify_if_exists(t_node *dst, char *target, void *content,
 				void (*del)(void *))
 {
 	while (dst != NULL
-		&& ft_strcmp(((t_hashmap_node *)dst->content)->target, target) != 0)
+		&& ft_strcmp(((t_hashmap_content *)dst->content)->target, target) != 0)
 		dst = dst->next;
 	if (dst == NULL)
 		return (NOT_FOUND);
 	if (del == NULL)
 	{
-		((t_hashmap_node *)dst->content)->content = content;
+		((t_hashmap_content *)dst->content)->content = content;
 		return (SUCCESSFULLY_ADDED);
 	}
-	del(((t_hashmap_node *)dst->content)->content);
-	((t_hashmap_node *)dst->content)->content = content;
+	del(((t_hashmap_content *)dst->content)->content);
+	((t_hashmap_content *)dst->content)->content = content;
 	return (SUCCESSFULLY_ADDED);
 }
 
 static int	add_new(t_node **dst, char *target, void *content)
 {
-	t_hashmap_node	*new_node_content;
+	t_hashmap_content	*new_node_content;
 	t_node				*new_node;
 
-	new_node_content = malloc(sizeof(t_hashmap_node));
+	new_node_content = malloc(sizeof(t_hashmap_content));
 	if (new_node_content == NULL)
 		return (MALLOC_FAILED);
 	new_node_content->content = content;

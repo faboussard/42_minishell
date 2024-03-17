@@ -75,9 +75,8 @@ typedef struct s_token
 /****************** LEXER ******************/
 
 void	transform_to_token(char *string, t_node **list_tokens);
-void	print_list(t_node *list_tokens);
 void	define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
-
+void	print_token(t_node *list_tokens);
 
 /****************** OPERATORS ******************/
 

@@ -275,6 +275,9 @@
 		<Unit filename="/home/juba/minishell/libft/src/hashmap/hm_init.c">
 			<Option target="minishell"/>
 		</Unit>
+		<Unit filename="/home/juba/minishell/libft/src/hashmap/hm_print.c">
+			<Option target="minishell"/>
+		</Unit>
 		<Unit filename="/home/juba/minishell/libft/src/hashmap/hm_size.c">
 			<Option target="minishell"/>
 		</Unit>
