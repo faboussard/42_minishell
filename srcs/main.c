@@ -51,12 +51,13 @@ int main()
 	t_minishell 	minishell;
 	int 			tmp;
 
-	string = "echo hello >> output.txt";
+	string = "echo ls >> output.txt";
 	tmp = minishell_init(&minishell, envp, argv[0]);
 	minishell.list_tokens = get_list_tokens(string);
 	print_token(minishell.list_tokens);
 	minishell.hm_env_variables = get_hm_env_variables(envp);
 	print_hashmap(minishell.hm_env_variables);
-	//ft_lstclear(&list_tokens, &free);
+	ft_lstclear(&minishell.list_tokens , &free);
+	ft_hm_clear(&minishell.hm_env_variables, &free);
 	return (0);
 }

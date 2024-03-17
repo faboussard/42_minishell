@@ -14,7 +14,10 @@
 #define LEXER_H
 
 #include <stdbool.h>
-#include "libft.h"
+#include "../libft/inc/libft.h"
+
+#define BUILTINS_COUNT 9
+#define OPERATOR_COUNT 9
 
 enum e_token_type
 {
@@ -86,9 +89,8 @@ void	print_operator_syntax_error(t_token *token);
 
 
 /****************** BUILTIN ******************/
-void	cpy_string_builtin(char builtins[7][10]);
-bool	define_builtin(t_token *new_token, char *string);
 
+bool	create_builtin_token(t_token *new_token, char *string);
 
 /********************* ENV_VARIABLES *********************/
 t_hashmap	get_hm_env_variables(char **envp);
