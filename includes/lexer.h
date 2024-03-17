@@ -64,7 +64,6 @@ enum e_token_builtin
 	EXIT = 8
 };
 
-/****************** STRCUTURES ******************/
 
 typedef struct s_token
 {
@@ -90,5 +89,9 @@ void	print_operator_syntax_error(t_token *token);
 /****************** BUILTIN ******************/
 void	cpy_string_builtin(char builtins[7][10]);
 bool	define_builtin(t_token *new_token, char *string);
+
+
+/********************* ENV_VARIABLES *********************/
+t_hashmap	get_hm_env_variables(char **envp);
 
 #endif //LEXER_H
