@@ -1,11 +1,24 @@
+
+SHEMA grammaire : FICHIER sinon CMDE ARG | etc (en boucle)
+renvoie struc minishell qui contient liste tokens + hashmap
+
 --------------------- A FAIRE -----------------------------------------------
 
-SHEMA : FICHIER sinon CMDE ARG | etc (en boucle)
-
+parser:
 traiter les guillemets
 VOIR DAUTRES CAS DE SYNTAXES STRING OU TOKEN
 
-hashmap : mes variables denvironnement ne se mettent pas a la suite dans ma hashmap + SEGFAULT
+env variable:
+ajouter les autres variables denvironnement (old pwd, default, etc..)
+cmd path ??
+soccuper des paths ?
+
+expansion:
+soccuper des guillemets
+soccuper des dollars
+
+faire le readline
+faire les builtins
 ---------------------------- OPERATORS --------------------------------
 
 
