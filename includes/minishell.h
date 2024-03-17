@@ -13,7 +13,7 @@
 #ifndef RUN_MINISHELLRC_H
 # define RUN_MINISHELLRC_H
 
-#include "libft.h"
+#include "../libft/inc/libft.h"
 
 typedef struct s_minishell
 {

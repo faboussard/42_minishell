@@ -13,7 +13,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "libft.h"
+#include "../libft/inc/libft.h"
 
 void	token_rework(t_node *list_tokens);
 
