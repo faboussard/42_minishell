@@ -37,17 +37,17 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 	void	*content;
 
 	if (string == NULL)
-		return;
+		return ;
 	if (string[0] == '-')
-		define_token(ARGUMENT, NO_OPERATOR, NO_BUILTIN, new_token);
+		define_token(ARGUMENT, NO_BUILTIN, NO_OPERATOR, new_token);
 	if (string[0] == '(')
 	{
-		define_token(COMMAND, OPEN_PARENTHESES, NO_BUILTIN, new_token);
+		define_token(COMMAND, NO_BUILTIN, OPEN_PARENTHESES, new_token);
 		new_token->e_type = SUBSHELL;
 	}
-	if (define_builtin(new_token, string) == FALSE
+	if (create_builtin_token(new_token, string) == FALSE
 		&& define_operator(new_token, string) == FALSE && string[0] != '-')
-		define_token(COMMAND, NO_OPERATOR, NO_BUILTIN, new_token);
+		define_token(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
 	content = new_token;
 	new_node = ft_lstnew(content);
 	if (new_node == NULL)
@@ -57,10 +57,6 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 	}
 	ft_lstadd_back(tokens, new_node);
 }
-
-//a mettre dans parser
-// fonction redefine from position in chain list.
-
 
 int parentheses_error(const char *string)
 {

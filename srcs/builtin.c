@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "lexer.h"
 #include "general.h"
 #include <stdlib.h>
@@ -21,30 +20,40 @@
 #include "../libft/inc/libft.h"
 #include "error.h"
 
-void cpy_string_builtin(char builtins[7][10])
+int is_builtin(char *command_name)
 {
-	ft_strcpy(builtins[LS], "ls");
-	ft_strcpy(builtins[ECHO], "echo");
-	ft_strcpy(builtins[CD], "cd");
-	ft_strcpy(builtins[PWD], "pwd");
-	ft_strcpy(builtins[EXIT], "exit");
-	ft_strcpy(builtins[ENV], "env");
-	ft_strcpy(builtins[EXPORT], "export");
-	ft_strcpy(builtins[UNSET], "unset");
+	if (ft_strcmp(command_name, "echo") == 0)
+		return (ECHO);
+	if (ft_strcmp(command_name, "cd") == 0)
+		return (CD);
+	if (ft_strcmp(command_name, "ls") == 0)
+		return (LS);
+	if (ft_strcmp(command_name, "pwd") == 0)
+		return (PWD);
+	if (ft_strcmp(command_name, "export") == 0)
+		return (EXPORT);
+	if (ft_strcmp(command_name, "unset") == 0)
+		return (UNSET);
+	if (ft_strcmp(command_name, "env") == 0)
+		return (ENV);
+	if (ft_strcmp(command_name, "exit") == 0)
+		return (EXIT);
+	else
+		return (-1);
 }
 
-bool	define_builtin(t_token *new_token, char *string)
+bool	create_builtin_token(t_token *new_token, char *string)
 {
 	int		i;
-	char	builtins[8][10];
+	int 	built_n;
 
-	cpy_string_builtin(builtins);
 	i = 0;
-	while (i < 8)
+	while (i < BUILTINS_COUNT)
 	{
-		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
+		built_n = is_builtin(string);
+		if (is_builtin(string) !=  -1)
 		{
-			define_token(COMMAND, i, NO_OPERATOR, new_token);
+			define_token(COMMAND, built_n, NO_OPERATOR, new_token);
 			return (TRUE);
 		}
 		i++;

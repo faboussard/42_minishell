@@ -20,32 +20,41 @@
 #include "../libft/inc/libft.h"
 #include "error.h"
 
+
 int get_target_and_content(char **envp, t_hashmap hm)
 {
-	size_t i;
+	size_t	i;
+	char	*content;
+	char	*target;
 
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
-	((t_hashmap_content *)hm)->target = ft_substr(*envp, 0, i);
-	if (((t_hashmap_content *)hm)->target == NULL)
+	target = ft_substr(*envp, 0, i);
+	if (target == NULL)
 		return (-1);
 	if ((*envp)[i] == '=')
 	{
 		i++;
-		((t_hashmap_content *)hm)->content = ft_substr(*envp, i, ft_strlen(*envp) - i);
-		if (((t_hashmap_content *)hm)->content == NULL)
+		content = ft_substr(*envp, i, ft_strlen(*envp) - i);
+		if (content == NULL)
+		{
+			free(target);
 			return (-1);
+		}
+		if (ft_hm_add_elem(hm, target, content, &free) == -1)
+		{
+			free(target);
+			free(content);
+			return (-1);
+		}
 	}
+	free(target);
 	return (0);
 }
 
-
 int add_env_variable(t_hashmap hm, char **envp)
 {
-	char	*key;
-	char	*value;
-
 	if (envp == NULL || *envp == NULL)
 		return (-1);
 	while (*envp)
@@ -54,17 +63,12 @@ int add_env_variable(t_hashmap hm, char **envp)
 		{
 			if (get_target_and_content(envp, hm) == -1)
 				return (-1);
-			key = ((t_hashmap_content *) hm)->target;
-			value = ((t_hashmap_content *) hm)->content;
-			if (ft_hm_add_elem(hm, key, value, &free) == -1)
-				return (ft_hm_clear(&hm, &free), -1);
-			free(key);
-			free(value);
 		}
 		envp++;
 	}
 	return (0);
 }
+
 
 t_hashmap get_hm_env_variables(char **envp)
 {
@@ -74,6 +78,9 @@ t_hashmap get_hm_env_variables(char **envp)
 	if (env_variables == NULL)
 		return (NULL);
 	if (add_env_variable(env_variables, envp) == -1)
+	{
+		ft_hm_clear(&env_variables, &free);
 		return (NULL);
+	}
 	return (env_variables);
 }

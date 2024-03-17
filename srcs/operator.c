@@ -24,32 +24,43 @@
 #include "../libft/inc/libft.h"
 #include "error.h"
 
-
-void cpy_string_operator(char operator[9][10])
+int is_operator(char *symbol)
 {
-	ft_strcpy(operator[OPEN_PARENTHESES], "(");
-	ft_strcpy(operator[CLOSE_PARENTHESES], ")");
-	ft_strcpy(operator[PIPE], "|");
-	ft_strcpy(operator[INPUT_REDIRECT], ">");
-	ft_strcpy(operator[OUTPUT_REDIRECT], "<");
-	ft_strcpy(operator[HERE_DOC], "<<");
-	ft_strcpy(operator[APPEND], ">>");
-	ft_strcpy(operator[DOUBLE_QUOTE], "\"");
-	ft_strcpy(operator[SINGLE_QUOTE], "'");
+	if (strcmp(symbol, "(") == 0)
+		return (OPEN_PARENTHESES);
+	else if (strcmp(symbol, ")") == 0)
+		return (CLOSE_PARENTHESES);
+	else if (strcmp(symbol, "|") == 0)
+		return (PIPE);
+	else if (strcmp(symbol, ">") == 0)
+		return (INPUT_REDIRECT);
+	else if (strcmp(symbol, "<") == 0)
+		return (OUTPUT_REDIRECT);
+	else if (strcmp(symbol, "<<") == 0)
+		return (HERE_DOC);
+	else if (strcmp(symbol, ">>") == 0)
+		return (APPEND);
+	else if (strcmp(symbol, "\"") == 0)
+		return (DOUBLE_QUOTE);
+	else if (strcmp(symbol, "\'") == 0)
+		return (SINGLE_QUOTE);
+	else
+		return (-1); // Retourne -1 si l'opérateur n'est pas reconnu
 }
 
 bool	define_operator(t_token *new_token, char *string)
 {
 	int		i;
-	char	operator[9][10];
+	int 	operator;
 
 	i = 0;
-	cpy_string_operator(operator);
-	while (i < 9)
+
+	while (i < OPERATOR_COUNT)
 	{
-		if (!ft_strncmp(string, operator[i], ft_strlen(string)))
+		operator = is_operator(string);
+		if (is_operator(string) != -1)
 		{
-			define_token(OPERATOR, NO_BUILTIN, i, new_token);
+			define_token(OPERATOR, NO_BUILTIN, operator, new_token);
 			return (TRUE);
 		}
 		i++;
