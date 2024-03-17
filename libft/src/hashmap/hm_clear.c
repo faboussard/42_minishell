@@ -25,7 +25,7 @@ void	ft_hm_clear(t_hashmap *map, void (*del)(void *))
 
 static void	free_hashmap_list(t_node *lst, void (*del)(void *))
 {
-	t_hashmap_node	*node_content;
+	t_hashmap_content	*node_content;
 
 	if (lst == NULL)
 		return ;

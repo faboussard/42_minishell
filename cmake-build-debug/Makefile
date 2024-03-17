@@ -1521,6 +1521,30 @@ libft/src/hashmap/hm_init.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_init.c.s
 .PHONY : libft/src/hashmap/hm_init.c.s
 
+libft/src/hashmap/hm_print.o: libft/src/hashmap/hm_print.c.o
+.PHONY : libft/src/hashmap/hm_print.o
+
+# target to build an object file
+libft/src/hashmap/hm_print.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_print.c.o
+.PHONY : libft/src/hashmap/hm_print.c.o
+
+libft/src/hashmap/hm_print.i: libft/src/hashmap/hm_print.c.i
+.PHONY : libft/src/hashmap/hm_print.i
+
+# target to preprocess a source file
+libft/src/hashmap/hm_print.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_print.c.i
+.PHONY : libft/src/hashmap/hm_print.c.i
+
+libft/src/hashmap/hm_print.s: libft/src/hashmap/hm_print.c.s
+.PHONY : libft/src/hashmap/hm_print.s
+
+# target to generate assembly for a file
+libft/src/hashmap/hm_print.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/libft/src/hashmap/hm_print.c.s
+.PHONY : libft/src/hashmap/hm_print.c.s
+
 libft/src/hashmap/hm_size.o: libft/src/hashmap/hm_size.c.o
 .PHONY : libft/src/hashmap/hm_size.o
 
@@ -1944,6 +1968,9 @@ help:
 	@echo "... libft/src/hashmap/hm_init.o"
 	@echo "... libft/src/hashmap/hm_init.i"
 	@echo "... libft/src/hashmap/hm_init.s"
+	@echo "... libft/src/hashmap/hm_print.o"
+	@echo "... libft/src/hashmap/hm_print.i"
+	@echo "... libft/src/hashmap/hm_print.s"
 	@echo "... libft/src/hashmap/hm_size.o"
 	@echo "... libft/src/hashmap/hm_size.i"
 	@echo "... libft/src/hashmap/hm_size.s"

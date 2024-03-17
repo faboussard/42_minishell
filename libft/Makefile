@@ -59,6 +59,7 @@ SRCS=src/ft_is/ft_isalnum.c\
         src/hashmap/hm_get_index.c\
         src/hashmap/hm_init.c\
         src/hashmap/hm_size.c)\
+        src/hashmap/hm_print.c)\
 	    src/utils.c\
 
 DIR_INCS		=	inc/

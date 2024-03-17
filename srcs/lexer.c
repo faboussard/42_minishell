@@ -61,20 +61,6 @@ void create_token_to_list(t_node **tokens, t_token *new_token, char *string)
 //a mettre dans parser
 // fonction redefine from position in chain list.
 
-void print_list(t_node *list_tokens)
-{
-	t_node  *iterator;
-	t_token *token;
-
-	iterator = list_tokens;
-	while (iterator != NULL)
-	{
-		token = (t_token *)(iterator)->content;
-		printf("Type: %d, Builtin: %d, Operator: %d\n", token->e_type, token->e_builtin, token->e_operator);
-		iterator = iterator->next;
-	}
-	printf("\n");
-}
 
 int parentheses_error(const char *string)
 {

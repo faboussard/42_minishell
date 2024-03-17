@@ -37,6 +37,15 @@ typedef struct s_node
 	struct s_node		*next;
 }						t_node;
 
+typedef struct s_hashmap_content
+{
+	char					*target;
+	void					*content;
+}	t_hashmap_content;
+
+typedef t_node**	t_hashmap;
+
+
 /***************************** ft_is **************************************/
 int						ft_isalpha(int c);
 int						ft_isdigit(int c);
@@ -125,23 +134,16 @@ int						ft_abs(int n);
 
 # define HASHMAP_ARR_SIZE 50
 
-typedef t_node**	t_hashmap;
-
-typedef struct s_hashmap_node
-{
-	char	*target;
-	void	*content;
-}	t_hashmap_node;
-
 int					ft_hm_add_elem(t_hashmap dst, char *target, void *content,
 									  void (*del)(void *));
 int					ft_hm_delete_elem(t_hashmap map,
 										 char *target, void (*del)(void *));
 void				ft_hm_clear(t_hashmap *map, void (*del)(void *));
 void				*ft_hm_get_content(t_hashmap map, char *target);
-t_hashmap_node		*ft_hm_get_elem(t_hashmap map, char *target);
+t_hashmap_content		*ft_hm_get_elem(t_hashmap map, char *target);
 size_t				ft_hm_get_index(char *target);
 t_hashmap			ft_hm_init(void);
 int					ft_hm_size(t_hashmap hashmap);
+void				print_hashmap(t_hashmap hashmap);
 
 #endif // LIBFT_H

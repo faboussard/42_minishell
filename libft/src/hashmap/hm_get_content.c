@@ -9,7 +9,7 @@
 ///						returns NULL if it doesn't exist
 void	*ft_hm_get_content(t_hashmap map, char *target)
 {
-	t_hashmap_node	*elem;
+	t_hashmap_content	*elem;
 
 	elem = ft_hm_get_elem(map, target);
 	if (elem == NULL)
