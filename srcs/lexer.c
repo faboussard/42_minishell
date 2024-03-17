@@ -78,7 +78,7 @@ int parentheses_error(const char *string)
 	return (0);
 }
 
-int parentheses_on_arg(const char *string)
+int parentheses_on_arg(char *string)
 {
 	int	i;
 	int	count;
@@ -106,7 +106,7 @@ int parentheses_on_arg(const char *string)
 	return (0);
 }
 
-void check_string_syntax(const char *string)
+void check_string_syntax(char *string)
 {
 	if (string == NULL)
 		return;

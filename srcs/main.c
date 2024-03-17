@@ -29,11 +29,11 @@ t_node *get_list_tokens(char *string)
 }
 
 
-int minishell_init(t_minishell *minishell, char **envp, char argv_zero)
-{
-	ft_bzero(minishell, (sizeof * minishell));
-	//setgoodpath with command. fonction melodie.
-}
+//int minishell_init(t_minishell *minishell, char **envp, char argv_zero)
+//{
+//	ft_bzero(minishell, (sizeof * minishell));
+//	//setgoodpath with command. fonction melodie.
+//}
 
 
 int main()
@@ -46,13 +46,13 @@ int main()
 			"USER=user",
 			NULL
 	};
-	char 			argv[0];
+//	char 			argv[0];
 	/******* dans int main(int ac, char **av, char **env) *****/
 	t_minishell 	minishell;
-	int 			tmp;
+//	int 			tmp;
 
 	string = "echo ls >> output.txt";
-	tmp = minishell_init(&minishell, envp, argv[0]);
+//	tmp = minishell_init(&minishell, envp, argv[0]);
 	minishell.list_tokens = get_list_tokens(string);
 	print_token(minishell.list_tokens);
 	minishell.hm_env_variables = get_hm_env_variables(envp);
