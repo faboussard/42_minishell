@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   minishell.h                            		    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 16:26:03 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/13 16:26:38 by faboussa         ###   ########.fr       */
+/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
+/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef RUN_MINISHELLRC_H
+# define RUN_MINISHELLRC_H
 
-void	print_error(const char *error);
+#include "../libft/inc/libft.h"
 
-#endif //ERROR_H
+typedef struct s_minishell
+{
+	t_hashmap		hm_env_variables;
+	t_node			*list_tokens;
+	t_node			*list_here_docs;
+}	t_minishell;
+
+#endif

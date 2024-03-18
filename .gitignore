@@ -1,3 +1,50 @@
-cmake-build-debug
-.idea
-CMakeLists.txt
+# IDE
+.idea/
+.VSCode/
+cmake-build-debug/
+
+# Executables
+minishell
+libft_test
+libft_test_debug
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Object files
+.build/
+*.o
+*.ko
+*.obj
+*.elf
+
+# Prerequisites
+*.d
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf

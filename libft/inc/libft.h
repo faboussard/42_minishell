@@ -37,30 +37,67 @@ typedef struct s_node
 	struct s_node		*next;
 }						t_node;
 
-int						ft_atoi(const char *string);
-long					ft_atol(const char *s);
+typedef struct s_hashmap_content
+{
+	void					*content; // valeur
+	char					*target; //clef
+}	t_hashmap_content;
+
+typedef t_node**	t_hashmap;
+
+
+/***************************** ft_is **************************************/
 int						ft_isalpha(int c);
 int						ft_isdigit(int c);
 int						ft_isalnum(int c);
 int						ft_isascii(int c);
 int						ft_isprint(int c);
+
+/***************************** ft_to **************************************/
+
 int						ft_tolower(int c);
 int						ft_toupper(int c);
-size_t					ft_strlen(const char *string);
-char					*ft_strchr(const char *s, int c);
-char					*ft_strrchr(const char *s, int c);
-void					*ft_memset(void *s, int c, size_t n);
+int						ft_atoi(const char *string);
+long					ft_atol(const char *s);
+char					*ft_itoa(int n);
+
+/***************************** ft_mem **************************************/
+
 void					*ft_realloc(void *ptr, unsigned int new_size);
 void					*ft_bzero(void *s, size_t n);
 void					*ft_calloc(size_t nmemb, size_t size);
 void					*ft_memcpy(void *dest, const void *src, size_t n);
 void					*ft_memmove(void *dest, const void *src, size_t n);
-char					*ft_strdup(const char *s);
-size_t					ft_strlcpy(char *dest, const char *src, size_t size);
-size_t					ft_strlcat(char *dst, const char *src, size_t dstsize);
-int						ft_strncmp(const char *s1, const char *s2, size_t n);
 void					*ft_memchr(const void *s, int c, size_t n);
 int						ft_memcmp(void *s1, const void *s2, size_t n);
+void					*ft_memset(void *s, int c, size_t n);
+
+/***************************** ft_printf **************************************/
+
+int						ft_printf(const char *s, ...);
+int						ft_print_and_count_int(int n, const char *base);
+int						print_and_count_ul(unsigned long int n, char *base);
+int						print_and_count_u(unsigned int n, char *base);
+
+/***************************** ft_put **************************************/
+
+int						ft_putstr_fd(char *s, int fd);
+void					ft_putendl_fd(char *s, int fd);
+void					ft_putnbr_fd(int n, int fd);
+void					ft_putchar_fd(char c, int fd);
+int						ft_putchar(int c);
+int						ft_putstr(char *s);
+
+/***************************** ft_str **************************************/
+
+size_t					ft_strlen(const char *string);
+char					*ft_strchr(const char *s, int c);
+char					*ft_strrchr(const char *s, int c);
+char					*ft_strdup(const char *s);
+size_t					ft_strlcpy(char *dest, const char *src, size_t size);
+size_t					ft_strcpy(char *dest, const char *src);
+size_t					ft_strlcat(char *dst, const char *src, size_t dstsize);
+int						ft_strncmp(const char *s1, const char *s2, size_t n);
 char					*ft_strnstr(const char *big, const char *little,
 							size_t len);
 char					*ft_substr(const char *s1, unsigned int start,
@@ -70,13 +107,14 @@ char					*ft_substr_gnl(char const *s, size_t total_len,
 char					*ft_strjoin(char const *s1, char const *s2);
 int						ft_strcmp(char *s1, char *s2);
 char					*ft_strtrim(char const *s1, char const *set);
-char					*ft_itoa(int n);
+
 char					*ft_strmapi(char const *s, char (*f)(unsigned int,
 								char));
 void					ft_striteri(char *s, void (*f)(unsigned int, char *));
-int						ft_putstr_fd(char *s, int fd);
-void					ft_putendl_fd(char *s, int fd);
-void					ft_putnbr_fd(int n, int fd);
+char					**ft_split(char const *s, char c);
+
+/***************************** ft_lst **************************************/
+
 t_node					*ft_lstnew(void *content);
 void					ft_lstadd_front(t_node **lst, t_node *new);
 int						ft_lstsize(t_node *lst);
@@ -87,14 +125,25 @@ void					ft_lstclear(t_node **lst, void (*del)(void *));
 void					ft_lstiter(t_node *lst, void (*f)(void *));
 t_node					*ft_lstmap(t_node *lst, void *(*f)(void *),
 							void (*del)(void *));
-void					ft_putchar_fd(char c, int fd);
-char					**ft_split(char const *s, char c);
-int						ft_printf(const char *s, ...);
-int						ft_putchar(int c);
-int						ft_putstr(char *s);
-int						ft_print_and_count_int(int n, const char *base);
-int						print_and_count_ul(unsigned long int n, char *base);
-int						print_and_count_u(unsigned int n, char *base);
+
+/***************************** ft_maths **************************************/
+
 int						ft_abs(int n);
+
+/***************************** ft_hashmap **************************************/
+
+# define HASHMAP_ARR_SIZE 50
+
+int					ft_hm_add_elem(t_hashmap dst, char *target, void *content,
+									  void (*del)(void *));
+int					ft_hm_delete_elem(t_hashmap map,
+										 char *target, void (*del)(void *));
+void				ft_hm_clear(t_hashmap *map, void (*del)(void *));
+void				*ft_hm_get_content(t_hashmap map, char *target);
+t_hashmap_content		*ft_hm_get_elem(t_hashmap map, char *target);
+size_t				ft_hm_get_index(char *target);
+t_hashmap			ft_hm_init(void);
+int					ft_hm_size(t_hashmap hashmap);
+void				print_hashmap(t_hashmap hashmap);
 
 #endif // LIBFT_H
