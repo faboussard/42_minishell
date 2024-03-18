@@ -13,4 +13,6 @@
 #ifndef ERROR_H
 # define ERROR_H
 
+void	print_error(const char *error);
+
 #endif //ERROR_H

@@ -11,46 +11,78 @@
 /* ************************************************************************** */
 
 #ifndef LEXER_H
-# define LEXER_H
+#define LEXER_H
 
-enum e_token_builtin
-{
-	cd,
-	echo,
-	pwd,
-	export,
-	unset,
-	env,
-};
+#include <stdbool.h>
+#include "../libft/inc/libft.h"
 
-enum e_token_group
-{
-	ARGUMENT,
-	COMMAND,
-	ENVIRONMENT,
-	OPERATOR
-};
+#define BUILTINS_COUNT 9
+#define OPERATOR_COUNT 7
 
 enum e_token_type
 {
-	builtin,
-	delimiter,
-	redirect,
-	path_env
+	NO_TYPE = 0,
+	COMMAND = 1,
+	ARGUMENT = 2,
+	PATH_FILE = 3,
+	OPERATOR = 4,
+	TO_APPEND = 5,
+	SUBSHELL = 6,
 };
 
-typedef struct s_token_group
+enum e_token_operators
 {
-	enum e_token_group	e_group;
-	enum e_token_type	e_type;
-}					t_token_group;
+	NO_OPERATOR = 0,
+	OPEN_PARENTHESES = 1,
+	CLOSE_PARENTHESES = 2,
+	PIPE = 3,
+	INPUT_REDIRECT = 4,
+	OUTPUT_REDIRECT = 5,
+	HERE_DOC = 6,
+	APPEND = 7,
+	DOUBLE_QUOTE = 8,
+	SINGLE_QUOTE = 9,
+};
+
+enum e_token_builtin
+{
+	NO_BUILTIN = 0,
+	CD = 1,
+	LS = 2,
+	ECHO = 3,
+	PWD = 4,
+	EXPORT = 5,
+	UNSET =	6,
+	ENV = 7,
+	EXIT = 8
+};
+
 
 typedef struct s_token
 {
-	t_token_group	group;
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*content;
-}					t_token;
+	enum e_token_type		e_type;
+	enum e_token_builtin	e_builtin;
+	enum e_token_operators	e_operator;
+}	t_token;
+
+/****************** LEXER ******************/
+
+void	transform_to_token(char *string, t_node **list_tokens);
+void	define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
+void	print_token(t_node *list_tokens);
+
+/****************** OPERATORS ******************/
+
+bool	define_operator(t_token *new_token, char *string);
+bool	is_redirect_token(t_token *token);
+void	print_operator_syntax_error(t_token *token);
+
+
+/****************** BUILTIN ******************/
+
+bool	create_builtin_token(t_token *new_token, char *string);
+
+/********************* ENV_VARIABLES *********************/
+t_hashmap	get_hm_env_variables(char **envp);
 
 #endif //LEXER_H
