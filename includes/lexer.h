@@ -16,9 +16,6 @@
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
 
-#define BUILTINS_COUNT 9
-#define OPERATOR_COUNT 7
-
 enum e_token_type
 {
 	NO_TYPE = 0,
@@ -60,29 +57,37 @@ enum e_token_builtin
 
 typedef struct s_token
 {
+	char					*name;
 	enum e_token_type		e_type;
 	enum e_token_builtin	e_builtin;
 	enum e_token_operators	e_operator;
 }	t_token;
 
+/******************* EXPANSION *******************/
+
+int	parentheses_error(const char *string);
+int parentheses_on_arg(char *string);
+char  *manage_quotes(char *string);
+
 /****************** LEXER ******************/
 
-void	transform_to_token(char *string, t_node **list_tokens);
+void	transform_to_token(char **string, t_node **list_tokens);
 void	define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
-void	print_token(t_node *list_tokens);
+t_node *get_list_tokens(char **string);
 
 /****************** OPERATORS ******************/
 
-bool	define_operator(t_token *new_token, char *string);
+bool	get_operator_token(t_token *new_token, char *string);
 bool	is_redirect_token(t_token *token);
 void	print_operator_syntax_error(t_token *token);
 
 
 /****************** BUILTIN ******************/
 
-bool	create_builtin_token(t_token *new_token, char *string);
+bool	get_builtin_token(t_token *new_token, char *string);
 
 /********************* ENV_VARIABLES *********************/
+
 t_hashmap	get_hm_env_variables(char **envp);
 
 #endif //LEXER_H

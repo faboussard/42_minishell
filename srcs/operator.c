@@ -10,10 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//structure de bbuilint + options
-//cd with only a relative or absolute path -> faire un strjoin
-//&& transform_to_token->content + 1 == "-n" ->faire un strjoin
-
 #include "lexer.h"
 #include "utils.h"
 #include <stdlib.h>
@@ -24,15 +20,15 @@
 #include "../libft/inc/libft.h"
 #include "error.h"
 
-bool	define_operator(t_token *new_token, char *string)
+bool	get_operator_token(t_token *new_token, char *string)
 {
-	int		i;
-	const char	*operators[OPERATOR_COUNT] = {
-		"(", ")", "|", ">", "<", "<<", ">>"
+	int			i;
+	const char	*operators[10] = {NULL,
+		"(", ")", "|", ">", "<", "<<", ">>", "\"", "'",
 	};
 
-	i = 0;
-	while (i < OPERATOR_COUNT)
+	i = 1;
+	while (i < 9)
 	{
 
 		if (!ft_strncmp(string, operators[i], ft_strlen(string)))
@@ -44,28 +40,6 @@ bool	define_operator(t_token *new_token, char *string)
 	}
 	return (FALSE);
 }
-
-//bool	define_operator(t_token *new_token, char *string)
-//{
-//	int		i;
-//	int 	operator;
-//	const char	*operators[OPERATOR_COUNT] = {
-//		"(", ")", "|", ">", "<", "<<", ">>"
-//	};
-//
-//	i = 0;
-//	while (i < OPERATOR_COUNT)
-//	{
-//		operator = is_operator(string);
-//		if (is_operator(string) != -1)
-//		{
-//			define_token(OPERATOR, NO_BUILTIN, operator, new_token);
-//			return (TRUE);
-//		}
-//		i++;
-//	}
-//	return (FALSE);
-//}
 
 bool	is_redirect_token(t_token *token)
 {

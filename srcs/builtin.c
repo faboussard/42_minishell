@@ -20,40 +20,19 @@
 #include "../libft/inc/libft.h"
 #include "error.h"
 
-int is_builtin(char *command_name)
-{
-	if (ft_strcmp(command_name, "echo") == 0)
-		return (ECHO);
-	if (ft_strcmp(command_name, "cd") == 0)
-		return (CD);
-	if (ft_strcmp(command_name, "ls") == 0)
-		return (LS);
-	if (ft_strcmp(command_name, "pwd") == 0)
-		return (PWD);
-	if (ft_strcmp(command_name, "export") == 0)
-		return (EXPORT);
-	if (ft_strcmp(command_name, "unset") == 0)
-		return (UNSET);
-	if (ft_strcmp(command_name, "env") == 0)
-		return (ENV);
-	if (ft_strcmp(command_name, "exit") == 0)
-		return (EXIT);
-	else
-		return (-1);
-}
-
-bool	create_builtin_token(t_token *new_token, char *string)
+bool	get_builtin_token(t_token *new_token, char *string)
 {
 	int		i;
-	int 	built_n;
+	const char *builtins[9] = {NULL,
+	"echo", "cd", "ls", "pwd", "export", "unset", "env", "exit"
+	};
 
-	i = 0;
-	while (i < BUILTINS_COUNT)
+	i = 1;
+	while (i < 9)
 	{
-		built_n = is_builtin(string);
-		if (is_builtin(string) !=  -1)
+		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
 		{
-			define_token(COMMAND, built_n, NO_OPERATOR, new_token);
+			define_token(COMMAND, i, NO_OPERATOR, new_token);
 			return (TRUE);
 		}
 		i++;

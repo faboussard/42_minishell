@@ -39,8 +39,8 @@ typedef struct s_node
 
 typedef struct s_hashmap_content
 {
-	void					*content; // valeur
-	char					*target; //clef
+	void					*content;
+	char					*target;
 }	t_hashmap_content;
 
 typedef t_node**	t_hashmap;

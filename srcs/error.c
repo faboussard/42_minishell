@@ -19,36 +19,6 @@
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
 
-void	ft_free_split(char **tab)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-void	ft_free_tab(void **tab, int j)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (i < j)
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
 void	print_error(char *error)
 {
 	if (error != NULL)

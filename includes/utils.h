@@ -21,9 +21,14 @@ enum e_bool
 	TRUE = 1,
 }	e_bool;
 
-void	ft_free_split(char **tab);
-void	ft_free_tab(void **tab, int j);
 t_token	*return_last_token(t_node *list_tokens);
+void	print_token(t_node *list_tokens);
+void	create_double_array(t_minishell *minishell, t_node *list_tokens);
+
+/******************** FREE ********************/
+
 void	free_minishell(t_minishell *minishell);
+void	ft_free_double_tab(char **tab);
+void	ft_free_tab_from_i(void **tab, int j);
 
 #endif //GENERAL_H
