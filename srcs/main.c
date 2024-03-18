@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                		                       :+:      :+:    :+:   */
+/*   main.c                			                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../libft/inc/libft.h"
 #include "../includes/lexer.h"
+<<<<<<< HEAD
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
@@ -59,5 +58,18 @@ int main()
 	minishell.hm_env_variables = get_hm_env_variables(envp);
 	print_hashmap(minishell.hm_env_variables);
 	free_minishell(&minishell);
+=======
+#include "../libft/inc/libft.h"
+#include <stdio.h>
+
+void	is_delimiter(void)
+{
+	printf("hello word !");
+}
+
+int	main(void)
+{
+	is_delimiter();
+>>>>>>> master
 	return (0);
 }
