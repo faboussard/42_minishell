@@ -18,7 +18,9 @@
 typedef struct s_minishell
 {
 	t_hashmap		hm_env_variables;
+	char 			**env_variables;
 	t_node			*list_tokens;
+	char 			**token_array;
 	t_node			*list_here_docs;
 }	t_minishell;
 

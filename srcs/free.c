@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   free.c                                              :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,28 +14,45 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
-#include "error.h"
+#include "minishell.h"
 
-bool	get_builtin_token(t_token *new_token, char *string)
+void	free_minishell(t_minishell *minishell)
 {
-	int		i;
-	const char *builtins[9] = {NULL,
-	"echo", "cd", "ls", "pwd", "export", "unset", "env", "exit"
-	};
+	ft_free_double_tab(minishell->token_array);
+	ft_hm_clear(&minishell->hm_env_variables, &free);
+	ft_lstclear(&minishell->list_tokens , &free);
+}
 
-	i = 1;
-	while (i < 9)
+
+void	ft_free_double_tab(char **tab)
+{
+	int	i;
+
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (tab[i])
 	{
-		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
-		{
-			define_token(COMMAND, i, NO_OPERATOR, new_token);
-			return (TRUE);
-		}
+		free(tab[i]);
 		i++;
 	}
-	return (FALSE);
+	free(tab);
+}
+
+void	ft_free_tab_from_i(void **tab, int j)
+{
+	int	i;
+
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (i < j)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }
