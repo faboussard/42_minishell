@@ -7,7 +7,6 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-<<<<<<< HEAD
 LIST_SRCS		=  builtin env_variables error lexer main operator parser utils
 
 LIST_HEADERS	= error utils lexer minishell parser
