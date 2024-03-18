@@ -12,12 +12,13 @@
 
 
 #include "lexer.h"
-#include "general.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
+#include "minishell.h"
 
 t_token *return_last_token(t_node *list_tokens)
 {
@@ -46,6 +47,15 @@ void print_token(t_node *list_tokens)
 	}
 	ft_printf("\n");
 }
+
+void	free_minishell(t_minishell *minishell)
+{
+	ft_hm_clear(&minishell->hm_env_variables, &free);
+	ft_lstclear(&minishell->list_tokens , &free);
+}
+
+
+
 
 
 

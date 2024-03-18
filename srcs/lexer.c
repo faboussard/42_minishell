@@ -15,7 +15,7 @@
 //&& transform_to_token->content + 1 == "-n" ->faire un strjoin
 
 #include "lexer.h"
-#include "general.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>

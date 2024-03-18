@@ -11,7 +11,7 @@ VOIR DAUTRES CAS DE SYNTAXES STRING OU TOKEN
 env variable:
 ajouter les autres variables denvironnement (old pwd, default, etc..)
 cmd path ??
-soccuper des paths ?
+soccuper des paths ? aboslute ?
 
 expansion:
 soccuper des guillemets

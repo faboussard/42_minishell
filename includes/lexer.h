@@ -17,7 +17,7 @@
 #include "../libft/inc/libft.h"
 
 #define BUILTINS_COUNT 9
-#define OPERATOR_COUNT 9
+#define OPERATOR_COUNT 6
 
 enum e_token_type
 {
@@ -29,16 +29,6 @@ enum e_token_type
 	TO_APPEND = 5,
 	SUBSHELL = 6,
 };
-
-enum e_token_subtype
-{
-	NO_SUBTYPE = 0,
-
-
-	BEGIN_SUBSHELL = 3
-};
-
-// pour lenveronnement ca provint du path voir apres
 
 enum e_token_operators
 {
