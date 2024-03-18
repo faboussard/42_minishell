@@ -27,7 +27,6 @@
 bool	define_operator(t_token *new_token, char *string)
 {
 	int		i;
-	int 	operator;
 	const char	*operators[OPERATOR_COUNT] = {
 		"(", ")", "|", ">", "<", "<<", ">>"
 	};
@@ -38,7 +37,7 @@ bool	define_operator(t_token *new_token, char *string)
 
 		if (!ft_strncmp(string, operators[i], ft_strlen(string)))
 		{
-			define_token(OPERATOR, NO_BUILTIN, operator, new_token);
+			define_token(OPERATOR, NO_BUILTIN, i, new_token);
 			return (TRUE);
 		}
 		i++;

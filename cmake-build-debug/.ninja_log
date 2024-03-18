@@ -148,3 +148,14 @@
 98	128	1710766751876213936	minishell	e98db8ece643be3
 1	31	1710766793468255392	CMakeFiles/minishell.dir/srcs/operator.c.o	73a6dcb2ece95d02
 31	60	1710766793500255422	minishell	e98db8ece643be3
+0	42	1710769546447298120	CMakeFiles/minishell.dir/srcs/operator.c.o	73a6dcb2ece95d02
+42	141	1710769546547298129	minishell	e98db8ece643be3
+1	39	1710769568003299597	CMakeFiles/minishell.dir/srcs/main.c.o	c89bb02698ec20d6
+3	43	1710769568007299598	CMakeFiles/minishell.dir/srcs/lexer.c.o	33895804edc33a60
+2	47	1710769568011299597	CMakeFiles/minishell.dir/srcs/error.c.o	4bb9148c86b9c6e7
+39	76	1710769568043299601	CMakeFiles/minishell.dir/srcs/parser.c.o	aae6f4ea6d8352e9
+43	81	1710769568047299600	CMakeFiles/minishell.dir/srcs/operator.c.o	73a6dcb2ece95d02
+47	84	1710769568047299600	CMakeFiles/minishell.dir/srcs/builtin.c.o	a82d30cb091b5cc1
+76	110	1710769568075299602	CMakeFiles/minishell.dir/srcs/env_variables.c.o	90a60d3a4921b398
+81	114	1710769568079299603	CMakeFiles/minishell.dir/srcs/utils.c.o	e78de99ef0579895
+114	145	1710769568111299604	minishell	e98db8ece643be3

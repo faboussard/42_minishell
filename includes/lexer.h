@@ -17,7 +17,7 @@
 #include "../libft/inc/libft.h"
 
 #define BUILTINS_COUNT 9
-#define OPERATOR_COUNT 6
+#define OPERATOR_COUNT 7
 
 enum e_token_type
 {
