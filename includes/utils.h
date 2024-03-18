@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 #ifndef MINISHELL_GENERAL_H
 #define MINISHELL_GENERAL_H
 
@@ -22,5 +24,6 @@ typedef enum
 void	ft_free_split(char **tab);
 void	ft_free_tab(void **tab, int j);
 t_token	*return_last_token(t_node *list_tokens);
+void	free_minishell(t_minishell *minishell);
 
 #endif //MINISHELL_GENERAL_H

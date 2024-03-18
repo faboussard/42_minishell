@@ -62,7 +62,7 @@ add_executable(minishell
         libft/src/gnl/get_next_line_utils.c
         libft/src/utils.c
         srcs/main.c
-        includes/general.h
+        includes/utils.h
         srcs/error.c
         includes/error.h
         includes/lexer.h

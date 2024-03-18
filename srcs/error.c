@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "general.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>

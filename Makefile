@@ -9,7 +9,7 @@ vpath %c srcs
 
 LIST_SRCS		=  builtin env_variables error lexer main operator parser utils
 
-LIST_HEADERS	= error general lexer minishell parser
+LIST_HEADERS	= error utils lexer minishell parser
 
 # ------------ DIRECTORIES ------------ #
 

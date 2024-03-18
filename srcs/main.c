@@ -16,6 +16,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
+#include "utils.h"
 
 t_node *get_list_tokens(char *string)
 {
@@ -57,7 +58,6 @@ int main()
 	print_token(minishell.list_tokens);
 	minishell.hm_env_variables = get_hm_env_variables(envp);
 	print_hashmap(minishell.hm_env_variables);
-	ft_lstclear(&minishell.list_tokens , &free);
-	ft_hm_clear(&minishell.hm_env_variables, &free);
+	free_minishell(&minishell);
 	return (0);
 }

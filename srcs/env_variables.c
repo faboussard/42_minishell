@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "general.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -78,9 +78,8 @@ t_hashmap get_hm_env_variables(char **envp)
 	if (env_variables == NULL)
 		return (NULL);
 	if (add_env_variable(env_variables, envp) == -1)
-	{
-		ft_hm_clear(&env_variables, &free);
-		return (NULL);
-	}
+		return (ft_hm_clear(&env_variables, &free), NULL);
+//	if (add_default_env_variables(env_variables) == -1)
+//		return (ft_hm_clear(&env_variables, &free), NULL);
 	return (env_variables);
 }
