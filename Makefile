@@ -7,6 +7,7 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
+<<<<<<< HEAD
 LIST_SRCS		=  builtin env_variables error lexer main operator parser utils
 
 LIST_HEADERS	= error utils lexer minishell parser
@@ -47,7 +48,7 @@ $(NAME):		 $(OBJS) $(libft)
 # ---------- COMPILED RULES ----------- #
 
 $(DIR_BUILD)%.o: %.c $(DIR_BUILD)
-				$(CC) $(CFLAGS) $(DEPS_FLAGS) $(INCLUDES) -O3 -c $< -o $@
+				$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
 
 #---------- CREATE REPO OBJS ---------#
 
