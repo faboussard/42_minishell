@@ -17,19 +17,23 @@
 void create_token_chain_list(t_minishell *minishell, char *string)
 {
 	minishell->list_tokens = get_list_tokens(string);
-	print_token(minishell->list_tokens);
 }
 
 void create_envp_hashmap(t_minishell *minishell, char **envp)
 {
 	minishell->hm_env_variables = get_hm_env_variables(envp);
-	print_hashmap(minishell->hm_env_variables);
+}
+
+void create_tables(t_minishell *minishell)
+{
+	create_cmd_table(minishell, minishell->list_tokens);
+	create_redirect_table(minishell, minishell->list_tokens);
 }
 
 int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
-	char *string = "echo cat | .txt"; //entree dans readlin, avant split par "bash"
+	char *string = "ls l < cat cat |"; //entree dans readlin, avant split par "bash"
 	char			*envp[] = {
 			"PATH=/bin:/usr/bin",
 			"HOME=/home/user",
@@ -41,11 +45,12 @@ int main()
 
 	ft_init_minishell(&minishell);
 	create_token_chain_list(&minishell, string);
+	print_token(minishell.list_tokens); //DELETE
 	create_envp_hashmap(&minishell, envp);
-
-	tokens_to_array_of_cmds(&minishell, minishell.list_tokens);
-	tokens_to_redirects(&minishell, minishell.list_tokens);
-	print_array(minishell.token_array);
+	print_hashmap(minishell.hm_env_variables); //DELETE
+	create_tables(&minishell);
+	print_array(minishell.cmd_table);
+	print_array(minishell.in_redirect_table);
 	free_minishell(&minishell);
 	return (0);
 }

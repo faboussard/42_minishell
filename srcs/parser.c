@@ -84,7 +84,7 @@ void arg_to_command(t_node *list_tokens)
 		{
 			token = (t_token *) (iterator)->content;
 			next_token = (t_token *) (iterator->next)->content;
-			if (token->e_type == COMMAND && next_token->e_operator != NO_OPERATOR && next_token->e_type != PATH_FILE)
+			if (token->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != PATH_FILE)
 				next_token->e_type = ARGUMENT;
 			if (token->e_type == PATH_FILE)
 				next_token->e_type = COMMAND;
@@ -122,6 +122,3 @@ void token_rework(t_node *list_tokens)
 	check_syntax_with_tokens(list_tokens);
 	token_requalification(list_tokens);
 }
-
-
-

@@ -36,8 +36,12 @@ void	free_minishell(t_minishell *minishell)
 		ft_hm_clear(&minishell->hm_env_variables, &free);
 	if (minishell->list_tokens)
 		ft_lstclear(&minishell->list_tokens , &free_token);
-	if (minishell->token_array)
-		ft_free_double_tab(minishell->token_array);
+	if (minishell->cmd_table)
+		ft_free_double_tab(minishell->cmd_table);
+	if (minishell->in_redirect_table)
+		ft_free_double_tab(minishell->in_redirect_table);
+	if (minishell->out_redirect_table)
+		ft_free_double_tab(minishell->out_redirect_table);
 }
 
 void	ft_free_double_tab(char **tab)

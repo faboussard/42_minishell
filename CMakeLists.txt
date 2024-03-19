@@ -87,5 +87,5 @@ add_executable(minishell
         srcs/free.c
         srcs/split_readline_string.c
         srcs/print.c
-        srcs/create_cmd_in_array.c
+        srcs/create_tables_from_tokens.c
 )
