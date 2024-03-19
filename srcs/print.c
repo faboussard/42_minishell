@@ -12,12 +12,6 @@
 
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "../libft/inc/libft.h"
-#include "minishell.h"
 
 void print_array(char **array)
 {
@@ -30,7 +24,6 @@ void print_array(char **array)
 		ft_printf("%s\n", array[i]);
 		i++;
 	}
-	ft_printf("\n");
 }
 
 void print_token(t_node *list_tokens)

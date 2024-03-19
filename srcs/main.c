@@ -14,10 +14,14 @@
 #include "minishell.h"
 #include "utils.h"
 
-void create_token_chain_list(t_minishell *minishell, char *string, char *envp[])
+void create_token_chain_list(t_minishell *minishell, char *string)
 {
 	minishell->list_tokens = get_list_tokens(string);
 	print_token(minishell->list_tokens);
+}
+
+void create_envp_hashmap(t_minishell *minishell, char **envp)
+{
 	minishell->hm_env_variables = get_hm_env_variables(envp);
 	print_hashmap(minishell->hm_env_variables);
 }
@@ -25,7 +29,7 @@ void create_token_chain_list(t_minishell *minishell, char *string, char *envp[])
 int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
-	char *string = "echo ls >> output.txt"; //entree dans readlin, avant split par "bash"
+	char *string = "echo cat | .txt"; //entree dans readlin, avant split par "bash"
 	char			*envp[] = {
 			"PATH=/bin:/usr/bin",
 			"HOME=/home/user",
@@ -36,9 +40,12 @@ int main()
 	t_minishell 	minishell;
 
 	ft_init_minishell(&minishell);
-	create_token_chain_list(&minishell, string, envp);
-//	create_double_array(&minishell, minishell.list_tokens);
-//	print_array(minishell.token_array);
+	create_token_chain_list(&minishell, string);
+	create_envp_hashmap(&minishell, envp);
+
+	tokens_to_array_of_cmds(&minishell, minishell.list_tokens);
+	tokens_to_redirects(&minishell, minishell.list_tokens);
+	print_array(minishell.token_array);
 	free_minishell(&minishell);
 	return (0);
 }
