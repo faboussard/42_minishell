@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_variables.c		                            :+:      :+:    :+:   */
+/*   env_variables_table.c		                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -73,7 +73,7 @@ t_hashmap get_hm_env_variables(char **envp)
 		return (NULL);
 	if (add_env_variable(env_variables, envp) == -1)
 		return (ft_hm_clear(&env_variables, &free), NULL);
-//	if (add_default_env_variables(env_variables) == -1)
-//		return (ft_hm_clear(&env_variables, &free), NULL);
+//	if (add_default_env_variables(env_variables_table) == -1)
+//		return (ft_hm_clear(&env_variables_table, &free), NULL);
 	return (env_variables);
 }

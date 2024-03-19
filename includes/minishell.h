@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RUN_MINISHELLRC_H
-# define RUN_MINISHELLRC_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 #include "../libft/inc/libft.h"
 
@@ -23,11 +23,17 @@ typedef struct s_minishell
 	int				pipe_fd[2];
 	int				fd_in;
 	int				fd_out;
-	t_hashmap		hm_env_variables;
-	char 			**env_variables;
 	t_node			*list_tokens;
-	char 			**token_array;
-	t_node			*list_here_docs;
+	t_hashmap		hm_env_variables;
+	char 			**cmd_table;
+	char 			**in_redirect_table;
+	char 			**out_redirect_table;
+	char 			**env_variables_table;
 }	t_minishell;
+
+
+/*************************************** CREATE TABLES ***************************************/
+
+void create_redirect_table(t_minishell *minishell, t_node *list_tokens);
 
 #endif

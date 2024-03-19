@@ -2,6 +2,9 @@
 SHEMA grammaire : FICHIER sinon CMDE ARG | etc (en boucle)
 renvoie struc minishell qui contient liste tokens + hashmap
 
+
+collision hashmap : array of linked list
+
 --------------------- A FAIRE -----------------------------------------------
 
 parser:
