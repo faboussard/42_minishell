@@ -13,11 +13,18 @@
 #include "lexer.h"
 #include "utils.h"
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "../libft/inc/libft.h"
 #include "minishell.h"
+
+
+void free_token(void *content)
+{
+	t_token *token = (t_token *)content;
+	if (token != NULL)
+	{
+		free(token->name);
+		free(token);
+	}
+}
 
 void	free_minishell(t_minishell *minishell)
 {
@@ -28,7 +35,7 @@ void	free_minishell(t_minishell *minishell)
 	if (minishell->hm_env_variables)
 		ft_hm_clear(&minishell->hm_env_variables, &free);
 	if (minishell->list_tokens)
-		ft_lstclear(&minishell->list_tokens , &free);
+		ft_lstclear(&minishell->list_tokens , &free_token);
 	if (minishell->token_array)
 		ft_free_double_tab(minishell->token_array);
 }
