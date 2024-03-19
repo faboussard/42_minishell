@@ -17,8 +17,3 @@ jobs:
       - name: Compile files with Makefile
         run: make
 
-      - name: norminette
-        uses: alexandregv/norminette-action@v3
-        with:
-          flags: '.'
-

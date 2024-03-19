@@ -15,6 +15,7 @@
 
 #include <stdbool.h>
 #include "../libft/inc/libft.h"
+#include "minishell.h"
 
 enum e_token_type
 {
@@ -86,6 +87,9 @@ bool	get_operator_token(t_token *new_token, char *string);
 bool	is_redirect_token(t_token *token);
 void	print_operator_syntax_error(t_token *token);
 
+/******************** CREATE TOKEN TO ARRAY ********************/
+
+void tokens_to_array_of_cmds(t_minishell *minishell, t_node *list_tokens);
 
 /****************** BUILTIN ******************/
 

@@ -10,18 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//structure de bbuilint + options
-//cd with only a relative or absolute path -> faire un strjoin
-//&& transform_to_token->content + 1 == "-n" ->faire un strjoin
-
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "../libft/inc/libft.h"
 #include "error.h"
 
 char  *manage_quotes(char *string)

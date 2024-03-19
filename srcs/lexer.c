@@ -13,7 +13,6 @@
 #include "lexer.h"
 #include "utils.h"
 #include <stdlib.h>
-#include <string.h>
 #include "parser.h"
 
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token)
@@ -42,7 +41,7 @@ void define_token(t_token *new_token, char *string)
 {
 	if (string == NULL)
 		return;
-	new_token->name = strdup(string);
+	new_token->name = ft_strdup(string);
 	if (new_token->name == NULL)
 		return ;
 	if (string[0] == '-')
@@ -87,6 +86,3 @@ t_node *get_list_tokens(char *string)
 	token_rework(list_tokens);
 	return (list_tokens);
 }
-
-
-

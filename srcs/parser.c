@@ -10,14 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "lexer.h"
 #include "utils.h"
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "../libft/inc/libft.h"
 
 int check_parentheses(t_node *list_tokens)
 {
@@ -126,8 +121,6 @@ void token_rework(t_node *list_tokens)
 {
 	check_syntax_with_tokens(list_tokens);
 	token_requalification(list_tokens);
-
-	//ajouter une condition pour faire le split que sil ny a pas despace avec des guillets. sinon on retirera ce token avant de resplit.
 }
 
 
