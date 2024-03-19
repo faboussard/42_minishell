@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/lexer.h"
-#include "lexer.h"
-#include "parser.h"
 #include "minishell.h"
 #include "utils.h"
 
@@ -23,9 +21,6 @@ void create_token_chain_list(t_minishell *minishell, char *string, char *envp[])
 	minishell->hm_env_variables = get_hm_env_variables(envp);
 	print_hashmap(minishell->hm_env_variables);
 }
-
-// fais la commande print_array(minishell.args);
-
 
 int main()
 {

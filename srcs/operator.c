@@ -33,7 +33,7 @@ bool	get_operator_token(t_token *new_token, char *string)
 
 		if (!ft_strncmp(string, operators[i], ft_strlen(string)))
 		{
-			define_token(OPERATOR, NO_BUILTIN, i, new_token);
+			define_token_types(OPERATOR, NO_BUILTIN, i, new_token);
 			return (TRUE);
 		}
 		i++;
