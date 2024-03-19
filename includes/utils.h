@@ -19,10 +19,13 @@ enum e_bool
 {
 	FALSE = 0,
 	TRUE = 1,
-}	e_bool;
+};
+
+/******************** UTILS ********************/
 
 t_token	*return_last_token(t_node *list_tokens);
 void	print_token(t_node *list_tokens);
+void	print_array(char **array);
 void	create_double_array(t_minishell *minishell, t_node *list_tokens);
 
 /******************** FREE ********************/

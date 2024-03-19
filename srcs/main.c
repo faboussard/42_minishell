@@ -16,9 +16,6 @@
 #include "minishell.h"
 #include "utils.h"
 
-
-
-
 //int minishell_init(t_minishell *minishell, char **envp, char argv_zero)
 //{
 //	ft_bzero(minishell, (sizeof * minishell));
@@ -34,22 +31,25 @@ void create_lists(t_minishell *minishell, char **string, char *envp[])
 	print_hashmap(minishell->hm_env_variables);
 }
 
+// fais la commande print_array(minishell.args);
+
+
 int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
-	char			*string[] = {"echo", "ls", ">>", "output.txt", NULL};
+	char			*string[] = {"(echo", "ls", ">>", "output.txt", NULL};
 	char			*envp[] = {
 			"PATH=/bin:/usr/bin",
 			"HOME=/home/user",
 			"USER=user",
 			NULL
 	};
-	/******* dans int main(int ac, char **av, char **env) *****/
+	/*************************************************************/
 	t_minishell 	minishell;
-//	tmp = minishell_init(&minishell, envp, argv[0]);
+
 	create_lists(&minishell, string, envp);
 	create_double_array(&minishell, minishell.list_tokens);
-	print_array(minishell.args);
+	print_array(minishell.token_array);
 	free_minishell(&minishell);
 	return (0);
 }

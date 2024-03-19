@@ -83,9 +83,6 @@
 		<Unit filename="/home/juba/minishell/includes/error.h">
 			<Option target="minishell"/>
 		</Unit>
-		<Unit filename="/home/juba/minishell/includes/general.h">
-			<Option target="minishell"/>
-		</Unit>
 		<Unit filename="/home/juba/minishell/includes/lexer.h">
 			<Option target="minishell"/>
 		</Unit>
@@ -93,6 +90,9 @@
 			<Option target="minishell"/>
 		</Unit>
 		<Unit filename="/home/juba/minishell/includes/parser.h">
+			<Option target="minishell"/>
+		</Unit>
+		<Unit filename="/home/juba/minishell/includes/utils.h">
 			<Option target="minishell"/>
 		</Unit>
 		<Unit filename="/home/juba/minishell/libft/inc/get_next_line.h">
@@ -291,6 +291,12 @@
 			<Option target="minishell"/>
 		</Unit>
 		<Unit filename="/home/juba/minishell/srcs/error.c">
+			<Option target="minishell"/>
+		</Unit>
+		<Unit filename="/home/juba/minishell/srcs/expansion.c">
+			<Option target="minishell"/>
+		</Unit>
+		<Unit filename="/home/juba/minishell/srcs/free.c">
 			<Option target="minishell"/>
 		</Unit>
 		<Unit filename="/home/juba/minishell/srcs/lexer.c">
