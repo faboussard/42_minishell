@@ -1665,6 +1665,54 @@ srcs/error.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/error.c.s
 .PHONY : srcs/error.c.s
 
+srcs/expansion.o: srcs/expansion.c.o
+.PHONY : srcs/expansion.o
+
+# target to build an object file
+srcs/expansion.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/expansion.c.o
+.PHONY : srcs/expansion.c.o
+
+srcs/expansion.i: srcs/expansion.c.i
+.PHONY : srcs/expansion.i
+
+# target to preprocess a source file
+srcs/expansion.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/expansion.c.i
+.PHONY : srcs/expansion.c.i
+
+srcs/expansion.s: srcs/expansion.c.s
+.PHONY : srcs/expansion.s
+
+# target to generate assembly for a file
+srcs/expansion.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/expansion.c.s
+.PHONY : srcs/expansion.c.s
+
+srcs/free.o: srcs/free.c.o
+.PHONY : srcs/free.o
+
+# target to build an object file
+srcs/free.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/free.c.o
+.PHONY : srcs/free.c.o
+
+srcs/free.i: srcs/free.c.i
+.PHONY : srcs/free.i
+
+# target to preprocess a source file
+srcs/free.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/free.c.i
+.PHONY : srcs/free.c.i
+
+srcs/free.s: srcs/free.c.s
+.PHONY : srcs/free.s
+
+# target to generate assembly for a file
+srcs/free.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/minishell.dir/build.make CMakeFiles/minishell.dir/srcs/free.c.s
+.PHONY : srcs/free.c.s
+
 srcs/lexer.o: srcs/lexer.c.o
 .PHONY : srcs/lexer.o
 
@@ -1986,6 +2034,12 @@ help:
 	@echo "... srcs/error.o"
 	@echo "... srcs/error.i"
 	@echo "... srcs/error.s"
+	@echo "... srcs/expansion.o"
+	@echo "... srcs/expansion.i"
+	@echo "... srcs/expansion.s"
+	@echo "... srcs/free.o"
+	@echo "... srcs/free.i"
+	@echo "... srcs/free.s"
 	@echo "... srcs/lexer.o"
 	@echo "... srcs/lexer.i"
 	@echo "... srcs/lexer.s"
