@@ -63,6 +63,11 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 }	t_token;
 
+
+/****************** SPLIT_READLINE ******************/
+
+char	**split_with_quotes_management(char *string);
+
 /******************* EXPANSION *******************/
 
 int	parentheses_error(const char *string);
@@ -71,9 +76,9 @@ char  *manage_quotes(char *string);
 
 /****************** LEXER ******************/
 
-void	transform_to_token(char **string, t_node **list_tokens);
+void	transform_to_token(char *string, t_node **list_tokens);
 void	define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
-t_node *get_list_tokens(char **string);
+t_node *get_list_tokens(char *string);
 
 /****************** OPERATORS ******************/
 

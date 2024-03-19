@@ -7,7 +7,7 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  builtin env_variables error lexer main operator parser utils expansion free
+LIST_SRCS		=  builtin env_variables error lexer main operator parser utils expansion free split_readline_string print
 
 LIST_HEADERS	= error utils lexer minishell parser
 

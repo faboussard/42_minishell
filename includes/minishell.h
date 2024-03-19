@@ -17,6 +17,12 @@
 
 typedef struct s_minishell
 {
+	pid_t			pid1;
+	pid_t			pid2;
+	int				status;
+	int				pipe_fd[2];
+	int				fd_in;
+	int				fd_out;
 	t_hashmap		hm_env_variables;
 	char 			**env_variables;
 	t_node			*list_tokens;

@@ -1,3 +1,0 @@
-/home/juba/minishell/cmake-build-debug/CMakeFiles/minishell.dir
-/home/juba/minishell/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/juba/minishell/cmake-build-debug/CMakeFiles/rebuild_cache.dir
