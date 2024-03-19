@@ -32,7 +32,7 @@ bool	get_builtin_token(t_token *new_token, char *string)
 	{
 		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
 		{
-			define_token(COMMAND, i, NO_OPERATOR, new_token);
+			define_token_types(COMMAND, i, NO_OPERATOR, new_token);
 			return (TRUE);
 		}
 		i++;

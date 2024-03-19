@@ -16,7 +16,7 @@
 #include <string.h>
 #include "parser.h"
 
-void define_token(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token)
+void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token)
 {
 	new_token->e_type = type;
 	new_token->e_builtin = builtin;
@@ -38,21 +38,23 @@ void add_token_to_list(t_node **tokens, t_token *new_token)
 	ft_lstadd_back(tokens, new_node);
 }
 
-void create_token_and_add_to_list(t_token *new_token, char *string)
+void define_token(t_token *new_token, char *string)
 {
 	if (string == NULL)
 		return;
-	new_token->name = string;
+	new_token->name = strdup(string);
+	if (new_token->name == NULL)
+		return ;
 	if (string[0] == '-')
-		define_token(ARGUMENT, NO_BUILTIN, NO_OPERATOR, new_token);
+		define_token_types(ARGUMENT, NO_BUILTIN, NO_OPERATOR, new_token);
 	if (string[0] == '(')
 	{
-		define_token(COMMAND, NO_BUILTIN, OPEN_PARENTHESES, new_token);
+		define_token_types(COMMAND, NO_BUILTIN, OPEN_PARENTHESES, new_token);
 		new_token->e_type = SUBSHELL;
 	}
 	if (get_builtin_token(new_token, string) == FALSE
 		&& get_operator_token(new_token, string) == FALSE && string[0] != '-')
-		define_token(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
+		define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
 }
 
 void transform_to_token(char *string, t_node **list_tokens)
@@ -69,9 +71,7 @@ void transform_to_token(char *string, t_node **list_tokens)
 	{
 		token = malloc(sizeof(t_token));
 		ft_memset(token, 0, sizeof(t_token));
-		ft_printf(split[i]);
-		ft_printf("\n");
-		create_token_and_add_to_list(token, split[i]);
+		define_token(token, split[i]);
 		add_token_to_list(list_tokens, token);
 		i++;
 	}
