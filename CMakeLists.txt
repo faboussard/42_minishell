@@ -85,4 +85,6 @@ add_executable(minishell
         libft/src/hashmap/hm_print.c
         srcs/expansion.c
         srcs/free.c
+        srcs/split_readline_string.c
+        srcs/print.c
 )
