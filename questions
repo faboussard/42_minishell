@@ -5,6 +5,10 @@ renvoie struc minishell qui contient liste tokens + hashmap
 
 collision hashmap : array of linked list
 
+HEREDOCS
+
+FAIRE LA GESTION A PART DES LE TOUT DEBUT : UN HEREDOC RENVOIE UN READLINE JUSQUA CE QUIL TROUVE LE DELIMITER
+
 --------------------- A FAIRE -----------------------------------------------
 
 parser:

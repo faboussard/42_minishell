@@ -16,9 +16,8 @@
 #include "minishell.h"
 
 
-void free_token(void *content)
+void free_token(t_token	*token)
 {
-	t_token *token = (t_token *)content;
 	if (token != NULL)
 	{
 		free(token->name);
@@ -32,16 +31,12 @@ void	free_minishell(t_minishell *minishell)
 		close(minishell->fd_in);
 	if (minishell->fd_out >= 0)
 		close(minishell->fd_out);
-	if (minishell->hm_env_variables)
-		ft_hm_clear(&minishell->hm_env_variables, &free);
 	if (minishell->list_tokens)
-		ft_lstclear(&minishell->list_tokens , &free_token);
+		ft_lstclear(&minishell->list_tokens , (void *) &free_token);
+	if (minishell->dict_environment)
+		ft_hm_clear(&minishell->dict_environment, &free);
 	if (minishell->cmd_table)
 		ft_free_double_tab(minishell->cmd_table);
-	if (minishell->in_redirect_table)
-		ft_free_double_tab(minishell->in_redirect_table);
-	if (minishell->out_redirect_table)
-		ft_free_double_tab(minishell->out_redirect_table);
 }
 
 void	ft_free_double_tab(char **tab)
@@ -73,3 +68,5 @@ void	ft_free_tab_from_i(void **tab, int j)
 	}
 	free(tab);
 }
+
+

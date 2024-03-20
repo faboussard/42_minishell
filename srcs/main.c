@@ -13,6 +13,7 @@
 #include "../includes/lexer.h"
 #include "minishell.h"
 #include "utils.h"
+#include "parser.h"
 
 void create_token_chain_list(t_minishell *minishell, char *string)
 {
@@ -21,13 +22,13 @@ void create_token_chain_list(t_minishell *minishell, char *string)
 
 void create_envp_hashmap(t_minishell *minishell, char **envp)
 {
-	minishell->hm_env_variables = get_hm_env_variables(envp);
+	minishell->dict_environment = create_dict_envp(envp);
 }
 
 void create_tables(t_minishell *minishell)
 {
 	create_cmd_table(minishell, &minishell->list_tokens);
-	create_redirect_table(minishell, &minishell->list_tokens);
+	create_envp_table(minishell, minishell->dict_environment);
 }
 
 int main()
@@ -47,14 +48,12 @@ int main()
 	create_token_chain_list(&minishell, string);
 	print_token(minishell.list_tokens); //DELETE
 	create_envp_hashmap(&minishell, envp);
-	print_hashmap(minishell.hm_env_variables); //DELETE
+	print_envp_dict(minishell.dict_environment); //DELETE
 	create_tables(&minishell);
 	ft_printf("************ print cmd_table ************\n");
 	print_array(minishell.cmd_table);  //DELETE
-	ft_printf("******************** print redirect table ********************\n");
-	print_array(minishell.in_redirect_table);  //DELETE
-	ft_printf("********************** print outdirect table **********************\n");
-	print_array(minishell.out_redirect_table);  //DELETE
+	ft_printf("********************** print HM table **********************\n");
+	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }

@@ -14,38 +14,6 @@
 #include "utils.h"
 #include "error.h"
 
-char  *manage_quotes(char *string)
-{
-	if (ft_strchr(string, '\"') || ft_strchr(string, '\''))
-	{
-		if (!ft_strchr(string, ' '))
-			string = ft_strtrim(string, "\"");
-	}
-	else if (ft_strchr(string, '\''))
-	{
-		if (!ft_strchr(string, ' '))
-			string= ft_strtrim(string, "\'");
-	}
-	return (string);
-}
-
-int count_quotes(const char *string, char c)
-{
-	int i;
-	int count;
-
-	i = 0;
-	count = 0;
-	while (string[i])
-	{
-		count += string[i] == c;
-		i++;
-	}
-	if (count % 2 != 0)
-		return (-1);
-	return (0);
-}
-
 int parentheses_error(const char *string)
 {
 	int 	i;

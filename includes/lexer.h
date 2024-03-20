@@ -64,6 +64,15 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 }	t_token;
 
+typedef struct s_dict_content
+{
+	char					*content;
+	char					*target;
+	size_t 					content_size;
+	size_t 					target_size;
+}	t_dict_content;
+
+typedef t_node**	t_dict;
 
 /****************** SPLIT_READLINE ******************/
 
@@ -73,7 +82,6 @@ char	**split_with_quotes_management(char *string);
 
 int	parentheses_error(const char *string);
 int parentheses_on_arg(char *string);
-char  *manage_quotes(char *string);
 
 /****************** LEXER ******************/
 
@@ -81,22 +89,12 @@ void	transform_to_token(char *string, t_node **list_tokens);
 void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
 t_node *get_list_tokens(char *string);
 
-/****************** OPERATORS ******************/
-
-bool	get_operator_token(t_token *new_token, char *string);
-bool	is_redirect_token(t_token *token);
-void	print_operator_syntax_error(t_token *token);
-
-/******************** CREATE TOKEN TO ARRAY ********************/
-
-void create_cmd_table(t_minishell *minishell, t_node **list_tokens);
-
 /****************** BUILTIN ******************/
 
 bool	get_builtin_token(t_token *new_token, char *string);
 
 /********************* ENV_VARIABLES *********************/
 
-t_hashmap	get_hm_env_variables(char **envp);
+t_hashmap	create_dict_envp(char **envp);
 
 #endif //LEXER_H

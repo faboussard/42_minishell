@@ -42,3 +42,21 @@ t_token *return_last_token(t_node *list_tokens)
 	last_token = (t_token *) (iterator)->content;
 	return (last_token);
 }
+
+void fill_array(t_node **list_tokens, char **array, int cmd_until_pipe)
+{
+	t_token	*token;
+	int		i;
+
+	i = 0;
+	while (i < cmd_until_pipe)
+	{
+		token = (t_token *) (*list_tokens)->content;
+		array[i] = ft_strdup(token->name);
+		if (array[i] == NULL)
+			return ;
+		i++;
+		*list_tokens = (*list_tokens)->next;
+	}
+	array[i] = NULL;
+}
