@@ -43,10 +43,12 @@ static int	modify_if_exists(t_node *dst, char *target, void *content,
 	if (del == NULL)
 	{
 		((t_dict_content *)dst->content)->content = content;
+		((t_dict_content *)dst->content)->content_size = ft_strlen(content);
 		return (SUCCESSFULLY_ADDED);
 	}
 	del(((t_dict_content *)dst->content)->content);
 	((t_dict_content *)dst->content)->content = content;
+	((t_dict_content *)dst->content)->content_size = ft_strlen(content);
 	return (SUCCESSFULLY_ADDED);
 }
 
