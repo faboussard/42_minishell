@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   split_readline_string.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,12 +14,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <stdio.h>
 #include <stdbool.h>
-#include "../libft/inc/libft.h"
-#include "error.h"
-#include "parser.h"
 
 static void	deal_with_quotations_marks(char *joined_cmd)
 {

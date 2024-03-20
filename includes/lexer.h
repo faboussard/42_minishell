@@ -89,7 +89,7 @@ void	print_operator_syntax_error(t_token *token);
 
 /******************** CREATE TOKEN TO ARRAY ********************/
 
-void create_cmd_table(t_minishell *minishell, t_node *list_tokens);
+void create_cmd_table(t_minishell *minishell, t_node **list_tokens);
 
 /****************** BUILTIN ******************/
 
