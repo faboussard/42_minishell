@@ -26,14 +26,14 @@ void create_envp_hashmap(t_minishell *minishell, char **envp)
 
 void create_tables(t_minishell *minishell)
 {
-	create_cmd_table(minishell, minishell->list_tokens);
-	create_redirect_table(minishell, minishell->list_tokens);
+	create_cmd_table(minishell, &minishell->list_tokens);
+	create_redirect_table(minishell, &minishell->list_tokens);
 }
 
 int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
-	char *string = "ls l < cat cat |"; //entree dans readlin, avant split par "bash"
+	char *string = "ls l < cat cat | > ll | ll"; //entree dans readlin, avant split par "bash"
 	char			*envp[] = {
 			"PATH=/bin:/usr/bin",
 			"HOME=/home/user",
@@ -49,8 +49,12 @@ int main()
 	create_envp_hashmap(&minishell, envp);
 	print_hashmap(minishell.hm_env_variables); //DELETE
 	create_tables(&minishell);
-	print_array(minishell.cmd_table);
-	print_array(minishell.in_redirect_table);
+	ft_printf("************ print cmd_table ************\n");
+	print_array(minishell.cmd_table);  //DELETE
+	ft_printf("******************** print redirect table ********************\n");
+	print_array(minishell.in_redirect_table);  //DELETE
+	ft_printf("********************** print outdirect table **********************\n");
+	print_array(minishell.out_redirect_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }

@@ -17,4 +17,11 @@
 
 void	token_rework(t_node *list_tokens);
 
+/**************************** count tokens **************************/
+
+int count_tokens_until_pipe_or_redirect(t_node *head);
+int count_tokens_from_in_redirect(t_node *head);
+int count_tokens_from_out_redirect(t_node *head);
+
+
 #endif //PARSER_H

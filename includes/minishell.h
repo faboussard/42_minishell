@@ -34,6 +34,6 @@ typedef struct s_minishell
 
 /*************************************** CREATE TABLES ***************************************/
 
-void create_redirect_table(t_minishell *minishell, t_node *list_tokens);
+void create_redirect_table(t_minishell *minishell, t_node **list_tokens);
 
 #endif

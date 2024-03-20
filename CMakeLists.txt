@@ -88,4 +88,5 @@ add_executable(minishell
         srcs/split_readline_string.c
         srcs/print.c
         srcs/create_tables_from_tokens.c
+        srcs/count_tokens.c
 )

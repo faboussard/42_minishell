@@ -18,6 +18,11 @@ void print_array(char **array)
 	ft_printf("------------------- PRINT ARRAY ------------------------------------\n");
 	int i;
 
+	if (array == NULL)
+	{
+		ft_printf("no array to print\n");
+		return;
+	}
 	i = 0;
 	while (array[i] != NULL)
 	{
@@ -31,6 +36,11 @@ void print_token(t_node *list_tokens)
 	t_node  *iterator;
 	t_token *token;
 
+	if (list_tokens == NULL)
+	{
+		ft_printf("no list to print\n");
+		return;
+	}
 	ft_printf("----------------------- PRINT LIST -----------------------\n");
 	iterator = list_tokens;
 	while (iterator != NULL)
