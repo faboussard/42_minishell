@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "utils.h"
+#include "parser.h"
 
 int count_tokens_until_pipe_or_redirect(t_node *head)
 {
