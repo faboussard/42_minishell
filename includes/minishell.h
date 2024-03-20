@@ -14,6 +14,9 @@
 # define MINISHELL_H
 
 #include "../libft/inc/libft.h"
+#include "lexer.h"
+
+typedef t_node**	t_dict;
 
 typedef struct s_minishell
 {
@@ -24,11 +27,9 @@ typedef struct s_minishell
 	int				fd_in;
 	int				fd_out;
 	t_node			*list_tokens;
-	t_hashmap		hm_env_variables;
+	t_dict			dict_environment;
 	char 			**cmd_table;
-	char 			**in_redirect_table;
-	char 			**out_redirect_table;
-	char 			**env_variables_table;
+	char 			**envp_table;
 }	t_minishell;
 
 

@@ -2,10 +2,10 @@
 #include "../../inc/libft.h"
 
 /// @brief 			Returns the index of the t_list where target could be found
-///						if it is in the hashmap
+///						if it is in the hashmap_dictionnary
 /// @param target 	String from which the index is generated
 /// @return 		Returns the index of the t_list where target could be found
-///						if it is in the hashmap
+///						if it is in the hashmap_dictionnary
 size_t	ft_hm_get_index(char *target)
 {
 	size_t	target_value;

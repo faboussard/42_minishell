@@ -24,15 +24,14 @@ void define_token_types(enum e_token_type type, enum e_token_builtin builtin, en
 
 void add_token_to_list(t_node **tokens, t_token *new_token)
 {
-	void *content;
-	t_node *new_node;
+	t_node	*new_node;
 
-	content = new_token;
-	new_node = ft_lstnew(content);
+	new_node = ft_lstnew(new_token);
 	if (new_node == NULL)
 	{
-		ft_lstclear(&new_node, &free);
-		return;
+		free_token(new_token);
+		ft_lstclear(&new_node, (void *)&free_token);
+		return ;
 	}
 	ft_lstadd_back(tokens, new_node);
 }

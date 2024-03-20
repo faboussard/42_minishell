@@ -1,11 +1,11 @@
 
 #include "../../inc/libft.h"
 
-/// @brief 			returns the t_hashmap_content* (a) in the hashmap that has
+/// @brief 			returns the t_hashmap_content* (a) in the hashmap_dictionnary that has
 ///						a->target == target, returns NULL if it doesn't exist
 /// @param map 		Hashmap in which to search for target
-/// @param target 	string to look for in the hashmap
-/// @return 		returns the t_hashmap_content* (a) in the hashmap that has
+/// @param target 	string to look for in the hashmap_dictionnary
+/// @return 		returns the t_hashmap_content* (a) in the hashmap_dictionnary that has
 ///						a->target == target, returns NULL if it doesn't exist
 t_hashmap_content	*ft_hm_get_elem(t_hashmap map, char *target)
 {

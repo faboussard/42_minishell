@@ -8,7 +8,7 @@ void	print_hashmap(t_hashmap env_variables)
 	t_node				*cursor;
 	t_hashmap_content	*hm_content;
 
-	ft_printf("--------------- Hashmap ---------------\n");
+	ft_printf("--------------- Hashmap / dictionnary ---------------\n");
 	i = HASHMAP_ARR_SIZE;
 	int size = ft_hm_size(env_variables);
 	ft_printf("Size: %d\n", size);

@@ -132,7 +132,7 @@ int						ft_abs(int n);
 
 /***************************** ft_hashmap **************************************/
 
-# define HASHMAP_ARR_SIZE 50
+# define HASHMAP_ARR_SIZE 5
 
 int					ft_hm_add_elem(t_hashmap dst, char *target, void *content,
 									  void (*del)(void *));

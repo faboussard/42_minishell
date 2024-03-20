@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_variables_table.c		                            :+:      :+:    :+:   */
+/*   envp_table.c		                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int get_target_and_content(char **envp, t_hashmap hm)
+int get_target_and_content(char **envp, t_dict envp_dict)
 {
 	size_t	i;
 	char	*content;
@@ -36,7 +36,7 @@ int get_target_and_content(char **envp, t_hashmap hm)
 			free(target);
 			return (-1);
 		}
-		if (ft_hm_add_elem(hm, target, content, &free) == -1)
+		if (ft_hm_add_elem(envp_dict, target, content, &free) == -1)
 		{
 			free(target);
 			free(content);
@@ -47,7 +47,7 @@ int get_target_and_content(char **envp, t_hashmap hm)
 	return (0);
 }
 
-int add_env_variable(t_hashmap hm, char **envp)
+int add_env_variable(char **envp, t_dict envp_dict)
 {
 	if (envp == NULL || *envp == NULL)
 		return (-1);
@@ -55,7 +55,7 @@ int add_env_variable(t_hashmap hm, char **envp)
 	{
 		if (ft_strchr(*envp, '='))
 		{
-			if (get_target_and_content(envp, hm) == -1)
+			if (get_target_and_content(envp, envp_dict) == -1)
 				return (-1);
 		}
 		envp++;
@@ -63,17 +63,20 @@ int add_env_variable(t_hashmap hm, char **envp)
 	return (0);
 }
 
-
-t_hashmap get_hm_env_variables(char **envp)
+t_dict	ft_dict_init(void)
 {
-	t_hashmap	env_variables;
+	return (ft_calloc(HASHMAP_ARR_SIZE, sizeof(t_dict)));
+}
 
-	env_variables = ft_hm_init();
-	if (env_variables == NULL)
+
+t_dict create_dict_envp(char **envp)
+{
+	t_dict	envp_dict;
+
+	envp_dict = ft_dict_init();
+	if (envp_dict == NULL)
 		return (NULL);
-	if (add_env_variable(env_variables, envp) == -1)
-		return (ft_hm_clear(&env_variables, &free), NULL);
-//	if (add_default_env_variables(env_variables_table) == -1)
-//		return (ft_hm_clear(&env_variables_table, &free), NULL);
-	return (env_variables);
+	if (add_env_variable(envp, envp_dict) == -1)
+		return (ft_hm_clear(&envp_dict, &free), NULL);
+	return (envp_dict);
 }

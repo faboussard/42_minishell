@@ -51,15 +51,15 @@ SRCS=src/ft_is/ft_isalnum.c\
 	    src/ft_to/ft_toupper.c\
 	    src/gnl/get_next_line.c\
 	    src/gnl/get_next_line_utils.c\
-	    src/hashmap/hm_add_elem.c\
-	    src/hashmap/hm_clear.c\
-        src/hashmap/hm_delete_elem.c\
-        src/hashmap/hm_get_content.c\
-        src/hashmap/hm_get_elem.c\
-        src/hashmap/hm_get_index.c\
-        src/hashmap/hm_init.c\
-        src/hashmap/hm_size.c\
-        src/hashmap/hm_print.c\
+	    src/hashmap_dictionnary/hm_add_elem.c\
+	    src/hashmap_dictionnary/hm_clear.c\
+        src/hashmap_dictionnary/hm_delete_elem.c\
+        src/hashmap_dictionnary/hm_get_content.c\
+        src/hashmap_dictionnary/hm_get_elem.c\
+        src/hashmap_dictionnary/hm_get_index.c\
+        src/hashmap_dictionnary/hm_init.c\
+        src/hashmap_dictionnary/hm_size.c\
+        src/hashmap_dictionnary/hm_print.c\
 	    src/utils.c\
 
 DIR_INCS		=	inc/
