@@ -26,7 +26,6 @@ enum e_bool
 t_token	*return_last_token(t_node *list_tokens);
 void	ft_init_minishell(t_minishell *minishell);
 void	exit_msg(t_minishell *minishell, char *msg, int error_code);
-void	fill_array(t_node **list_tokens, char **array, int cmd_until_pipe);
 
 /******************** PRINT ********************/
 
@@ -37,7 +36,7 @@ void	print_envp_dict(t_dict envp_dict);
 /******************** FREE ********************/
 
 void	free_minishell(t_minishell *minishell);
-void	ft_free_double_tab(char **tab);
+void	ft_free_all_tab(char **tab);
 void	ft_free_tab_from_i(void **tab, int j);
 void	free_token(t_token	*token);
 void	free_dict(t_dict_content *dict);

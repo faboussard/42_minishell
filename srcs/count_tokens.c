@@ -14,9 +14,9 @@
 #include "utils.h"
 #include "parser.h"
 
-int count_tokens_until_pipe_or_redirect(t_node *head)
+size_t count_letters_until_pipe_or_redirect(t_node *head)
 {
-	int		num_commands;
+	size_t		num_commands;
 	t_node	*current;
 	t_token	*token;
 
@@ -26,7 +26,27 @@ int count_tokens_until_pipe_or_redirect(t_node *head)
 	{
 		token = (t_token *) (current)->content;
 		if (token->e_operator != PIPE && !is_redirect_token(token))
-			num_commands++;
+			num_commands += ft_strlen(token->name);
+		else
+			break ;
+		current = current->next;
+	}
+	return (num_commands);
+}
+
+size_t count_cmds_until_pipe_or_redirect(t_node *head)
+{
+	size_t		num_commands;
+	t_node	*current;
+	t_token	*token;
+
+	num_commands = 0;
+	current = head;
+	while (current)
+	{
+		token = (t_token *) (current)->content;
+		if (token->e_operator != PIPE && !is_redirect_token(token))
+			num_commands ++;
 		else
 			break ;
 		current = current->next;

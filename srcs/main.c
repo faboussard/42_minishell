@@ -15,6 +15,8 @@
 #include "utils.h"
 #include "parser.h"
 
+t_hashmap_struct *create_dict_envp(char **envp);
+
 void create_token_chain_list(t_minishell *minishell, char *string)
 {
 	minishell->list_tokens = get_list_tokens(string);
@@ -22,19 +24,28 @@ void create_token_chain_list(t_minishell *minishell, char *string)
 
 void create_envp_hashmap(t_minishell *minishell, char **envp)
 {
-	minishell->dict_environment = create_dict_envp(envp);
+	minishell->hashmap_environment = create_dict_envp(envp);
 }
 
 void create_tables(t_minishell *minishell)
 {
 	create_cmd_table(minishell, &minishell->list_tokens);
-	create_envp_table(minishell, minishell->dict_environment);
+	create_envp_table(minishell, &minishell->hashmap_environment);
 }
+
+void	ft_init_minishell(t_minishell *minishell)
+{
+	ft_bzero(minishell, (sizeof * minishell));
+	minishell->status = 0;
+	minishell->fd_in = -1;
+	minishell->fd_out = -1;
+}
+
 
 int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
-	char *string = "ls l < cat cat | > ll | ll"; //entree dans readlin, avant split par "bash"
+	char *string = "lsffffff | > ll | ll"; //entree dans readlin, avant split par "bash"
 	char			*envp[] = {
 			"PATH=/bin:/usr/bin",
 			"HOME=/home/user",
@@ -48,7 +59,7 @@ int main()
 	create_token_chain_list(&minishell, string);
 	print_token(minishell.list_tokens); //DELETE
 	create_envp_hashmap(&minishell, envp);
-	print_envp_dict(minishell.dict_environment); //DELETE
+	print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
 	create_tables(&minishell);
 	ft_printf("************ print cmd_table ************\n");
 	print_array(minishell.cmd_table);  //DELETE

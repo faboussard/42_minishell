@@ -47,15 +47,18 @@ int get_target_and_content(char **envp, t_dict envp_dict)
 	return (0);
 }
 
-int add_env_variable(char **envp, t_dict envp_dict)
+t_dict	ft_dict_init(void)
 {
-	if (envp == NULL || *envp == NULL)
-		return (-1);
+	return (ft_calloc(HASHMAP_ARR_SIZE, sizeof(t_dict)));
+}
+
+int create_dict_env_variable(char **envp, t_dict dict_chain)
+{
 	while (*envp)
 	{
 		if (ft_strchr(*envp, '='))
 		{
-			if (get_target_and_content(envp, envp_dict) == -1)
+			if (get_target_and_content(envp, dict_chain) == -1)
 				return (-1);
 		}
 		envp++;
@@ -63,20 +66,24 @@ int add_env_variable(char **envp, t_dict envp_dict)
 	return (0);
 }
 
-t_dict	ft_dict_init(void)
+t_hashmap_struct *create_dict_envp(char **envp)
 {
-	return (ft_calloc(HASHMAP_ARR_SIZE, sizeof(t_dict)));
-}
+	t_hashmap_struct *hashmap_environment;
 
-
-t_dict create_dict_envp(char **envp)
-{
-	t_dict	envp_dict;
-
-	envp_dict = ft_dict_init();
-	if (envp_dict == NULL)
+	hashmap_environment = (t_hashmap_struct *)ft_calloc(1, sizeof(t_hashmap_struct));
+	if (hashmap_environment == NULL)
+		return NULL;
+	hashmap_environment->dict_chain = ft_dict_init();
+	if (hashmap_environment->dict_chain == NULL)
+	{
+		free(hashmap_environment);
 		return (NULL);
-	if (add_env_variable(envp, envp_dict) == -1)
-		return (ft_hm_clear(&envp_dict, &free), NULL);
-	return (envp_dict);
+	}
+	if (create_dict_env_variable(envp, hashmap_environment->dict_chain) == -1)
+	{
+		ft_hm_clear(&hashmap_environment->dict_chain, &free);
+		free(hashmap_environment);
+		return (NULL);
+	}
+	return (hashmap_environment);
 }

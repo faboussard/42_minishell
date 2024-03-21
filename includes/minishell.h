@@ -15,21 +15,30 @@
 
 #include "../libft/inc/libft.h"
 #include "lexer.h"
+#include "minishell.h"
 
 typedef t_node**	t_dict;
 
+typedef struct s_hashmap
+{
+	t_dict 	dict_chain;
+	size_t	total_size;
+	char 	**target_tab;
+}	t_hashmap_struct;
+
 typedef struct s_minishell
 {
-	pid_t			pid1;
-	pid_t			pid2;
-	int				status;
-	int				pipe_fd[2];
-	int				fd_in;
-	int				fd_out;
-	t_node			*list_tokens;
-	t_dict			dict_environment;
-	char 			**cmd_table;
-	char 			**envp_table;
+	pid_t						pid1;
+	pid_t						pid2;
+	int							status;
+	int							pipe_fd[2];
+	int							fd_in;
+	int							fd_out;
+	t_node						*list_tokens;
+	t_hashmap_struct			*hashmap_environment;
+	char 						**cmd_table;
+	char 						**envp_table;
+
 }	t_minishell;
 
 

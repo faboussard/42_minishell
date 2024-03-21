@@ -61,19 +61,6 @@ add_executable(minishell
         libft/src/gnl/get_next_line.c
         libft/src/gnl/get_next_line_utils.c
         libft/src/utils.c
-        srcs/main.c
-        includes/utils.h
-        srcs/error.c
-        includes/error.h
-        includes/lexer.h
-        srcs/lexer.c
-        srcs/parser.c
-        includes/parser.h
-        includes/minishell.h
-        srcs/operator.c
-        srcs/builtin.c
-        srcs/env_variables.c
-        srcs/utils.c
         libft/src/hashmap_dictionnary/hm_clear.c
         libft/src/hashmap_dictionnary/hm_add_elem.c
         libft/src/hashmap_dictionnary/hm_get_content.c
@@ -83,10 +70,28 @@ add_executable(minishell
         libft/src/hashmap_dictionnary/hm_init.c
         libft/src/hashmap_dictionnary/hm_size.c
         libft/src/hashmap_dictionnary/hm_print.c
+
+        includes/utils.h
+        includes/parser.h
+        includes/minishell.h
+        includes/error.h
+        includes/lexer.h
+
+
+
+        srcs/main.c
+        srcs/error.c
+        srcs/tokenization.c
+        srcs/parser.c
+        srcs/operator.c
+        srcs/builtin.c
+        srcs/env_variables.c
+        srcs/utils.c
         srcs/expansion.c
         srcs/free.c
         srcs/split_readline_string.c
         srcs/print.c
         srcs/create_tables_from_tokens.c
         srcs/count_tokens.c
+        srcs/envp_calcultate_size.c
 )

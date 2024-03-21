@@ -24,14 +24,16 @@ void define_token_types(enum e_token_type type, enum e_token_builtin builtin, en
 
 void add_token_to_list(t_node **tokens, t_token *new_token)
 {
-	t_node	*new_node;
+	t_node *new_node;
+	void	*content_node;
 
-	new_node = ft_lstnew(new_token);
+	content_node = new_token;
+	new_node = ft_lstnew(content_node);
 	if (new_node == NULL)
 	{
-		free_token(new_token);
-		ft_lstclear(&new_node, (void *)&free_token);
-		return ;
+		free_token(content_node);
+		ft_lstclear(&new_node, (void *) free_token);
+		return;
 	}
 	ft_lstadd_back(tokens, new_node);
 }
@@ -73,7 +75,7 @@ void transform_to_token(char *string, t_node **list_tokens)
 		add_token_to_list(list_tokens, token);
 		i++;
 	}
-	ft_free_double_tab(split);
+	ft_free_all_tab(split);
 }
 
 t_node *get_list_tokens(char *string)
