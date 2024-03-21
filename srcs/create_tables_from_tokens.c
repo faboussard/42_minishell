@@ -39,7 +39,7 @@ void create_cmd_table(t_minishell *minishell, t_node **list_tokens)
 
 	nbr_cmds_until_pipe = count_cmds_until_pipe_or_redirect(*list_tokens);
 	nbr_letters_until_pipe = count_letters_until_pipe_or_redirect(*list_tokens);
-	minishell->cmd_table = malloc((nbr_letters_until_pipe + 1) * sizeof(char **));
+	minishell->cmd_table = ft_calloc(nbr_letters_until_pipe, sizeof(char **));
 	if (minishell->cmd_table == NULL)
 		return;
 	fill_array(list_tokens, minishell->cmd_table, nbr_cmds_until_pipe);
@@ -56,7 +56,7 @@ void create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap)
 	char *temp;
 
 	total_target_and_value_size = calculate_total_size(*hashmap);
-	minishell->envp_table = malloc((total_target_and_value_size + 1) * sizeof(char *));
+	minishell->envp_table = ft_calloc(total_target_and_value_size, sizeof(char **));
 	if (minishell->envp_table == NULL)
 		return;
 
