@@ -63,8 +63,8 @@ $(DIR_BUILD)lexer/:
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
-valgrind: ($MAKE)
-                valgrind--track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./minishell
+valgrind: $(NAME)
+                valgrind--track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./$(NAME)
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean
