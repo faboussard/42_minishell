@@ -25,13 +25,10 @@ void define_token_types(enum e_token_type type, enum e_token_builtin builtin, en
 void add_token_to_list(t_node **tokens, t_token *new_token)
 {
 	t_node *new_node;
-	void	*content_node;
 
-	content_node = new_token;
-	new_node = ft_lstnew(content_node);
+	new_node = ft_lstnew(new_token);
 	if (new_node == NULL)
 	{
-		free_token(content_node);
 		ft_lstclear(&new_node, (void *) free_token);
 		return;
 	}
@@ -40,11 +37,6 @@ void add_token_to_list(t_node **tokens, t_token *new_token)
 
 void define_token(t_token *new_token, char *string)
 {
-	if (string == NULL)
-		return;
-	new_token->name = ft_strdup(string);
-	if (new_token->name == NULL)
-		return ;
 	if (string[0] == '-')
 		define_token_types(ARGUMENT, NO_BUILTIN, NO_OPERATOR, new_token);
 	if (string[0] == '(')
@@ -60,19 +52,24 @@ void define_token(t_token *new_token, char *string)
 void transform_to_token(char *string, t_node **list_tokens)
 {
 	int 	i;
-	t_token	*token;
+	t_token	*new_token;
 	char	**split;
 
 	i = 0;
 	split = split_with_quotes_management(string);
 	if (split == NULL)
 		return ;
+	new_token = NULL;
 	while (split[i])
 	{
-		token = malloc(sizeof(t_token));
-		ft_memset(token, 0, sizeof(t_token));
-		define_token(token, split[i]);
-		add_token_to_list(list_tokens, token);
+		new_token = malloc(sizeof(t_token));
+		if (new_token == NULL)
+			return ;
+		new_token->name = ft_strdup(split[i]);
+		if (new_token->name == NULL)
+			return ;
+		define_token(new_token, split[i]);
+		add_token_to_list(list_tokens, new_token);
 		i++;
 	}
 	ft_free_all_tab(split);

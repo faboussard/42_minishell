@@ -32,7 +32,7 @@ void	free_minishell(t_minishell *minishell)
 	if (minishell->fd_out >= 0)
 		close(minishell->fd_out);
 	if (minishell->list_tokens)
-		ft_lstclear(&minishell->list_tokens , (void *) free_token);
+		ft_lstclear(&minishell->list_tokens, (void *) free_token);
 	if (minishell->hashmap_environment != NULL) {
 		if (minishell->hashmap_environment->dict_chain != NULL) {
 			ft_hm_clear(&minishell->hashmap_environment->dict_chain, &free);

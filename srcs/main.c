@@ -30,7 +30,7 @@ void create_envp_hashmap(t_minishell *minishell, char **envp)
 void create_tables(t_minishell *minishell)
 {
 	create_cmd_table(minishell, &minishell->list_tokens);
-	create_envp_table(minishell, &minishell->hashmap_environment);
+//	create_envp_table(minishell, &minishell->hashmap_environment);
 }
 
 void	ft_init_minishell(t_minishell *minishell)
@@ -61,10 +61,10 @@ int main()
 	create_envp_hashmap(&minishell, envp);
 	print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
 	create_tables(&minishell);
-	ft_printf("************ print cmd_table ************\n");
-	print_array(minishell.cmd_table);  //DELETE
-	ft_printf("********************** print HM table **********************\n");
-	print_array(minishell.envp_table);  //DELETE
+//	ft_printf("************ print cmd_table ************\n");
+//	print_array(minishell.cmd_table);  //DELETE
+//	ft_printf("********************** print HM table **********************\n");
+//	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
