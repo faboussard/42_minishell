@@ -12,39 +12,40 @@
 
 #include "lexer.h"
 #include "utils.h"
+#include "parser.h"
 #include <stdlib.h>
 
-int check_parentheses(t_node *list_tokens)
-{
-	size_t	open_parentheses;
-	size_t	close_parentheses;
-	t_node	*iterator;
-	t_token	*token;
+//int check_parentheses(t_node *list_tokens)
+//{
+//	size_t	open_parentheses;
+//	size_t	close_parentheses;
+//	t_node	*iterator;
+//	t_token	*token;
+//
+//	open_parentheses = 0;
+//	close_parentheses = 0;
+//	iterator = list_tokens;
+//	while (iterator != NULL)
+//	{
+//		token = (t_token *)(iterator)->value;
+//		open_parentheses += token->e_operator == OPEN_PARENTHESES;
+//		close_parentheses += token->e_operator == CLOSE_PARENTHESES;
+//		iterator = iterator->next;
+//	}
+//	if (close_parentheses > open_parentheses)
+//		return (print_operator_syntax_error(token), -1);
+//	if (open_parentheses > close_parentheses)
+//		return (print_operator_syntax_error(token), -1);
+//	return (close_parentheses == open_parentheses);
+//}
 
-	open_parentheses = 0;
-	close_parentheses = 0;
-	iterator = list_tokens;
-	while (iterator != NULL)
-	{
-		token = (t_token *)(iterator)->content;
-		open_parentheses += token->e_operator == OPEN_PARENTHESES;
-		close_parentheses += token->e_operator == CLOSE_PARENTHESES;
-		iterator = iterator->next;
-	}
-	if (close_parentheses > open_parentheses)
-		return (print_operator_syntax_error(token), -1);
-	if (open_parentheses > close_parentheses)
-		return (print_operator_syntax_error(token), -1);
-	return (close_parentheses == open_parentheses);
-}
 
-
-int check_syntax_with_tokens(t_node *list_tokens)
-{
-	if (check_parentheses(list_tokens) == -1)
-		exit(EXIT_FAILURE);
-	return (0);
-}
+//int check_syntax_with_tokens(t_node *list_tokens)
+//{
+//	if (check_parentheses(list_tokens) == -1)
+//		exit(EXIT_FAILURE);
+//	return (0);
+//}
 
 
 void to_subshell(t_node *list_tokens)
@@ -119,6 +120,6 @@ void token_requalification(t_node *list_tokens)
 
 void token_rework(t_node *list_tokens)
 {
-	check_syntax_with_tokens(list_tokens);
+//	check_syntax_with_tokens(list_tokens);
 	token_requalification(list_tokens);
 }

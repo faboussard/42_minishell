@@ -7,7 +7,8 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  builtin env_variables error lexer main operator parser utils expansion free split_readline_string print
+LIST_SRCS		=  main error tokenization parser operator builtin env_variables \
+					expansion free split_readline_string print create_tables_from_tokens count_tokens envp_calcultate_size
 
 LIST_HEADERS	= error utils lexer minishell parser
 
@@ -63,7 +64,7 @@ $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
 valgrind: ($MAKE)
-                valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./minishell
+                valgrind--track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./minishell
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean

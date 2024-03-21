@@ -55,7 +55,6 @@ enum e_token_builtin
 	EXIT = 8
 };
 
-
 typedef struct s_token
 {
 	char					*name;
@@ -66,9 +65,9 @@ typedef struct s_token
 
 typedef struct s_dict_content
 {
-	char					*content;
+	char					*value;
 	char					*target;
-	size_t 					content_size;
+	size_t 					value_size;
 	size_t 					target_size;
 }	t_dict_content;
 
@@ -95,6 +94,5 @@ bool	get_builtin_token(t_token *new_token, char *string);
 
 /********************* ENV_VARIABLES *********************/
 
-t_hashmap	create_dict_envp(char **envp);
 
 #endif //LEXER_H

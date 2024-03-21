@@ -14,42 +14,70 @@
 #include "utils.h"
 #include "parser.h"
 
-void create_cmd_table(t_minishell *minishell, t_node **list_tokens)
+void fill_array(t_node **list_tokens, char **array, size_t nbr_cmds_until_pipe)
 {
-	int nbr_cmd_until_pipe;
+	t_token	*token;
+	size_t	i;
 
-	nbr_cmd_until_pipe = count_tokens_until_pipe_or_redirect(*list_tokens);
-	minishell->cmd_table = malloc((nbr_cmd_until_pipe + 1) * sizeof(char **));
-	if (minishell->cmd_table == NULL)
-		return;
-	fill_array(list_tokens, minishell->cmd_table, nbr_cmd_until_pipe);
+	i = 0;
+	while (i < nbr_cmds_until_pipe)
+	{
+		token = (t_token *) (*list_tokens)->content;
+		array[i] = ft_strdup(token->name);
+		if (array[i] == NULL)
+			return ;
+		i++;
+		*list_tokens = (*list_tokens)->next;
+	}
+	array[i] = NULL;
 }
 
-void create_envp_table(t_minishell *minishell, t_dict envp_dict)
+void create_cmd_table(t_minishell *minishell, t_node **list_tokens)
 {
+	size_t nbr_cmds_until_pipe;
+	size_t nbr_letters_until_pipe;
+
+	nbr_cmds_until_pipe = count_cmds_until_pipe_or_redirect(*list_tokens);
+	nbr_letters_until_pipe = count_letters_until_pipe_or_redirect(*list_tokens);
+	minishell->cmd_table = malloc((nbr_letters_until_pipe + 1) * sizeof(char **));
+	if (minishell->cmd_table == NULL)
+		return;
+	fill_array(list_tokens, minishell->cmd_table, nbr_cmds_until_pipe);
+}
+
+void create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap)
+{
+	t_dict dict_chain = (*hashmap)->dict_chain;
 	t_dict_content *envp_dict_node;
 	t_node *current;
-	int i;
-	int j;
+	size_t total_target_and_value_size;
+	size_t i = 0;
+	size_t j = 0;
+	char *temp;
 
-	j = 0;
-	i = HASHMAP_ARR_SIZE;
-	minishell->envp_table = malloc(1000* sizeof(char **));
-	while (i-- > 0)
+	total_target_and_value_size = calculate_total_size(*hashmap);
+	minishell->envp_table = malloc((total_target_and_value_size + 1) * sizeof(char *));
+	if (minishell->envp_table == NULL)
+		return;
+
+	while (i < HASHMAP_ARR_SIZE)
 	{
-		current = envp_dict[i];
-		while (current)
+		current = dict_chain[i];
+		while (current != NULL)
 		{
 			envp_dict_node = (t_dict_content *)current->content;
-			minishell->envp_table[j] = malloc(1000 * sizeof(char *));
-			if (minishell->envp_table == NULL)
+			temp = ft_strjoin(envp_dict_node->target, "=");
+			if (temp == NULL)
 				return;
-			minishell->envp_table[j] = ft_strjoin((char *)envp_dict_node->target, "=");
-			minishell->envp_table[j] = ft_strjoin(minishell->envp_table[j], envp_dict_node->content);
+			minishell->envp_table[j] = ft_strjoin(temp, envp_dict_node->value);
+			free(temp);
 			if (minishell->envp_table[j] == NULL)
 				return;
 			current = current->next;
 			j++;
 		}
+		i++;
 	}
+	minishell->envp_table[j] = NULL;
 }
+

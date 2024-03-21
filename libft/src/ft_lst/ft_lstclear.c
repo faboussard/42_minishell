@@ -20,8 +20,7 @@ void ft_lstclear(t_node **lst, void (*del)(void*))
 	{
 		temp = *lst;
 		*lst = (*lst)->next;
-		if (temp->content != NULL)
-			(*del)(temp->content);
+		(*del)(temp->content);
 		free(temp);
 	}
 }

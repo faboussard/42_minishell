@@ -1,7 +1,7 @@
 
 #include "../../inc/libft.h"
 #include <stdlib.h>
-#include "lexer.h"
+#include "../../includes/lexer.h"
 
 #define NOT_FOUND 1
 #define MALLOC_FAILED -1
@@ -17,8 +17,8 @@ static int	add_new(t_node **dst, char *target, void *content);
 ///						(doesn't need to be malloced)
 /// @param content 	Content to add to the hashmap_dictionnary
 ///						(needs to be malloced)
-/// @param del 		Fonction to delete content that might already be at target
-///						(pass NULL if you don't want to free previous content)
+/// @param del 		Fonction to delete value that might already be at target
+///						(pass NULL if you don't want to free previous value)
 /// @return			0 if successful, -1 if malloc failed
 int	ft_hm_add_elem(t_dict map, char *target, void *content,
 			void (*del)(void *))
@@ -42,13 +42,13 @@ static int	modify_if_exists(t_node *dst, char *target, void *content,
 		return (NOT_FOUND);
 	if (del == NULL)
 	{
-		((t_dict_content *)dst->content)->content = content;
-		((t_dict_content *)dst->content)->content_size = ft_strlen(content);
+		((t_dict_content *)dst->content)->value = content;
+		((t_dict_content *)dst->content)->value_size = ft_strlen(content);
 		return (SUCCESSFULLY_ADDED);
 	}
-	del(((t_dict_content *)dst->content)->content);
-	((t_dict_content *)dst->content)->content = content;
-	((t_dict_content *)dst->content)->content_size = ft_strlen(content);
+	del(((t_dict_content *)dst->content)->value);
+	((t_dict_content *)dst->content)->value = content;
+	((t_dict_content *)dst->content)->value_size = ft_strlen(content);
 	return (SUCCESSFULLY_ADDED);
 }
 
@@ -60,9 +60,9 @@ static int	add_new(t_node **dst, char *target, void *content)
 	new_node_content = malloc(sizeof(t_dict_content));
 	if (new_node_content == NULL)
 		return (MALLOC_FAILED);
-	new_node_content->content = content;
+	new_node_content->value = content;
 	new_node_content->target = ft_strdup(target);
-	new_node_content->content_size = ft_strlen(new_node_content->content);
+	new_node_content->value_size = ft_strlen(new_node_content->value);
 	new_node_content->target_size = ft_strlen(new_node_content->target);
 	if (new_node_content->target == NULL)
 	{
