@@ -14,31 +14,32 @@
 #include "utils.h"
 #include "parser.h"
 
-void fill_array(t_node **list_tokens, char **array, size_t nbr_cmds_until_pipe)
+void fill_array(t_node *list_tokens, char **array, size_t nbr_cmds_until_pipe)
 {
-	t_token	*token;
-	size_t	i;
+	t_token *token;
+	size_t i;
 
 	i = 0;
-	while (i < nbr_cmds_until_pipe)
+	while (i < nbr_cmds_until_pipe && list_tokens != NULL)
 	{
-		token = (t_token *) (*list_tokens)->content;
+		token = (t_token *)list_tokens->content;
 		array[i] = ft_strdup(token->name);
 		if (array[i] == NULL)
-			return ;
+			return;
 		i++;
-		*list_tokens = (*list_tokens)->next;
+		list_tokens = list_tokens->next; // Déplacer le pointeur de liste localement
 	}
 	array[i] = NULL;
 }
 
-void create_cmd_table(t_minishell *minishell, t_node **list_tokens)
+
+void create_cmd_table(t_minishell *minishell, t_node *list_tokens)
 {
 	size_t nbr_cmds_until_pipe;
 	size_t nbr_letters_until_pipe;
 
-	nbr_cmds_until_pipe = count_cmds_until_pipe_or_redirect(*list_tokens);
-	nbr_letters_until_pipe = count_letters_until_pipe_or_redirect(*list_tokens);
+	nbr_cmds_until_pipe = count_cmds_until_pipe_or_redirect(list_tokens);
+	nbr_letters_until_pipe = count_letters_until_pipe_or_redirect(list_tokens);
 	minishell->cmd_table = ft_calloc(nbr_letters_until_pipe, sizeof(char **));
 	if (minishell->cmd_table == NULL)
 		return;

@@ -28,7 +28,7 @@ size_t calculate_total_size(t_hashmap_struct *hashmap);
 /**************************** parse tokens **************************/
 
 void create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap);
-void create_cmd_table(t_minishell *minishell, t_node **list_tokens);
+void create_cmd_table(t_minishell *minishell, t_node *list_tokens);
 
 /****************** OPERATORS ******************/
 
