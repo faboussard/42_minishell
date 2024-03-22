@@ -41,7 +41,6 @@ void	ft_init_minishell(t_minishell *minishell)
 	minishell->fd_out = -1;
 }
 
-
 int main()
 {
 	/******* dans int main(int ac, char **av, char **env) *****/
@@ -61,9 +60,9 @@ int main()
 	create_envp_hashmap(&minishell, envp);
 	print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
 	create_tables(&minishell);
-	ft_printf("************ print cmd_table ************\n");
+	ft_printf("************ print cmd_table ************\n\n");
 	print_array(minishell.cmd_table);  //DELETE
-	ft_printf("********************** print HM table **********************\n");
+	ft_printf("********************** print HM table **********************\n\n");
 	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);

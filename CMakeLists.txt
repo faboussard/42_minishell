@@ -80,18 +80,17 @@ add_executable(minishell
 
 
         srcs/main.c
-        srcs/error.c
-        srcs/tokenization.c
-        srcs/parser.c
-        srcs/operator.c
-        srcs/builtin.c
-        srcs/env_variables.c
-        srcs/utils.c
-        srcs/expansion.c
-        srcs/free.c
-        srcs/split_readline_string.c
-        srcs/print.c
-        srcs/create_tables_from_tokens.c
-        srcs/count_tokens.c
-        srcs/envp_calcultate_size.c
+        srcs/utils/error.c
+        srcs/lexer/tokenization.c
+        srcs/parser/parser.c
+        srcs/lexer/operator.c
+        srcs/lexer/builtin.c
+        srcs/env_variables/env_variables.c
+        srcs/expansion/expansion.c
+        srcs/utils/free.c
+        srcs/lexer/split_string.c
+        srcs/utils/print.c
+        srcs/parser/create_tables_from_tokens.c
+        srcs/lexer/count_tokens.c
+        srcs/env_variables/envp_calcultate_size.c
 )
