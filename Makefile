@@ -7,8 +7,12 @@ vpath %c srcs
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main error tokenization parser operator builtin env_variables \
-					expansion free split_readline_string print create_tables_from_tokens count_tokens envp_calcultate_size
+LIST_SRCS		=  main \
+				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string\
+				env_variables/env_variables env_variables/envp_calcultate_size\
+				parser/parser parser/create_tables_from_tokens\
+				expansion/expansion \
+				utils/free utils/print utils/error
 
 LIST_HEADERS	= error utils lexer minishell parser
 
@@ -55,10 +59,11 @@ $(DIR_BUILD)%.o: %.c $(DIR_BUILD)
 $(DIR_BUILD):
 		@echo "Création du répertoire $(DIR_BUILD)"
 		$(MKDIR) -p $(DIR_BUILD)
-
-$(DIR_BUILD)lexer/:
-	 @echo "Création du répertoire $(DIR_BUILD)lexer/"
-	$(MKDIR) -p $(DIR_BUILD)lexer/
+		@mkdir -p $(DIR_BUILD)/lexer
+		@mkdir -p $(DIR_BUILD)/env_variables
+		@mkdir -p $(DIR_BUILD)/parser
+		@mkdir -p $(DIR_BUILD)/expansion
+		@mkdir -p $(DIR_BUILD)/utils
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)

@@ -43,4 +43,12 @@ void	print_operator_syntax_error(t_token *token)
 		print_error("syntax error near unexpected token `>>'");
 }
 
+void	exit_msg(t_minishell *minishell, char *msg, int error_code)
+{
+	if (minishell != NULL)
+		free_minishell(minishell);
+	ft_putendl_fd(msg, 2);
+	exit(error_code);
+}
+
 
