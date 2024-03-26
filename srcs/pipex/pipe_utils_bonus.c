@@ -51,7 +51,7 @@ void	check_null_cmd(int ac, char **av, int i)
 		if (!av[i] || !av[i][0])
 		{
 			ft_putstr_fd("pipex: ", 2);
-			exit_msg(NULL, SYNTAX_ERROR, 2);
+			exit_msg_pipex(NULL, SYNTAX_ERROR, 2);
 		}
 		i++;
 	}

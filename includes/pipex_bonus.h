@@ -60,7 +60,7 @@ void		print_name(t_pipex *p, char *name);
 void		exit_command_not_found(t_pipex *p, char *name);
 void		print_name_and_exit_perror(t_pipex *p, char *name, int err);
 void		print_name_and_exit_msg(t_pipex *p, char *name, char *msg, int err);
-void		exit_msg(t_pipex *p, char *msg, int error_code);
+void		exit_msg_pipex(t_pipex *p, char *msg, int error_code);
 ///////////////////////////////////////////////////////////
 //---------------------CHILD CARE------------------------//
 ///////////////////////////////////////////////////////////

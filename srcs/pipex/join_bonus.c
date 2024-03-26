@@ -24,7 +24,7 @@ char	*join_sep(t_pipex *p, char *s1, char *s2, char sep)
 	total_len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	dest = (char *)malloc(sizeof(char) * (total_len + 1));
 	if (!dest)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 	x = -1;
 	y = 0;
 	while (s1[++x])

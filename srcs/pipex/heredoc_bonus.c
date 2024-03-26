@@ -66,7 +66,7 @@ static void	here_doc(t_pipex *p, char *limiter)
 	check_and_delete_if_tmp_file_exists("/tmp/.tmp_heredoc");
 	p->fd_in = open("/tmp/.tmp_heredoc", O_CREAT | O_WRONLY | O_APPEND, 0666);
 	if (p->fd_in < 0)
-		exit_msg(NULL, "No /tmp/ directory found", -1);
+		exit_msg_pipex(NULL, "No /tmp/ directory found", -1);
 	p->pid1 = safe_fork(p);
 	if (p->pid1 == 0)
 		writing_in_heredoc(p, limiter);
@@ -83,7 +83,7 @@ void	handle_heredoc(t_pipex *p, char *limiter, int *i, int ac)
 	if (ac < 6)
 	{
 		ft_putstr_fd("pipex: ", 2);
-		exit_msg(NULL, "Invalid number of arguments", 2);
+		exit_msg_pipex(NULL, "Invalid number of arguments", 2);
 	}
 	*i = 3;
 	here_doc(p, limiter);

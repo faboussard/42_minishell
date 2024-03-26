@@ -16,7 +16,7 @@ static void	deal_with_pathed_cmd(t_pipex *p)
 {
 	p->good_path = ft_strdup(p->cmd_args[0]);
 	if (p->good_path == NULL)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 }
 
 static void	deal_with_quotations_marks(char *joined_cmd)
@@ -51,17 +51,17 @@ static void	set_cmd_with_apostrophes(t_pipex *p, char *cmd)
 	x++;
 	begin = malloc(sizeof(char) * x);
 	if (!begin)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 	ft_strlcpy(begin, cmd, x);
 	joined_cmd = ft_strjoin(begin, cmd + x);
 	free(begin);
 	if (!joined_cmd)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 	deal_with_quotations_marks(joined_cmd);
 	p->cmd_args = ft_split(joined_cmd, '\"');
 	free(joined_cmd);
 	if (!p->cmd_args)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 }
 
 void	set_cmd_args(t_pipex *p, char *cmd)
@@ -75,7 +75,7 @@ void	set_cmd_args(t_pipex *p, char *cmd)
 	{
 		p->cmd_args = ft_split(cmd, ' ');
 		if (!p->cmd_args)
-			exit_msg(p, "Malloc error", -1);
+			exit_msg_pipex(p, "Malloc error", -1);
 	}
 	else
 		set_cmd_with_apostrophes(p, cmd);
@@ -94,7 +94,7 @@ void	set_good_path_with_cmd(t_pipex *p, char *cmd)
 	}
 	p->tab_paths = ft_split(p->paths, ':');
 	if (p->tab_paths == NULL || p->cmd_args == NULL)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 	p->good_path = join_sep(p, p->tab_paths[0], p->cmd_args[0], '/');
 	x = 0;
 	while (p->tab_paths[x] && access(p->good_path, F_OK) != 0)

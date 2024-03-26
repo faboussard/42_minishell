@@ -3,7 +3,7 @@ NAME			=	minishell
 
 #-------------  VPATH  ---------------#
 
-vpath %c srcs
+vpath %c srcs lexer env_variables parser expansion utils pipex
 
 # --------------- FILES --------------- #
 
@@ -12,15 +12,19 @@ LIST_SRCS		=  main \
 				env_variables/env_variables env_variables/envp_calcultate_size\
 				parser/parser parser/create_tables_from_tokens\
 				expansion/expansion \
-				utils/free utils/print utils/error
+				utils/free utils/print utils/error \
+				pipex/pipex_bonus	pipex/errors_bonus	pipex/join_bonus	pipex/paths_bonus	pipex/cmds_bonus\
+                pipex/pipe_utils_bonus	pipex/utils_bonus	pipex/child_care_bonus	pipex/heredoc_bonus
 
-LIST_HEADERS	= error utils lexer minishell parser
+
+LIST_HEADERS	= error utils lexer minishell parser pipex_bonus
 
 # ------------ DIRECTORIES ------------ #
 
 DIR_BUILD		=	.build/
 DIR_HEADERS		=	includes/
 DIR_LIBFT		=	libft/
+HEADER_LIBFT    =   libft/inc/
 libft			=	$(DIR_LIBFT)libft.a
 
 # ------------- SHORTCUTS ------------- #
@@ -28,7 +32,7 @@ libft			=	$(DIR_LIBFT)libft.a
 OBJS            = $(addprefix $(DIR_BUILD), $(addsuffix .o, $(LIST_SRCS)))
 HEADERS			= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
 DEPS            = ${OBJS:.o=.d}
-INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT)
+INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
 # ------------ COMPILATION ------------ #
 
@@ -64,12 +68,13 @@ $(DIR_BUILD):
 		@mkdir -p $(DIR_BUILD)/parser
 		@mkdir -p $(DIR_BUILD)/expansion
 		@mkdir -p $(DIR_BUILD)/utils
+		@mkdir -p $(DIR_BUILD)/pipex
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
-valgrind: $(NAME)
-                valgrind--track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./$(NAME)
+valgrind:       $(NAME)
+		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean
