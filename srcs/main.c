@@ -14,24 +14,35 @@
 #include "minishell.h"
 #include "utils.h"
 #include "parser.h"
-#include "minishell.h"
+#include "signals.h"
+# include <readline/history.h>
 
-void minishell_interactive(t_minishell *minishell, char **envp)
+# define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
+
+void minishell_interactive(t_minishell *minishell)
 {
 	while (1)
 	{
-		minishell->list_tokens = readline(PROMPT);
-		minishell->hashmap_environment = create_envp_hm(envp);
-		print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
+		set_signals_interactive();
+		minishell->user_input = readline(PROMPT);
+		add_history(minishell->user_input);
+		minishell->list_tokens = parse_input(minishell);
+		if (minishell->list_tokens == NULL)
+			exit_msg(minishell, "Fatal : tokenization failed", -1);
 		create_tables(minishell);
 	}
 }
 
-void minishell_non_interactive(t_minishell *minishell, char *data_input, char **envp)
+void minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	minishell->list_tokens = get_list_tokens(data_input);
-	minishell->hashmap_environment = create_envp_hm(envp);
-	print_envp_dict(minishell->hashmap_environment->dict_chain); //DELETE
+	set_signals_noninteractive();
+	minishell->user_input = ft_strdup(data_input);
+	if (minishell->user_input == NULL)
+		exit_msg(minishell, "Fatal : malloc failed", -1);
+	add_history(minishell->user_input);
+	minishell->list_tokens = parse_input(minishell);
+	if (minishell->list_tokens == NULL)
+		exit_msg(minishell, "Fatal : tokenization failed", -1);
 	create_tables(minishell);
 }
 
@@ -40,11 +51,12 @@ int main(int ac, char **av, char **envp)
 	t_minishell 	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
+//	minishell.hashmap_environment = create_envp_hm(envp);
+//	print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
 	if (is_interactive(&minishell, ac) == true)
-		minishell_interactive(&minishell, envp);
+		minishell_interactive(&minishell);
 	else
-		minishell_non_interactive(&minishell, av[2], envp);
-
+		minishell_non_interactive(&minishell, av[2]);
 	print_token(minishell.list_tokens); //DELETE
 	/**** for exec *///////
 	ft_printf("************ print cmd_table ************\n\n");
@@ -52,7 +64,6 @@ int main(int ac, char **av, char **envp)
 	ft_printf("********************** print HM table **********************\n\n");
 	print_array(minishell.envp_table);  //DELETE
 	/**** for exec *///////
-
 	free_minishell(&minishell);
 	return (0);
 }

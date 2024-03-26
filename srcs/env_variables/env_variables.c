@@ -42,6 +42,7 @@ int get_target_and_content(char **envp, t_dict envp_dict)
 			free(content);
 			return (-1);
 		}
+		free(content);
 	}
 	free(target);
 	return (0);

@@ -13,7 +13,6 @@
 #include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include "parser.h"
 
 static int check_arguments(int ac, char **av)
 {
@@ -21,7 +20,7 @@ static int check_arguments(int ac, char **av)
 		return (-1);
 	if (ac == 3)
 	{
-		if (!av[1] || ft_strncmp(av[1], "-c", 2) != 0 || !av[2] || av[2][0] == '\0')
+		if (!av[1] || ft_strcmp(av[1], "-c") != 0 || !av[2] || av[2][0] == '\0')
 			return (-1);
 	}
 	return (0);
@@ -30,8 +29,8 @@ static int check_arguments(int ac, char **av)
 void	ft_init_minishell(t_minishell *minishell, int ac, char **av)
 {
 	if (check_arguments(ac, av) == -1)
-		exit_msg(minishell, "Fatal : Wrong arguments. Usage: ./minishell (-c + command)", -1);
-	ft_bzero(&minishell, (sizeof(t_minishell)));
+		exit_msg(minishell, "Wrong arguments. Usage: ./minishell -c \"input line\"", -1);
+	ft_bzero(minishell, (sizeof(t_minishell)));
 	minishell->fd_in = -1;
 	minishell->fd_out = -1;
 }
