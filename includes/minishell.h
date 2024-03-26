@@ -16,6 +16,19 @@
 #include "../libft/inc/libft.h"
 #include "lexer.h"
 #include "minishell.h"
+# include <unistd.h>
+# include <errno.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <limits.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 typedef t_node**	t_dict;
 
