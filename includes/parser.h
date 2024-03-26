@@ -14,6 +14,7 @@
 #define PARSER_H
 
 #include "../libft/inc/libft.h"
+#include "minishell.h"
 
 /************************** parser  **************************/
 
