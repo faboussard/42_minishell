@@ -15,15 +15,9 @@
 #include "utils.h"
 #include "parser.h"
 
-t_hashmap_struct *create_dict_envp(char **envp);
-
-void	ft_init_minishell(t_minishell *minishell, char **envp)
+void	ft_init_minishell(t_minishell *minishell)
 {
-	if (!init_envp(minishell, envp))
-		return (ft_putendl_fd("Fatal : Could not initialize envp", 2));
-	if (!init_words(minishell))
-		return (ft_putendl_fd("Fatal : could not initialize working directory", 2));
-	ft_bzero(minishell, (sizeof * minishell));
+	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell->fd_in = -1;
 	minishell->fd_out = -1;
 }

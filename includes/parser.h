@@ -24,12 +24,13 @@ void	token_rework(t_node *list_tokens);
 
 size_t	count_letters_until_pipe_or_redirect(t_node *head);
 size_t	count_cmds_until_pipe_or_redirect(t_node *head);
-size_t calculate_total_size(t_hashmap_struct *hashmap);
+size_t	calculate_total_size(t_hashmap_struct *hashmap);
 
 /**************************** parse tokens **************************/
 
-void create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap);
-void create_cmd_table(t_minishell *minishell, t_node *list_tokens);
+t_hashmap_struct	*create_dict_envp(char **envp);
+void				create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap);
+void				create_cmd_table(t_minishell *minishell, t_node *list_tokens);
 
 /****************** OPERATORS ******************/
 

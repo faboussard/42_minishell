@@ -48,6 +48,7 @@ typedef struct s_minishell
 	int					pipe_fd[2];
 	int					fd_in;
 	int					fd_out;
+	char				*user_input;
 	t_node				*list_tokens;
 	t_hashmap_struct	*hashmap_environment;
 	char 				**cmd_table;
@@ -58,7 +59,7 @@ typedef struct s_minishell
 
 /*************************************** INIT MINISHELL ***************************************/
 
-void	ft_init_minishell(t_minishell *minishell, char **envp);
+void	ft_init_minishell(t_minishell *minishell);
 
 
 /*************************************** CREATE CHAINS ***************************************/

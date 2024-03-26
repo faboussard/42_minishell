@@ -1,0 +1,85 @@
+.PHONY: all clean fclean re FORCE libft
+
+				$(MAKE) -C ./
+re:				fclean all
+
+				$(RM) $(NAME)
+				$(MAKE) -C $(DIR_LIBFT) fclean
+fclean: clean
+
+				$(RM) $(DIR_BUILD)
+				$(MAKE) -C $(DIR_LIBFT) clean
+clean:
+
+                valgrind--track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./$(NAME)
+valgrind: $(NAME)
+
+	            $(MAKE) -C $(DIR_LIBFT)
+$(libft): FORCE
+
+		@mkdir -p $(DIR_BUILD)/utils
+		@mkdir -p $(DIR_BUILD)/expansion
+		@mkdir -p $(DIR_BUILD)/parser
+		@mkdir -p $(DIR_BUILD)/env_variables
+		@mkdir -p $(DIR_BUILD)/lexer
+		$(MKDIR) -p $(DIR_BUILD)
+		@echo "Création du répertoire $(DIR_BUILD)"
+$(DIR_BUILD):
+
+#---------- CREATE REPO OBJS ---------#
+
+				$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
+$(DIR_BUILD)%.o: %.c $(DIR_BUILD)
+
+# ---------- COMPILED RULES ----------- #
+
+				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -o $(NAME)
+$(NAME):		 $(OBJS) $(libft)
+
+# ---------- VARIABLES RULES ---------- #
+
+all:			 $(NAME)
+
+#***********************************  RULES  **********************************#
+
+MKDIR			=	mkdir -p
+RM				=	rm -rf
+
+# -------------  COMMANDS ------------- #
+
+DEPS_FLAGS		=	-MMD -MP
+CFLAGS			=	-Wall -Wextra -Werror -g3
+
+# ------------ COMPILATION ------------ #
+
+INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT)
+DEPS            = ${OBJS:.o=.d}
+HEADERS			= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
+OBJS            = $(addprefix $(DIR_BUILD), $(addsuffix .o, $(LIST_SRCS)))
+
+# ------------- SHORTCUTS ------------- #
+
+libft			=	$(DIR_LIBFT)libft.a
+DIR_LIBFT		=	libft/
+DIR_HEADERS		=	includes/
+DIR_BUILD		=	.build/
+
+# ------------ DIRECTORIES ------------ #
+
+LIST_HEADERS	= error utils lexer minishell parser
+
+				utils/free utils/print utils/error
+				expansion/expansion \
+				parser/parser parser/create_tables_from_tokens\
+				env_variables/env_variables env_variables/envp_calcultate_size\
+				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string\
+LIST_SRCS		=  main \
+
+# --------------- FILES --------------- #
+
+vpath %c srcs
+
+#-------------  VPATH  ---------------#
+
+NAME			=	minishell
+
