@@ -6,7 +6,7 @@
 #    By: mbernard <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/14 16:22:44 by mbernard          #+#    #+#              #
-#    Updated: 2024/03/26 09:21:03 by mbernard         ###   ########.fr        #
+#    Updated: 2024/03/26 09:26:07 by mbernard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,9 +35,10 @@ OBJS = $(addprefix ${OBJS_DIR}, $(addsuffix .o, ${SRCS_PIPEX}))
 DEPS = ${OBJS:.o=.d}
 
 # ---------------------------------- Lib Gestion ----------------------------- #
-LIBFT_DIR = ../libft/
+LIBFT_DIR = ../../libft/
+HEADER_LIBFT = ../../libft/inc/ 
 LIBFT = $(addprefix ${LIBFT_DIR}, libft.a)
-INCLUDES = -I ${LIBFT_DIR} -I ${HEADER_DIR} 
+INCLUDES = -I ${LIBFT_DIR} -I ${HEADER_LIBFT} -I ${HEADER_DIR} 
 # ---------------------------------- Compilation ----------------------------- #
 all: ${NAME} ${OBJS} Makefile | ${OBJS_DIR}
  
