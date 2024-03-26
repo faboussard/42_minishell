@@ -59,7 +59,8 @@ typedef struct s_minishell
 
 /*************************************** INIT MINISHELL ***************************************/
 
-void	ft_init_minishell(t_minishell *minishell);
+void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
+bool	is_interactive(t_minishell *minishell, int ac);
 
 
 /*************************************** CREATE CHAINS ***************************************/
