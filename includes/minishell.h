@@ -34,29 +34,40 @@ typedef t_node**	t_dict;
 
 typedef struct s_hashmap
 {
-	t_dict 	dict_chain;
-	size_t	total_size;
-	char 	**target_tab;
+	t_dict 				dict_chain;
+	size_t				total_size;
+	char 				**target_tab;
 }	t_hashmap_struct;
 
 typedef struct s_minishell
 {
-	pid_t						pid1;
-	pid_t						pid2;
-	int							status;
-	int							pipe_fd[2];
-	int							fd_in;
-	int							fd_out;
-	t_node						*list_tokens;
-	t_hashmap_struct			*hashmap_environment;
-	char 						**cmd_table;
-	char 						**envp_table;
+	bool				interactive;
+	pid_t				pid1;
+	pid_t				pid2;
+	int					status;
+	int					pipe_fd[2];
+	int					fd_in;
+	int					fd_out;
+	t_node				*list_tokens;
+	t_hashmap_struct	*hashmap_environment;
+	char 				**cmd_table;
+	char 				**envp_table;
 
 }	t_minishell;
 
 
+/*************************************** INIT MINISHELL ***************************************/
+
+void	ft_init_minishell(t_minishell *minishell, char **envp);
+
+
+/*************************************** CREATE CHAINS ***************************************/
+
+void	create_token_chain_list(t_minishell *minishell, char *string);
+void	create_envp_hashmap(t_minishell *minishell, char **envp);
+
 /*************************************** CREATE TABLES ***************************************/
 
-void create_redirect_table(t_minishell *minishell, t_node **list_tokens);
+void	create_tables(t_minishell *minishell);
 
 #endif
