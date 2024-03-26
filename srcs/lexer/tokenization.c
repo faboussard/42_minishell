@@ -49,38 +49,47 @@ void define_token(t_token *new_token, char *string)
 		define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
 }
 
-void transform_to_token(char *string, t_node **list_tokens)
+int transform_to_token(t_minishell *minishell, t_node **list_tokens)
 {
 	int 	i;
 	t_token	*new_token;
 	char	**split;
 
 	i = 0;
-	split = split_with_quotes_management(string);
+	split = split_with_quotes_management(minishell->user_input);
 	if (split == NULL)
-		return ;
+		return (0);
 	new_token = NULL;
 	while (split[i])
 	{
 		new_token = malloc(sizeof(t_token));
 		if (new_token == NULL)
-			return ;
+		{
+			ft_free_all_tab(split);
+			return (0);
+		}
 		new_token->name = ft_strdup(split[i]);
 		if (new_token->name == NULL)
-			return ;
+		{
+			ft_free_all_tab(split);
+			return (0);
+		}
 		define_token(new_token, split[i]);
 		add_token_to_list(list_tokens, new_token);
 		i++;
 	}
 	ft_free_all_tab(split);
+	return (1);
 }
 
-t_node *get_list_tokens(char *string)
+t_node *parse_input(t_minishell *minishell)
 {
-	t_node *list_tokens;
+	t_node	*list_tokens;
 
 	list_tokens = NULL;
-	transform_to_token(string, &list_tokens);
-	token_rework(list_tokens);
+	if (!transform_to_token(minishell, &list_tokens))
+		return (NULL);
+	//	check_syntax_with_tokens(list_tokens);
+	token_requalification(list_tokens);
 	return (list_tokens);
 }

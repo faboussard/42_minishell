@@ -12,9 +12,11 @@ LIST_SRCS		=  main \
 				env_variables/env_variables env_variables/envp_calcultate_size\
 				parser/parser parser/create_tables_from_tokens\
 				expansion/expansion \
-				utils/free utils/print utils/error
+				utils/free utils/print utils/error \
+				signal \
+				init
 
-LIST_HEADERS	= error utils lexer minishell parser
+LIST_HEADERS	= error utils lexer minishell parser signals
 
 # ------------ DIRECTORIES ------------ #
 
@@ -32,7 +34,8 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT)
 
 # ------------ COMPILATION ------------ #
 
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CC				=	clang
+CFLAGS			=	-Wall -Wextra -Werror
 DEPS_FLAGS		=	-MMD -MP
 
 # -------------  COMMANDS ------------- #
@@ -47,7 +50,7 @@ all:			 $(NAME)
 # ---------- VARIABLES RULES ---------- #
 
 $(NAME):		 $(OBJS) $(libft)
-				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -o $(NAME)
+				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -lreadline -o $(NAME)
 
 # ---------- COMPILED RULES ----------- #
 
@@ -68,8 +71,11 @@ $(DIR_BUILD):
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
-valgrind: $(NAME)
-                valgrind--track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./mask_readline_leaks.supp ./$(NAME)
+debug: CFLAGS := $(filter-out -Werror,$(CFLAGS))
+debug: all
+
+valgrind:       $(NAME)
+				valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean

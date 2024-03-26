@@ -23,7 +23,6 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <signal.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
@@ -53,7 +52,6 @@ typedef struct s_minishell
 	t_hashmap_struct	*hashmap_environment;
 	char 				**cmd_table;
 	char 				**envp_table;
-
 }	t_minishell;
 
 
@@ -61,7 +59,7 @@ typedef struct s_minishell
 
 void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
 bool	is_interactive(t_minishell *minishell, int ac);
-
+t_node	*parse_input(t_minishell *minishell);
 
 /*************************************** CREATE CHAINS ***************************************/
 

@@ -24,7 +24,6 @@ enum e_bool
 /******************** UTILS ********************/
 
 t_token	*return_last_token(t_node *list_tokens);
-void	ft_init_minishell(t_minishell *minishell);
 void	exit_msg(t_minishell *minishell, char *msg, int error_code);
 
 /******************** PRINT ********************/

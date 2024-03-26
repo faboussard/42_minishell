@@ -31,6 +31,8 @@ void	free_minishell(t_minishell *minishell)
 		close(minishell->fd_in);
 	if (minishell->fd_out >= 0)
 		close(minishell->fd_out);
+	if (minishell->user_input)
+		free(minishell->user_input);
 	if (minishell->list_tokens)
 		ft_lstclear(&minishell->list_tokens, (void *) free_token);
 	if (minishell->hashmap_environment != NULL) {
@@ -43,6 +45,7 @@ void	free_minishell(t_minishell *minishell)
 		ft_free_all_tab(minishell->envp_table);
 	if (minishell->cmd_table)
 		ft_free_all_tab(minishell->cmd_table);
+	rl_clear_history();
 }
 
 void	ft_free_all_tab(char **tab)

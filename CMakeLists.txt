@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories(includes)
 include_directories(libft/inc)
+find_library(READLINE_LIBRARY readline)
 
 add_executable(minishell
         libft/inc/get_next_line.h
@@ -76,6 +77,7 @@ add_executable(minishell
         includes/minishell.h
         includes/error.h
         includes/lexer.h
+        includes/signals.h
 
 
 
@@ -93,4 +95,8 @@ add_executable(minishell
         srcs/parser/create_tables_from_tokens.c
         srcs/lexer/count_tokens.c
         srcs/env_variables/envp_calcultate_size.c
+        srcs/init.c
+        srcs/signal.c
 )
+
+target_link_libraries(minishell ${READLINE_LIBRARY})

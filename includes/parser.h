@@ -18,7 +18,7 @@
 
 /************************** parser  **************************/
 
-void	token_rework(t_node *list_tokens);
+void	token_requalification(t_node *list_tokens);
 
 /**************************** count tokens **************************/
 
