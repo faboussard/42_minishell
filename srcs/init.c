@@ -10,31 +10,42 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lexer.h"
+#include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
 #include "parser.h"
 
-void	ft_init_minishell(t_minishell *minishell)
+static int check_arguments(int ac, char **av)
 {
+	if (ac != 1 && ac != 3)
+		return (-1);
+	if (ac == 3)
+	{
+		if (!av[1] || ft_strncmp(av[1], "-c", 2) != 0 || !av[2] || av[2][0] == '\0')
+			return (-1);
+	}
+	return (0);
+}
+
+void	ft_init_minishell(t_minishell *minishell, int ac, char **av)
+{
+	if (check_arguments(ac, av) == -1)
+		exit_msg(minishell, "Fatal : Wrong arguments. Usage: ./minishell (-c + command)", -1);
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell->fd_in = -1;
 	minishell->fd_out = -1;
 }
 
-void create_token_chain_list(t_minishell *minishell, char *string)
+bool is_interactive(t_minishell *minishell, int ac)
 {
-	minishell->list_tokens = get_list_tokens(string);
-}
-
-void create_envp_hashmap(t_minishell *minishell, char **envp)
-{
-	minishell->hashmap_environment = create_dict_envp(envp);
-}
-
-/******for exec*******/
-void create_tables(t_minishell *minishell)
-{
-	create_cmd_table(minishell, minishell->list_tokens);
-	create_envp_table(minishell, &minishell->hashmap_environment);
+	if (ac == 3)
+	{
+		minishell->interactive = false;
+		return (false);
+	}
+	else
+	{
+		minishell->interactive = true;
+		return (true);
+	}
 }

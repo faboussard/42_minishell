@@ -28,7 +28,7 @@ size_t	calculate_total_size(t_hashmap_struct *hashmap);
 
 /**************************** parse tokens **************************/
 
-t_hashmap_struct	*create_dict_envp(char **envp);
+t_hashmap_struct	*create_envp_hm(char **envp);
 void				create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap);
 void				create_cmd_table(t_minishell *minishell, t_node *list_tokens);
 
@@ -37,5 +37,8 @@ void				create_cmd_table(t_minishell *minishell, t_node *list_tokens);
 bool	get_operator_token(t_token *new_token, char *string);
 bool	is_redirect_token(t_token *token);
 void	print_operator_syntax_error(t_token *token);
+
+/******************** init.c **********************/
+void	parsing(t_minishell *minishell, int ac, char **av, char **envp);
 
 #endif //PARSER_H

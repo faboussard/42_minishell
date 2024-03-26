@@ -66,7 +66,7 @@ int create_dict_env_variable(char **envp, t_dict dict_chain)
 	return (0);
 }
 
-t_hashmap_struct *create_dict_envp(char **envp)
+t_hashmap_struct *create_envp_hm(char **envp)
 {
 	t_hashmap_struct *hashmap_environment;
 

@@ -82,3 +82,9 @@ void create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap)
 	minishell->envp_table[j] = NULL;
 }
 
+void create_tables(t_minishell *minishell)
+{
+	create_cmd_table(minishell, minishell->list_tokens);
+	create_envp_table(minishell, &minishell->hashmap_environment);
+}
+
