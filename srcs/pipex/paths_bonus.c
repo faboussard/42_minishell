@@ -40,7 +40,7 @@ void	set_paths(t_pipex *p, char **env)
 		{
 			p->paths = ft_strdup(env[x] + 5);
 			if (p->paths == NULL)
-				exit_msg(p, "Malloc error", -1);
+				exit_msg_pipex(p, "Malloc error", -1);
 			break ;
 		}
 		x++;
@@ -48,5 +48,5 @@ void	set_paths(t_pipex *p, char **env)
 	if (p->paths == NULL)
 		p->paths = ft_strdup("N");
 	if (p->paths == NULL)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 }

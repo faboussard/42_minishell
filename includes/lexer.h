@@ -14,7 +14,7 @@
 #define LEXER_H
 
 #include <stdbool.h>
-#include "../libft/inc/libft.h"
+#include "libft.h"
 #include "minishell.h"
 
 enum e_token_type

@@ -13,7 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "../libft/inc/libft.h"
+#include "libft.h"
 #include "lexer.h"
 #include "minishell.h"
 # include <unistd.h>

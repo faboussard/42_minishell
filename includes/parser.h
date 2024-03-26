@@ -13,7 +13,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "../libft/inc/libft.h"
+#include "libft.h"
 
 /************************** parser  **************************/
 

@@ -82,7 +82,7 @@ static void	middle_child(t_pipex *p, char *cmd, char **env)
 void	child_care(t_pipex *p, char *cmd, char **env, int child)
 {
 	if (pipe(p->pipe_fd) == -1)
-		exit_msg(p, "Error creating the pipe", -1);
+		exit_msg_pipex(p, "Error creating the pipe", -1);
 	if (child == 1)
 		first_child(p, cmd, env);
 	else if (child == 3)

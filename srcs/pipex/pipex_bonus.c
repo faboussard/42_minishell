@@ -25,7 +25,7 @@ void	open_and_check_fd_infile(t_pipex *p, char *in)
 		p->dev_null = 1;
 		p->fd_in = open("/dev/null", O_RDONLY);
 		if (p->fd_in < 0)
-			exit_msg(NULL, "No /dev/null/ found", -1);
+			exit_msg_pipex(NULL, "No /dev/null/ found", -1);
 	}
 }
 
@@ -54,7 +54,7 @@ void	exec(t_pipex *p, char *cmd, char **env)
 	erase_spaces_in_cmd_args(p);
 	free(entire_cmd);
 	if (p->cmd_args == NULL)
-		exit_msg(p, "Malloc error", -1);
+		exit_msg_pipex(p, "Malloc error", -1);
 	execve(p->good_path, p->cmd_args, env);
 	if (access(p->good_path, F_OK) == 0)
 		print_name_and_exit_perror(p, p->cmd_args[0], 1);
@@ -73,7 +73,7 @@ static int	wait_children_and_give_the_exit_status_please(t_pipex *p)
 	return (status);
 }
 
-int	main(int ac, char **av, char **env)
+int	pipex(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
 	int		error_status;
@@ -98,6 +98,6 @@ int	main(int ac, char **av, char **env)
 		ft_free_struct(&pipex);
 	}
 	else if (ac < 5)
-		exit_msg(NULL, "Invalid number of arguments", 1);
+		exit_msg_pipex(NULL, "Invalid number of arguments", 1);
 	return (pipex.status);
 }
