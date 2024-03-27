@@ -15,7 +15,6 @@
 
 #include "libft.h"
 #include "lexer.h"
-#include "minishell.h"
 # include <unistd.h>
 # include <errno.h>
 # include <stdbool.h>
@@ -28,8 +27,6 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-
-typedef struct s_envp_content	t_envp_content;
 
 typedef struct s_minishell
 {
@@ -57,6 +54,7 @@ typedef struct s_envp_content
 	size_t 					target_size;
 	struct s_envp_content 	*next;
 }	t_envp_content;
+
 
 /*************************************** INIT MINISHELL ***************************************/
 

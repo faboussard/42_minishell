@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "parser.h"
 #include "signals.h"
+#include "error.h"
 # include <readline/history.h>
 
 //The exit utility shall cause the shell to exit from its current
@@ -36,13 +37,22 @@ void restore_terminal(t_minishell *minishell)
 	free_minishell(minishell);
 }
 
-int ft_exit(t_minishell *minishell)
+unsigned int ft_exit_builtin(t_minishell *minishell)
 {
-    if (!minishell->list_tokens->next)
+	unsigned int	status;
+
+	write(1, "exit\n", 5);
+	if (!minishell->list_tokens || !minishell->list_tokens->next)
 	{
 		restore_terminal(minishell);
 		exit(0);
 	}
-	else
-		exit(1);
+	errno = 0;
+	status = ft_atoi(minishell->list_tokens->next->content);
+	if (minishell->list_tokens->next && errno != EINVAL)
+	{
+		print_error("exit:too many arguments");
+		restore_terminal(minishell);
+		exit(status);
+	}
 }
