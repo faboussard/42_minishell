@@ -27,7 +27,7 @@ void fill_array(t_node *list_tokens, char **array, size_t nbr_cmds_until_pipe)
 		if (array[i] == NULL)
 			return;
 		i++;
-		list_tokens = list_tokens->next; // Déplacer le pointeur de liste localement
+		list_tokens = list_tokens->next;
 	}
 	array[i] = NULL;
 }
@@ -57,7 +57,7 @@ void create_envp_table(t_minishell *minishell, t_hashmap_struct **hashmap)
 	char *temp;
 
 	total_target_and_value_size = calculate_total_size(*hashmap);
-	minishell->envp_table = ft_calloc(total_target_and_value_size, sizeof(char **));
+	minishell->envp_table = ft_calloc(total_target_and_value_size + 1, sizeof(char **));
 	if (minishell->envp_table == NULL)
 		return;
 

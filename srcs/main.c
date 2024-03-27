@@ -26,6 +26,7 @@ void minishell_interactive(t_minishell *minishell)
 		set_signals_interactive();
 		minishell->user_input = readline(PROMPT);
 		add_history(minishell->user_input);
+		minishell->history_count += 1;
 		minishell->list_tokens = parse_input(minishell);
 		if (minishell->list_tokens == NULL)
 			exit_msg(minishell, "Fatal : tokenization failed", -1);
@@ -40,6 +41,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
 	add_history(minishell->user_input);
+	minishell->history_count += 1;
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		exit_msg(minishell, "Fatal : tokenization failed", -1);
@@ -51,18 +53,20 @@ int main(int ac, char **av, char **envp)
 	t_minishell 	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
-//	minishell.hashmap_environment = create_envp_hm(envp);
+	minishell.hashmap_environment = create_envp_hm(envp);
+	if (minishell.hashmap_environment == NULL)
+		exit_msg(&minishell, "Fatal : malloc failed", -1);
 //	print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-	print_token(minishell.list_tokens); //DELETE
+//	print_token(minishell.list_tokens); //DELETE
 	/**** for exec *///////
-	ft_printf("************ print cmd_table ************\n\n");
-	print_array(minishell.cmd_table);  //DELETE
-	ft_printf("********************** print HM table **********************\n\n");
-	print_array(minishell.envp_table);  //DELETE
+//	ft_printf("************ print cmd_table ************\n\n");
+//	print_array(minishell.cmd_table);  //DELETE
+//	ft_printf("********************** print HM table **********************\n\n");
+//	print_array(minishell.envp_table);  //DELETE
 	/**** for exec *///////
 	free_minishell(&minishell);
 	return (0);

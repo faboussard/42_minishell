@@ -47,6 +47,7 @@ typedef struct s_minishell
 	int					pipe_fd[2];
 	int					fd_in;
 	int					fd_out;
+	int 				history_count;
 	char				*user_input;
 	t_node				*list_tokens;
 	t_hashmap_struct	*hashmap_environment;
