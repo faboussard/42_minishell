@@ -31,7 +31,18 @@
 //except when the exit utility is invoked in that trap itself, in
 //        which case the shell shall exit immediately.
 
-void ft_exit(t_minishell *minishell)
+void restore_terminal(t_minishell *minishell)
 {
-    if (ft_strcmp(minishell->user_input, )
+	free_minishell(minishell);
+}
+
+int ft_exit(t_minishell *minishell)
+{
+    if (!minishell->list_tokens->next)
+	{
+		restore_terminal(minishell);
+		exit(0);
+	}
+	else
+		exit(1);
 }
