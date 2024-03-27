@@ -56,7 +56,7 @@ static int	add_new_envp(t_node **list_envp, char *target, char *content)
 	return (SUCCESSFULLY_ADDED);
 }
 
-int get_target_and_value(char **envp, t_node **list_envp)
+int get_target_and_value(char **envp, t_node **list_envp, t_minishell *minishell)
 {
 	size_t	i;
 	char	*content;
@@ -65,7 +65,7 @@ int get_target_and_value(char **envp, t_node **list_envp)
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
-	target = ft_substr(*envp, 0, i);
+	target = ft_substr(*envp, 0, i + 1);
 	if (target == NULL)
 	{
 		ft_lstclear(list_envp, (void *) free_t_envp_content);
@@ -82,28 +82,29 @@ int get_target_and_value(char **envp, t_node **list_envp)
 		}
 		if (content != NULL)
 			free(content);
+		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
 	}
 	free(target);
 	return (1);
 }
 
-int create_dict_env_variable(char **envp, t_node **list_envp)
+int create_dict_env_variable(char **envp, t_node **list_envp, t_minishell *minishell)
 {
 	while (*envp && ft_strchr(*envp, '='))
 	{
-			if (!get_target_and_value(envp, list_envp))
-				return (0);
+		if (!get_target_and_value(envp, list_envp, minishell))
+			return (0);
 		envp++;
 	}
 	return (1);
 }
 
-t_node *create_envp_list(char **envp)
+t_node *create_envp_list(char **envp, t_minishell *minishell)
 {
 	t_node *list_envp;
 
 	list_envp = NULL;
-	if (!create_dict_env_variable(envp, &list_envp))
+	if (!create_dict_env_variable(envp, &list_envp, minishell))
 		return (NULL);
 	return (list_envp);
 }
