@@ -80,9 +80,9 @@ int get_target_and_value(char **envp, t_node **list_envp, t_minishell *minishell
 			ft_lstclear(list_envp, (void *) free_t_envp_content);
 			return (0);
 		}
-		if (content != NULL)
-			free(content);
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
+        if (content != NULL)
+            free(content);
 	}
 	free(target);
 	return (1);
