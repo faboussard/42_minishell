@@ -9,7 +9,7 @@ vpath %c srcs lexer env_variables parser expansion utils pipex
 
 LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string\
-				env_variables/env_variables env_variables/envp_calcultate_size\
+				env_variables/env_variables\
 				parser/parser parser/create_tables_from_tokens\
 				expansion/expansion \
 				utils/free utils/print utils/error \

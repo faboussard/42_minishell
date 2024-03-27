@@ -94,7 +94,6 @@ add_executable(minishell
         srcs/utils/print.c
         srcs/parser/create_tables_from_tokens.c
         srcs/lexer/count_tokens.c
-        srcs/env_variables/envp_calcultate_size.c
         srcs/init.c
         srcs/signal.c
 )
