@@ -51,27 +51,3 @@ void print_token(t_node *list_tokens)
 	}
 	ft_printf("\n");
 }
-
-void	print_envp_dict(t_dict envp_dict)
-{
-	int					i;
-	t_node				*cursor;
-	t_dict_content		*dict_content;
-	int					size;
-
-	ft_printf("--------------- Hashmap / dictionnary ---------------\n");
-	i = HASHMAP_ARR_SIZE;
-	size = ft_hm_size(envp_dict);
-	ft_printf("Size: %d\n", size);
-	while (i-- > 0)
-	{
-		cursor = envp_dict[i];
-		while (cursor != NULL)
-		{
-			dict_content = cursor->content;
-			ft_printf("%s=%s\n", dict_content->target, (char *) dict_content->value);
-			ft_printf("value size : %d, target size : %d\n", dict_content->value_size, dict_content->target_size);
-			cursor = cursor->next;
-		}
-	}
-}
