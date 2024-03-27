@@ -48,29 +48,28 @@ void create_cmd_table(t_minishell *minishell, t_node *list_tokens)
 
 void create_envp_table(t_minishell *minishell)
 {
-	t_envp_content *envp_node = minishell->list_envp;
-	size_t total_target_and_value_size = calculate_total_size(minishell);
-	size_t j = 0;
-	char *temp;
+    t_node *current;
+    t_envp_content *envp_content;
+	size_t i;
 
-	minishell->envp_table = ft_calloc(total_target_and_value_size + 1, sizeof(char *));
+	i = 0;
+	minishell->envp_table = ft_calloc(minishell->total_size_envp + 1, sizeof(char **));
 	if (minishell->envp_table == NULL)
 		return;
-
-	while (envp_node != NULL)
+    current = minishell->list_envp;
+	while (current != NULL)
 	{
-		temp = ft_strjoin(envp_node->target, "=");
-		if (temp == NULL)
-			return;
-		minishell->envp_table[j] = ft_strjoin(temp, envp_node->value);
-		free(temp);
-		if (minishell->envp_table[j] == NULL)
-			return;
-
-		envp_node = envp_node->next;
-		j++;
+        envp_content = (t_envp_content *)(current)->content;
+		minishell->envp_table[i] = ft_strjoin(envp_content->target, envp_content->value);
+		if (minishell->envp_table[i] == NULL)
+        {
+            ft_free_all_tab(minishell->envp_table);
+            return;
+        }
+        current = current->next;
+		i++;
 	}
-	minishell->envp_table[j] = NULL;
+	minishell->envp_table[i] = NULL;
 }
 
 

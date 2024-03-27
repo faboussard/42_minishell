@@ -28,8 +28,9 @@ void	exit_msg(t_minishell *minishell, char *msg, int error_code);
 
 /******************** PRINT ********************/
 
-void	print_token(t_node *list_tokens);
+void	print_token_list(t_node *list_tokens);
 void	print_array(char **array);
+void    print_list_envp(t_minishell *minishell);
 
 /******************** FREE ********************/
 

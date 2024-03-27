@@ -15,39 +15,61 @@
 
 void print_array(char **array)
 {
-	ft_printf("------------------- PRINT ARRAY ------------------------------------\n");
+    printf("------------------- PRINT ARRAY ------------------------------------\n");
 	int i;
 
 	if (array == NULL)
 	{
-		ft_printf("no array to print\n");
+        printf("no array to print\n");
 		return;
 	}
 	i = 0;
 	while (array[i] != NULL)
 	{
-		ft_printf("%s\n", array[i]);
+        printf("%s\n", array[i]);
 		i++;
 	}
 }
 
-void print_token(t_node *list_tokens)
+void print_token_list(t_node *list_tokens)
 {
 	t_node  *iterator;
 	t_token *token;
 
 	if (list_tokens == NULL)
 	{
-		ft_printf("no list to print\n");
+        printf("no list to  print\n");
 		return;
 	}
-	ft_printf("----------------------- PRINT LIST -----------------------\n");
+    printf("----------------------- PRINT LIST -----------------------\n");
 	iterator = list_tokens;
 	while (iterator != NULL)
 	{
 		token = (t_token *)(iterator)->content;
-		ft_printf("Name : %s, Type: %d, Builtin: %d, Operator: %d\n", token->name, token->e_type, token->e_builtin, token->e_operator);
+        printf("Name : %s, Type: %d, Builtin: %d, Operator: %d\n", token->name, token->e_type, token->e_builtin, token->e_operator);
 		iterator = iterator->next;
 	}
-	ft_printf("\n");
+    printf("\n");
+}
+
+void print_list_envp(t_minishell *minishell)
+{
+    t_node *current;
+    t_envp_content *envp_content;
+
+    if (minishell->list_envp == NULL)
+    {
+        printf("no list to print\n");
+        return;
+    }
+    printf("----------------------- PRINT LIST -----------------------\n");
+    current = minishell->list_envp;
+    while (current != NULL)
+    {
+        envp_content = (t_envp_content *)(current)->content;
+        printf("Target: %s, Value: %s\n", envp_content->target, envp_content->value);
+        current = current->next;
+    }
+
+    printf("\n");
 }

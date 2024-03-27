@@ -14,7 +14,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
-size_t calculate_total_target_size(t_minishell *minishell)
+size_t calculate_envp_target_size(t_minishell *minishell)
 {
 	size_t target_size = 0;
 	t_node *current_node = minishell->list_envp;
@@ -28,7 +28,7 @@ size_t calculate_total_target_size(t_minishell *minishell)
 	return target_size;
 }
 
-size_t calculate_total_value_size(t_minishell *minishell)
+size_t calculate_envp_value_size(t_minishell *minishell)
 {
 	size_t value_size = 0;
 	t_node *current_node = minishell->list_envp;
@@ -42,9 +42,9 @@ size_t calculate_total_value_size(t_minishell *minishell)
 	return value_size;
 }
 
-size_t calculate_total_size(t_minishell *minishell)
+size_t calculate_target_and_value_total_size(t_minishell *minishell)
 {
-	size_t value_size = calculate_total_value_size(minishell);
-	size_t target_size = calculate_total_target_size(minishell);
-	return target_size + value_size;
+	size_t value_size = calculate_envp_value_size(minishell);
+	size_t target_size = calculate_envp_target_size(minishell);
+	return (target_size + value_size);
 }
