@@ -48,22 +48,22 @@
 //}
 
 
-void to_subshell(t_node *list_tokens)
-{
-	t_node *iterator;
-	t_token *token;
-	t_token *next_token;
-
-	iterator = list_tokens;
-	while (iterator->next != NULL)
-	{
-		token = (t_token *)(iterator)->content;
-		next_token = (t_token *)(iterator->next)->content;
-		if (token->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
-			next_token->e_type = SUBSHELL;
-		iterator = iterator->next;
-	}
-}
+//void to_subshell(t_node *list_tokens)
+//{
+//	t_node *iterator;
+//	t_token *token;
+//	t_token *next_token;
+//
+//	iterator = list_tokens;
+//	while (iterator->next != NULL)
+//	{
+//		token = (t_token *)(iterator)->content;
+//		next_token = (t_token *)(iterator->next)->content;
+//		if (token->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
+//			next_token->e_type = SUBSHELL;
+//		iterator = iterator->next;
+//	}
+//}
 
 void arg_to_command(t_node *list_tokens)
 {
@@ -94,7 +94,7 @@ void arg_to_command(t_node *list_tokens)
 	}
 }
 
-void to_file(t_node *list_tokens)
+void change_type_to_file(t_node *list_tokens)
 {
 	t_node *iterator;
 	t_token *token;
@@ -113,13 +113,7 @@ void to_file(t_node *list_tokens)
 
 void token_requalification(t_node *list_tokens)
 {
-	to_file(list_tokens);
+	change_type_to_file(list_tokens);
 	arg_to_command(list_tokens);
-	to_subshell(list_tokens);
-}
-
-void token_rework(t_node *list_tokens)
-{
-//	check_syntax_with_tokens(list_tokens);
-	token_requalification(list_tokens);
+//	to_subshell(list_tokens);
 }

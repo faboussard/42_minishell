@@ -63,15 +63,6 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 }	t_token;
 
-typedef struct s_dict_content
-{
-	char					*value;
-	char					*target;
-	size_t 					value_size;
-	size_t 					target_size;
-}	t_dict_content;
-
-typedef t_node**	t_dict;
 
 /****************** SPLIT_READLINE ******************/
 
@@ -84,9 +75,7 @@ int parentheses_on_arg(char *string);
 
 /****************** LEXER ******************/
 
-void	transform_to_token(char *string, t_node **list_tokens);
 void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
-t_node *get_list_tokens(char *string);
 
 /****************** BUILTIN ******************/
 

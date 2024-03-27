@@ -7,7 +7,7 @@ vpath %c srcs lexer env_variables parser expansion utils pipex
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main \
+LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string\
 				env_variables/env_variables env_variables/envp_calcultate_size\
 				parser/parser parser/create_tables_from_tokens\
@@ -16,8 +16,7 @@ LIST_SRCS		=  main \
 				pipex/pipex_bonus	pipex/errors_bonus	pipex/join_bonus	pipex/paths_bonus	pipex/cmds_bonus\
                 pipex/pipe_utils_bonus	pipex/utils_bonus	pipex/child_care_bonus	pipex/heredoc_bonus
 
-
-LIST_HEADERS	= error utils lexer minishell parser pipex_bonus
+LIST_HEADERS	= error utils lexer minishell parser signals pipex_bonus
 
 # ------------ DIRECTORIES ------------ #
 
@@ -36,7 +35,8 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
 # ------------ COMPILATION ------------ #
 
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CC				=	clang
+CFLAGS			=	-Wall -Wextra -Werror
 DEPS_FLAGS		=	-MMD -MP
 
 # -------------  COMMANDS ------------- #
@@ -51,7 +51,7 @@ all:			 $(NAME)
 # ---------- VARIABLES RULES ---------- #
 
 $(NAME):		 $(OBJS) $(libft)
-				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -o $(NAME)
+				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -lreadline -o $(NAME)
 
 # ---------- COMPILED RULES ----------- #
 
@@ -75,6 +75,9 @@ $(libft): FORCE
 
 valgrind:       $(NAME)
 		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
+
+debug: CFLAGS := $(filter-out -Werror,$(CFLAGS))
+debug: all
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean

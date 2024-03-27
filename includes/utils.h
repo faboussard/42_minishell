@@ -24,14 +24,13 @@ enum e_bool
 /******************** UTILS ********************/
 
 t_token	*return_last_token(t_node *list_tokens);
-void	ft_init_minishell(t_minishell *minishell);
 void	exit_msg(t_minishell *minishell, char *msg, int error_code);
 
 /******************** PRINT ********************/
 
-void	print_token(t_node *list_tokens);
+void	print_token_list(t_node *list_tokens);
 void	print_array(char **array);
-void	print_envp_dict(t_dict envp_dict);
+void    print_list_envp(t_minishell *minishell);
 
 /******************** FREE ********************/
 
@@ -39,6 +38,6 @@ void	free_minishell(t_minishell *minishell);
 void	ft_free_all_tab(char **tab);
 void	ft_free_tab_from_i(void **tab, int j);
 void	free_token(t_token	*token);
-void	free_dict(t_dict_content *dict);
+void	free_t_envp_content(t_envp_content *envp);
 
 #endif //GENERAL_H

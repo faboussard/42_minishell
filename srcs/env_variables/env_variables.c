@@ -15,7 +15,48 @@
 #include <stdlib.h>
 #include <string.h>
 
-int get_target_and_content(char **envp, t_dict envp_dict)
+#define NOT_FOUND 1
+#define MALLOC_FAILED -1
+#define SUCCESSFULLY_ADDED 0
+
+//content doit etre pouvoir nul ?
+static int	add_new_envp(t_node **list_envp, char *target, char *content)
+{
+	t_envp_content		*new_node_content;
+	t_node				*new_node;
+
+	new_node_content = malloc(sizeof(t_envp_content));
+	if (new_node_content == NULL)
+		return (MALLOC_FAILED);
+	new_node_content->target = ft_strdup(target);
+	if (new_node_content->target == NULL)
+	{
+		free(new_node_content);
+		return (MALLOC_FAILED);
+	}
+	if (content)
+	{
+		new_node_content->value = ft_strdup(content);
+		if (new_node_content->value == NULL)
+		{
+			free(new_node_content->target);
+			free(new_node_content);
+			return (MALLOC_FAILED);
+		}
+		new_node_content->value_size = ft_strlen(new_node_content->value);
+	}
+	new_node_content->target_size = ft_strlen(new_node_content->target);
+	new_node = ft_lstnew(new_node_content);
+	if (new_node == NULL)
+	{
+		free_t_envp_content(new_node_content);
+		return (MALLOC_FAILED);
+	}
+	ft_lstadd_front(list_envp, new_node);
+	return (SUCCESSFULLY_ADDED);
+}
+
+int get_target_and_value(char **envp, t_node **list_envp, t_minishell *minishell)
 {
 	size_t	i;
 	char	*content;
@@ -24,66 +65,46 @@ int get_target_and_content(char **envp, t_dict envp_dict)
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
-	target = ft_substr(*envp, 0, i);
+	target = ft_substr(*envp, 0, i + 1);
 	if (target == NULL)
-		return (-1);
+	{
+		ft_lstclear(list_envp, (void *) free_t_envp_content);
+		return (0);
+	}
 	if ((*envp)[i] == '=')
 	{
 		i++;
 		content = ft_substr(*envp, i, ft_strlen(*envp) - i);
-		if (content == NULL)
+		if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
 		{
-			free(target);
-			return (-1);
+			ft_lstclear(list_envp, (void *) free_t_envp_content);
+			return (0);
 		}
-		if (ft_hm_add_elem(envp_dict, target, content, &free) == -1)
-		{
-			free(target);
-			free(content);
-			return (-1);
-		}
+		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
+        if (content != NULL)
+            free(content);
 	}
 	free(target);
-	return (0);
+	return (1);
 }
 
-t_dict	ft_dict_init(void)
+int create_dict_env_variable(char **envp, t_node **list_envp, t_minishell *minishell)
 {
-	return (ft_calloc(HASHMAP_ARR_SIZE, sizeof(t_dict)));
-}
-
-int create_dict_env_variable(char **envp, t_dict dict_chain)
-{
-	while (*envp)
+	while (*envp && ft_strchr(*envp, '='))
 	{
-		if (ft_strchr(*envp, '='))
-		{
-			if (get_target_and_content(envp, dict_chain) == -1)
-				return (-1);
-		}
+		if (!get_target_and_value(envp, list_envp, minishell))
+			return (0);
 		envp++;
 	}
-	return (0);
+	return (1);
 }
 
-t_hashmap_struct *create_dict_envp(char **envp)
+t_node *create_envp_list(char **envp, t_minishell *minishell)
 {
-	t_hashmap_struct *hashmap_environment;
+	t_node *list_envp;
 
-	hashmap_environment = (t_hashmap_struct *)ft_calloc(1, sizeof(t_hashmap_struct));
-	if (hashmap_environment == NULL)
-		return NULL;
-	hashmap_environment->dict_chain = ft_dict_init();
-	if (hashmap_environment->dict_chain == NULL)
-	{
-		free(hashmap_environment);
+	list_envp = NULL;
+	if (!create_dict_env_variable(envp, &list_envp, minishell))
 		return (NULL);
-	}
-	if (create_dict_env_variable(envp, hashmap_environment->dict_chain) == -1)
-	{
-		ft_hm_clear(&hashmap_environment->dict_chain, &free);
-		free(hashmap_environment);
-		return (NULL);
-	}
-	return (hashmap_environment);
+	return (list_envp);
 }

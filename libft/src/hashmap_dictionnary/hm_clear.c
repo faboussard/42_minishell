@@ -8,25 +8,25 @@ static void	free_hashmap_list(t_node *lst, void (*del)(void *));
 /// @brief 		Frees all elements of a hashmap_dictionnary and sets it to NULL
 /// @param map 	Hashmap to free
 /// @param del 	Fonction to free hashmap_dictionnary value
-void	ft_hm_clear(t_dict *dict, void (*del)(void *))
+void	ft_hm_clear(t_hashmap *map, void (*del)(void *))
 {
 	size_t	i;
 
-	if (dict == NULL || *dict == NULL)
+	if (map == NULL || *map == NULL)
 		return ;
 	i = 0;
 	while (i < HASHMAP_ARR_SIZE)
 	{
-		free_hashmap_list((*dict)[i], del);
+		free_hashmap_list((*map)[i], del);
 		i++;
 	}
-	free(*dict);
-	*dict = NULL;
+	free(*map);
+	*map = NULL;
 }
 
 static void	free_hashmap_list(t_node *lst, void (*del)(void *))
 {
-	t_dict_content	*node_content;
+	t_envp_content	*node_content;
 
 	if (lst == NULL)
 		return ;
