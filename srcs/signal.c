@@ -16,64 +16,79 @@
 #include <signal.h>
 #include <unistd.h>
 # include <readline/readline.h>
-
-void	signal_reset_prompt(int signo)
-{
-	(void)signo;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+#include "utils.h"
 
 void	signal_print_newline(int signal)
 {
-	(void)signal;
-	rl_on_new_line();
+    (void)signal;
+    rl_on_new_line();
 }
 
-void	set_signals_interactive(void)
+void sigint_handler(int signo, t_minishell *minishell)
 {
-	struct sigaction	action;
+    (void)(signo);
+    free_minishell(minishell);
+}
 
-	ignore_sigquit();
-	action.sa_handler = &signal_reset_prompt;
-	sigemptyset(&action.sa_mask);
-	if (sigaction(SIGINT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return ;
-	}
+void	set_signals_interactive()
+{
+    struct sigaction	action;
+
+    ignore_sigquit();
+    action.sa_handler = (void (*)(int)) sigint_handler;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = 0;
+    if (sigaction(SIGINT, &action, NULL) < 0)
+    {
+        print_error("sigaction() failed");
+        return ;
+    }
+}
+
+void	signal_reset_prompt(int signo)
+{
+    (void)signo;
+    write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 
 void	set_signals_noninteractive(void)
 {
-	struct sigaction	action;
+    struct sigaction	action;
 
-	action.sa_handler = &signal_print_newline;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return ;
-	}
-	if (sigaction(SIGQUIT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return ;
-	}
+    ft_memset(&action, 0, sizeof(action));
+    action.sa_handler = &signal_print_newline;
+    sigaction(SIGINT, &action, NULL);
+    if (sigaction(SIGINT, &action, NULL) < 0)
+    {
+        print_error("sigaction() failed");
+        return ;
+    }
+    sigaction(SIGQUIT, &action, NULL);
+    if (sigaction(SIGQUIT, &action, NULL) < 0)
+    {
+        print_error("sigaction() failed");
+        return ;
+    }
 }
 
+//interet de SIGUIT (ctrl + \ ) si on lignore ??
+/*In interactive mode:
+◦ ctrl-C displays a new prompt on a new line.
+◦ ctrl-D exits the shell.
+◦ ctrl-\ does nothing.*/
 void	ignore_sigquit(void)
 {
-	struct sigaction	action;
+    struct sigaction	action;
 
-	action.sa_handler = SIG_IGN;
-	sigemptyset(&action.sa_mask);
-	if (sigaction(SIGQUIT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return ;
-	}
+    action.sa_handler = SIG_IGN;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = 0;
+    if (sigaction(SIGQUIT, &action, NULL) < 0)
+    {
+        print_error("sigaction() failed");
+        return ;
+    }
 }

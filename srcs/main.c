@@ -21,17 +21,21 @@
 
 void minishell_interactive(t_minishell *minishell)
 {
-	while (1)
-	{
-		set_signals_interactive();
-		minishell->user_input = readline(PROMPT);
-		add_history(minishell->user_input);
-		minishell->history_count += 1;
-		minishell->list_tokens = parse_input(minishell);
-		if (minishell->list_tokens == NULL)
-			exit_msg(minishell, "Fatal : malloc failed", -1);
-		create_tables(minishell);
-	}
+    while (1)
+    {
+        set_signals_interactive();
+        minishell->user_input = readline(PROMPT);
+        if (minishell->user_input == NULL)
+            break;
+        set_signals_noninteractive();
+        add_history(minishell->user_input);
+        minishell->history_count += 1;
+        minishell->list_tokens = parse_input(minishell);
+        if (minishell->list_tokens == NULL)
+            exit_msg(minishell, "Fatal : tokenization failed", -1);
+        create_tables(minishell);
+        free(minishell->user_input);
+    }
 }
 
 void minishell_non_interactive(t_minishell *minishell, char *data_input)
