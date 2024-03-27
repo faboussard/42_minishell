@@ -17,6 +17,7 @@
 #include "libft.h"
 #include "minishell.h"
 
+
 enum e_token_type
 {
 	NO_TYPE = 0,
@@ -63,25 +64,15 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 }	t_token;
 
-
-/****************** SPLIT_READLINE ******************/
-
 char	**split_with_quotes_management(char *string);
-
-/******************* EXPANSION *******************/
 
 int	parentheses_error(const char *string);
 int parentheses_on_arg(char *string);
 
-/****************** LEXER ******************/
 
 void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
 
-/****************** BUILTIN ******************/
-
 bool	get_builtin_token(t_token *new_token, char *string);
-
-/********************* ENV_VARIABLES *********************/
 
 
 #endif //LEXER_H

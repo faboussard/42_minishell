@@ -96,6 +96,10 @@ add_executable(minishell
         srcs/lexer/count_tokens.c
         srcs/init.c
         srcs/signal.c
+        srcs/builtins/exit.c
+        execute.c
+        includes/execute.h
+        includes/builtins.h
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})
