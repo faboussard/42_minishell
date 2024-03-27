@@ -23,40 +23,54 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <signal.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 
-typedef t_node**	t_dict;
-
-typedef struct s_hashmap
-{
-	t_dict 	dict_chain;
-	size_t	total_size;
-	char 	**target_tab;
-}	t_hashmap_struct;
+typedef struct s_envp_content	t_envp_content;
 
 typedef struct s_minishell
 {
-	pid_t						pid1;
-	pid_t						pid2;
-	int							status;
-	int							pipe_fd[2];
-	int							fd_in;
-	int							fd_out;
-	t_node						*list_tokens;
-	t_hashmap_struct			*hashmap_environment;
-	char 						**cmd_table;
-	char 						**envp_table;
-
+	bool				interactive;
+	pid_t				pid1;
+	pid_t				pid2;
+	int					status;
+	int					pipe_fd[2];
+	int					fd_in;
+	int					fd_out;
+	int 				history_count;
+	char				*user_input;
+	t_node				*list_tokens;
+	t_node				*list_envp;
+	size_t				total_size_envp;
+	char 				**cmd_table;
+	char 				**envp_table;
 }	t_minishell;
 
+typedef struct s_envp_content
+{
+	char					*value;
+	char					*target;
+	size_t 					value_size;
+	size_t 					target_size;
+	struct s_envp_content 	*next;
+}	t_envp_content;
+
+/*************************************** INIT MINISHELL ***************************************/
+
+void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
+bool	is_interactive(t_minishell *minishell, int ac);
+t_node	*parse_input(t_minishell *minishell);
+
+/*************************************** CREATE CHAINS ***************************************/
+
+void	create_token_chain_list(t_minishell *minishell, char *string);
+void	create_envp_hashmap(t_minishell *minishell, char **envp);
 
 /*************************************** CREATE TABLES ***************************************/
 
-void create_redirect_table(t_minishell *minishell, t_node **list_tokens);
+void	create_tables(t_minishell *minishell);
 
 #endif

@@ -10,59 +10,64 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lexer.h"
+#include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
 #include "parser.h"
+#include "signals.h"
+# include <readline/history.h>
 
-t_hashmap_struct *create_dict_envp(char **envp);
+# define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
-void create_token_chain_list(t_minishell *minishell, char *string)
+void minishell_interactive(t_minishell *minishell)
 {
-	minishell->list_tokens = get_list_tokens(string);
+	while (1)
+	{
+		set_signals_interactive();
+		minishell->user_input = readline(PROMPT);
+		add_history(minishell->user_input);
+		minishell->history_count += 1;
+		minishell->list_tokens = parse_input(minishell);
+		if (minishell->list_tokens == NULL)
+			exit_msg(minishell, "Fatal : malloc failed", -1);
+		create_tables(minishell);
+	}
 }
 
-void create_envp_hashmap(t_minishell *minishell, char **envp)
+void minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	minishell->hashmap_environment = create_dict_envp(envp);
+	set_signals_noninteractive();
+	minishell->user_input = ft_strdup(data_input);
+	if (minishell->user_input == NULL)
+		exit_msg(minishell, "Fatal : malloc failed", -1);
+	add_history(minishell->user_input);
+	minishell->history_count += 1;
+	minishell->list_tokens = parse_input(minishell);
+	if (minishell->list_tokens == NULL)
+		exit_msg(minishell, "Fatal : tokenization failed", -1);
+	create_tables(minishell);
 }
 
-void create_tables(t_minishell *minishell)
+int main(int ac, char **av, char **envp)
 {
-	create_cmd_table(minishell, minishell->list_tokens);
-	create_envp_table(minishell, &minishell->hashmap_environment);
-}
-
-void	ft_init_minishell(t_minishell *minishell)
-{
-	ft_bzero(minishell, (sizeof * minishell));
-	minishell->status = 0;
-	minishell->fd_in = -1;
-	minishell->fd_out = -1;
-}
-
-int main()
-{
-	/******* dans int main(int ac, char **av, char **env) *****/
-	char *string = "lsffffff ls > ll | ll"; //entree dans readlin, avant split par "bash"
-	char			*envp[] = {
-			"PATH=/bin:/usr/bin",
-			"HOME=/home/user",
-			"USER=user",
-			NULL
-	};
-	/*************************************************************/
 	t_minishell 	minishell;
 
-	ft_init_minishell(&minishell);
-	create_token_chain_list(&minishell, string);
-	print_token(minishell.list_tokens); //DELETE
-	create_envp_hashmap(&minishell, envp);
-	print_envp_dict(minishell.hashmap_environment->dict_chain); //DELETE
-	create_tables(&minishell);
-	ft_printf("************ print cmd_table ************\n\n");
+	ft_init_minishell(&minishell, ac, av);
+	if (envp)
+		minishell.list_envp = create_envp_list(envp, &minishell);
+	if (minishell.list_envp == NULL)
+		exit_msg(&minishell, "Fatal : malloc failed", -1);
+	if (is_interactive(&minishell, ac) == true)
+		minishell_interactive(&minishell);
+	else
+		minishell_non_interactive(&minishell, av[2]);
+    printf("************ print list_envp ************\n\n"); // DELETE
+    print_list_envp(&minishell);
+    printf("************ print list_tokens ************\n\n"); // DELETE
+    print_token_list(minishell.list_tokens); //DELETE
+    printf("************ print cmd_table ************\n\n"); // DELETE
 	print_array(minishell.cmd_table);  //DELETE
-	ft_printf("********************** print HM table **********************\n\n");
+    printf("********************** print HM table **********************\n\n"); // DELETE
 	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
