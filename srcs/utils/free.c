@@ -14,6 +14,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include "minishell.h"
+# include <readline/history.h>
 
 
 void free_token(t_token *token)
@@ -35,17 +36,18 @@ void	free_minishell(t_minishell *minishell)
 		free(minishell->user_input);
 	if (minishell->list_tokens)
 		ft_lstclear(&minishell->list_tokens, (void *) free_token);
-	if (minishell->hashmap_environment != NULL) {
-		if (minishell->hashmap_environment->dict_chain != NULL) {
+	if (minishell->hashmap_environment != NULL)
+	{
+		if (minishell->hashmap_environment->dict_chain != NULL)
 			ft_hm_clear(&minishell->hashmap_environment->dict_chain, &free);
-		}
 		free(minishell->hashmap_environment);
 	}
 	if (minishell->envp_table)
 		ft_free_all_tab(minishell->envp_table);
 	if (minishell->cmd_table)
 		ft_free_all_tab(minishell->cmd_table);
-	rl_clear_history();
+	if (minishell->history_count != 0)
+		rl_clear_history();
 }
 
 void	ft_free_all_tab(char **tab)
