@@ -29,16 +29,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-typedef t_node**	t_dict;
-
-//union ?
-
-typedef struct s_hashmap
-{
-	t_dict 				dict_chain;
-	size_t				total_size;
-	char 				**target_tab;
-}	t_hashmap_struct;
+typedef struct s_envp_content	t_envp_content;
 
 typedef struct s_minishell
 {
@@ -52,18 +43,20 @@ typedef struct s_minishell
 	int 				history_count;
 	char				*user_input;
 	t_node				*list_tokens;
-	t_hashmap_struct	*hashmap_environment;
+	t_node				*list_envp;
+	size_t				total_size_envp;
 	char 				**cmd_table;
 	char 				**envp_table;
 }	t_minishell;
 
-typedef struct s_dict_content
+typedef struct s_envp_content
 {
 	char					*value;
 	char					*target;
 	size_t 					value_size;
 	size_t 					target_size;
-}	t_dict_content;
+	struct s_envp_content 	*next;
+}	t_envp_content;
 
 /*************************************** INIT MINISHELL ***************************************/
 
