@@ -31,6 +31,8 @@
 
 typedef t_node**	t_dict;
 
+//union ?
+
 typedef struct s_hashmap
 {
 	t_dict 				dict_chain;
@@ -55,6 +57,13 @@ typedef struct s_minishell
 	char 				**envp_table;
 }	t_minishell;
 
+typedef struct s_dict_content
+{
+	char					*value;
+	char					*target;
+	size_t 					value_size;
+	size_t 					target_size;
+}	t_dict_content;
 
 /*************************************** INIT MINISHELL ***************************************/
 

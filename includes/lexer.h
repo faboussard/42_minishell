@@ -63,15 +63,6 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 }	t_token;
 
-typedef struct s_dict_content
-{
-	char					*value;
-	char					*target;
-	size_t 					value_size;
-	size_t 					target_size;
-}	t_dict_content;
-
-typedef t_node**	t_dict;
 
 /****************** SPLIT_READLINE ******************/
 
