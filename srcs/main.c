@@ -49,7 +49,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		exit_msg(minishell, "Fatal : tokenization failed", -1);
-	create_tables(minishell);
+//	create_tables(minishell);
 }
 
 int main(int ac, char **av, char **envp)
