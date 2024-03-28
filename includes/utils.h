@@ -37,7 +37,7 @@ void    print_list_envp(t_minishell *minishell);
 void	free_minishell(t_minishell *minishell);
 void	ft_free_all_tab(char **tab);
 void	ft_free_tab_from_i(void **tab, int j);
-void	free_token(t_token	*token);
+void    free_token(void *token);
 void	free_t_envp_content(t_envp_content *envp);
 
 #endif //GENERAL_H

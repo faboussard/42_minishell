@@ -65,19 +65,34 @@
 //	}
 //}
 
+int	ft_lstsize_token(t_token *lst)
+{
+    int	i;
+    int	list_size;
+
+    i = 0;
+    while (lst)
+    {
+        i++;
+        lst = lst->next;
+    }
+    list_size = i;
+    return (list_size);
+}
+
 void arg_to_command(t_token *list_tokens)
 {
 	t_token  *iterator;
 	t_token *next_token;
 
-	if (ft_lstsize(list_tokens) == 2)
+    iterator = list_tokens;
+	if (ft_lstsize_token(iterator) == 2)
 	{
-		if (list_tokens->e_type == ARGUMENT)
-            list_tokens->e_type = COMMAND;
+		if (iterator->e_type == ARGUMENT)
+            iterator->e_type = COMMAND;
 	}
 	else
 	{
-		iterator = list_tokens;
 		while (iterator->next != NULL)
 		{
 			next_token = iterator->next;
