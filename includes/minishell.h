@@ -19,7 +19,7 @@
 # include <errno.h>
 # include <stdbool.h>
 # include <stdio.h>
-# include <stdlib.h>
+# include <stdlib.h>env
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
