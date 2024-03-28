@@ -33,7 +33,7 @@ void minishell_interactive(t_minishell *minishell)
         minishell->list_tokens = parse_input(minishell);
         if (minishell->list_tokens == NULL)
             exit_msg(minishell, "Fatal : tokenization failed", -1);
-        create_tables(minishell);
+//        create_tables(minishell);
         free(minishell->user_input);
     }
 }
@@ -57,10 +57,10 @@ int main(int ac, char **av, char **envp)
 	t_minishell 	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
-	if (envp)
-		minishell.list_envp = create_envp_list(envp, &minishell);
-	if (minishell.list_envp == NULL)
-		exit_msg(&minishell, "Fatal : malloc failed", -1);
+//	if (envp)
+//		minishell.list_envp = create_envp_list(envp, &minishell);
+//	if (minishell.list_envp == NULL)
+//		exit_msg(&minishell, "Fatal : malloc failed", -1);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
