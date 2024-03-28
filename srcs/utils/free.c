@@ -47,7 +47,7 @@ void	free_minishell(t_minishell *minishell)
 	if (minishell->user_input)
 		free(minishell->user_input);
 	if (minishell->list_tokens)
-		ft_lstclear(&minishell->list_tokens, (void *) free_token);
+		ft_lstclear(&minishell->list_tokens, (void *) free_token(minishell->list_tokens));
 	if (minishell->list_envp != NULL)
 		ft_lstclear(&minishell->list_envp, (void *) free_t_envp_content);
 	if (minishell->envp_table)

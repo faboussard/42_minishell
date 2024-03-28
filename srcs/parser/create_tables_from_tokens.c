@@ -16,13 +16,12 @@
 
 void fill_array(t_token *list_tokens, char **array, size_t nbr_cmds)
 {
-	t_token *token;
 	size_t i;
 
 	i = 0;
 	while (i < nbr_cmds && list_tokens != NULL)
 	{
-		array[i] = ft_strdup(token->name);
+		array[i] = ft_strdup(list_tokens->name);
 		if (array[i] == NULL)
 			return;
 		i++;
