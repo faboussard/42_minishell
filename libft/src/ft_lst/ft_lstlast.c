@@ -12,7 +12,7 @@
 
 #include "../../inc/libft.h"
 
-t_node	*ft_lstlast(t_node *lst)
+t_node_int	*ft_lstlast(t_node_int *lst)
 {
 	while (lst != NULL)
 	{

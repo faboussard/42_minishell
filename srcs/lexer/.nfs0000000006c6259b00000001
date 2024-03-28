@@ -1,30 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   list_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/17 09:52:37 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "lexer.h"
+#include "utils.h"
+#include <stdlib.h>
+#include "parser.h"
 
-void	ft_lstadd_back(t_node_int **node, t_node_int *new)
-{
-    t_node_int	*last;
-
-	if (node != NULL)
-	{
-		if (*node != NULL)
-		{
-			last = ft_lstlast(*node);
-			if (last != NULL)
-				last->next = new;
-		}
-		else
-			*node = new;
-	}
-}

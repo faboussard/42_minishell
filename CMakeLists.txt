@@ -62,15 +62,6 @@ add_executable(minishell
         libft/src/gnl/get_next_line.c
         libft/src/gnl/get_next_line_utils.c
         libft/src/utils.c
-        libft/src/hashmap_dictionnary/hm_clear.c
-        libft/src/hashmap_dictionnary/hm_add_elem.c
-        libft/src/hashmap_dictionnary/hm_get_content.c
-        libft/src/hashmap_dictionnary/hm_delete_elem.c
-        libft/src/hashmap_dictionnary/hm_get_elem.c
-        libft/src/hashmap_dictionnary/hm_get_index.c
-        libft/src/hashmap_dictionnary/hm_init.c
-        libft/src/hashmap_dictionnary/hm_size.c
-        libft/src/hashmap_dictionnary/hm_print.c
 
         includes/utils.h
         includes/parser.h
@@ -96,6 +87,6 @@ add_executable(minishell
         srcs/lexer/count_tokens.c
         srcs/init.c
         srcs/signal.c
-)
+        srcs/lexer/list_tokens.c)
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

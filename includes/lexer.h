@@ -57,10 +57,11 @@ enum e_token_builtin
 
 typedef struct s_token
 {
-	char					*name;
-	enum e_token_type		e_type;
-	enum e_token_builtin	e_builtin;
-	enum e_token_operators	e_operator;
+    char					*name;
+    enum e_token_type		e_type;
+    enum e_token_builtin	e_builtin;
+    enum e_token_operators	e_operator;
+    struct s_token          *next;
 }	t_token;
 
 
