@@ -26,18 +26,16 @@
 
 typedef struct s_node_int
 {
-	int					content;
+	void				*content;
 	int					index;
 	struct s_node_int	*next;
-}						t_node_int;
+}						t_node;
 
 typedef struct s_hashmap_content
 {
 	void					*content;
 	char					*target;
 }	t_hashmap_content;
-
-
 
 /***************************** ft_is **************************************/
 int						ft_isalpha(int c);
@@ -108,15 +106,15 @@ char					**ft_split(char const *s, char c);
 
 /***************************** ft_lst **************************************/
 
-t_node_int					*ft_lstnew(void *content);
-void					ft_lstadd_front(t_node_int **lst, t_node_int *new);
-int						ft_lstsize(t_node_int *lst);
-t_node_int					*ft_lstlast(t_node_int *lst);
-void					ft_lstadd_back(t_node_int **node, t_node_int *new);
-void					ft_lstdelone(t_node_int *lst, void (*del)(void *));
-void					ft_lstclear(t_node_int **lst, void (*del)(void *));
-void					ft_lstiter(t_node_int *lst, void (*f)(void *));
-t_node_int					*ft_lstmap(t_node_int *lst, void *(*f)(void *),
+t_node					*ft_lstnew(void *content);
+void					ft_lstadd_front(t_node **lst, t_node *new);
+int						ft_lstsize(t_node *lst);
+t_node					*ft_lstlast(t_node *lst);
+void					ft_lstadd_back(t_node **node, t_node *new);
+void					ft_lstdelone(t_node *lst, void (*del)(void *));
+void					ft_lstclear(t_node **lst, void (*del)(void *));
+void					ft_lstiter(t_node *lst, void (*f)(void *));
+t_node					*ft_lstmap(t_node *lst, void *(*f)(void *),
                                       void (*del)(void *));
 
 /***************************** ft_maths **************************************/
