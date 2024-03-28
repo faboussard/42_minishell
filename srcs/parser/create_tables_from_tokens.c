@@ -30,7 +30,6 @@ void fill_array(t_token *list_tokens, char **array, size_t nbr_cmds)
 	array[i] = NULL;
 }
 
-
 void create_cmd_table(t_minishell *minishell, t_token *list_tokens)
 {
 	size_t nbr_cmds_until_redirect_or_pipe;
@@ -46,19 +45,17 @@ void create_cmd_table(t_minishell *minishell, t_token *list_tokens)
 
 void create_envp_table(t_minishell *minishell)
 {
-    t_token *current;
-    t_envp_content *envp_content;
+    t_envp *current;
 	size_t i;
 
 	i = 0;
 	minishell->envp_table = ft_calloc(minishell->total_size_envp + 1, sizeof(char **));
 	if (minishell->envp_table == NULL)
-		return;
+		return ;
     current = minishell->list_envp;
 	while (current != NULL)
 	{
-        envp_content = (t_envp_content *)(current);
-		minishell->envp_table[i] = ft_strjoin(envp_content->target, envp_content->value);
+		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
 		if (minishell->envp_table[i] == NULL)
         {
             ft_free_all_tab(minishell->envp_table);
@@ -69,7 +66,6 @@ void create_envp_table(t_minishell *minishell)
 	}
 	minishell->envp_table[i] = NULL;
 }
-
 
 void create_tables(t_minishell *minishell)
 {

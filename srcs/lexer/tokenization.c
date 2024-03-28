@@ -51,18 +51,18 @@ t_token	*ft_lstlast_token(t_token *lst)
 	return (lst);
 }
 
-void add_token_to_list(t_token **tokens, t_token *new_token)
+void add_token_to_list(t_token **list_tokens, t_token *new_token)
 {
 	t_token	*last;
 
-	if (*tokens != NULL)
+	if (*list_tokens != NULL)
 	{
-		last = ft_lstlast_token((t_token *)(*tokens));
+		last = ft_lstlast_token(*list_tokens);
 		if (last != NULL)
 			last->next = new_token;
 	}
 	else
-		*tokens = new_token;	
+		*list_tokens = new_token;
 }
 
 int transform_to_token(t_minishell *minishell, t_token **list_tokens)

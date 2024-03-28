@@ -52,8 +52,7 @@ void print_token_list(t_token *list_tokens)
 
 void print_list_envp(t_minishell *minishell)
 {
-    t_token *current;
-    t_envp_content *envp_content;
+    t_envp *current;
 
     if (minishell->list_envp == NULL)
     {
@@ -64,10 +63,8 @@ void print_list_envp(t_minishell *minishell)
     current = minishell->list_envp;
     while (current != NULL)
     {
-        envp_content = (t_envp_content *)(current);
-        printf("Target: %s, Value: %s\n", envp_content->target, envp_content->value);
+        printf("Target: %s, Value: %s\n", minishell->list_envp->target, minishell->list_envp->value);
         current = current->next;
     }
-
     printf("\n");
 }
