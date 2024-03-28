@@ -31,19 +31,12 @@ typedef struct s_node_int
 	struct s_node_int	*next;
 }						t_node_int;
 
-typedef struct s_node
-{
-	void				*content;
-	struct s_node		*next;
-}						t_node;
-
 typedef struct s_hashmap_content
 {
 	void					*content;
 	char					*target;
 }	t_hashmap_content;
 
-typedef t_node**	t_hashmap;
 
 
 /***************************** ft_is **************************************/
@@ -115,16 +108,16 @@ char					**ft_split(char const *s, char c);
 
 /***************************** ft_lst **************************************/
 
-t_node					*ft_lstnew(void *content);
-void					ft_lstadd_front(t_node **lst, t_node *new);
-int						ft_lstsize(t_node *lst);
-t_node					*ft_lstlast(t_node *lst);
-void					ft_lstadd_back(t_node **node, t_node *new);
-void					ft_lstdelone(t_node *lst, void (*del)(void *));
-void					ft_lstclear(t_node **lst, void (*del)(void *));
-void					ft_lstiter(t_node *lst, void (*f)(void *));
-t_node					*ft_lstmap(t_node *lst, void *(*f)(void *),
-							void (*del)(void *));
+t_node_int					*ft_lstnew(void *content);
+void					ft_lstadd_front(t_node_int **lst, t_node_int *new);
+int						ft_lstsize(t_node_int *lst);
+t_node_int					*ft_lstlast(t_node_int *lst);
+void					ft_lstadd_back(t_node_int **node, t_node_int *new);
+void					ft_lstdelone(t_node_int *lst, void (*del)(void *));
+void					ft_lstclear(t_node_int **lst, void (*del)(void *));
+void					ft_lstiter(t_node_int *lst, void (*f)(void *));
+t_node_int					*ft_lstmap(t_node_int *lst, void *(*f)(void *),
+                                      void (*del)(void *));
 
 /***************************** ft_maths **************************************/
 
@@ -132,18 +125,5 @@ int						ft_abs(int n);
 
 /***************************** ft_hashmap **************************************/
 
-# define HASHMAP_ARR_SIZE 1000
-
-int					ft_hm_add_elem(t_hashmap dst, char *target, void *content,
-									  void (*del)(void *));
-int					ft_hm_delete_elem(t_hashmap map,
-										 char *target, void (*del)(void *));
-void				ft_hm_clear(t_hashmap *map, void (*del)(void *));
-void				*ft_hm_get_content(t_hashmap map, char *target);
-t_hashmap_content	*ft_hm_get_elem(t_hashmap map, char *target);
-size_t				ft_hm_get_index(char *target);
-t_hashmap			ft_hm_init(void);
-int					ft_hm_size(t_hashmap hashmap);
-void				print_hashmap(t_hashmap hashmap);
 
 #endif // LIBFT_H

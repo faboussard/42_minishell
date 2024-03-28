@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "parser.h"
 
-void fill_array(t_node *list_tokens, char **array, size_t nbr_cmds)
+void fill_array(t_token *list_tokens, char **array, size_t nbr_cmds)
 {
 	t_token *token;
 	size_t i;
@@ -22,7 +22,6 @@ void fill_array(t_node *list_tokens, char **array, size_t nbr_cmds)
 	i = 0;
 	while (i < nbr_cmds && list_tokens != NULL)
 	{
-		token = (t_token *)list_tokens->content;
 		array[i] = ft_strdup(token->name);
 		if (array[i] == NULL)
 			return;
@@ -33,7 +32,7 @@ void fill_array(t_node *list_tokens, char **array, size_t nbr_cmds)
 }
 
 
-void create_cmd_table(t_minishell *minishell, t_node *list_tokens)
+void create_cmd_table(t_minishell *minishell, t_token *list_tokens)
 {
 	size_t nbr_cmds_until_redirect_or_pipe;
 	size_t nbr_letters_until_redirect_or_pipe;
@@ -48,7 +47,7 @@ void create_cmd_table(t_minishell *minishell, t_node *list_tokens)
 
 void create_envp_table(t_minishell *minishell)
 {
-    t_node *current;
+    t_token *current;
     t_envp_content *envp_content;
 	size_t i;
 
@@ -59,7 +58,7 @@ void create_envp_table(t_minishell *minishell)
     current = minishell->list_envp;
 	while (current != NULL)
 	{
-        envp_content = (t_envp_content *)(current)->content;
+        envp_content = (t_envp_content *)(current);
 		minishell->envp_table[i] = ft_strjoin(envp_content->target, envp_content->value);
 		if (minishell->envp_table[i] == NULL)
         {

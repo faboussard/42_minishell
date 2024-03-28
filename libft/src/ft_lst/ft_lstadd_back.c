@@ -12,9 +12,9 @@
 
 #include "../../inc/libft.h"
 
-void	ft_lstadd_back(t_node **node, t_node *new)
+void	ft_lstadd_back(t_node_int **node, t_node_int *new)
 {
-	t_node	*last;
+    t_node_int	*last;
 
 	if (node != NULL)
 	{

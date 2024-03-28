@@ -20,7 +20,7 @@
 # include <errno.h>
 # include <stdbool.h>
 # include <stdio.h>
-# include <stdlib.h>env
+# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
@@ -30,6 +30,7 @@
 # include <sys/wait.h>
 
 typedef struct s_envp_content	t_envp_content;
+typedef struct s_token          t_token;
 
 typedef struct s_minishell
 {
@@ -42,8 +43,8 @@ typedef struct s_minishell
 	int					fd_out;
 	int 				history_count;
 	char				*user_input;
-	t_node				*list_tokens;
-	t_node				*list_envp;
+	t_token				*list_tokens;
+	t_token				*list_envp;
 	size_t				total_size_envp;
 	char 				**cmd_table;
 	char 				**envp_table;
@@ -62,7 +63,7 @@ typedef struct s_envp_content
 
 void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
 bool	is_interactive(t_minishell *minishell, int ac);
-t_node	*parse_input(t_minishell *minishell);
+t_token	*parse_input(t_minishell *minishell);
 
 /*************************************** CREATE CHAINS ***************************************/
 

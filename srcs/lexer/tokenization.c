@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,21 +22,12 @@ void define_token_types(enum e_token_type type, enum e_token_builtin builtin, en
 	new_token->e_operator = operator;
 }
 
-void add_token_to_list(t_node **tokens, t_token *new_token)
+void define_token(t_minishell *minishell, t_token *new_token, char *string)
 {
-	t_node *new_node;
-
-	new_node = ft_lstnew(new_token);
-	if (new_node == NULL)
-	{
-		ft_lstclear(&new_node, (void *) free_token);
-		return;
-	}
-	ft_lstadd_back(tokens, new_node);
-}
-
-void define_token(t_token *new_token, char *string)
-{
+	new_token->name = ft_strdup(string);
+	if (new_token->name == NULL)
+		exit_msg(minishell, "Malloc failed at tokenization for name", 2);
+	new_token->next = NULL;
 	if (string[0] == '-')
 		define_token_types(ARGUMENT, NO_BUILTIN, NO_OPERATOR, new_token);
 	if (string[0] == '(')
@@ -49,7 +40,32 @@ void define_token(t_token *new_token, char *string)
 		define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
 }
 
-int transform_to_token(t_minishell *minishell, t_node **list_tokens)
+t_token	*ft_lstlast_token(t_token *lst)
+{
+	while (lst != NULL)
+	{
+		if (lst->next == NULL)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
+}
+
+void add_token_to_list(t_token **tokens, t_token *new_token)
+{
+	t_token	*last;
+
+	if (*tokens != NULL)
+	{
+		last = ft_lstlast_token((t_token *)(*tokens));
+		if (last != NULL)
+			last->next = new_token;
+	}
+	else
+		*tokens = new_token;	
+}
+
+int transform_to_token(t_minishell *minishell, t_token **list_tokens)
 {
 	int 	i;
 	t_token	*new_token;
@@ -64,17 +80,8 @@ int transform_to_token(t_minishell *minishell, t_node **list_tokens)
 	{
 		new_token = malloc(sizeof(t_token));
 		if (new_token == NULL)
-		{
-			ft_free_all_tab(split);
-			return (0);
-		}
-		new_token->name = ft_strdup(split[i]);
-		if (new_token->name == NULL)
-		{
-			ft_free_all_tab(split);
-			return (0);
-		}
-		define_token(new_token, split[i]);
+			exit_msg(minishell, "Malloc failed at tokenization", 2);
+		define_token(minishell, new_token, split[i]);
 		add_token_to_list(list_tokens, new_token);
 		i++;
 	}
@@ -82,9 +89,9 @@ int transform_to_token(t_minishell *minishell, t_node **list_tokens)
 	return (1);
 }
 
-t_node *parse_input(t_minishell *minishell)
+t_token *parse_input(t_minishell *minishell)
 {
-	t_node	*list_tokens;
+	t_token	*list_tokens;
 
 	list_tokens = NULL;
 	if (!transform_to_token(minishell, &list_tokens))

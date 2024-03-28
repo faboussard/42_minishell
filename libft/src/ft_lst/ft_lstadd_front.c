@@ -12,7 +12,7 @@
 
 #include "../../inc/libft.h"
 
-void	ft_lstadd_front(t_node **lst, t_node *new)
+void	ft_lstadd_front(t_node_int **lst, t_node_int *new)
 {
 	if (lst != NULL)
 	{

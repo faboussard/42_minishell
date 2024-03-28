@@ -14,42 +14,38 @@
 #include "utils.h"
 #include "parser.h"
 
-size_t count_letters_until_pipe_or_redirect(t_node *head)
+size_t count_letters_until_pipe_or_redirect(t_token *head)
 {
 	size_t		num_commands;
-	t_node	*current;
-	t_token	*token;
+	t_token     *iterator;
 
 	num_commands = 0;
-	current = head;
-	while (current)
+    iterator = head;
+	while (iterator)
 	{
-		token = (t_token *) (current)->content;
-		if (token->e_operator != PIPE && !is_redirect_token(token))
-			num_commands += ft_strlen(token->name);
+		if (iterator->e_operator != PIPE && !is_redirect_token(iterator))
+			num_commands += ft_strlen(iterator->name);
 		else
 			break ;
-		current = current->next;
+        iterator = iterator->next;
 	}
 	return (num_commands);
 }
 
-size_t count_cmds_until_pipe_or_redirect(t_node *head)
+size_t count_cmds_until_pipe_or_redirect(t_token *head)
 {
 	size_t		num_commands;
-	t_node	*current;
-	t_token	*token;
+	t_token	*iterator;
 
 	num_commands = 0;
-	current = head;
-	while (current)
+    iterator = head;
+	while (iterator)
 	{
-		token = (t_token *) (current)->content;
-		if (token->e_operator != PIPE && !is_redirect_token(token))
+		if (iterator->e_operator != PIPE && !is_redirect_token(iterator))
 			num_commands ++;
 		else
 			break ;
-		current = current->next;
+        iterator = iterator->next;
 	}
 	return (num_commands);
 }

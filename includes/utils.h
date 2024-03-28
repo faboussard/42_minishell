@@ -23,12 +23,12 @@ enum e_bool
 
 /******************** UTILS ********************/
 
-t_token	*return_last_token(t_node *list_tokens);
+t_token	*return_last_token(t_token *list_tokens);
 void	exit_msg(t_minishell *minishell, char *msg, int error_code);
 
 /******************** PRINT ********************/
 
-void	print_token_list(t_node *list_tokens);
+void	print_token_list(t_token *list_tokens);
 void	print_array(char **array);
 void    print_list_envp(t_minishell *minishell);
 

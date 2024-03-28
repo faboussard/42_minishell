@@ -20,10 +20,10 @@
 #define SUCCESSFULLY_ADDED 0
 
 //content doit etre pouvoir nul ?
-static int	add_new_envp(t_node **list_envp, char *target, char *content)
+static int	add_new_envp(t_token **list_envp, char *target, char *content)
 {
 	t_envp_content		*new_node_content;
-	t_node				*new_node;
+	t_token				*new_node;
 
 	new_node_content = malloc(sizeof(t_envp_content));
 	if (new_node_content == NULL)
@@ -56,7 +56,7 @@ static int	add_new_envp(t_node **list_envp, char *target, char *content)
 	return (SUCCESSFULLY_ADDED);
 }
 
-int get_target_and_value(char **envp, t_node **list_envp, t_minishell *minishell)
+int get_target_and_value(char **envp, t_token **list_envp, t_minishell *minishell)
 {
 	size_t	i;
 	char	*content;
@@ -88,7 +88,7 @@ int get_target_and_value(char **envp, t_node **list_envp, t_minishell *minishell
 	return (1);
 }
 
-int create_dict_env_variable(char **envp, t_node **list_envp, t_minishell *minishell)
+int create_dict_env_variable(char **envp, t_token **list_envp, t_minishell *minishell)
 {
 	while (*envp && ft_strchr(*envp, '='))
 	{
@@ -99,9 +99,9 @@ int create_dict_env_variable(char **envp, t_node **list_envp, t_minishell *minis
 	return (1);
 }
 
-t_node *create_envp_list(char **envp, t_minishell *minishell)
+t_token *create_envp_list(char **envp, t_minishell *minishell)
 {
-	t_node *list_envp;
+	t_token *list_envp;
 
 	list_envp = NULL;
 	if (!create_dict_env_variable(envp, &list_envp, minishell))
