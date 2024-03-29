@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/03/29 09:51:41 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/03/29 15:34:00 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	my_execve(char *path, char **av, char **env, t_minishell m)
 {
-	execve(m->path, m->cmd, m->envp_table);
+	execve(m->path, m->cmd_table, m->envp_table);
 	if (access(m->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, m->cmd_args[0], 1);
 	else
@@ -31,9 +31,9 @@ void	exec_one_cmd(t_minishell *m)
 		open_fd_infile(INFILE_FILE);
 		m_safe_dup2(fd_in, STDIN_FILENO);
 	}
-	if (redirection out) // fichier en sortie, style > fichier
+	if (m->t_token->e_) // fichier en sortie, style > fichier
 	{
-		open_fd_outfile(m->t_token->next, trunc_ou_append); // besoin definition plus claire de l'outfile final + savoir si c'est > ou >>
+		open_fd_outfile(m->t_token->name, m->t_token->e_operator); // besoin definition plus claire de l'outfile final + savoir si c'est > ou >>
 		m_safe_dup2(fd_out, STDOUT_FILENO);
 	}
 	only_pid = m_safe_fork(m);
