@@ -1,36 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   execute.c             			                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
+/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "utils.h"
-#include <stdbool.h>
 #include "minishell.h"
+#include "utils.h"
+#include "builtins.h"
 
-bool	get_builtin_token(t_token *new_token, char *string)
+
+int exec_builtin(t_minishell *minishell, t_token *command)
 {
-	int		i;
-	const char *builtins[9] = {NULL,
-	"echo", "cd", "ls", "pwd", "export", "unset", "env", "exit"
-	};
+	if (command->e_builtin == EXIT)
+		return (ft_exit_builtin(minishell));
+	return (0);
+}
 
-	i = 1;
-	while (i < 9)
-	{
-		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
-		{
-			define_token_types(COMMAND, i, NO_OPERATOR, new_token);
-			return (TRUE);
-		}
-		i++;
-	}
-	return (FALSE);
+void execute(t_minishell *minishell)
+{
+	t_token *token;
+
+	token = (t_token *)(minishell->list_tokens)->content;
+	if (token->e_builtin != 0)
+		exec_builtin(minishell, token);
+	//else
+		//exec_external(minishell);
 }

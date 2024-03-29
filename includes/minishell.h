@@ -18,7 +18,6 @@
 
 #include "libft.h"
 #include "lexer.h"
-#include "minishell.h"
 # include <unistd.h>
 # include <errno.h>
 # include <stdbool.h>
@@ -61,6 +60,7 @@ typedef struct s_envp
 	size_t 			target_size;
 	struct s_envp 	*next;
 }	t_envp;
+
 
 /*************************************** INIT MINISHELL ***************************************/
 
