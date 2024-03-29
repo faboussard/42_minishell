@@ -74,7 +74,7 @@ int check_syntax(t_token *list_tokens)
 			next_token = iterator->next;
 			if (iterator->e_type == OPERATOR && next_token->e_type == OPERATOR)
 			{
-				print_operator_syntax_error(iterator);
+				print_operator_syntax_error(iterator->next);
 				return (1);
 			}
 			iterator = iterator->next;
