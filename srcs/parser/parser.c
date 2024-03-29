@@ -41,14 +41,13 @@
 void to_subshell(t_token *list_tokens)
 {
 	t_token *iterator;
-	t_token *token;
 	t_token *next_token;
 
 	iterator = list_tokens;
 	while (iterator->next != NULL)
 	{
 		next_token = iterator->next;
-		if (token->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
+		if (iterator->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
 			next_token->e_type = SUBSHELL;
 		iterator = iterator->next;
 	}

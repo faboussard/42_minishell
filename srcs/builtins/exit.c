@@ -32,26 +32,33 @@
 //except when the exit utility is invoked in that trap itself, in
 //        which case the shell shall exit immediately.
 
-void restore_terminal(t_minishell *minishell)
-{
-	free_minishell(minishell);
-}
-
-unsigned int ft_exit_builtin(t_minishell *minishell)
-{
-	unsigned int	status;
-
-	write(1, "exit\n", 5);
-	if (!minishell->list_tokens || !minishell->list_tokens->next)
-	{
-		restore_terminal(minishell);
-		exit(0);
-	}
-	errno = 0;
-	status = ft_atoi(minishell->list_tokens->next->content);
-	if (minishell->list_tokens->next && errno != EINVAL)
-	{
-		print_error("exit: too many arguments");
-		restore_terminal(minishell);
-	}
-}
+//void restore_terminal(t_minishell *minishell)
+//{
+//	free_minishell(minishell);
+//}
+//
+//int exec_builtin(t_minishell *minishell, t_token *command)
+//{
+//	if (command->e_builtin == EXIT)
+//		return (ft_exit_builtin(minishell));
+//	return (0);
+//}
+//
+//unsigned int ft_exit_builtin(t_minishell *minishell)
+//{
+//	unsigned int	status;
+//
+//	write(1, "exit\n", 5);
+//	if (!minishell->list_tokens || !minishell->list_tokens->next)
+//	{
+//		restore_terminal(minishell);
+//		exit(0);
+//	}
+//	errno = 0;
+//	status = ft_atoi(minishell->list_tokens->next);
+//	if (minishell->list_tokens->next && errno != EINVAL)
+//	{
+//		print_error("exit: too many arguments");
+//		restore_terminal(minishell);
+//	}
+//}

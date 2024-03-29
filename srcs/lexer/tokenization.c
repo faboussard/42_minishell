@@ -22,7 +22,7 @@ void define_token_types(enum e_token_type type, enum e_token_builtin builtin, en
 	new_token->e_operator = operator;
 }
 
-int define_token(t_minishell *minishell, t_token *new_token, char *string)
+int define_token( t_token *new_token, char *string)
 {
 	new_token->name = ft_strdup(string);
 	if (new_token->name == NULL)
@@ -101,9 +101,8 @@ int transform_to_token(t_minishell *minishell, t_token **list_tokens)
 			ft_free_all_tab(split);
 			exit_msg(minishell, "Malloc failed at tokenization", 2);
 		}
-		if (!define_token(minishell, new_token, split[i]))
+		if (!define_token(new_token, split[i]))
 		{
-			free(new_token);
 			ft_free_all_tab(split);
 			exit_msg(minishell, "Malloc failed at tokenization", 2);
 		}
