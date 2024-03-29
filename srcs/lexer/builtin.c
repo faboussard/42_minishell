@@ -14,22 +14,34 @@
 #include "utils.h"
 #include <stdbool.h>
 
-bool	get_builtin_token(t_token *new_token, char *string)
+bool define_builtin_token(t_token *new_token, const char *string, const char *builtins[9])
 {
-	int		i;
-	const char *builtins[9] = {NULL,
-	"echo", "cd", "ls", "pwd", "export", "unset", "env", "exit"
-	};
-
-	i = 1;
+	int i = 0;
 	while (i < 9)
 	{
-		if (!ft_strncmp(string, builtins[i], ft_strlen(string)))
+		if (builtins[i] != NULL && !ft_strncmp(string, builtins[i], ft_strlen(string)))
 		{
-			define_token_types(COMMAND, i, NO_OPERATOR, new_token);
-			return (TRUE);
+			new_token->e_builtin = i;
+			new_token->e_type = COMMAND;
+			return true;
 		}
 		i++;
 	}
-	return (FALSE);
+	return false;
+}
+
+bool get_builtin_token(t_token *new_token, char *string)
+{
+	const char *builtins[9] = {
+			[LS] = "ls",
+			[ECHO] = "echo",
+			[CD] = "cd",
+			[PWD] = "pwd",
+			[EXIT] = "exit",
+			[ENV] = "env",
+			[EXPORT] = "export",
+			[UNSET] = "unset"
+	};
+
+	return define_builtin_token(new_token, string, builtins);
 }

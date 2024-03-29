@@ -13,34 +13,34 @@
 #include "lexer.h"
 #include "utils.h"
 
-void	print_error(char *error)
+void	print_error(const char *error)
 {
 	if (error != NULL)
 		ft_putstr_fd(error, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-void	print_operator_syntax_error(t_token *token)
+int	print_operator_syntax_error(t_token *token)
 {
-	enum e_token_operators	error;
-
+	int error;
 	if (token == NULL)
-		return (print_error("syntax error near unexpected token `newline'"));
+		return (print_error("syntax error near unexpected token `newline'"), 1);
 	error = token->e_operator;
 	if (error == OPEN_PARENTHESES)
-		print_error("syntax error near unexpected token `('");
+		return (print_error("syntax error near unexpected token `('"), 1);
 	else if (error == CLOSE_PARENTHESES)
-		print_error("syntax error near unexpected token `)'");
+		return (print_error("syntax error near unexpected token `)'"), 1);
 	else if (error == PIPE)
-		print_error("syntax error near unexpected token `|'");
+		return (print_error("syntax error near unexpected token `|'"), 1);
 	else if (error == INPUT_REDIRECT)
-		print_error("syntax error near unexpected token `<'");
+		return (print_error("syntax error near unexpected token `<'"), 1);
 	else if (error == OUTPUT_REDIRECT)
-		print_error("syntax error near unexpected token `>'");
+		return (print_error("syntax error near unexpected token `>'"), 1);
 	else if (error == HERE_DOC)
-		print_error("syntax error near unexpected token `<<'");
+		return (print_error("syntax error near unexpected token `<<'"), 1);
 	else if (error == APPEND)
-		print_error("syntax error near unexpected token `>>'");
+		return (print_error("syntax error near unexpected token `>>'"), 1);
+	return (0);
 }
 
 void	exit_msg(t_minishell *minishell, char *msg, int error_code)

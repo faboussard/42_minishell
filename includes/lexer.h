@@ -22,10 +22,11 @@ enum e_token_type
 	NO_TYPE = 0,
 	COMMAND = 1,
 	ARGUMENT = 2,
-	PATH_FILE = 3,
-	OPERATOR = 4,
-	TO_APPEND = 5,
-	SUBSHELL = 6,
+	IN_FILE = 3,
+    OUT_FILE = 4,
+    DELIMITER = 5,
+	OPERATOR = 6,
+    SUBSHELL = 7,
 };
 
 enum e_token_operators
@@ -34,12 +35,10 @@ enum e_token_operators
 	OPEN_PARENTHESES = 1,
 	CLOSE_PARENTHESES = 2,
 	PIPE = 3,
-	INPUT_REDIRECT = 4,
-	OUTPUT_REDIRECT = 5,
+    OUTPUT_REDIRECT = 4,
+	INPUT_REDIRECT = 5,
 	HERE_DOC = 6,
 	APPEND = 7,
-	DOUBLE_QUOTE = 8,
-	SINGLE_QUOTE = 9,
 };
 
 enum e_token_builtin
@@ -82,7 +81,10 @@ void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, en
 
 bool	get_builtin_token(t_token *new_token, char *string);
 
-/********************* ENV_VARIABLES *********************/
+/********************* count *********************/
 
+size_t total_commands(t_token *head);
+size_t count_letters_until_pipe(t_token *head);
+size_t count_cmds_until_pipe(t_token *head);
 
 #endif //LEXER_H

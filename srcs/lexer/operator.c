@@ -14,26 +14,40 @@
 #include "utils.h"
 #include <stdbool.h>
 
-bool	get_operator_token(t_token *new_token, char *string)
-{
-	int			i;
-	const char	*operators[10] = {NULL,
-		"(", ")", "|", ">", "<", "<<", ">>", "\"", "'",
-	};
 
-	i = 1;
+bool define_operator_token(t_token *new_token, const char *string, const char *operator[9])
+{
+	int i = 0;
+
 	while (i < 9)
 	{
-
-		if (!ft_strncmp(string, operators[i], ft_strlen(string)))
+		if (operator[i] != NULL && !ft_strncmp(string, operator[i], ft_strlen(string)))
 		{
-			define_token_types(OPERATOR, NO_BUILTIN, i, new_token);
-			return (TRUE);
+			new_token->e_type = OPERATOR;
+			new_token->e_operator = i;
+			return true;
 		}
 		i++;
 	}
-	return (FALSE);
+	return false;
 }
+
+
+bool get_operator_token(t_token *new_token, const char *string)
+{
+	const char *operator[9] = {
+			[OPEN_PARENTHESES] = "(",
+			[CLOSE_PARENTHESES] = ")",
+			[PIPE] = "|",
+			[OUTPUT_REDIRECT] = ">",
+			[INPUT_REDIRECT] = "<",
+			[HERE_DOC] = "<<",
+			[APPEND] = ">>"
+	};
+
+	return define_operator_token(new_token, string, operator);
+}
+
 
 bool	is_redirect_token(t_token *token)
 {

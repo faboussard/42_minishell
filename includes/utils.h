@@ -40,4 +40,8 @@ void	ft_free_tab_from_i(void **tab, int j);
 void    ft_lstclear_envp(t_envp **lst);
 void    ft_lstclear_token(t_token **lst);
 
+/******************** ERROR ********************/
+void	print_error(const char *error);
+int	print_operator_syntax_error(t_token *token);
+
 #endif //GENERAL_H
