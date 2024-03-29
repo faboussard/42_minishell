@@ -16,6 +16,7 @@
 #include "signals.h"
 # include <readline/history.h>
 # include "execute.h"
+#include "parser.h"
 
 # define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
@@ -33,7 +34,6 @@ void minishell_interactive(t_minishell *minishell)
         minishell->list_tokens = parse_input(minishell);
         if (minishell->list_tokens == NULL)
             exit_msg(minishell, "Fatal : tokenization failed", -1);
-		execute(minishell);
         create_tables(minishell);
         free(minishell->user_input);
     }
@@ -50,7 +50,6 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
-	execute(minishell);
 	create_tables(minishell);
 }
 
@@ -59,21 +58,21 @@ int main(int ac, char **av, char **envp)
 	t_minishell 	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
-//	if (envp)
-//		minishell.list_envp = create_envp_list(envp, &minishell);
-//	if (minishell.list_envp == NULL)
-//		exit_msg(&minishell, "Fatal : malloc failed", -1);
+	if (envp)
+		minishell.list_envp = create_envp_list(envp, &minishell);
+	if (minishell.list_envp == NULL)
+		exit_msg(&minishell, "Fatal : malloc failed", -1);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
     printf("************ print list_envp ************\n\n"); // DELETE
     print_list_envp(&minishell);
-    printf("************ print list_tokens ************\n\n"); // DELETE
+    printf("************ print list_tokens **********\n\n"); // DELETE
     print_token_list(minishell.list_tokens); //DELETE
     printf("************ print cmd_table ************\n\n"); // DELETE
 	print_array(minishell.cmd_table);  //DELETE
-    printf("********************** print env_table **********************\n\n"); // DELETE
+    printf("************ print env_table *************\n\n"); // DELETE
 	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
