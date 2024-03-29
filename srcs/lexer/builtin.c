@@ -13,6 +13,7 @@
 #include "lexer.h"
 #include "utils.h"
 #include <stdbool.h>
+#include "minishell.h"
 
 bool define_builtin_token(t_token *new_token, const char *string, const char *builtins[9])
 {
