@@ -51,8 +51,7 @@ unsigned int ft_exit_builtin(t_minishell *minishell)
 	status = ft_atoi(minishell->list_tokens->next->content);
 	if (minishell->list_tokens->next && errno != EINVAL)
 	{
-		print_error("exit:too many arguments");
+		print_error("exit: too many arguments");
 		restore_terminal(minishell);
-		exit(status);
 	}
 }
