@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "signals.h"
 # include <readline/history.h>
+# include "execute.h"
 
 # define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
@@ -30,6 +31,9 @@ void minishell_interactive(t_minishell *minishell)
         add_history(minishell->user_input);
         minishell->history_count += 1;
         minishell->list_tokens = parse_input(minishell);
+        if (minishell->list_tokens == NULL)
+            exit_msg(minishell, "Fatal : tokenization failed", -1);
+		execute(minishell);
         create_tables(minishell);
         free(minishell->user_input);
     }
@@ -46,6 +50,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
+	execute(minishell);
 	create_tables(minishell);
 }
 

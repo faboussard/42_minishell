@@ -18,7 +18,6 @@ int parentheses_error(const char *string)
 	int 	i;
 	size_t	open_parentheses;
 	size_t	close_parentheses;
-
 	i = 0;
 	open_parentheses = 0;
 	close_parentheses = 0;
