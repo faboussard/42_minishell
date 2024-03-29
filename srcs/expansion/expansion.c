@@ -12,7 +12,6 @@
 
 #include "lexer.h"
 #include "utils.h"
-#include "error.h"
 
 int parentheses_error(const char *string)
 {

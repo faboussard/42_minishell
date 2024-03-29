@@ -48,6 +48,7 @@ typedef struct s_minishell
 	char				*user_input;
 	t_token		        *list_tokens;
     t_envp		        *list_envp;
+    size_t              total_commands;
 	size_t				total_size_envp;
 	char 				**cmd_table;
 	char 				**envp_table;

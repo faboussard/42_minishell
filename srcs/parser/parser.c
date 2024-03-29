@@ -27,9 +27,8 @@
 //	iterator = list_tokens;
 //	while (iterator != NULL)
 //	{
-//		token = (t_token *)(iterator)->value;
-//		open_parentheses += token->e_operator == OPEN_PARENTHESES;
-//		close_parentheses += token->e_operator == CLOSE_PARENTHESES;
+//		open_parentheses += iterator->e_operator == OPEN_PARENTHESES;
+//		close_parentheses += iterator->e_operator == CLOSE_PARENTHESES;
 //		iterator = iterator->next;
 //	}
 //	if (close_parentheses > open_parentheses)
@@ -39,31 +38,21 @@
 //	return (close_parentheses == open_parentheses);
 //}
 
+void to_subshell(t_token *list_tokens)
+{
+	t_token *iterator;
+	t_token *token;
+	t_token *next_token;
 
-//int check_syntax_with_tokens(t_token *list_tokens)
-//{
-//	if (check_parentheses(list_tokens) == -1)
-//		exit(EXIT_FAILURE);
-//	return (0);
-//}
-
-
-//void to_subshell(t_token *list_tokens)
-//{
-//	t_token *iterator;
-//	t_token *token;
-//	t_token *next_token;
-//
-//	iterator = list_tokens;
-//	while (iterator->next != NULL)
-//	{
-//		token = (t_token *)(iterator)->content;
-//		next_token = (t_token *)(iterator->next)->content;
-//		if (token->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
-//			next_token->e_type = SUBSHELL;
-//		iterator = iterator->next;
-//	}
-//}
+	iterator = list_tokens;
+	while (iterator->next != NULL)
+	{
+		next_token = iterator->next;
+		if (token->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
+			next_token->e_type = SUBSHELL;
+		iterator = iterator->next;
+	}
+}
 
 int	ft_lstsize_token(t_token *lst)
 {
@@ -86,7 +75,7 @@ void arg_to_command(t_token *list_tokens)
 	t_token *next_token;
 
     iterator = list_tokens;
-	if (ft_lstsize_token(iterator) == 2)
+	if (ft_lstsize_token(iterator) == 1)
 	{
 		if (iterator->e_type == ARGUMENT)
             iterator->e_type = COMMAND;
@@ -96,33 +85,49 @@ void arg_to_command(t_token *list_tokens)
 		while (iterator->next != NULL)
 		{
 			next_token = iterator->next;
-			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != PATH_FILE)
+			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != IN_FILE && next_token->e_type != OUT_FILE)
 				next_token->e_type = ARGUMENT;
-			if (iterator->e_type == PATH_FILE)
-				next_token->e_type = COMMAND;
 			iterator = iterator->next;
 		}
 	}
 }
 
-void change_type_to_file(t_token *list_tokens)
+void to_infile_or_outfile(t_token *list_tokens)
 {
-	t_token *iterator;
-	t_token *next_token;
+    t_token *iterator;
+    t_token *next_token;
 
-	iterator = list_tokens;
-	while (iterator->next != NULL)
-	{
-		next_token = iterator->next;
-		if (is_redirect_token(iterator))
-			next_token->e_type = PATH_FILE;
-		iterator = iterator->next;
-	}
+    iterator = list_tokens;
+    while (iterator->next != NULL)
+    {
+        next_token = iterator->next;
+        if (iterator->e_operator == INPUT_REDIRECT || iterator->e_operator == APPEND)
+            next_token->e_type = IN_FILE;
+        if (iterator->e_operator == OUTPUT_REDIRECT)
+            next_token->e_type = OUT_FILE;
+        iterator = iterator->next;
+    }
+}
+
+void to_delimiter(t_token *list_tokens)
+{
+    t_token *iterator;
+    t_token *next_token;
+
+    iterator = list_tokens;
+    while (iterator->next != NULL)
+    {
+        next_token = iterator->next;
+        if (iterator->e_operator == HERE_DOC)
+            next_token->e_type = DELIMITER;
+        iterator = iterator->next;
+    }
 }
 
 void token_requalification(t_token *list_tokens)
 {
-	change_type_to_file(list_tokens);
+	to_infile_or_outfile(list_tokens);
 	arg_to_command(list_tokens);
+    to_delimiter(list_tokens);
 //	to_subshell(list_tokens);
 }

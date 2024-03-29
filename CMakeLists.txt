@@ -66,7 +66,6 @@ add_executable(minishell
         includes/utils.h
         includes/parser.h
         includes/minishell.h
-        includes/error.h
         includes/lexer.h
         includes/signals.h
 

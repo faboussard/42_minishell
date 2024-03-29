@@ -14,38 +14,48 @@
 #include "utils.h"
 #include "parser.h"
 
-size_t count_letters_until_pipe_or_redirect(t_token *head)
+size_t count_letters_until_pipe(t_token *head)
 {
 	size_t		num_commands;
 	t_token     *iterator;
 
 	num_commands = 0;
     iterator = head;
-	while (iterator)
+    while (iterator && iterator->e_operator != PIPE)
 	{
-		if (iterator->e_operator != PIPE && !is_redirect_token(iterator))
+        if (iterator->e_type == COMMAND || iterator->e_type == ARGUMENT)
 			num_commands += ft_strlen(iterator->name);
-		else
-			break ;
         iterator = iterator->next;
 	}
 	return (num_commands);
 }
 
-size_t count_cmds_until_pipe_or_redirect(t_token *head)
+size_t count_cmds_until_pipe(t_token *head)
 {
 	size_t		num_commands;
 	t_token	*iterator;
 
 	num_commands = 0;
     iterator = head;
-	while (iterator)
+	while (iterator && iterator->e_operator != PIPE)
 	{
-		if (iterator->e_operator != PIPE && !is_redirect_token(iterator))
-			num_commands ++;
-		else
-			break ;
+		if (iterator->e_type == COMMAND || iterator->e_type == ARGUMENT)
+			num_commands++;
         iterator = iterator->next;
 	}
 	return (num_commands);
+}
+
+size_t total_commands(t_token *head)
+{
+    size_t	num_commands;
+    t_token *iterator;
+
+    num_commands = 0;
+    iterator = head;
+    while (iterator && iterator->e_operator == PIPE)
+    {
+        num_commands++;
+    }
+    return (num_commands);
 }

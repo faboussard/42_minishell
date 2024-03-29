@@ -72,8 +72,8 @@ int						print_and_count_u(unsigned int n, char *base);
 
 /***************************** ft_put **************************************/
 
-int						ft_putstr_fd(char *s, int fd);
-void					ft_putendl_fd(char *s, int fd);
+int						ft_putstr_fd(const char *s, int fd);
+void					ft_putendl_fd(const char *s, int fd);
 void					ft_putnbr_fd(int n, int fd);
 void					ft_putchar_fd(char c, int fd);
 int						ft_putchar(int c);

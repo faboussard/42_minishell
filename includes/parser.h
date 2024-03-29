@@ -19,6 +19,7 @@
 /************************** parser  **************************/
 
 void	token_requalification(t_token *list_tokens);
+int     check_syntax(t_token *list_tokens);
 
 /**************************** count tokens **************************/
 
@@ -33,7 +34,6 @@ void				create_cmd_table(t_minishell *minishell, t_token *list_tokens);
 
 bool	get_operator_token(t_token *new_token, char *string);
 bool	is_redirect_token(t_token *token);
-void	print_operator_syntax_error(t_token *token);
 
 /******************** init.c **********************/
 void	parsing(t_minishell *minishell, int ac, char **av, char **envp);

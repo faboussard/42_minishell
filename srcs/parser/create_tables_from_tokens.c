@@ -14,33 +14,39 @@
 #include "utils.h"
 #include "parser.h"
 
-void fill_array(t_token *list_tokens, char **array, size_t nbr_cmds)
+void fill_cmds_and_args_array(t_token *list_tokens, char **array)
 {
 	size_t i;
+    t_token	*iterator;
 
 	i = 0;
-	while (i < nbr_cmds && list_tokens != NULL)
+    iterator = list_tokens;
+    while (iterator && iterator->e_operator != PIPE)
 	{
-		array[i] = ft_strdup(list_tokens->name);
-		if (array[i] == NULL)
-			return;
-		i++;
-		list_tokens = list_tokens->next;
+        if (iterator->e_type == COMMAND || iterator->e_type == ARGUMENT)
+        {
+            array[i] = ft_strdup(iterator->name);
+            if (array[i] == NULL)
+                return;
+            i++;
+        }
+        iterator = iterator->next;
 	}
 	array[i] = NULL;
 }
 
+//< coucou > fichierPROUT ls  < coucou -la < coucou
+//met le resultat de "ls -la" dans fichier prout
+//-c "echo ls > ls -l | ls -l "
 void create_cmd_table(t_minishell *minishell, t_token *list_tokens)
 {
-	size_t nbr_cmds_until_redirect_or_pipe;
-	size_t nbr_letters_until_redirect_or_pipe;
+	size_t nbr_cmds_letters_int_pipe;
 
-	nbr_cmds_until_redirect_or_pipe = count_cmds_until_pipe_or_redirect(list_tokens);
-	nbr_letters_until_redirect_or_pipe = count_letters_until_pipe_or_redirect(list_tokens);
-	minishell->cmd_table = ft_calloc(nbr_letters_until_redirect_or_pipe, sizeof(char **));
+    nbr_cmds_letters_int_pipe = count_letters_until_pipe(list_tokens);
+	minishell->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
 	if (minishell->cmd_table == NULL)
 		return;
-	fill_array(list_tokens, minishell->cmd_table, nbr_cmds_until_redirect_or_pipe);
+    fill_cmds_and_args_array(list_tokens, minishell->cmd_table);
 }
 
 void create_envp_table(t_minishell *minishell)
@@ -71,7 +77,7 @@ void create_tables(t_minishell *minishell)
 {
 	if (minishell->list_tokens != NULL)
 		create_cmd_table(minishell, minishell->list_tokens);
-	if (minishell->list_envp != NULL)
-		create_envp_table(minishell);
+//	if (minishell->list_envp != NULL)
+//		create_envp_table(minishell);
 }
 
