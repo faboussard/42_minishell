@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:20:51 by mbernard          #+#    #+#             */
-/*   Updated: 2024/03/28 11:26:44 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/03/29 09:24:36 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ pid_t	m_safe_fork(t_minishell *minishell)
 	return (my_pid);
 }
 
-void	safe_dup2(t_minishell *minishell, int old_fd, int new_fd)
+void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd)
 {
 	int	my_dup;
 
@@ -44,15 +44,10 @@ void	close_pipes(int *pipe_fd)
 		close(pipe_fd[1]);
 }
 
-void	check_null_cmd(int ac, char **av, int i)
+void	close_fds(int fd_in, int fd_out)
 {
-	while (i < ac - 1)
-	{
-		if (!av[i] || !av[i][0])
-		{
-			ft_putstr_fd("pipex: ", 2);
-			exit_msg_pipex(NULL, SYNTAX_ERROR, 2);
-		}
-		i++;
-	}
+	if (fd_in >= 0)
+		close(fd_in);
+	if (fd_out >= 0)
+		close(fd_out);
 }
