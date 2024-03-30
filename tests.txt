@@ -9,3 +9,9 @@ cecw
 lol
 faboussa@z1r9p4:~/minishell$ cat r
 Please ask your administrator.
+
+************** builtins ************************
+-c "d ls echo hihi echo export unset exit"
+ on doit avoir builtin 0 :
+-c "cdc"
+-c "c"

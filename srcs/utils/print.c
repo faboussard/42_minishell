@@ -13,6 +13,38 @@
 #include "lexer.h"
 #include "utils.h"
 
+
+void print_process_list(t_process_list *process_list)
+{
+	t_process_list *current;
+
+	if (process_list == NULL)
+	{
+		printf("no list to  print\n");
+		return;
+	}
+	current = process_list;
+	while (current != NULL)
+	{
+		printf("************ print cmd_table ************\n\n");
+		print_array(current->cmd_table);
+		printf("************ print in_files_list ************\n\n");
+		if (current->in_files_list == NULL)
+			printf("no in_files_list\n");
+		else
+			print_token_list(current->in_files_list);
+		printf("************ print out_files_list ************\n\n");
+		if (current->out_files_list == NULL)
+			printf("no out_files_list\n");
+		else
+			print_token_list(current->out_files_list);
+		if (current->limiters == NULL)
+			printf("no limiters\n");
+		else
+			print_token_list(current->limiters);
+		current = current->next;
+	}
+}
 void print_array(char **array)
 {
     printf("------------------- PRINT ARRAY ------------------------------------\n");
@@ -57,13 +89,13 @@ void print_list_envp(t_minishell *minishell)
     if (minishell->list_envp == NULL)
     {
         printf("no list to print\n");
-        return;
+        return ;
     }
     printf("----------------------- PRINT LIST -----------------------\n");
     current = minishell->list_envp;
     while (current != NULL)
     {
-        printf("Target: %s, Value: %s\n", minishell->list_envp->target, minishell->list_envp->value);
+        printf("Target: %s, Value: %s\n", current->target, current->value);
         current = current->next;
     }
     printf("\n");

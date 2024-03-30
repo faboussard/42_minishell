@@ -96,6 +96,6 @@ add_executable(minishell
         srcs/pipex/paths_bonus.c
         srcs/pipex/pipe_utils_bonus.c
         srcs/pipex/utils_bonus.c
-)
+        srcs/parser/process_list.c)
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

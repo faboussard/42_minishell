@@ -18,6 +18,7 @@
 
 #include "libft.h"
 #include "lexer.h"
+#include "minishell.h"
 # include <unistd.h>
 # include <errno.h>
 # include <stdbool.h>
@@ -32,7 +33,11 @@
 # include <sys/wait.h>
 
 typedef struct s_envp	t_envp;
-typedef struct s_token          t_token;
+typedef struct s_token  t_token;
+typedef struct s_minishell t_minishell;
+typedef struct process_list t_process_list;
+typedef struct in_out_files_tokens t_in_out_files_tokens;
+typedef struct limiter_tokens t_limiter_tokens;
 
 typedef struct s_minishell
 {
@@ -45,12 +50,12 @@ typedef struct s_minishell
 	int					fd_out;
 	int 				history_count;
 	char				*user_input;
-	t_token		        *list_tokens;
-    t_envp		        *list_envp;
-    size_t              total_commands;
-	size_t				total_size_envp;
-	char 				**cmd_table;
 	char 				**envp_table;
+	t_token		        *list_tokens;
+	t_envp		        *list_envp;
+	t_process_list		*process_list;
+	size_t              total_commands;
+	size_t				total_size_envp;
 }	t_minishell;
 
 typedef struct s_envp
@@ -62,6 +67,15 @@ typedef struct s_envp
 	struct s_envp 	*next;
 }	t_envp;
 
+typedef struct process_list
+{
+	char 	**cmd_table;
+	t_token *tokens_until_pipe;
+	t_token	*in_files_list;
+	t_token	*out_files_list;
+	t_token	*limiters;
+	struct	process_list	*next;
+} t_process_list;
 
 /*************************************** INIT MINISHELL ***************************************/
 

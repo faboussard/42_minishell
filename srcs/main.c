@@ -14,29 +14,30 @@
 #include "minishell.h"
 #include "utils.h"
 #include "signals.h"
-# include <readline/history.h>
-# include "execute.h"
 #include "parser.h"
+# include <readline/history.h>
 
 # define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
 void minishell_interactive(t_minishell *minishell)
 {
-    while (1)
-    {
-        set_signals_interactive();
-        minishell->user_input = readline(PROMPT);
-        if (minishell->user_input == NULL)
-            break;
-        set_signals_noninteractive();
-        add_history(minishell->user_input);
-        minishell->history_count += 1;
-        minishell->list_tokens = parse_input(minishell);
-        if (minishell->list_tokens == NULL)
+	while (1)
+	{
+		set_signals_interactive();
+		minishell->user_input = readline(PROMPT);
+		if (minishell->user_input == NULL)
+			break;
+		set_signals_noninteractive();
+//        add_history(minishell->user_input);
+		minishell->history_count += 1;
+		minishell->list_tokens = parse_input(minishell);
+		if (minishell->list_tokens == NULL)
 			return ;
-        create_tables(minishell);
-        free(minishell->user_input);
-    }
+		minishell->process_list = create_process_list(minishell, minishell->list_tokens);
+		if (minishell->process_list == NULL)
+			return ;
+		free(minishell->user_input);
+	}
 }
 
 void minishell_non_interactive(t_minishell *minishell, char *data_input)
@@ -45,12 +46,12 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
-	add_history(minishell->user_input);
+//	add_history(minishell->user_input);
 	minishell->history_count += 1;
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
-	create_tables(minishell);
+	minishell->process_list = create_process_list(minishell, minishell->list_tokens);
 }
 
 int main(int ac, char **av, char **envp)
@@ -62,20 +63,20 @@ int main(int ac, char **av, char **envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
 		exit_msg(&minishell, "Fatal : malloc failed", -1);
+	else
+		create_envp_table(&minishell);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-    printf("************ print list_envp ************\n\n"); // DELETE
-    print_list_envp(&minishell);
-    printf("************ print list_tokens **********\n\n"); // DELETE
-    print_token_list(minishell.list_tokens); //DELETE
-    printf("************ print cmd_table ************\n\n"); // DELETE
-	print_array(minishell.cmd_table);  //DELETE
-    printf("************ print env_table *************\n\n"); // DELETE
-	print_array(minishell.envp_table);  //DELETE
+//    printf("************ print list_envp ************\n\n"); // DELETE
+//    print_list_envp(&minishell);
+	printf("************ print list_tokens ************\n"); // DELETE
+	print_token_list(minishell.list_tokens); //DELETE
+	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
+//	print_process_list(minishell.process_list);  //DELETE
+//    printf("********************** print env_table **********************\n\n"); // DELETE
+//	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
-
-
