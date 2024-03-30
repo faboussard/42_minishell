@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                			                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/03/30 22:12:15 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void minishell_interactive(t_minishell *minishell)
 	{
 		set_signals_interactive();
 		minishell->user_input = readline(PROMPT);
-		if (minishell->user_input == NULL)
-			break;
+		if (minishell->user_input[0] == 0)
+			continue;
 		set_signals_noninteractive();
 //        add_history(minishell->user_input);
 		minishell->history_count += 1;
