@@ -68,35 +68,28 @@ char **create_cmd_table(t_minishell *minishell)
 	return (cmd_table);
 }
 
-//void create_envp_table(t_minishell *minishell)
-//{
-//    t_envp *current;
-//	size_t i;
-//
-//	i = 0;
-//	minishell->envp_table = ft_calloc(minishell->total_size_envp + 1, sizeof(char **));
-//	if (minishell->envp_table == NULL)
-//		return ;
-//    current = minishell->list_envp;
-//	while (current != NULL)
-//	{
-//		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
-//		if (minishell->envp_table[i] == NULL)
-//        {
-//            ft_free_all_tab(minishell->envp_table);
-//            return;
-//        }
-//        current = current->next;
-//		i++;
-//	}
-//	minishell->envp_table[i] = NULL;
-//}
-//
-//void create_tables(t_minishell *minishell)
-//{
-//	if (minishell->list_tokens != NULL)
-//		create_cmd_table(minishell, minishell->list_tokens);
-//	if (minishell->list_envp != NULL)
-//		create_envp_table(minishell);
-//}
+void create_envp_table(t_minishell *minishell)
+{
+    t_envp *current;
+	size_t i;
+
+	i = 0;
+	minishell->envp_table = ft_calloc(minishell->total_size_envp + 1, sizeof(char **));
+	if (minishell->envp_table == NULL)
+		return ;
+    current = minishell->list_envp;
+	while (current != NULL)
+	{
+		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
+		if (minishell->envp_table[i] == NULL)
+        {
+            ft_free_all_tab(minishell->envp_table);
+            return;
+        }
+        current = current->next;
+		i++;
+	}
+	minishell->envp_table[i] = NULL;
+}
+
 

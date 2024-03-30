@@ -63,8 +63,6 @@ void ft_free_process_list(t_process_list **process_list)
 		next = current->next;
 		if (current->cmd_table)
 			ft_free_all_tab(current->cmd_table);
-		if (current->envp_table)
-			ft_free_all_tab(current->envp_table);
 		free(current);
 		current = next;
 	}
@@ -83,6 +81,8 @@ void	free_minishell(t_minishell *minishell)
         ft_lstclear_token( &minishell->list_tokens);
 	if (minishell->list_envp != NULL)
         ft_lstclear_envp(&minishell->list_envp);
+	if (minishell->envp_table)
+		ft_free_all_tab(minishell->envp_table);
 	if (minishell->process_list)
 		ft_free_process_list(&minishell->process_list);
 	if (minishell->history_count != 0)

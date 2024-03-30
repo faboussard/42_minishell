@@ -50,6 +50,7 @@ typedef struct s_minishell
 	int					fd_out;
 	int 				history_count;
 	char				*user_input;
+	char 				**envp_table;
 	t_token		        *list_tokens;
     t_envp		        *list_envp;
 	t_process_list		*process_list;
@@ -69,10 +70,9 @@ typedef struct s_envp
 typedef struct process_list
 {
 	char 					**cmd_table;
-	char 					**envp_table;
 	t_in_out_files_tokens	*files;
 	t_limiter_tokens		*limiters;
-	struct	process_list *next;
+	struct	process_list	*next;
 } t_process_list;
 
 typedef struct in_out_files_tokens

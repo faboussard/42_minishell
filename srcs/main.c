@@ -33,7 +33,7 @@ void minishell_interactive(t_minishell *minishell)
         minishell->list_tokens = parse_input(minishell);
 		if (minishell->list_tokens == NULL)
 			return ;
-        minishell->process_list = create_process_list(minishell);
+		minishell->process_list = create_process_list(minishell, minishell->list_tokens);
 		if (minishell->process_list == NULL)
 			return ;
         free(minishell->user_input);
@@ -51,9 +51,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
-	minishell->process_list = create_process_list(minishell);
-	if (minishell->process_list == NULL)
-		return ;
+	minishell->process_list = create_process_list(minishell, minishell->list_tokens);
 }
 
 int main(int ac, char **av, char **envp)
@@ -65,6 +63,8 @@ int main(int ac, char **av, char **envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
 		exit_msg(&minishell, "Fatal : malloc failed", -1);
+	else
+		create_envp_table(&minishell);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
@@ -76,7 +76,7 @@ int main(int ac, char **av, char **envp)
     printf("************ print cmd_table ************\n\n"); // DELETE
 	print_array(minishell.process_list->cmd_table);  //DELETE
     printf("********************** print env_table **********************\n\n"); // DELETE
-	print_array(minishell.process_list->envp_table);  //DELETE
+	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }

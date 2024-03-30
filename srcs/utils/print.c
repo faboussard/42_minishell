@@ -63,7 +63,7 @@ void print_list_envp(t_minishell *minishell)
     current = minishell->list_envp;
     while (current != NULL)
     {
-        printf("Target: %s, Value: %s\n", minishell->list_envp->target, minishell->list_envp->value);
+        printf("Target: %s, Value: %s\n", current->target, current->value);
         current = current->next;
     }
     printf("\n");

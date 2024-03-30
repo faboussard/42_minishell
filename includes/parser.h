@@ -28,8 +28,9 @@ size_t	count_cmds_until_pipe_or_redirect(t_token *head);
 
 /**************************** parse tokens **************************/
 
-t_process_list	*create_process_list(t_minishell *minishell);
+t_process_list *create_process_list(t_minishell *minishell, t_token *list_tokens);
 char	**create_cmd_table(t_minishell *minishell);
+void create_envp_table(t_minishell *minishell);
 
 /****************** OPERATORS ******************/
 
