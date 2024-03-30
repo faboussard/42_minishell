@@ -21,7 +21,7 @@ size_t count_letters_until_pipe(t_token *head)
 
 	num_commands = 0;
     iterator = head;
-    while (iterator && iterator->e_operator != PIPE)
+    while (iterator != NULL&& iterator->e_operator != PIPE)
 	{
         if (iterator->e_type == COMMAND || iterator->e_type == ARGUMENT)
 			num_commands += ft_strlen(iterator->name);

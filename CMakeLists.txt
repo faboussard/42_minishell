@@ -86,6 +86,16 @@ add_executable(minishell
         srcs/lexer/count_tokens.c
         srcs/init.c
         srcs/signal.c
+        srcs/builtins/exit.c
+        srcs/pipex/pipex_bonus.c
+        srcs/pipex/cmds_bonus.c
+        srcs/pipex/child_care_bonus.c
+        srcs/pipex/errors_bonus.c
+        srcs/pipex/heredoc_bonus.c
+        srcs/pipex/join_bonus.c
+        srcs/pipex/paths_bonus.c
+        srcs/pipex/pipe_utils_bonus.c
+        srcs/pipex/utils_bonus.c
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

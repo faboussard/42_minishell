@@ -48,7 +48,6 @@ void ft_lstclear_token(t_token **lst)
         free(current);
         current = next;
     }
-
     *lst = NULL;
 }
 

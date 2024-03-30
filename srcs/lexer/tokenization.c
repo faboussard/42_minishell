@@ -95,7 +95,7 @@ int transform_to_token(t_minishell *minishell, t_token **list_tokens)
 		return (0);
 	while (split[i])
 	{
-		new_token = malloc(sizeof(t_token));
+		new_token = ft_calloc(1, sizeof(t_token));
 		if (new_token == NULL)
 		{
 			ft_free_all_tab(split);
@@ -121,7 +121,10 @@ t_token *parse_input(t_minishell *minishell)
 	if (transform_to_token(minishell, &list_tokens) == 0)
 		return (NULL);
 	if (check_syntax(list_tokens))
+	{
+		ft_lstclear_token(&list_tokens);
 		return (NULL);
+	}
 	token_requalification(list_tokens);
     minishell->total_commands = total_commands(minishell->list_tokens);
 	return (list_tokens);
