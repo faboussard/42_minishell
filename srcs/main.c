@@ -14,6 +14,7 @@
 #include "minishell.h"
 #include "utils.h"
 #include "signals.h"
+#include "parser.h"
 # include <readline/history.h>
 
 # define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
@@ -30,7 +31,11 @@ void minishell_interactive(t_minishell *minishell)
         add_history(minishell->user_input);
         minishell->history_count += 1;
         minishell->list_tokens = parse_input(minishell);
-        create_tables(minishell);
+		if (minishell->list_tokens == NULL)
+			return ;
+        minishell->process_list = create_process_list(minishell);
+		if (minishell->process_list == NULL)
+			return ;
         free(minishell->user_input);
     }
 }
@@ -46,7 +51,9 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
-	create_tables(minishell);
+	minishell->process_list = create_process_list(minishell);
+	if (minishell->process_list == NULL)
+		return ;
 }
 
 int main(int ac, char **av, char **envp)
@@ -54,10 +61,10 @@ int main(int ac, char **av, char **envp)
 	t_minishell 	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
-//	if (envp)
-//		minishell.list_envp = create_envp_list(envp, &minishell);
-//	if (minishell.list_envp == NULL)
-//		exit_msg(&minishell, "Fatal : malloc failed", -1);
+	if (envp)
+		minishell.list_envp = create_envp_list(envp, &minishell);
+	if (minishell.list_envp == NULL)
+		exit_msg(&minishell, "Fatal : malloc failed", -1);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
@@ -67,11 +74,10 @@ int main(int ac, char **av, char **envp)
     printf("************ print list_tokens ************\n\n"); // DELETE
     print_token_list(minishell.list_tokens); //DELETE
     printf("************ print cmd_table ************\n\n"); // DELETE
-	print_array(minishell.cmd_table);  //DELETE
+	print_array(minishell.process_list->cmd_table);  //DELETE
     printf("********************** print env_table **********************\n\n"); // DELETE
-	print_array(minishell.envp_table);  //DELETE
+	print_array(minishell.process_list->envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
-
 

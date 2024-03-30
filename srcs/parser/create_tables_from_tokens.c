@@ -14,7 +14,18 @@
 #include "utils.h"
 #include "parser.h"
 
-void fill_cmds_and_args_array(t_token *list_tokens, char **array)
+char	*ft_strdup_free(const char *s)
+{
+	char	*copy;
+
+	copy = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (copy == NULL)
+		return (NULL);
+	ft_memcpy(copy, s, ft_strlen(s) + 1);
+	return (copy);
+}
+
+int fill_cmds_and_args_array(t_token *list_tokens, char **array)
 {
 	size_t i;
     t_token	*iterator;
@@ -27,57 +38,65 @@ void fill_cmds_and_args_array(t_token *list_tokens, char **array)
         {
             array[i] = ft_strdup(iterator->name);
             if (array[i] == NULL)
-                return;
+			{
+				ft_free_all_tab(array);
+				return 0;
+			}
             i++;
         }
         iterator = iterator->next;
 	}
 	array[i] = NULL;
+	return (1);
 }
 
-//< coucou > fichierPROUT ls  < coucou -la < coucou
+//< coucou > fichierEX ls  < coucou -la < coucou
 //met le resultat de "ls -la" dans fichier prout
 //-c "echo ls > ls -l | ls -l "
-void create_cmd_table(t_minishell *minishell, t_token *list_tokens)
+char **create_cmd_table(t_minishell *minishell)
 {
+	char **cmd_table;
+
 	size_t nbr_cmds_letters_int_pipe;
 
-    nbr_cmds_letters_int_pipe = count_letters_until_pipe(list_tokens);
-	minishell->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
-	if (minishell->cmd_table == NULL)
-		return;
-    fill_cmds_and_args_array(list_tokens, minishell->cmd_table);
+    nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
+	cmd_table= ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
+	if (cmd_table == NULL)
+		return (NULL);
+    if (fill_cmds_and_args_array(minishell->list_tokens, cmd_table) == 0)
+		exit_msg(minishell, "Malloc failed at tokenization", 2);
+	return (cmd_table);
 }
 
-void create_envp_table(t_minishell *minishell)
-{
-    t_envp *current;
-	size_t i;
-
-	i = 0;
-	minishell->envp_table = ft_calloc(minishell->total_size_envp + 1, sizeof(char **));
-	if (minishell->envp_table == NULL)
-		return ;
-    current = minishell->list_envp;
-	while (current != NULL)
-	{
-		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
-		if (minishell->envp_table[i] == NULL)
-        {
-            ft_free_all_tab(minishell->envp_table);
-            return;
-        }
-        current = current->next;
-		i++;
-	}
-	minishell->envp_table[i] = NULL;
-}
-
-void create_tables(t_minishell *minishell)
-{
-	if (minishell->list_tokens != NULL)
-		create_cmd_table(minishell, minishell->list_tokens);
+//void create_envp_table(t_minishell *minishell)
+//{
+//    t_envp *current;
+//	size_t i;
+//
+//	i = 0;
+//	minishell->envp_table = ft_calloc(minishell->total_size_envp + 1, sizeof(char **));
+//	if (minishell->envp_table == NULL)
+//		return ;
+//    current = minishell->list_envp;
+//	while (current != NULL)
+//	{
+//		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
+//		if (minishell->envp_table[i] == NULL)
+//        {
+//            ft_free_all_tab(minishell->envp_table);
+//            return;
+//        }
+//        current = current->next;
+//		i++;
+//	}
+//	minishell->envp_table[i] = NULL;
+//}
+//
+//void create_tables(t_minishell *minishell)
+//{
+//	if (minishell->list_tokens != NULL)
+//		create_cmd_table(minishell, minishell->list_tokens);
 //	if (minishell->list_envp != NULL)
 //		create_envp_table(minishell);
-}
+//}
 

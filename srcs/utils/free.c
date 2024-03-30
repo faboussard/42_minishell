@@ -18,28 +18,29 @@
 
 void ft_lstclear_envp(t_envp **lst)
 {
-    t_envp *current = *lst;
-    t_envp *next;
+    t_envp *current;
+	t_envp *next;
 
+	current = *lst;
     while (current != NULL)
     {
-        next = current->next;
+		next = current->next;
         if (current->target != NULL)
             free(current->target);
         if (current->value != NULL)
             free(current->value);
         free(current);
-        current = next;
+		current = next;
     }
-
     *lst = NULL;
 }
 
 void ft_lstclear_token(t_token **lst)
 {
-    t_token *current = *lst;
+    t_token *current;
     t_token *next;
 
+	current = *lst;
     while (current != NULL)
     {
         next = current->next;
@@ -48,8 +49,26 @@ void ft_lstclear_token(t_token **lst)
         free(current);
         current = next;
     }
-
     *lst = NULL;
+}
+
+void ft_free_process_list(t_process_list **process_list)
+{
+	t_process_list *current;
+	t_process_list *next;
+
+	current = *process_list;
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->cmd_table)
+			ft_free_all_tab(current->cmd_table);
+		if (current->envp_table)
+			ft_free_all_tab(current->envp_table);
+		free(current);
+		current = next;
+	}
+	*process_list = NULL;
 }
 
 void	free_minishell(t_minishell *minishell)
@@ -64,10 +83,8 @@ void	free_minishell(t_minishell *minishell)
         ft_lstclear_token( &minishell->list_tokens);
 	if (minishell->list_envp != NULL)
         ft_lstclear_envp(&minishell->list_envp);
-	if (minishell->envp_table)
-		ft_free_all_tab(minishell->envp_table);
-	if (minishell->cmd_table)
-		ft_free_all_tab(minishell->cmd_table);
+	if (minishell->process_list)
+		ft_free_process_list(&minishell->process_list);
 	if (minishell->history_count != 0)
 		rl_clear_history();
 }
