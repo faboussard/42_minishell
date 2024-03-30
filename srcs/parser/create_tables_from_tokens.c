@@ -14,16 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-char	*ft_strdup_free(const char *s)
-{
-	char	*copy;
-
-	copy = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (copy == NULL)
-		return (NULL);
-	ft_memcpy(copy, s, ft_strlen(s) + 1);
-	return (copy);
-}
 
 int fill_cmds_and_args_array(t_token *list_tokens, char **array)
 {

@@ -69,23 +69,13 @@ typedef struct s_envp
 
 typedef struct process_list
 {
-	char 					**cmd_table;
-	t_in_out_files_tokens	*files;
-	t_limiter_tokens		*limiters;
+	char 	**cmd_table;
+	t_token *tokens_until_pipe;
+	t_token	*in_files_list;
+	t_token	*out_files_list;
+	t_token	*limiters;
 	struct	process_list	*next;
 } t_process_list;
-
-typedef struct in_out_files_tokens
-{
-	t_token	*in_token;
-	t_token	*out_token;
-} t_in_out_files_tokens;
-
-typedef struct limiter_tokens
-{
-	t_token	*limiter_token;
-	struct limiter_tokens *next;
-} t_limiter_tokens;
 
 /*************************************** INIT MINISHELL ***************************************/
 
