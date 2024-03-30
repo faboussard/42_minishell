@@ -47,13 +47,13 @@ t_token *create_in_files_list(t_process_list *process_list)
 	temp_token = NULL;
 	in_files_list = NULL;
 	iterator = process_list->tokens_until_pipe;
-	while (iterator != NULL)
+	while (iterator!= NULL)
 	{
 		if (iterator->e_operator == INPUT_REDIRECT)
 		{
 			temp_token = iterator->next;
 			iterator->next = NULL;
-			add_token_to_list(&in_files_list, iterator);
+			add_token_to_list(&in_files_list, iterator->next);
 			iterator = temp_token;
 		}
 		iterator = iterator->next;
