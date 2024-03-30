@@ -13,13 +13,16 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#define MALLOC_FAILED (-1)
+#define SUCCESSFULLY_ADDED 0
+
 #include "libft.h"
 #include "lexer.h"
 # include <unistd.h>
 # include <errno.h>
 # include <stdbool.h>
 # include <stdio.h>
-# include <stdlib.h>env
+# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
@@ -27,6 +30,9 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+
+typedef struct s_envp	t_envp;
+typedef struct s_token          t_token;
 
 typedef struct s_minishell
 {
@@ -39,28 +45,29 @@ typedef struct s_minishell
 	int					fd_out;
 	int 				history_count;
 	char				*user_input;
-	t_node				*list_tokens;
-	t_node				*list_envp;
+	t_token		        *list_tokens;
+    t_envp		        *list_envp;
+    size_t              total_commands;
 	size_t				total_size_envp;
 	char 				**cmd_table;
 	char 				**envp_table;
 }	t_minishell;
 
-typedef struct s_envp_content
+typedef struct s_envp
 {
-	char					*value;
-	char					*target;
-	size_t 					value_size;
-	size_t 					target_size;
-	struct s_envp_content 	*next;
-}	t_envp_content;
+	char			*value;
+	char			*target;
+	size_t 			value_size;
+	size_t 			target_size;
+	struct s_envp 	*next;
+}	t_envp;
 
 
 /*************************************** INIT MINISHELL ***************************************/
 
 void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
 bool	is_interactive(t_minishell *minishell, int ac);
-t_node	*parse_input(t_minishell *minishell);
+t_token	*parse_input(t_minishell *minishell);
 
 /*************************************** CREATE CHAINS ***************************************/
 

@@ -14,7 +14,7 @@
 
 void ft_lstclear(t_node **lst, void (*del)(void*))
 {
-	t_node *temp;
+    t_node *temp;
 
 	while (*lst != NULL)
 	{

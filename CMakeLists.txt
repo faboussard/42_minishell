@@ -62,20 +62,10 @@ add_executable(minishell
         libft/src/gnl/get_next_line.c
         libft/src/gnl/get_next_line_utils.c
         libft/src/utils.c
-        libft/src/hashmap_dictionnary/hm_clear.c
-        libft/src/hashmap_dictionnary/hm_add_elem.c
-        libft/src/hashmap_dictionnary/hm_get_content.c
-        libft/src/hashmap_dictionnary/hm_delete_elem.c
-        libft/src/hashmap_dictionnary/hm_get_elem.c
-        libft/src/hashmap_dictionnary/hm_get_index.c
-        libft/src/hashmap_dictionnary/hm_init.c
-        libft/src/hashmap_dictionnary/hm_size.c
-        libft/src/hashmap_dictionnary/hm_print.c
 
         includes/utils.h
         includes/parser.h
         includes/minishell.h
-        includes/error.h
         includes/lexer.h
         includes/signals.h
 
@@ -97,9 +87,15 @@ add_executable(minishell
         srcs/init.c
         srcs/signal.c
         srcs/builtins/exit.c
-        execute.c
-        includes/execute.h
-        includes/builtins.h
+        srcs/pipex/pipex_bonus.c
+        srcs/pipex/cmds_bonus.c
+        srcs/pipex/child_care_bonus.c
+        srcs/pipex/errors_bonus.c
+        srcs/pipex/heredoc_bonus.c
+        srcs/pipex/join_bonus.c
+        srcs/pipex/paths_bonus.c
+        srcs/pipex/pipe_utils_bonus.c
+        srcs/pipex/utils_bonus.c
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

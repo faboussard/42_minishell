@@ -16,7 +16,7 @@ LIST_SRCS		=  main signal init\
 				pipex/pipex_bonus	pipex/errors_bonus	pipex/join_bonus	pipex/paths_bonus	pipex/cmds_bonus\
                 pipex/pipe_utils_bonus	pipex/utils_bonus	pipex/child_care_bonus	pipex/heredoc_bonus
 
-LIST_HEADERS	= error utils lexer minishell parser signals pipex_bonus
+LIST_HEADERS	= utils lexer minishell parser signals pipex_bonus
 
 # ------------ DIRECTORIES ------------ #
 
