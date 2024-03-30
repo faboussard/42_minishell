@@ -33,7 +33,7 @@ void minishell_interactive(t_minishell *minishell)
         minishell->history_count += 1;
         minishell->list_tokens = parse_input(minishell);
         if (minishell->list_tokens == NULL)
-            exit_msg(minishell, "Fatal : tokenization failed", -1);
+			return ;
         create_tables(minishell);
         free(minishell->user_input);
     }
