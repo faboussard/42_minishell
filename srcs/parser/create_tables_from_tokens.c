@@ -14,7 +14,8 @@
 #include "utils.h"
 #include "parser.h"
 
-void fill_cmds_and_args_array(t_token *list_tokens, char **array)
+
+int fill_cmds_and_args_array(t_token *list_tokens, char **array)
 {
 	size_t i;
     t_token	*iterator;
@@ -27,26 +28,34 @@ void fill_cmds_and_args_array(t_token *list_tokens, char **array)
         {
             array[i] = ft_strdup(iterator->name);
             if (array[i] == NULL)
-                return;
+			{
+				ft_free_all_tab(array);
+				return 0;
+			}
             i++;
         }
         iterator = iterator->next;
 	}
 	array[i] = NULL;
+	return (1);
 }
 
-//< coucou > fichierPROUT ls  < coucou -la < coucou
+//< coucou > fichierEX ls  < coucou -la < coucou
 //met le resultat de "ls -la" dans fichier prout
 //-c "echo ls > ls -l | ls -l "
-void create_cmd_table(t_minishell *minishell, t_token *list_tokens)
+char **create_cmd_table(t_minishell *minishell)
 {
+	char **cmd_table;
+
 	size_t nbr_cmds_letters_int_pipe;
 
-    nbr_cmds_letters_int_pipe = count_letters_until_pipe(list_tokens);
-	minishell->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
-	if (minishell->cmd_table == NULL)
-		return;
-    fill_cmds_and_args_array(list_tokens, minishell->cmd_table);
+    nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
+	cmd_table= ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
+	if (cmd_table == NULL)
+		return (NULL);
+    if (fill_cmds_and_args_array(minishell->list_tokens, cmd_table) == 0)
+		exit_msg(minishell, "Malloc failed at tokenization", 2);
+	return (cmd_table);
 }
 
 void create_envp_table(t_minishell *minishell)
@@ -73,11 +82,4 @@ void create_envp_table(t_minishell *minishell)
 	minishell->envp_table[i] = NULL;
 }
 
-void create_tables(t_minishell *minishell)
-{
-	if (minishell->list_tokens != NULL)
-		create_cmd_table(minishell, minishell->list_tokens);
-//	if (minishell->list_envp != NULL)
-//		create_envp_table(minishell);
-}
 
