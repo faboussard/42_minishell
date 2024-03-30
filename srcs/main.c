@@ -13,10 +13,10 @@
 #include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include "parser.h"
 #include "signals.h"
 # include <readline/history.h>
 # include "execute.h"
+#include "parser.h"
 
 # define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
@@ -33,8 +33,7 @@ void minishell_interactive(t_minishell *minishell)
         minishell->history_count += 1;
         minishell->list_tokens = parse_input(minishell);
         if (minishell->list_tokens == NULL)
-            exit_msg(minishell, "Fatal : tokenization failed", -1);
-		execute(minishell);
+			return ;
         create_tables(minishell);
         free(minishell->user_input);
     }
@@ -50,8 +49,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->history_count += 1;
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
-		exit_msg(minishell, "Fatal : tokenization failed", -1);
-	execute(minishell);
+		return ;
 	create_tables(minishell);
 }
 
@@ -70,11 +68,11 @@ int main(int ac, char **av, char **envp)
 		minishell_non_interactive(&minishell, av[2]);
     printf("************ print list_envp ************\n\n"); // DELETE
     print_list_envp(&minishell);
-    printf("************ print list_tokens ************\n\n"); // DELETE
+    printf("************ print list_tokens **********\n\n"); // DELETE
     print_token_list(minishell.list_tokens); //DELETE
     printf("************ print cmd_table ************\n\n"); // DELETE
 	print_array(minishell.cmd_table);  //DELETE
-    printf("********************** print HM table **********************\n\n"); // DELETE
+    printf("************ print env_table *************\n\n"); // DELETE
 	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);

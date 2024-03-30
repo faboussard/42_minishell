@@ -26,15 +26,9 @@
 
 typedef struct s_node_int
 {
-	int					content;
+	void				*content;
 	int					index;
 	struct s_node_int	*next;
-}						t_node_int;
-
-typedef struct s_node
-{
-	void				*content;
-	struct s_node		*next;
 }						t_node;
 
 typedef struct s_hashmap_content
@@ -42,9 +36,6 @@ typedef struct s_hashmap_content
 	void					*content;
 	char					*target;
 }	t_hashmap_content;
-
-typedef t_node**	t_hashmap;
-
 
 /***************************** ft_is **************************************/
 int						ft_isalpha(int c);
@@ -81,8 +72,8 @@ int						print_and_count_u(unsigned int n, char *base);
 
 /***************************** ft_put **************************************/
 
-int						ft_putstr_fd(char *s, int fd);
-void					ft_putendl_fd(char *s, int fd);
+int						ft_putstr_fd(const char *s, int fd);
+void					ft_putendl_fd(const char *s, int fd);
 void					ft_putnbr_fd(int n, int fd);
 void					ft_putchar_fd(char c, int fd);
 int						ft_putchar(int c);
@@ -124,7 +115,7 @@ void					ft_lstdelone(t_node *lst, void (*del)(void *));
 void					ft_lstclear(t_node **lst, void (*del)(void *));
 void					ft_lstiter(t_node *lst, void (*f)(void *));
 t_node					*ft_lstmap(t_node *lst, void *(*f)(void *),
-							void (*del)(void *));
+                                      void (*del)(void *));
 
 /***************************** ft_maths **************************************/
 
@@ -132,18 +123,5 @@ int						ft_abs(int n);
 
 /***************************** ft_hashmap **************************************/
 
-# define HASHMAP_ARR_SIZE 1000
-
-int					ft_hm_add_elem(t_hashmap dst, char *target, void *content,
-									  void (*del)(void *));
-int					ft_hm_delete_elem(t_hashmap map,
-										 char *target, void (*del)(void *));
-void				ft_hm_clear(t_hashmap *map, void (*del)(void *));
-void				*ft_hm_get_content(t_hashmap map, char *target);
-t_hashmap_content	*ft_hm_get_elem(t_hashmap map, char *target);
-size_t				ft_hm_get_index(char *target);
-t_hashmap			ft_hm_init(void);
-int					ft_hm_size(t_hashmap hashmap);
-void				print_hashmap(t_hashmap hashmap);
 
 #endif // LIBFT_H

@@ -16,26 +16,39 @@
 #include "minishell.h"
 # include <readline/history.h>
 
-
-void free_token(t_token *token)
+void ft_lstclear_envp(t_envp **lst)
 {
-	if (token != NULL)
-	{
-		free(token->name);
-		free(token);
-	}
+    t_envp *current = *lst;
+    t_envp *next;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        if (current->target != NULL)
+            free(current->target);
+        if (current->value != NULL)
+            free(current->value);
+        free(current);
+        current = next;
+    }
+
+    *lst = NULL;
 }
 
-void free_t_envp_content(t_envp_content *envp)
+void ft_lstclear_token(t_token **lst)
 {
-	if (envp != NULL)
-	{
-		if (envp->target)
-			free(envp->target);
-		if (envp->value)
-			free(envp->value);
-		free(envp);
-	}
+    t_token *current = *lst;
+    t_token *next;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        if (current->name != NULL)
+            free(current->name);
+        free(current);
+        current = next;
+    }
+    *lst = NULL;
 }
 
 void	free_minishell(t_minishell *minishell)
@@ -47,9 +60,9 @@ void	free_minishell(t_minishell *minishell)
 	if (minishell->user_input)
 		free(minishell->user_input);
 	if (minishell->list_tokens)
-		ft_lstclear(&minishell->list_tokens, (void *) free_token);
+        ft_lstclear_token( &minishell->list_tokens);
 	if (minishell->list_envp != NULL)
-		ft_lstclear(&minishell->list_envp, (void *) free_t_envp_content);
+        ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)
 		ft_free_all_tab(minishell->envp_table);
 	if (minishell->cmd_table)

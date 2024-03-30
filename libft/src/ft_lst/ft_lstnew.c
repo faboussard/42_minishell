@@ -14,7 +14,7 @@
 
 t_node	*ft_lstnew(void *content)
 {
-	t_node	*new_element;
+    t_node	*new_element;
 
 	new_element = malloc(sizeof(t_node));
 	if (new_element == NULL)
