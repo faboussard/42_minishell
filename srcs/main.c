@@ -66,14 +66,14 @@ int main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-    printf("************ print list_envp ************\n\n"); // DELETE
-    print_list_envp(&minishell);
-    printf("************ print list_tokens **********\n\n"); // DELETE
-    print_token_list(minishell.list_tokens); //DELETE
-    printf("************ print cmd_table ************\n\n"); // DELETE
-	print_array(minishell.cmd_table);  //DELETE
-    printf("************ print env_table *************\n\n"); // DELETE
-	print_array(minishell.envp_table);  //DELETE
+//    printf("************ print list_envp ************\n\n"); // DELETE
+//    print_list_envp(&minishell);
+//    printf("************ print list_tokens **********\n\n"); // DELETE
+//    print_token_list(minishell.list_tokens); //DELETE
+//    printf("************ print cmd_table ************\n\n"); // DELETE
+//	print_array(minishell.cmd_table);  //DELETE
+//    printf("************ print env_table *************\n\n"); // DELETE
+//	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
