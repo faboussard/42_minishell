@@ -33,7 +33,11 @@
 # include <sys/wait.h>
 
 typedef struct s_envp	t_envp;
-typedef struct s_token          t_token;
+typedef struct s_token  t_token;
+typedef struct s_minishell t_minishell;
+typedef struct process_list t_process_list;
+typedef struct in_out_files_tokens t_in_out_files_tokens;
+typedef struct limiter_tokens t_limiter_tokens;
 
 typedef struct s_minishell
 {
@@ -48,10 +52,9 @@ typedef struct s_minishell
 	char				*user_input;
 	t_token		        *list_tokens;
     t_envp		        *list_envp;
+	t_process_list		*process_list;
     size_t              total_commands;
 	size_t				total_size_envp;
-	char 				**cmd_table;
-	char 				**envp_table;
 }	t_minishell;
 
 typedef struct s_envp
@@ -62,6 +65,27 @@ typedef struct s_envp
 	size_t 			target_size;
 	struct s_envp 	*next;
 }	t_envp;
+
+typedef struct process_list
+{
+	char 					**cmd_table;
+	char 					**envp_table;
+	t_in_out_files_tokens	*files;
+	t_limiter_tokens		*limiters;
+	struct	process_list *next;
+} t_process_list;
+
+typedef struct in_out_files_tokens
+{
+	t_token	*in_token;
+	t_token	*out_token;
+} t_in_out_files_tokens;
+
+typedef struct limiter_tokens
+{
+	t_token	*limiter_token;
+	struct limiter_tokens *next;
+} t_limiter_tokens;
 
 /*************************************** INIT MINISHELL ***************************************/
 

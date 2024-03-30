@@ -85,6 +85,7 @@ add_executable(minishell
         srcs/parser/create_tables_from_tokens.c
         srcs/lexer/count_tokens.c
         srcs/init.c
-        srcs/signal.c)
+        srcs/signal.c
+        srcs/parser/process_list.c)
 
 target_link_libraries(minishell ${READLINE_LIBRARY})
