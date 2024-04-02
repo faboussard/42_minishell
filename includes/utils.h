@@ -31,6 +31,7 @@ void	exit_msg(t_minishell *minishell, char *msg, int error_code);
 void	print_token_list(t_token *list_tokens);
 void	print_array(char **array);
 void    print_list_envp(t_minishell *minishell);
+void print_process_list(t_process_list *process_list);
 
 /******************** FREE ********************/
 

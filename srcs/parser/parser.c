@@ -38,20 +38,21 @@
 //	return (close_parentheses == open_parentheses);
 //}
 
-void to_subshell(t_token *list_tokens)
-{
-	t_token *iterator;
-	t_token *next_token;
-
-	iterator = list_tokens;
-	while (iterator->next != NULL)
-	{
-		next_token = iterator->next;
-		if (iterator->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
-			next_token->e_type = SUBSHELL;
-		iterator = iterator->next;
-	}
-}
+//void to_subshell(t_token *list_tokens)
+//{
+//	t_token *iterator;
+//	t_token *token;
+//	t_token *next_token;
+//
+//	iterator = list_tokens;
+//	while (iterator->next != NULL)
+//	{
+//		next_token = iterator->next;
+//		if (token->e_operator == OPEN_PARENTHESES && next_token->e_type == COMMAND)
+//			next_token->e_type = SUBSHELL;
+//		iterator = iterator->next;
+//	}
+//}
 
 int	ft_lstsize_token(t_token *lst)
 {

@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/03/30 19:05:30 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ bool define_operator_token(t_token *new_token, const char *string, const char *o
 
 	while (i < 9)
 	{
-		if (operator[i] != NULL && !ft_strncmp(string, operator[i], ft_strlen(string)))
+		if (operator[i] != NULL && !ft_strcmp(string, operator[i]))
 		{
 			new_token->e_type = OPERATOR;
 			new_token->e_operator = i;
-			return true;
+			return (true);
 		}
 		i++;
 	}
-	return false;
+	return (false);
 }
 
 
@@ -45,7 +45,7 @@ bool get_operator_token(t_token *new_token, const char *string)
 			[APPEND] = ">>"
 	};
 
-	return define_operator_token(new_token, string, operator);
+	return (define_operator_token(new_token, string, operator));
 }
 
 
