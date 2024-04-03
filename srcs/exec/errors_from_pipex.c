@@ -51,3 +51,9 @@ void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err)
 	print_name(m, name);
 	exit_msg_minishell(m, msg, err);
 }
+
+void	print_name_and_give_status(t_minishell *m, char *name, int err)
+{
+	print_name(m, name);
+	m->status = err;
+}
