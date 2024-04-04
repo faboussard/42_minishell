@@ -44,9 +44,9 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 
 void	open_fd_outfile(t_minishell *m, char *out)
 {
-	if (m->process_list->out_files_list->e_operator == INPUT_REDIRECT)
+	if (m->process_list->out_files_token->e_operator == INPUT_REDIRECT)
 		m->fd_out = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	else if (m->process_list->out_files_list->e_operator == APPEND)
+	else if (m->process_list->out_files_token->e_operator == APPEND)
 		m->fd_out = open(out, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (m->fd_out < 0)
 		print_name_and_exit_perror(m, out, 1);

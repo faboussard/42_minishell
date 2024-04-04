@@ -39,19 +39,6 @@ void add_process_to_list(t_process_list **process_list, t_process_list *new_proc
 		*process_list = new_process;
 }
 
-void get_in_files_token(t_minishell *minishell)
-{
-	t_token_list *iterator;
-
-	iterator = minishell->list_tokens;
-	while (iterator!= NULL)
-	{
-		if (iterator->e_operator == INPUT_REDIRECT || iterator->e_operator == HERE_DOC)
-			minishell->process_list->in_files_list = iterator;
-		iterator = iterator->next;
-	}
-	minishell->process_list->in_files_list->e_operator = NO_OPERATOR;
-}
 
 void create_process_list(t_minishell *minishell)
 {
@@ -63,11 +50,9 @@ void create_process_list(t_minishell *minishell)
 	while (minishell->list_tokens != NULL)
 	{
 		new_process_list = ft_calloc(1, sizeof(t_process_list));
-		new_process_list = create_cmd_table(new_process_list, minishell);
+		new_process_list = create_process_list_node(new_process_list, minishell);
 		if (new_process_list == NULL)
 			return;
-//	get_in_files_token(minishell);
-//	get_out_files_token(minishell->process_list);
 		add_process_to_list(&minishell->process_list, new_process_list);
 		while (minishell->list_tokens != NULL && minishell->list_tokens->e_operator != PIPE)
 			minishell->list_tokens = minishell->list_tokens->next;
