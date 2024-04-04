@@ -83,7 +83,7 @@ add_executable(minishell
         srcs/utils/free.c
         srcs/lexer/split_string.c
         srcs/utils/print.c
-        srcs/parser/create_tables_from_tokens.c
+        srcs/parser/create_process_list.c
         srcs/lexer/count_tokens.c
         srcs/init.c
         srcs/signal.c

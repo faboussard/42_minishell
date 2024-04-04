@@ -28,8 +28,9 @@ enum e_token_type
 	IN_FILE = 3,
     OUT_FILE = 4,
     DELIMITER = 5,
-	OPERATOR = 6,
-    SUBSHELL = 7,
+	APPEND_FILE = 6,
+	OPERATOR = 7,
+    SUBSHELL = 8,
 };
 
 enum e_token_operators

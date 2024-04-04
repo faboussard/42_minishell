@@ -72,6 +72,7 @@ typedef struct process_list
 {
 	t_token_list	*in_files_token;
 	t_token_list	*out_files_token;
+	t_token_list	*delimiter_token;
 	char	*paths;
 	char	*good_path;
 	char	**tab_paths;
