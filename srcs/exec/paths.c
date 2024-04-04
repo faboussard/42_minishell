@@ -64,7 +64,7 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 		pl->good_path = join_sep(m, pl->tab_paths[i], pl->cmd_table[0], '/');
 		i++;
 	}
-	if (!(pl->tab_paths[i]) && !ft_strncmp("N", pl->paths, 2))
+	if (!(pl->tab_paths[i]) && !ft_strncmp("/usr", pl->paths, 2))
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 	else if (!(pl->tab_paths[i]))
 		exit_command_not_found(m, pl->cmd_table[0]);
