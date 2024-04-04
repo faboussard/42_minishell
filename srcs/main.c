@@ -13,6 +13,7 @@
 #include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
+#include "exec.h"
 #include "signals.h"
 #include "parser.h"
 # include <readline/history.h>
@@ -27,8 +28,6 @@ void minishell_interactive(t_minishell *minishell)
 		minishell->user_input = readline(PROMPT);
 		if (minishell->user_input == NULL)
 			break;
-		printf("the command is %s\n", minishell->user_input);
-
 		if (minishell->user_input[0] == 0)
 			continue;
 		set_signals_noninteractive();
@@ -36,10 +35,9 @@ void minishell_interactive(t_minishell *minishell)
 		minishell->history_count += 1;
 		parse_input(minishell);
 		create_process_list(minishell);
-		printf("the process list first cmd is %s\n", minishell->process_list->cmd_table[0]);
-		printf("the process list first cmd is %s\n", minishell->process_list->cmd_table[1]);
 		if (minishell->process_list == NULL)
 			return ;
+		ft_init_process_list_and_minishell(minishell, minishell->process_list);
 		execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);
 		ft_free_process_list(&(minishell->process_list));

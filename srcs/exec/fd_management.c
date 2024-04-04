@@ -16,8 +16,10 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 {
 	if (in_files_list->e_operator == HERE_DOC)
 		m->fd_in = open("/tmp/.tmp_heredoc", O_RDONLY);
-	else
+	else if (in_files_list->e_operator == INPUT_REDIRECT)
 		m->fd_in = open(in_files_list->name, O_RDONLY);
+	else
+		m->fd_in = STDIN_FILENO;
 	if (m->fd_in < 0)
 	{
 		if (in_files_list->e_operator == HERE_DOC)
@@ -39,8 +41,6 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		*/
 	}
 }
-
-// MUSIQUE CAMELEON
 
 void	open_fd_outfile(t_minishell *m, char *out)
 {

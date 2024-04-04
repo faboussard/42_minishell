@@ -14,6 +14,7 @@
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
+	dprintf(2, "I dont segfault yet !!!\t===\t\n");
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
 	dprintf(2, "GOOD PATH\t===\t%s\n", pl->good_path);
 	dprintf(2, "CMD_TABLE[0]\t===\t%s\n", pl->cmd_table[0]);
@@ -65,7 +66,6 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 {
 	if (nb_cmds < 1)
 		return ;
-	ft_init_process_list_and_minishell(minishell, minishell->process_list);
 	set_paths(minishell, minishell->envp_table);
 	if (minishell->process_list->paths == NULL)
 		return ;

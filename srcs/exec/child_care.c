@@ -15,6 +15,7 @@
 static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 {
 	close(m->pipe_fd[WRITE_END]);
+	dprintf(2, "I dont segfault yet !!!\t===\t\n");
 	if (m->fd_in >= 0)
 		close(m->fd_in);
 	m->tmp_in = m->pipe_fd[READ_END];
@@ -23,14 +24,16 @@ static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 
 static void	first_child(t_minishell *m)
 {
-	if (m->fd_in > 0 && m->process_list->dev_null == 0)
+	dprintf(2, "I dont segfault yet !!!\t===\t\n");
+	if (m->fd_in > 0 )//&& m->process_list->dev_null == 0)
 	{
+	dprintf(2, "I dont segfault yet !!!\t===\t\n");
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
 		{
-			//m_safe_dup2(m, m->fd_in, STDIN_FILENO);
+			m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-			//close(m->fd_in);
+			close(m->fd_in);
 			close_pipes(m->pipe_fd);
 			my_execve(m, m->process_list);
 		}
@@ -88,6 +91,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	pl = process_list;
 	if (safe_pipe(m) == 0)
 		return ;
+	//open_fd_infile(m, pl->in_files_list);
+	m->fd_in = STDIN_FILENO;
 	first_child(m);
 	pl = pl->next;
 	i = 0;
