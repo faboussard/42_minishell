@@ -73,11 +73,10 @@ typedef struct process_list
 	char	*paths;
 	char	*good_path;
 	char	**tab_paths;
-	char 	**cmd_table; // < infile ls -l | wc -l > outfile << stop
+	char 	**cmd_table; // < infile < infile ls -l | wc -l > outfile << stop
 	t_token *tokens_until_pipe;
 	t_token	*in_files_list; // infile | default | stop
 	t_token	*out_files_list; // default | outfile
-	t_token	*limiters; // ????????????????????
 	bool	dev_null;
 	struct	process_list	*next;
 } t_process_list;
