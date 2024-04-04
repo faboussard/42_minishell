@@ -35,7 +35,7 @@ void	set_paths(t_minishell *m, char **env);
 void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd);
 char	*join_sep(t_minishell *m, char *s1, char *s2, char sep);
 //--------------------------- FD MANAGEMENT ---------------------------//
-void	open_fd_infile(t_minishell *m, t_token *in_files_list);
+void	open_fd_infile(t_minishell *m, t_token_list *in_files_list);
 void	open_fd_outfile(t_minishell *m, char *out);
 //--------------------------- HERE_DOC --------------------------------//
 void	here_doc(t_minishell *m, char *limiter);
@@ -46,7 +46,8 @@ void	ft_free_node_process_list(t_minishell *m, t_process_list *pl);
 //--------------------------- CHILD CARE ------------------------------//
 void	exec_several_cmds(t_minishell *m, t_process_list *process_list);
 //--------------------------- EXEC ------------------------------------//
-void	my_execve(char *path, char **cmd_table, char **env, t_minishell *m);
+void	my_execve(t_minishell *m, t_process_list *pl);
+//void	my_execve(char **cmd_table, char **env, t_minishell *m);
 //void	execute_cmds(t_minishell *minishell, int nb_cmds);
 //--------------------------- ERRORS ------------------------------------//
 void	print_name(t_minishell *m, char *name);
