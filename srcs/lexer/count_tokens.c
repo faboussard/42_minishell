@@ -52,9 +52,10 @@ void count_total_commands(t_minishell *minishell)
 
 	minishell->total_commands = 1;
     iterator = minishell->list_tokens;
-    while (iterator && iterator->e_operator == PIPE)
+    while (iterator)
 	{
-		minishell->total_commands++;
+		if (iterator->e_operator == PIPE)
+			minishell->total_commands++;
 		iterator = iterator->next;
 	}
 }
