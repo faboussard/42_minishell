@@ -15,10 +15,10 @@
 #include "parser.h"
 
 
-int fill_cmds_and_args_array(t_token *list_tokens, char **array)
+int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 {
 	size_t i;
-    t_token	*iterator;
+    t_token_list	*iterator;
 
 	i = 0;
     iterator = list_tokens;
@@ -60,7 +60,7 @@ char **create_cmd_table(t_minishell *minishell)
 
 void create_envp_table(t_minishell *minishell)
 {
-    t_envp *current;
+    t_envp_list *current;
 	size_t i;
 
 	i = 0;

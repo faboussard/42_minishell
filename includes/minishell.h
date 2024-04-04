@@ -32,8 +32,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-typedef struct s_envp	t_envp;
-typedef struct s_token  t_token;
+typedef struct s_envp	t_envp_list;
+typedef struct s_token  t_token_list;
 typedef struct s_minishell t_minishell;
 typedef struct process_list t_process_list;
 typedef struct in_out_files_tokens t_in_out_files_tokens;
@@ -51,8 +51,8 @@ typedef struct s_minishell
 	int 				history_count;
 	char				*user_input;
 	char 				**envp_table;
-	t_token		        *list_tokens;
-	t_envp		        *list_envp;
+	t_token_list		*list_tokens;
+	t_envp_list		    *list_envp;
 	t_process_list		*process_list;
 	size_t              total_commands;
 	size_t				total_size_envp;
@@ -65,15 +65,13 @@ typedef struct s_envp
 	size_t 			value_size;
 	size_t 			target_size;
 	struct s_envp 	*next;
-}	t_envp;
+}	t_envp_list;
 
 typedef struct process_list
 {
-	char 	**cmd_table;
-	t_token *tokens_until_pipe;
-	t_token	*in_files_list;
-	t_token	*out_files_list;
-	t_token	*limiters;
+	char 			**cmd_table;
+	t_token_list	*in_files_list;
+	t_token_list	*out_files_list;
 	struct	process_list	*next;
 } t_process_list;
 
@@ -81,7 +79,7 @@ typedef struct process_list
 
 void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
 bool	is_interactive(t_minishell *minishell, int ac);
-t_token	*parse_input(t_minishell *minishell);
+t_token_list	*parse_input(t_minishell *minishell);
 
 /*************************************** CREATE CHAINS ***************************************/
 

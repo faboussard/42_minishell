@@ -18,30 +18,30 @@
 
 /************************** parser  **************************/
 
-void	token_requalification(t_token *list_tokens);
-int     check_syntax(t_token *list_tokens);
+void	token_requalification(t_token_list *list_tokens);
+int     check_syntax(t_token_list *list_tokens);
 
 /**************************** count tokens **************************/
 
-size_t	count_letters_until_pipe_or_redirect(t_token *head);
-size_t	count_cmds_until_pipe_or_redirect(t_token *head);
+size_t	count_letters_until_pipe_or_redirect(t_token_list *head);
+size_t	count_cmds_until_pipe_or_redirect(t_token_list *head);
 
 /**************************** parse tokens **************************/
 
-t_process_list *create_process_list(t_minishell *minishell, t_token *list_tokens);
+void *create_process_list(t_minishell *minishell, t_token_list *list_tokens);
 char	**create_cmd_table(t_minishell *minishell);
 void create_envp_table(t_minishell *minishell);
-void add_token_to_list(t_token **list_tokens, t_token *new_token);
+void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token);
 
 /****************** OPERATORS ******************/
 
-bool	get_operator_token(t_token *new_token, char *string);
-bool	is_redirect_token(t_token *token);
+bool	get_operator_token(t_token_list *new_token, char *string);
+bool	is_redirect_token(t_token_list *token);
 
 /******************** init.c **********************/
 void	parsing(t_minishell *minishell, int ac, char **av, char **envp);
 
 /********************* envp.c **************************/
-t_envp	*create_envp_list(char **envp, t_minishell *minishell);
+t_envp_list	*create_envp_list(char **envp, t_minishell *minishell);
 
 #endif //PARSER_H

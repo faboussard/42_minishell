@@ -16,10 +16,10 @@
 #include "minishell.h"
 # include <readline/history.h>
 
-void ft_lstclear_envp(t_envp **lst)
+void ft_lstclear_envp(t_envp_list **lst)
 {
-    t_envp *current;
-	t_envp *next;
+    t_envp_list *current;
+	t_envp_list *next;
 
 	current = *lst;
     while (current != NULL)
@@ -35,10 +35,10 @@ void ft_lstclear_envp(t_envp **lst)
     *lst = NULL;
 }
 
-void ft_lstclear_token(t_token **lst)
+void ft_lstclear_token(t_token_list **lst)
 {
-    t_token *current;
-    t_token *next;
+    t_token_list *current;
+    t_token_list *next;
 
 	current = *lst;
     while (current != NULL)

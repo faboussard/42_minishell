@@ -16,7 +16,7 @@
 #include <string.h>
 #include <minishell.h>
 
-void add_envp_to_list(t_envp **list_envp, t_envp *new_envp)
+void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
 {
     if (new_envp == NULL)
         return;
@@ -24,11 +24,11 @@ void add_envp_to_list(t_envp **list_envp, t_envp *new_envp)
     *list_envp = new_envp;
 }
 
-t_envp *create_new_envp(char *target, char *content)
+t_envp_list *create_new_envp(char *target, char *content)
 {
-    t_envp *new_envp;
+    t_envp_list *new_envp;
 
-    new_envp = malloc(sizeof(t_envp));
+    new_envp = malloc(sizeof(t_envp_list));
     if (new_envp == NULL)
         return NULL;
 
@@ -50,9 +50,9 @@ t_envp *create_new_envp(char *target, char *content)
     return new_envp;
 }
 
-static int add_new_envp(t_envp **list_envp, char *target, char *content)
+static int add_new_envp(t_envp_list **list_envp, char *target, char *content)
 {
-    t_envp *new_envp;
+    t_envp_list *new_envp;
 
     new_envp = create_new_envp(target, content);
     if (new_envp == NULL)
@@ -61,7 +61,7 @@ static int add_new_envp(t_envp **list_envp, char *target, char *content)
     return SUCCESSFULLY_ADDED;
 }
 
-int get_target_and_value(char **envp, t_envp **list_envp, t_minishell *minishell)
+int get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *minishell)
 {
     size_t  i;
     char    *content;
@@ -88,7 +88,7 @@ int get_target_and_value(char **envp, t_envp **list_envp, t_minishell *minishell
 	return (1);
 }
 
-int create_dict_env_variable(char **envp, t_envp **list_envp, t_minishell *minishell)
+int create_dict_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell)
 {
 	while (*envp && ft_strchr(*envp, '='))
 	{
@@ -99,9 +99,9 @@ int create_dict_env_variable(char **envp, t_envp **list_envp, t_minishell *minis
 	return (1);
 }
 
-t_envp *create_envp_list(char **envp, t_minishell *minishell)
+t_envp_list *create_envp_list(char **envp, t_minishell *minishell)
 {
-    t_envp *list_envp;
+    t_envp_list *list_envp;
 
 	list_envp = NULL;
 	if (!create_dict_env_variable(envp, &list_envp, minishell))
