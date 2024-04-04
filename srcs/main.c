@@ -42,8 +42,10 @@ void minishell_interactive(t_minishell *minishell)
 	//dprintf(2, "OPERATOR : %d\n", minishell->process_list->in_files_list->e_operator);
 	//infile_token = minishell->process_list->in_files_list->e_operator;
 	//outfile_token = minishell->process_list->out_files_list->e_operator;
-//		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
-//		execute_cmds(minishell, minishell->total_commands);
+		if (minishell->process_list == NULL)
+			return ;
+		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
+		execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);
 	}
 }
@@ -59,7 +61,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	parse_input(minishell);
 	create_process_list(minishell);
 	printf("total command is %zu\n", minishell->total_commands);
-//	execute_cmds(minishell, minishell->total_commands);
+	execute_cmds(minishell, minishell->total_commands);
 }
 
 int main(int ac, char **av, char **envp)

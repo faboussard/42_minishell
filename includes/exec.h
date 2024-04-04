@@ -57,5 +57,7 @@ void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
 void	malloc_error_with_exit(t_minishell *m);
+//void	malloc_error_no_exit(t_minishell *m, t_process_list *p);
 void	malloc_error_no_exit(t_minishell *m);
 #endif
+
