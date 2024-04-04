@@ -25,7 +25,7 @@ void minishell_interactive(t_minishell *minishell)
 	{
 		set_signals_interactive();
 		minishell->user_input = readline(PROMPT);
-		if (minishell->user_input[0] == NULL)
+		if (minishell->user_input == NULL)
 			break;
 		if (minishell->user_input[0] == 0)
 			continue;
@@ -40,6 +40,14 @@ void minishell_interactive(t_minishell *minishell)
 		create_process_list(minishell, minishell->list_tokens);
 		if (minishell->process_list == NULL)
 			return ;
+	//enum e_token_operators	infile_token;
+	//enum e_token_operators	outfile_token;
+
+	//dprintf(2, "OPERATOR : %d\n", minishell->process_list->in_files_list->e_operator);
+	//infile_token = minishell->process_list->in_files_list->e_operator;
+	//outfile_token = minishell->process_list->out_files_list->e_operator;
+		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
+		//execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);
 	}
 }
@@ -60,6 +68,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	create_process_list(minishell, minishell->list_tokens);
 	if (minishell->process_list == NULL)
 		return ;
+	execute_cmds(minishell, minishell->total_commands);
 }
 
 int main(int ac, char **av, char **envp)

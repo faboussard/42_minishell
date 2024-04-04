@@ -46,6 +46,7 @@ typedef struct s_minishell
 	pid_t				pid2;
 	int					status;
 	int					pipe_fd[2];
+	int					tmp_in;
 	int					fd_in;
 	int					fd_out;
 	int 				history_count;
@@ -69,9 +70,13 @@ typedef struct s_envp
 
 typedef struct process_list
 {
-	char 			**cmd_table;
 	t_token_list	*in_files_list;
 	t_token_list	*out_files_list;
+	char	*paths;
+	char	*good_path;
+	char	**tab_paths;
+	char 	**cmd_table; // < infile < infile ls -l | wc -l > outfile << stope
+	bool	dev_null;
 	struct	process_list	*next;
 } t_process_list;
 
@@ -89,5 +94,6 @@ void	create_envp_hashmap(t_minishell *minishell, char **envp);
 /*************************************** CREATE TABLES ***************************************/
 
 void	create_tables(t_minishell *minishell);
+void	execute_cmds(t_minishell *minishell, size_t nb_cmds);
 
 #endif
