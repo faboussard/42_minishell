@@ -29,14 +29,14 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		m->fd_in = open("/dev/null", O_RDONLY);
 		if (m->fd_in < 0)
 			ft_putendl_fd("No /dev/null/ found", 2);
-			/* exit_msg_pipex(NULL, "No /dev/null/ found", -1); */
-			// A CHANGER, pas d'exit du minishell
-			/*
-			mbernard@z1r9p2:/usr$ cd cdvwev
-			bash: cd: cdvwev: No such file or directory
-			mbernard@z1r9p2:/usr$ echo $?
-			1
-			*/
+		/* exit_msg_pipex(NULL, "No /dev/null/ found", -1); */
+		// A CHANGER, pas d'exit du minishell
+		/*
+		mbernard@z1r9p2:/usr$ cd cdvwev
+		bash: cd: cdvwev: No such file or directory
+		mbernard@z1r9p2:/usr$ echo $?
+		1
+		*/
 	}
 }
 
