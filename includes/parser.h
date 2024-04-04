@@ -18,8 +18,9 @@
 
 /************************** parser  **************************/
 
+void	parse_input(t_minishell *minishell);
 void	token_requalification(t_token_list *list_tokens);
-int     check_syntax(t_token_list *list_tokens);
+void    check_syntax(t_minishell *minishell);
 
 /**************************** count tokens **************************/
 
@@ -29,7 +30,7 @@ size_t	count_cmds_until_pipe_or_redirect(t_token_list *head);
 /**************************** parse tokens **************************/
 
 void	create_process_list(t_minishell *minishell);
-void	create_cmd_table(t_minishell *minishell);
+t_process_list	*create_cmd_table(t_process_list *new_process_list, t_minishell *minishell);
 void	create_envp_table(t_minishell *minishell);
 void	add_token_to_list(t_token_list **list_tokens, t_token_list *new_token);
 
