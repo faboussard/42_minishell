@@ -49,13 +49,16 @@ t_token *create_in_files_list(t_process_list *process_list)
 	iterator = process_list->tokens_until_pipe;
 	while (iterator!= NULL)
 	{
-		if (iterator->e_operator == INPUT_REDIRECT)
+		if (iterator->e_operator == INPUT_REDIRECT || iterator->e_operator == HERE_DOC)
 		{
 			temp_token = iterator->next;
 			iterator->next = NULL;
 			add_token_to_list(&in_files_list, iterator->next);
 			iterator = temp_token;
+			break;
 		}
+		//else
+		//	in_files_list->e_operator = NO_OPERATOR; ///TO CHECK TOGETHER
 		iterator = iterator->next;
 	}
 	return (in_files_list);
@@ -97,6 +100,10 @@ t_process_list *create_process_list(t_minishell *minishell, t_token *list_tokens
 //		new_process->limiters = create_limiters_list(new_process);
 		iterator_process = iterator_process->next;
 	}
-	process_list = iterator_process;
+	//process_list = iterator_process; 
+	// Commenter cette ligne permet d'eviter que process_list soit consideree nulle ensuite.
+	// Tant que iterator_process n'est pas nulle, faire boucle...
+	// puis une fois qu'il est NULL
+	// process_list = NULL :D :D :D
 	return (process_list);
 }

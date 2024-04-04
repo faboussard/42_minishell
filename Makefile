@@ -3,7 +3,7 @@ NAME			=	minishell
 
 #-------------  VPATH  ---------------#
 
-vpath %c srcs lexer env_variables parser expansion utils pipex
+vpath %c srcs lexer env_variables parser expansion utils exec
 
 # --------------- FILES --------------- #
 
@@ -13,10 +13,10 @@ LIST_SRCS		=  main signal init\
 				parser/parser parser/create_tables_from_tokens parser/process_list\
 				expansion/expansion \
 				utils/free utils/print utils/error \
-				pipex/pipex_bonus	pipex/errors_bonus	pipex/join_bonus	pipex/paths_bonus	pipex/cmds_bonus\
-                pipex/pipe_utils_bonus	pipex/utils_bonus	pipex/child_care_bonus	pipex/heredoc_bonus
+				exec/exec	exec/errors	exec/paths	exec/fd_management \
+                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
-LIST_HEADERS	= utils lexer minishell parser signals pipex_bonus
+LIST_HEADERS	= utils lexer minishell parser signals exec
 
 # ------------ DIRECTORIES ------------ #
 
@@ -29,7 +29,7 @@ libft			=	$(DIR_LIBFT)libft.a
 # ------------- SHORTCUTS ------------- #
 
 OBJS            = $(addprefix $(DIR_BUILD), $(addsuffix .o, $(LIST_SRCS)))
-HEADERS			= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
+HEADERS					= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
 DEPS            = ${OBJS:.o=.d}
 INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
@@ -50,25 +50,25 @@ all:			 $(NAME)
 
 # ---------- VARIABLES RULES ---------- #
 
-$(NAME):		 $(OBJS) $(libft)
-				$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -lreadline -o $(NAME)
+$(NAME): $(OBJS) $(libft) Makefile
+	$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -L $(DIR_LIBFT) -lft -lreadline -o $(NAME)
 
 # ---------- COMPILED RULES ----------- #
 
-$(DIR_BUILD)%.o: %.c $(DIR_BUILD)
-				$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
+$(DIR_BUILD)%.o: %.c Makefile | $(DIR_BUILD)
+	$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
 
 #---------- CREATE REPO OBJS ---------#
 
 $(DIR_BUILD):
-		@echo "Création du répertoire $(DIR_BUILD)"
-		$(MKDIR) -p $(DIR_BUILD)
-		@mkdir -p $(DIR_BUILD)/lexer
-		@mkdir -p $(DIR_BUILD)/env_variables
-		@mkdir -p $(DIR_BUILD)/parser
-		@mkdir -p $(DIR_BUILD)/expansion
-		@mkdir -p $(DIR_BUILD)/utils
-		@mkdir -p $(DIR_BUILD)/pipex
+	@echo "Création du répertoire $(DIR_BUILD)"
+	$(MKDIR) $(DIR_BUILD)
+	@mkdir -p $(DIR_BUILD)/lexer
+	@mkdir -p $(DIR_BUILD)/env_variables
+	@mkdir -p $(DIR_BUILD)/parser
+	@mkdir -p $(DIR_BUILD)/expansion
+	@mkdir -p $(DIR_BUILD)/utils
+	@mkdir -p $(DIR_BUILD)/exec
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)

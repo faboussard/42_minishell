@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:20:51 by mbernard          #+#    #+#             */
-/*   Updated: 2024/03/29 09:24:36 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:50:37 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,16 @@ void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd)
 		print_name_and_exit_perror(minishell, "dup2", errno);
 }
 
+bool	safe_pipe(t_minishell *m)
+{
+	if (pipe(m->pipe_fd) == -1)
+	{
+		ft_putendl_fd("Error creating the pipe", 2);
+		m->status = -1;
+		return (0);
+	}
+	return (1);
+}
 void	close_pipes(int *pipe_fd)
 {
 	if (!pipe_fd)
