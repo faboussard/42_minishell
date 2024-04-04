@@ -68,8 +68,9 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	m->status = WEXITSTATUS(status);
 }
 
-void	execute_cmds(t_minishell *minishell, int nb_cmds)
+void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 {
+	dprintf(2, "%lu\n", nb_cmds);
 	if (nb_cmds < 1)
 		return ;
 	ft_init_process_list_and_minishell(minishell, minishell->process_list);

@@ -97,6 +97,10 @@ t_process_list *create_process_list(t_minishell *minishell, t_token *list_tokens
 //		new_process->limiters = create_limiters_list(new_process);
 		iterator_process = iterator_process->next;
 	}
-	process_list = iterator_process;
+	//process_list = iterator_process; 
+	// Commenter cette ligne permet d'eviter que process_list soit consideree nulle ensuite.
+	// Tant que iterator_process n'est pas nulle, faire boucle...
+	// puis une fois qu'il est NULL
+	// process_list = NULL :D :D :D
 	return (process_list);
 }
