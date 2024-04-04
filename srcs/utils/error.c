@@ -22,9 +22,8 @@ void	print_error(const char *error)
 
 int	print_operator_syntax_error(t_token_list *token)
 {
-	int error;
-	if (token == NULL)
-		return (print_error("syntax error near unexpected token `newline'"), 1);
+	int	error;
+
 	error = token->e_operator;
 	if (error == OPEN_PARENTHESES)
 		return (print_error("syntax error near unexpected token `('"), 1);
