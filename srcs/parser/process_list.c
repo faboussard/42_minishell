@@ -63,7 +63,7 @@ void create_process_list(t_minishell *minishell)
 	while (minishell->list_tokens != NULL)
 	{
 		new_process_list = ft_calloc(1, sizeof(t_process_list));
-		create_cmd_table(new_process_list, minishell);
+		new_process_list = create_cmd_table(new_process_list, minishell);
 		if (new_process_list == NULL)
 			return;
 //	get_in_files_token(minishell);

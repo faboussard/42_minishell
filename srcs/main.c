@@ -73,9 +73,9 @@ int main(int ac, char **av, char **envp)
 		exit_msg(&minishell, "Fatal : malloc failed", -1);
 	else
 		create_envp_table(&minishell);
-//	if (is_interactive(&minishell, ac) == true)
-//		minishell_interactive(&minishell);
-//	else
+	if (is_interactive(&minishell, ac) == true)
+		minishell_interactive(&minishell);
+	else
 		minishell_non_interactive(&minishell, av[2]);
     printf("************ print list_envp ************\n\n"); // DELETE
     print_list_envp(&minishell);

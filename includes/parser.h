@@ -20,7 +20,7 @@
 
 void	parse_input(t_minishell *minishell);
 void	token_requalification(t_token_list *list_tokens);
-void    check_syntax(t_token_list *list_tokens);
+void    check_syntax(t_minishell *minishell);
 
 /**************************** count tokens **************************/
 

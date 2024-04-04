@@ -61,21 +61,21 @@ void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 		*list_tokens = new_token;
 }
 
-void check_syntax(t_token_list *list_tokens)
+void check_syntax(t_minishell *minishell)
 {
 	t_token_list *iterator;
 	t_token_list *next_token;
 
-	if (list_tokens != NULL)
+	if (minishell->list_tokens != NULL)
 	{
-		iterator = list_tokens;
+		iterator = minishell->list_tokens;
 		while (iterator != NULL && iterator->next != NULL)
 		{
 			next_token = iterator->next;
 			if (iterator->e_type == OPERATOR && next_token->e_type == OPERATOR)
 			{
 				print_operator_syntax_error(iterator->next);
-				free_minishell(list_tokens);
+				free_minishell(minishell);
 				exit(1);
 			}
 			iterator = iterator->next;
@@ -116,6 +116,6 @@ void transform_to_token(t_minishell *minishell)
 void parse_input(t_minishell *minishell)
 {
 	transform_to_token(minishell);
-	check_syntax(minishell->list_tokens);
+	check_syntax(minishell);
 	token_requalification(minishell->list_tokens);
 }
