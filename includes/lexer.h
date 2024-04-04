@@ -72,7 +72,6 @@ int parentheses_on_arg(char *string);
 
 
 void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token_list *new_token);
-
 bool	get_builtin_token(t_token_list *new_token, char *string);
 
 /********************* count *********************/

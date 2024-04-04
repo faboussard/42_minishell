@@ -61,7 +61,7 @@ void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 		*list_tokens = new_token;
 }
 
-int check_syntax(t_token_list *list_tokens)
+void check_syntax(t_token_list *list_tokens)
 {
 	t_token_list *iterator;
 	t_token_list *next_token;
@@ -75,24 +75,24 @@ int check_syntax(t_token_list *list_tokens)
 			if (iterator->e_type == OPERATOR && next_token->e_type == OPERATOR)
 			{
 				print_operator_syntax_error(iterator->next);
-				return (1);
+				free_minishell(list_tokens);
+				exit(1);
 			}
 			iterator = iterator->next;
 		}
 	}
-	return (0);
 }
 
-int transform_to_token(t_minishell *minishell, t_token_list **list_tokens)
+void transform_to_token(t_minishell *minishell)
 {
-	int 	i;
+	int 			i;
 	t_token_list	*new_token;
-	char	**split;
+	char			**split;
 
 	i = 0;
 	split = split_with_quotes_management(minishell->user_input);
 	if (split == NULL)
-		return (0);
+		exit_msg(minishell, "Malloc failed at split for tokenization", 2);
 	while (split[i])
 	{
 		new_token = malloc(sizeof(t_token_list));
@@ -107,22 +107,15 @@ int transform_to_token(t_minishell *minishell, t_token_list **list_tokens)
 			ft_free_all_tab(split);
 			exit_msg(minishell, "Malloc failed at tokenization", 2);
 		}
-		add_token_to_list(list_tokens, new_token);
+		add_token_to_list(&minishell->list_tokens, new_token);
 		i++;
 	}
 	ft_free_all_tab(split);
-	return (1);
 }
 
-t_token_list *parse_input(t_minishell *minishell)
+void parse_input(t_minishell *minishell)
 {
-	t_token_list	*list_tokens;
-
-	list_tokens = NULL;
-	if (transform_to_token(minishell, &list_tokens) == 0)
-		return (NULL);
-	if (check_syntax(list_tokens))
-		return (NULL);
-	token_requalification(list_tokens);
-	return (list_tokens);
+	transform_to_token(minishell);
+	check_syntax(minishell->list_tokens);
+	token_requalification(minishell->list_tokens);
 }

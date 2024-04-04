@@ -16,6 +16,8 @@
 #include "minishell.h"
 # include <readline/history.h>
 
+
+//commentaire pour fanny de fanny : laisser les declaration de next, invalid read sinon
 void ft_lstclear_envp(t_envp_list **lst)
 {
     t_envp_list *current;
@@ -63,10 +65,10 @@ void ft_free_process_list(t_process_list **process_list)
 		next = current->next;
 		if (current->cmd_table)
 			ft_free_all_tab(current->cmd_table);
-//		if (current->in_files_list)
-//			ft_lstclear_token(&current->in_files_list);
-//		if (current->out_files_list)
-//			ft_lstclear_token(&current->out_files_list);
+		if (current->in_files_list)
+			ft_lstclear_token(&current->in_files_list);
+		if (current->out_files_list)
+			ft_lstclear_token(&current->out_files_list);
 		free(current);
 		current = next;
 	}
@@ -87,8 +89,8 @@ void	free_minishell(t_minishell *minishell)
 		ft_free_all_tab(minishell->envp_table);
 	if (minishell->process_list)
 		ft_free_process_list(&minishell->process_list);
-//	if (minishell->list_tokens)
-//		ft_lstclear_token(&minishell->list_tokens);
+	if (minishell->list_tokens)
+		ft_lstclear_token(&minishell->list_tokens);
 	if (minishell->history_count != 0)
 		rl_clear_history();
 }
