@@ -52,7 +52,7 @@ void get_in_files_token(t_minishell *minishell)
 	minishell->process_list->in_files_list->e_operator = NO_OPERATOR;
 }
 
-void create_process_list(t_minishell *minishell, t_token_list *list_tokens)
+void create_process_list(t_minishell *minishell)
 {
 	minishell->process_list = ft_calloc(1, sizeof(t_process_list));
 	create_cmd_table(minishell);

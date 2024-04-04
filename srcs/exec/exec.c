@@ -15,23 +15,38 @@
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	char	*entire_cmd;
+<<<<<<< HEAD
 
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
 	entire_cmd = join_sep(m, pl->good_path, pl->cmd_table[0], ' ');
+=======
+/*
+	set_good_path_cmd(m, pl, pl->cmd_table[0]);
+	entire_cmd = join_sep(m, pl->good_path, pl->cmd_table[0], ' ');
+	printf("ENTIRE CMD === %s\n", entire_cmd);
+>>>>>>> 8c448782a66e201bf302686a7619d16d06bf7ef0
 	ft_free_tab(pl->cmd_table);
 	pl->cmd_table = ft_split(entire_cmd, ' ');
 	free(entire_cmd);
 	if (!(pl->cmd_table))
 		malloc_error_with_exit(m);
+<<<<<<< HEAD
 	/*
+=======
+>>>>>>> 8c448782a66e201bf302686a7619d16d06bf7ef0
 	int x = 0;
 	while (pl->cmd_table[x])
 	{
 		printf("TABLEAU %s\n", pl->cmd_table[x]);
 		x++;
 	}
+<<<<<<< HEAD
 	*/
 	execve(pl->good_path, pl->cmd_table + 1, m->envp_table);
+=======
+ */
+	execve("/usr/bin/ls", pl->cmd_table, m->envp_table);
+>>>>>>> 8c448782a66e201bf302686a7619d16d06bf7ef0
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 	else
@@ -80,7 +95,11 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 {
 	//dprintf(2, "Nombre de commandes\t:\t%lu\n", nb_cmds);
 	/*
+<<<<<<< HEAD
 	if (nb_cmds < 1) //-------------------> TO PUT AGAIN WHEN GOOD NB_CMD 
+=======
+	if (nb_cmds < 1) //-------------------> TO PUT AGAIN WHEN GOOD NB_CMD
+>>>>>>> 8c448782a66e201bf302686a7619d16d06bf7ef0
 		return ;
 	*/
 	ft_init_process_list_and_minishell(minishell, minishell->process_list);
@@ -88,10 +107,18 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 	if (minishell->process_list->paths == NULL)
 		return ;
 	if (nb_cmds <= 1)
+<<<<<<< HEAD
 	//if (nb_cmds == 1) //-------------------> TO PUT AGAIN WHEN GOOD NB_CMD
+=======
+		//if (nb_cmds == 1) //-------------------> TO PUT AGAIN WHEN GOOD NB_CMD
+>>>>>>> 8c448782a66e201bf302686a7619d16d06bf7ef0
 		exec_one_cmd(minishell);
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
 	//ft_free_node_process_list(minishell, minishell->process_list);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8c448782a66e201bf302686a7619d16d06bf7ef0

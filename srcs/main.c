@@ -37,22 +37,13 @@ void minishell_interactive(t_minishell *minishell)
 			return ;
 		count_total_commands(minishell);
 		printf("total command is %zu\n", minishell->total_commands);
-		create_process_list(minishell, minishell->list_tokens);
+		create_process_list(minishell);
 		if (minishell->process_list == NULL)
 			return ;
-<<<<<<< HEAD
-	//enum e_token_operators	infile_token;
-	//enum e_token_operators	outfile_token;
-
-	//dprintf(2, "OPERATOR : %d\n", minishell->process_list->in_files_list->e_operator);
-	//infile_token = minishell->process_list->in_files_list->e_operator;
-	//outfile_token = minishell->process_list->out_files_list->e_operator;
-		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
-		//execute_cmds(minishell, minishell->total_commands);
-=======
 		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
 		execute_cmds(minishell, minishell->total_commands);
->>>>>>> origin/exec
+		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
+		execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);
 	}
 }
@@ -68,18 +59,12 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
-<<<<<<< HEAD
 	count_total_commands(minishell);
 	printf("total command is %zu\n", minishell->total_commands);
-	create_process_list(minishell, minishell->list_tokens);
+	create_process_list(minishell);
 	if (minishell->process_list == NULL)
 		return ;
-//	execute_cmds(minishell, minishell->total_commands);
-=======
-	minishell->process_list = create_process_list(minishell, minishell->list_tokens);
-	dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
 	execute_cmds(minishell, minishell->total_commands);
->>>>>>> origin/exec
 }
 
 int main(int ac, char **av, char **envp)
@@ -99,21 +84,12 @@ int main(int ac, char **av, char **envp)
 		minishell_non_interactive(&minishell, av[2]);
 //    printf("************ print list_envp ************\n\n"); // DELETE
 //    print_list_envp(&minishell);
-<<<<<<< HEAD
 	printf("************ print list_tokens ************\n"); // DELETE
 	print_token_list(minishell.list_tokens); //DELETE
 	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
 	print_process_list(minishell.process_list);  //DELETE
     printf("********************** print env_table **********************\n\n"); // DELETE
 	print_array(minishell.envp_table);  //DELETE
-=======
-//	printf("************ print list_tokens ************\n"); // DELETE
-//	print_token_list(minishell.list_tokens); //DELETE
-//	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
-//	print_process_list(minishell.process_list);  //DELETE
-//    printf("********************** print env_table **********************\n\n"); // DELETE
-//	print_array(minishell.envp_table);  //DELETE
->>>>>>> origin/exec
 	free_minishell(&minishell);
 	return (0);
 }
