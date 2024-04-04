@@ -15,7 +15,7 @@
 #include <stdbool.h>
 
 
-bool define_operator_token(t_token *new_token, const char *string, const char *operator[9])
+bool define_operator_token(t_token_list *new_token, const char *string, const char *operator[9])
 {
 	int i = 0;
 
@@ -33,7 +33,7 @@ bool define_operator_token(t_token *new_token, const char *string, const char *o
 }
 
 
-bool get_operator_token(t_token *new_token, const char *string)
+bool get_operator_token(t_token_list *new_token, const char *string)
 {
 	const char *operator[9] = {
 			[OPEN_PARENTHESES] = "(",
@@ -49,7 +49,7 @@ bool get_operator_token(t_token *new_token, const char *string)
 }
 
 
-bool	is_redirect_token(t_token *token)
+bool	is_redirect_token(t_token_list *token)
 {
 	if (token == NULL || token->e_type != OPERATOR)
 		return (0);

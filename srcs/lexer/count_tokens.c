@@ -14,10 +14,10 @@
 #include "utils.h"
 #include "parser.h"
 
-size_t count_letters_until_pipe(t_token *head)
+size_t count_letters_until_pipe(t_token_list *head)
 {
 	size_t		num_commands;
-	t_token     *iterator;
+	t_token_list     *iterator;
 
 	num_commands = 0;
     iterator = head;
@@ -30,10 +30,10 @@ size_t count_letters_until_pipe(t_token *head)
 	return (num_commands);
 }
 
-size_t count_cmds_until_pipe(t_token *head)
+size_t count_cmds_until_pipe(t_token_list *head)
 {
 	size_t		num_commands;
-	t_token	*iterator;
+	t_token_list	*iterator;
 
 	num_commands = 0;
     iterator = head;
@@ -46,16 +46,15 @@ size_t count_cmds_until_pipe(t_token *head)
 	return (num_commands);
 }
 
-size_t total_commands(t_token *head)
+void count_total_commands(t_minishell *minishell)
 {
-    size_t	num_commands;
-    t_token *iterator;
+    t_token_list *iterator;
 
-    num_commands = 0;
-    iterator = head;
+	minishell->total_commands = 1;
+    iterator = minishell->list_tokens;
     while (iterator && iterator->e_operator == PIPE)
-    {
-        num_commands++;
-    }
-    return (num_commands);
+	{
+		minishell->total_commands++;
+		iterator = iterator->next;
+	}
 }

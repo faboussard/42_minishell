@@ -37,7 +37,7 @@
 //	free_minishell(minishell);
 //}
 //
-//int exec_builtin(t_minishell *minishell, t_token *command)
+//int exec_builtin(t_minishell *minishell, t_token_list *command)
 //{
 //	if (command->e_builtin == EXIT)
 //		return (ft_exit_builtin(minishell));

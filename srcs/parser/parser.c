@@ -15,12 +15,12 @@
 #include "parser.h"
 #include <stdlib.h>
 
-//int check_parentheses(t_token *list_tokens)
+//int check_parentheses(t_token_list *list_tokens)
 //{
 //	size_t	open_parentheses;
 //	size_t	close_parentheses;
-//	t_token	*iterator;
-//	t_token	*token;
+//	t_token_list	*iterator;
+//	t_token_list	*token;
 //
 //	open_parentheses = 0;
 //	close_parentheses = 0;
@@ -38,11 +38,11 @@
 //	return (close_parentheses == open_parentheses);
 //}
 
-//void to_subshell(t_token *list_tokens)
+//void to_subshell(t_token_list *list_tokens)
 //{
-//	t_token *iterator;
-//	t_token *token;
-//	t_token *next_token;
+//	t_token_list *iterator;
+//	t_token_list *token;
+//	t_token_list *next_token;
 //
 //	iterator = list_tokens;
 //	while (iterator->next != NULL)
@@ -54,7 +54,7 @@
 //	}
 //}
 
-int	ft_lstsize_token(t_token *lst)
+int	ft_lstsize_token(t_token_list *lst)
 {
     int	i;
     int	list_size;
@@ -69,10 +69,10 @@ int	ft_lstsize_token(t_token *lst)
     return (list_size);
 }
 
-void arg_to_command(t_token *list_tokens)
+void arg_to_command(t_token_list *list_tokens)
 {
-	t_token  *iterator;
-	t_token *next_token;
+	t_token_list  *iterator;
+	t_token_list *next_token;
 
     iterator = list_tokens;
 	if (ft_lstsize_token(iterator) == 1)
@@ -92,10 +92,10 @@ void arg_to_command(t_token *list_tokens)
 	}
 }
 
-void to_infile_or_outfile(t_token *list_tokens)
+void to_infile_or_outfile(t_token_list *list_tokens)
 {
-    t_token *iterator;
-    t_token *next_token;
+    t_token_list *iterator;
+    t_token_list *next_token;
 
     iterator = list_tokens;
     while (iterator->next != NULL)
@@ -109,10 +109,10 @@ void to_infile_or_outfile(t_token *list_tokens)
     }
 }
 
-void to_delimiter(t_token *list_tokens)
+void to_delimiter(t_token_list *list_tokens)
 {
-    t_token *iterator;
-    t_token *next_token;
+    t_token_list *iterator;
+    t_token_list *next_token;
 
     iterator = list_tokens;
     while (iterator->next != NULL)
@@ -124,7 +124,7 @@ void to_delimiter(t_token *list_tokens)
     }
 }
 
-void token_requalification(t_token *list_tokens)
+void token_requalification(t_token_list *list_tokens)
 {
 	to_infile_or_outfile(list_tokens);
 	arg_to_command(list_tokens);

@@ -15,10 +15,10 @@
 #include "parser.h"
 
 
-int fill_cmds_and_args_array(t_token *list_tokens, char **array)
+int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 {
 	size_t i;
-    t_token	*iterator;
+    t_token_list	*iterator;
 
 	i = 0;
     iterator = list_tokens;
@@ -43,24 +43,21 @@ int fill_cmds_and_args_array(t_token *list_tokens, char **array)
 //< coucou > fichierEX ls  < coucou -la < coucou
 //met le resultat de "ls -la" dans fichier prout
 //-c "echo ls > ls -l | ls -l "
-char **create_cmd_table(t_minishell *minishell)
+void create_cmd_table(t_minishell *minishell)
 {
-	char **cmd_table;
-
 	size_t nbr_cmds_letters_int_pipe;
 
     nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
-	cmd_table= ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
-	if (cmd_table == NULL)
-		return (NULL);
-    if (fill_cmds_and_args_array(minishell->list_tokens, cmd_table) == 0)
+	minishell->process_list->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
+	if (minishell->process_list->cmd_table == NULL)
+		return ;
+    if (fill_cmds_and_args_array(minishell->list_tokens, minishell->process_list->cmd_table) == 0)
 		exit_msg(minishell, "Malloc failed at tokenization", 2);
-	return (cmd_table);
 }
 
 void create_envp_table(t_minishell *minishell)
 {
-    t_envp *current;
+    t_envp_list *current;
 	size_t i;
 
 	i = 0;

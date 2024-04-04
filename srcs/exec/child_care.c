@@ -31,7 +31,7 @@ static void	first_child(t_minishell *m, char **cmd, char **env)
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close(m->fd_in);
 			close_pipes(m->pipe_fd);
-			my_execve(m->process_list->good_path, cmd, env, m);
+//			my_execve(m->process_list->good_path, cmd, env, m);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);
@@ -51,7 +51,7 @@ static void	last_child(t_minishell *m, char **cmd, char **env)
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 			close(m->fd_out);
-			my_execve(m->process_list->good_path, cmd, env, m);
+//			my_execve(m->process_list->good_path, cmd, env, m);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);
@@ -70,7 +70,7 @@ static void	middle_child(t_minishell *m, char **cmd, char **env)
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
-			my_execve(m->process_list->good_path, cmd, env, m);
+//			my_execve(m->process_list->good_path, cmd, env, m);
 		}
 		else
 			close(m->pipe_fd[WRITE_END]);

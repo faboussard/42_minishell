@@ -14,24 +14,26 @@
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
+
 	//char	*entire_cmd;
 
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	//entire_cmd = join_sep(m, pl->good_path, pl->cmd_table[0], ' ');
-	//ft_free_tab(pl->cmd_table);
-	//pl->cmd_table = ft_split(entire_cmd, ' ');
-	//free(entire_cmd);
-	//if (!(pl->cmd_table))
-	//	malloc_error_with_exit(m);
-	/*
+/*
+	entire_cmd = join_sep(m, pl->good_path, pl->cmd_table[0], ' ');
+	printf("ENTIRE CMD === %s\n", entire_cmd);
+	ft_free_tab(pl->cmd_table);
+	pl->cmd_table = ft_split(entire_cmd, ' ');
+	free(entire_cmd);
+	if (!(pl->cmd_table))
+		malloc_error_with_exit(m);
 	int x = 0;
 	while (pl->cmd_table[x])
 	{
 		printf("TABLEAU %s\n", pl->cmd_table[x]);
 		x++;
 	}
-	*/
-	execve(pl->good_path, pl->cmd_table + 1, m->envp_table);
+*/
+	execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 	else
@@ -78,17 +80,13 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 
 void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 {
-	//dprintf(2, "Nombre de commandes\t:\t%lu\n", nb_cmds);
-	/*
-	if (nb_cmds < 1) //-------------------> TO PUT AGAIN WHEN GOOD NB_CMD 
+	if (nb_cmds < 1)
 		return ;
-	*/
 	ft_init_process_list_and_minishell(minishell, minishell->process_list);
 	set_paths(minishell, minishell->envp_table);
 	if (minishell->process_list->paths == NULL)
 		return ;
-	if (nb_cmds <= 1)
-	//if (nb_cmds == 1) //-------------------> TO PUT AGAIN WHEN GOOD NB_CMD
+	if (nb_cmds == 1)
 		exec_one_cmd(minishell);
 	else
 		exec_several_cmds(minishell, minishell->process_list);
