@@ -14,15 +14,15 @@
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	char	*entire_cmd;
+	//char	*entire_cmd;
 
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	entire_cmd = join_sep(m, pl->good_path, pl->cmd_table[0], ' ');
-	ft_free_tab(pl->cmd_table);
-	pl->cmd_table = ft_split(entire_cmd, ' ');
-	free(entire_cmd);
-	if (!(pl->cmd_table))
-		malloc_error_with_exit(m);
+	//entire_cmd = join_sep(m, pl->good_path, pl->cmd_table[0], ' ');
+	//ft_free_tab(pl->cmd_table);
+	//pl->cmd_table = ft_split(entire_cmd, ' ');
+	//free(entire_cmd);
+	//if (!(pl->cmd_table))
+	//	malloc_error_with_exit(m);
 	/*
 	int x = 0;
 	while (pl->cmd_table[x])
