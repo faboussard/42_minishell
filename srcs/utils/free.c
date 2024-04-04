@@ -69,8 +69,6 @@ void ft_free_process_list(t_process_list **process_list)
 			ft_lstclear_token(&current->in_files_list);
 		if (current->out_files_list)
 			ft_lstclear_token(&current->out_files_list);
-		if (current->limiters)
-			ft_lstclear_token(& current->limiters);
 		free(current);
 		current = next;
 	}
