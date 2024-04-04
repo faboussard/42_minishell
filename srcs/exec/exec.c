@@ -46,7 +46,6 @@ static void	exec_one_cmd(t_minishell *m)
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 		my_execve(m, m->process_list);
-		//my_execve(m->process_list->cmd_table, m->envp_table, m);
 	else
 		close_fds(m->fd_in, m->fd_out);
 }
@@ -75,5 +74,5 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
-	//ft_free_node_process_list(minishell, minishell->process_list);
+	ft_free_node_process_list(minishell, minishell->process_list);
 }
