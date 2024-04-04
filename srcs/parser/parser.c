@@ -105,21 +105,10 @@ void to_infile_or_outfile(t_token_list *list_tokens)
             next_token->e_type = IN_FILE;
         if (iterator->e_operator == OUTPUT_REDIRECT)
             next_token->e_type = OUT_FILE;
-        iterator = iterator->next;
-    }
-}
-
-void to_delimiter(t_token_list *list_tokens)
-{
-    t_token_list *iterator;
-    t_token_list *next_token;
-
-    iterator = list_tokens;
-    while (iterator->next != NULL)
-    {
-        next_token = iterator->next;
-        if (iterator->e_operator == HERE_DOC)
-            next_token->e_type = DELIMITER;
+		if (iterator->e_operator == HERE_DOC)
+			next_token->e_type = DELIMITER;
+		if (iterator->e_operator == APPEND)
+			next_token->e_type = APPEND_FILE;
         iterator = iterator->next;
     }
 }
@@ -128,6 +117,5 @@ void token_requalification(t_token_list *list_tokens)
 {
 	to_infile_or_outfile(list_tokens);
 	arg_to_command(list_tokens);
-    to_delimiter(list_tokens);
 //	to_subshell(list_tokens);
 }

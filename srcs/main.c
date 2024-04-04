@@ -64,7 +64,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 
 int main(int ac, char **av, char **envp)
 {
-	t_minishell 	minishell;
+	t_minishell	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
 	if (envp)
@@ -77,14 +77,14 @@ int main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-    printf("************ print list_envp ************\n\n"); // DELETE
-    print_list_envp(&minishell);
-	printf("************ print list_tokens ************\n"); // DELETE
-	print_token_list(minishell.list_tokens); //DELETE
-	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
-	print_process_list(minishell.process_list);  //DELETE
-    printf("********************** print env_table **********************\n\n"); // DELETE
-	print_array(minishell.envp_table);  //DELETE
+//    printf("************ print list_envp ************\n\n"); // DELETE
+//    print_list_envp(&minishell);
+//	printf("************ print list_tokens ************\n"); // DELETE
+//	print_token_list(minishell.list_tokens); //DELETE
+//	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
+//	print_process_list(minishell.process_list);  //DELETE
+//    printf("********************** print env_table **********************\n\n"); // DELETE
+//	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
