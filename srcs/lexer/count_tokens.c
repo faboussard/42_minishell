@@ -21,7 +21,7 @@ size_t count_letters_until_pipe(t_token_list *head)
 
 	num_commands = 0;
     iterator = head;
-    while (iterator != NULL&& iterator->e_operator != PIPE)
+    while (iterator != NULL && iterator->e_operator != PIPE)
 	{
         if (iterator->e_type == COMMAND || iterator->e_type == ARGUMENT)
 			num_commands += ft_strlen(iterator->name);
@@ -48,7 +48,7 @@ size_t count_cmds_until_pipe(t_token_list *head)
 
 void count_total_commands(t_minishell *minishell)
 {
-    t_token_list *iterator;
+	t_token_list *iterator;
 
 	minishell->total_commands = 1;
     iterator = minishell->list_tokens;

@@ -84,7 +84,6 @@ typedef struct process_list
 
 void	ft_init_minishell(t_minishell *minishell, int ac, char **av);
 bool	is_interactive(t_minishell *minishell, int ac);
-t_token_list	*parse_input(t_minishell *minishell);
 
 /*************************************** CREATE CHAINS ***************************************/
 
@@ -93,7 +92,6 @@ void	create_envp_hashmap(t_minishell *minishell, char **envp);
 
 /*************************************** CREATE TABLES ***************************************/
 
-void	create_tables(t_minishell *minishell);
 void	execute_cmds(t_minishell *minishell, size_t nb_cmds);
 
 #endif

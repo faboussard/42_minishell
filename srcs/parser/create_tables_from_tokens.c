@@ -43,16 +43,17 @@ int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 //< coucou > fichierEX ls  < coucou -la < coucou
 //met le resultat de "ls -la" dans fichier prout
 //-c "echo ls > ls -l | ls -l "
-void create_cmd_table(t_minishell *minishell)
+t_process_list *create_cmd_table(t_process_list *new_process_list, t_minishell *minishell)
 {
 	size_t nbr_cmds_letters_int_pipe;
 
     nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
-	minishell->process_list->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
-	if (minishell->process_list->cmd_table == NULL)
-		return ;
-    if (fill_cmds_and_args_array(minishell->list_tokens, minishell->process_list->cmd_table) == 0)
+	new_process_list->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
+	if (new_process_list->cmd_table == NULL)
+		return NULL;
+    if (fill_cmds_and_args_array(minishell->list_tokens, new_process_list->cmd_table) == 0)
 		exit_msg(minishell, "Malloc failed at tokenization", 2);
+	return (new_process_list);
 }
 
 void create_envp_table(t_minishell *minishell)
