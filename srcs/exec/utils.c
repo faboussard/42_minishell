@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:29:13 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/03 12:38:41 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:53:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl)
 	pl->tab_paths = NULL;
 }
 
-void	ft_free_process_list(t_minishell *m, t_process_list *pl)
+void	ft_free_node_process_list(t_minishell *m, t_process_list *pl)
 {
 	if (pl->paths)
 		free(pl->paths);
