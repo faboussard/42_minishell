@@ -1,0 +1,24 @@
+module checkout permet de venir recuperer le code dans la github action.
+par defaut le code nest pas present.
+checout vient faire un gcl du projet.
+checkout v4 = dderniere version
+
+NE PAS UTILISER LA VERSION LATEST. il peut se lancer sur une version pas encore prise en charge ou causer des cas differents.
+librairie ; tjs preciser la version.
+
+fichier de config YML - tres courant.
+JSON : fichier qui permet decrire des configs.
+
+SQUASH : enelver tous les commits et les mettre en un seul.
+git by set : commande git hub qui permet de taider a rechercher ton bug. la commande prend tous tes commits, elle en prend un en plein milieu et elle teste si le bug existe ou pas.
+
+
+regles sont par job :
+jobs:
+  build:
+  pas en fonction du nom
+
+
+  les github actions vont dire is fail ou pass mais ne vont rien bloquer
+
+  act : logiciel qui permet de lancer des github action en local .

@@ -61,7 +61,7 @@ typedef struct s_token
     enum e_token_type		e_type;
     enum e_token_builtin	e_builtin;
     enum e_token_operators	e_operator;
-    struct s_token          *next; // ????????????????????
+    struct s_token          *next;
 }	t_token;
 
 char	**split_with_quotes_management(char *string);
