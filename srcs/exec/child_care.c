@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/03 15:56:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:51:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 
 static void	first_child(t_minishell *m, char **cmd, char **env)
 {
-	if (pipe(m->pipe_fd) == -1)
-		exit_msg(m, "Error creating the pipe", -1);
 	if (m->fd_in > 0 && m->process_list->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
@@ -44,8 +42,6 @@ static void	first_child(t_minishell *m, char **cmd, char **env)
 
 static void	last_child(t_minishell *m, char **cmd, char **env)
 {
-	if (pipe(m->pipe_fd) == -1)
-		exit_msg(m, "Error creating the pipe", -1);
 	if (m->fd_out > 0)
 	{
 		m->pid2 = m_safe_fork(m);
@@ -66,8 +62,6 @@ static void	last_child(t_minishell *m, char **cmd, char **env)
 
 static void	middle_child(t_minishell *m, char **cmd, char **env)
 {
-	if (pipe(m->pipe_fd) == -1)
-		exit_msg(m, "Error creating the pipe", -1);
 	if (m->fd_in > 0)
 	{
 		m->pid1 = m_safe_fork(m);
@@ -91,14 +85,20 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	t_process_list	*pl;
 
 	pl = process_list;
+	if (safe_pipe(m) == 0)
+		return ;
 	first_child(m, pl->cmd_table, m->envp_table);
 	pl = pl->next;
 	i = 0;
 	while (++i < m->total_commands)
 	{
+		if (safe_pipe(m) == 0)
+			return ;
 		middle_child(m, pl->cmd_table, m->envp_table);
 		pl = pl->next;
 	}
 	open_fd_outfile(m, pl->out_files_list->name);
+	if (safe_pipe(m) == 0)
+		return ;
 	last_child(m, pl->cmd_table, m->envp_table);
 }

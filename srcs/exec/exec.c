@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/03 15:56:27 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:41:01 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	my_execve(char *path, char **cmd_table, char **env, t_minishell *m)
 	m->process_list->cmd_table = ft_split(entire_cmd, ' ');
 	free(entire_cmd);
 	if (!(m->process_list->cmd_table))
-		exit_msg_pipex(m, "Malloc error", -1);
+		malloc_error_with_exit(m);
 	execve(path, cmd_table, env);
 	if (access(m->process_list->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, cmd_table[0], 1);
@@ -57,7 +57,7 @@ static void	exec_one_cmd(t_minishell *m)
 		close_fds(m->fd_in, m->fd_out);
 }
 
-static int	wait_children_and_give_exit_status(t_minishell *m)
+static void	wait_children_and_give_exit_status(t_minishell *m)
 {
 	int	status;
 
@@ -74,6 +74,8 @@ void	execute_cmds(t_minishell *minishell, int nb_cmds)
 		return ;
 	ft_init_process_list_and_minishell(minishell, minishell->process_list);
 	set_paths(minishell, minishell->envp_table);
+	if (minishell->process_list->paths == NULL)
+		return ;
 	if (nb_cmds == 1)
 		exec_one_cmd(minishell);
 	else
