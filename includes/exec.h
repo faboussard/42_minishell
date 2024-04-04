@@ -46,7 +46,8 @@ void	ft_free_node_process_list(t_minishell *m, t_process_list *pl);
 //--------------------------- CHILD CARE ------------------------------//
 void	exec_several_cmds(t_minishell *m, t_process_list *process_list);
 //--------------------------- EXEC ------------------------------------//
-void	my_execve(char *path, char **cmd_table, char **env, t_minishell *m);
+void	my_execve(t_minishell *m, t_process_list *pl);
+//void	my_execve(char **cmd_table, char **env, t_minishell *m);
 //void	execute_cmds(t_minishell *minishell, int nb_cmds);
 //--------------------------- ERRORS ------------------------------------//
 void	print_name(t_minishell *m, char *name);
@@ -56,5 +57,5 @@ void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
 void	malloc_error_with_exit(t_minishell *m);
-void	malloc_error_no_exit(t_minishell *m);
+void	malloc_error_no_exit(t_minishell *m, t_process_list *pl);
 #endif
