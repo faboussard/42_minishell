@@ -38,10 +38,6 @@ void print_process_list(t_process_list *process_list)
 			printf("no out_files_list\n");
 		else
 			print_token_list(current->out_files_list);
-		if (current->limiters == NULL)
-			printf("no limiters\n");
-		else
-			print_token_list(current->limiters);
 		current = current->next;
 	}
 }
@@ -63,9 +59,9 @@ void print_array(char **array)
 	}
 }
 
-void print_token_list(t_token *list_tokens)
+void print_token_list(t_token_list *list_tokens)
 {
-	t_token  *iterator;
+	t_token_list  *iterator;
 
 	if (list_tokens == NULL)
 	{
@@ -84,7 +80,7 @@ void print_token_list(t_token *list_tokens)
 
 void print_list_envp(t_minishell *minishell)
 {
-    t_envp *current;
+    t_envp_list *current;
 
     if (minishell->list_envp == NULL)
     {

@@ -35,7 +35,7 @@ void	set_paths(t_minishell *m, char **env);
 void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd);
 char	*join_sep(t_minishell *m, char *s1, char *s2, char sep);
 //--------------------------- FD MANAGEMENT ---------------------------//
-void	open_fd_infile(t_minishell *m, t_token *in_files_list);
+void	open_fd_infile(t_minishell *m, t_token_list *in_files_list);
 void	open_fd_outfile(t_minishell *m, char *out);
 //--------------------------- HERE_DOC --------------------------------//
 void	here_doc(t_minishell *m, char *limiter);
@@ -57,5 +57,7 @@ void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
 void	malloc_error_with_exit(t_minishell *m);
-void	malloc_error_no_exit(t_minishell *m, t_process_list *pl);
+//void	malloc_error_no_exit(t_minishell *m, t_process_list *p);
+void	malloc_error_no_exit(t_minishell *m);
 #endif
+

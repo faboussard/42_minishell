@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 project(minishell C)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_COMPILER "clang")
 
 include_directories(includes)
 include_directories(libft/inc)
@@ -87,15 +88,16 @@ add_executable(minishell
         srcs/init.c
         srcs/signal.c
         srcs/builtins/exit.c
-        srcs/pipex/pipex_bonus.c
-        srcs/pipex/cmds_bonus.c
-        srcs/pipex/child_care_bonus.c
-        srcs/pipex/errors_bonus.c
-        srcs/pipex/heredoc_bonus.c
-        srcs/pipex/join_bonus.c
-        srcs/pipex/paths_bonus.c
-        srcs/pipex/pipe_utils_bonus.c
-        srcs/pipex/utils_bonus.c
-        srcs/parser/process_list.c)
+        srcs/parser/process_list.c
+        includes/exec.h
+        srcs/exec/fd_management.c
+        srcs/exec/exec.c
+        srcs/exec/errors.c
+        srcs/exec/child_care.c
+        srcs/exec/heredoc.c
+        srcs/exec/paths.c
+        srcs/exec/safe_utils.c
+        srcs/exec/utils.c
+        srcs/exec/old_exec.h)
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

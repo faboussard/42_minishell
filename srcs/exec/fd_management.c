@@ -12,7 +12,7 @@
 
 #include "exec.h"
 
-void	open_fd_infile(t_minishell *m, t_token *in_files_list)
+void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 {
 	if (in_files_list->e_operator == HERE_DOC)
 		m->fd_in = open("/tmp/.tmp_heredoc", O_RDONLY);

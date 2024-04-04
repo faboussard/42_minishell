@@ -23,12 +23,12 @@ enum e_bool
 
 /******************** UTILS ********************/
 
-t_token	*return_last_token(t_token *list_tokens);
+t_token_list	*return_last_token(t_token_list *list_tokens);
 void	exit_msg(t_minishell *minishell, char *msg, int error_code);
 
 /******************** PRINT ********************/
 
-void	print_token_list(t_token *list_tokens);
+void	print_token_list(t_token_list *list_tokens);
 void	print_array(char **array);
 void    print_list_envp(t_minishell *minishell);
 void print_process_list(t_process_list *process_list);
@@ -38,11 +38,11 @@ void print_process_list(t_process_list *process_list);
 void	free_minishell(t_minishell *minishell);
 void	ft_free_all_tab(char **tab);
 void	ft_free_tab_from_i(void **tab, int j);
-void    ft_lstclear_envp(t_envp **lst);
-void    ft_lstclear_token(t_token **lst);
+void    ft_lstclear_envp(t_envp_list **lst);
+void    ft_lstclear_token(t_token_list **lst);
 
 /******************** ERROR ********************/
 void	print_error(const char *error);
-int	print_operator_syntax_error(t_token *token);
+int	print_operator_syntax_error(t_token_list *token);
 
 #endif //GENERAL_H
