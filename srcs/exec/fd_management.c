@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/03/29 09:54:26 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:43:33 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	open_fd_infile(t_minishell *m, t_token *in_files_list)
 		m->process_list->dev_null = 1;
 		m->fd_in = open("/dev/null", O_RDONLY);
 		if (m->fd_in < 0)
-			exit_msg_pipex(NULL, "No /dev/null/ found", -1);
+			ft_putendl_fd("No /dev/null/ found", 2);
+			/* exit_msg_pipex(NULL, "No /dev/null/ found", -1); */
 			// A CHANGER, pas d'exit du minishell
 			/*
 			mbernard@z1r9p2:/usr$ cd cdvwev

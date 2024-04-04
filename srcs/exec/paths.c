@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 09:51:27 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/03 09:51:36 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:40:45 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*join_sep(t_minishell *m, char *s1, char *s2, char sep)
 	total_len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	dest = (char *)malloc(sizeof(char) * (total_len + 1));
 	if (!dest)
-		exit_msg_pipex(m, "Malloc error", -1);
+		malloc_error_with_exit(m);
 	i = -1;
 	j = 0;
 	while (s1[++i])
@@ -40,22 +40,22 @@ static void	deal_with_pathed_cmd(t_minishell *m)
 {
 	m->process_list->good_path = ft_strdup(m->process_list->cmd_table[0]);
 	if (m->process_list->good_path == NULL)
-		exit_msg_pipex(m, "Malloc error", -1);
+		malloc_error_with_exit(m);
 }
 
 void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 {
 	size_t	i;
 
-	if (((cmd[0] == '/' || cmd[0] == '.')
-			|| (ft_strchr(cmd, '/'))) && pl->cmd_table != NULL)
+	if (((cmd[0] == '/' || cmd[0] == '.') || (ft_strchr(cmd, '/')))
+		&& pl->cmd_table != NULL)
 	{
 		deal_with_pathed_cmd(m);
 		return ;
 	}
 	pl->tab_paths = ft_split(pl->paths, ':');
 	if (pl->tab_paths == NULL || pl->cmd_table == NULL)
-		exit_msg_pipex(m, "Malloc error", -1);
+		malloc_error_with_exit(m);
 	pl->good_path = join_sep(m, pl->tab_paths[0], pl->cmd_table[0], '/');
 	i = 0;
 	while (pl->tab_paths[i] && access(pl->good_path, F_OK) != 0)
@@ -98,7 +98,10 @@ void	set_paths(t_minishell *m, char **env)
 		{
 			m->process_list->paths = ft_strdup(env[i] + 5);
 			if (m->process_list->paths == NULL)
-				exit_msg_pipex(m, "Malloc error", -1);
+			{
+				malloc_error_no_exit(m);
+				return ;
+			}
 			break ;
 		}
 		i++;
@@ -106,9 +109,9 @@ void	set_paths(t_minishell *m, char **env)
 	if (m->process_list->paths == NULL)
 		m->process_list->paths = ft_strdup("/usr");
 	if (m->process_list->paths == NULL)
-		exit_msg_pipex(m, "Malloc error", -1);
+		malloc_error_no_exit(m);
 }
 /*
  *	No rights for non root users in /usr, they won't be able to place
  *	malicious software there.
-*/
+ */
