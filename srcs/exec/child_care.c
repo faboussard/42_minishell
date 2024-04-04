@@ -15,8 +15,9 @@
 static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 {
 	close(m->pipe_fd[WRITE_END]);
-	close(m->fd_in);
-	m->fd_in = m->pipe_fd[READ_END];
+	if (m->fd_in >= 0)
+		close(m->fd_in);
+	m->tmp_in = m->pipe_fd[READ_END];
 	m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
 }
 
@@ -27,9 +28,9 @@ static void	first_child(t_minishell *m)
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
 		{
-			m_safe_dup2(m, m->fd_in, STDIN_FILENO);
+			//m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-			close(m->fd_in);
+			//close(m->fd_in);
 			close_pipes(m->pipe_fd);
 			my_execve(m, m->process_list);
 		}
