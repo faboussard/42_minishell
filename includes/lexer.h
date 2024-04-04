@@ -17,6 +17,8 @@
 #include "libft.h"
 #include "minishell.h"
 
+typedef struct s_minishell t_minishell;
+
 
 enum e_token_type
 {
@@ -46,13 +48,12 @@ enum e_token_builtin
 {
 	NO_BUILTIN = 0,
 	CD = 1,
-	LS = 2,
-	ECHO = 3,
-	PWD = 4,
-	EXPORT = 5,
-	UNSET =	6,
-	ENV = 7,
-	EXIT = 8
+	ECHO = 2,
+	PWD = 3,
+	EXPORT = 4,
+	UNSET =	5,
+	ENV = 6,
+	EXIT = 7
 };
 
 typedef struct s_token
@@ -62,7 +63,7 @@ typedef struct s_token
     enum e_token_builtin	e_builtin;
     enum e_token_operators	e_operator;
     struct s_token          *next;
-}	t_token;
+}	t_token_list;
 
 char	**split_with_quotes_management(char *string);
 
@@ -70,14 +71,14 @@ int	parentheses_error(const char *string);
 int parentheses_on_arg(char *string);
 
 
-void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token);
+void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token_list *new_token);
 
-bool	get_builtin_token(t_token *new_token, char *string);
+bool	get_builtin_token(t_token_list *new_token, char *string);
 
 /********************* count *********************/
 
-size_t total_commands(t_token *head);
-size_t count_letters_until_pipe(t_token *head);
-size_t count_cmds_until_pipe(t_token *head);
+void count_total_commands(t_minishell *minishell);
+size_t count_letters_until_pipe(t_token_list *head);
+size_t count_cmds_until_pipe(t_token_list *head);
 
 #endif //LEXER_H

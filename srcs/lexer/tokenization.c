@@ -15,14 +15,14 @@
 #include <stdlib.h>
 #include "parser.h"
 
-void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token *new_token)
+void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token_list *new_token)
 {
 	new_token->e_type = type;
 	new_token->e_builtin = builtin;
 	new_token->e_operator = operator;
 }
 
-int define_token(t_token *new_token, char *string)
+int define_token(t_token_list *new_token, char *string)
 {
 	new_token->name = ft_strdup(string);
 	if (new_token->name == NULL)
@@ -36,7 +36,7 @@ int define_token(t_token *new_token, char *string)
 	return (1);
 }
 
-t_token	*ft_lstlast_token(t_token *lst)
+t_token_list	*ft_lstlast_token(t_token_list *lst)
 {
 	while (lst != NULL)
 	{
@@ -47,9 +47,9 @@ t_token	*ft_lstlast_token(t_token *lst)
 	return (lst);
 }
 
-void add_token_to_list(t_token **list_tokens, t_token *new_token)
+void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 {
-	t_token	*last;
+	t_token_list	*last;
 
 	if (*list_tokens != NULL)
 	{
@@ -61,10 +61,10 @@ void add_token_to_list(t_token **list_tokens, t_token *new_token)
 		*list_tokens = new_token;
 }
 
-int check_syntax(t_token *list_tokens)
+int check_syntax(t_token_list *list_tokens)
 {
-	t_token *iterator;
-	t_token *next_token;
+	t_token_list *iterator;
+	t_token_list *next_token;
 
 	if (list_tokens != NULL)
 	{
@@ -83,10 +83,10 @@ int check_syntax(t_token *list_tokens)
 	return (0);
 }
 
-int transform_to_token(t_minishell *minishell, t_token **list_tokens)
+int transform_to_token(t_minishell *minishell, t_token_list **list_tokens)
 {
 	int 	i;
-	t_token	*new_token;
+	t_token_list	*new_token;
 	char	**split;
 
 	i = 0;
@@ -95,7 +95,7 @@ int transform_to_token(t_minishell *minishell, t_token **list_tokens)
 		return (0);
 	while (split[i])
 	{
-		new_token = malloc(sizeof(t_token));
+		new_token = malloc(sizeof(t_token_list));
 		if (new_token == NULL)
 		{
 			ft_free_all_tab(split);
@@ -114,9 +114,9 @@ int transform_to_token(t_minishell *minishell, t_token **list_tokens)
 	return (1);
 }
 
-t_token *parse_input(t_minishell *minishell)
+t_token_list *parse_input(t_minishell *minishell)
 {
-	t_token	*list_tokens;
+	t_token_list	*list_tokens;
 
 	list_tokens = NULL;
 	if (transform_to_token(minishell, &list_tokens) == 0)
@@ -124,6 +124,5 @@ t_token *parse_input(t_minishell *minishell)
 	if (check_syntax(list_tokens))
 		return (NULL);
 	token_requalification(list_tokens);
-	minishell->total_commands = total_commands(minishell->list_tokens);
 	return (list_tokens);
 }

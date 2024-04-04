@@ -15,10 +15,10 @@
 #include <stdbool.h>
 #include "minishell.h"
 
-bool define_builtin_token(t_token *new_token, const char *string, const char *builtins[9])
+bool define_builtin_token(t_token_list *new_token, const char *string, const char *builtins[8])
 {
 	int i = 0;
-	while (i < 9)
+	while (i < 8)
 	{
 		if (builtins[i] != NULL && !ft_strcmp(string, builtins[i]))
 		{
@@ -31,10 +31,9 @@ bool define_builtin_token(t_token *new_token, const char *string, const char *bu
 	return false;
 }
 
-bool get_builtin_token(t_token *new_token, char *string)
+bool get_builtin_token(t_token_list *new_token, char *string)
 {
-	const char *builtins[9] = {
-			[LS] = "ls",
+	const char *builtins[8] = {
 			[ECHO] = "echo",
 			[CD] = "cd",
 			[PWD] = "pwd",

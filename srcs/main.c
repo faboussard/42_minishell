@@ -35,7 +35,9 @@ void minishell_interactive(t_minishell *minishell)
 		minishell->list_tokens = parse_input(minishell);
 		if (minishell->list_tokens == NULL)
 			return ;
-		minishell->process_list = create_process_list(minishell, minishell->list_tokens);
+		count_total_commands(minishell);
+		printf("total command is %zu\n", minishell->total_commands);
+		create_process_list(minishell, minishell->list_tokens);
 		if (minishell->process_list == NULL)
 			return ;
 		free(minishell->user_input);
@@ -53,7 +55,11 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->list_tokens = parse_input(minishell);
 	if (minishell->list_tokens == NULL)
 		return ;
-	minishell->process_list = create_process_list(minishell, minishell->list_tokens);
+	count_total_commands(minishell);
+	printf("total command is %zu\n", minishell->total_commands);
+	create_process_list(minishell, minishell->list_tokens);
+	if (minishell->process_list == NULL)
+		return ;
 }
 
 int main(int ac, char **av, char **envp)

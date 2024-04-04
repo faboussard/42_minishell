@@ -20,7 +20,7 @@ void	print_error(const char *error)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-int	print_operator_syntax_error(t_token *token)
+int	print_operator_syntax_error(t_token_list *token)
 {
 	int error;
 	if (token == NULL)
