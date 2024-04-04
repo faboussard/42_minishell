@@ -28,10 +28,10 @@ size_t	count_cmds_until_pipe_or_redirect(t_token_list *head);
 
 /**************************** parse tokens **************************/
 
-void *create_process_list(t_minishell *minishell, t_token_list *list_tokens);
-char	**create_cmd_table(t_minishell *minishell);
-void create_envp_table(t_minishell *minishell);
-void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token);
+void	create_process_list(t_minishell *minishell, t_token_list *list_tokens);
+void	create_cmd_table(t_minishell *minishell);
+void	create_envp_table(t_minishell *minishell);
+void	add_token_to_list(t_token_list **list_tokens, t_token_list *new_token);
 
 /****************** OPERATORS ******************/
 

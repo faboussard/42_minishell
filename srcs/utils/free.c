@@ -63,12 +63,10 @@ void ft_free_process_list(t_process_list **process_list)
 		next = current->next;
 		if (current->cmd_table)
 			ft_free_all_tab(current->cmd_table);
-		if (current->tokens_until_pipe)
-			ft_lstclear_token(&current->tokens_until_pipe);
-		if (current->in_files_list)
-			ft_lstclear_token(&current->in_files_list);
-		if (current->out_files_list)
-			ft_lstclear_token(&current->out_files_list);
+//		if (current->in_files_list)
+//			ft_lstclear_token(&current->in_files_list);
+//		if (current->out_files_list)
+//			ft_lstclear_token(&current->out_files_list);
 		free(current);
 		current = next;
 	}

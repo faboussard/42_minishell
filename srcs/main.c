@@ -68,7 +68,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	create_process_list(minishell, minishell->list_tokens);
 	if (minishell->process_list == NULL)
 		return ;
-	execute_cmds(minishell, minishell->total_commands);
+//	execute_cmds(minishell, minishell->total_commands);
 }
 
 int main(int ac, char **av, char **envp)
@@ -91,9 +91,9 @@ int main(int ac, char **av, char **envp)
 	printf("************ print list_tokens ************\n"); // DELETE
 	print_token_list(minishell.list_tokens); //DELETE
 	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
-//	print_process_list(minishell.process_list);  //DELETE
-//    printf("********************** print env_table **********************\n\n"); // DELETE
-//	print_array(minishell.envp_table);  //DELETE
+	print_process_list(minishell.process_list);  //DELETE
+    printf("********************** print env_table **********************\n\n"); // DELETE
+	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
