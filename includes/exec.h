@@ -47,7 +47,7 @@ void	ft_free_node_process_list(t_minishell *m, t_process_list *pl);
 void	exec_several_cmds(t_minishell *m, t_process_list *process_list);
 //--------------------------- EXEC ------------------------------------//
 void	my_execve(char *path, char **cmd_table, char **env, t_minishell *m);
-void	execute_cmds(t_minishell *minishell, int nb_cmds);
+//void	execute_cmds(t_minishell *minishell, int nb_cmds);
 //--------------------------- ERRORS ------------------------------------//
 void	print_name(t_minishell *m, char *name);
 void	exit_command_not_found(t_minishell *m, char *name);

@@ -38,6 +38,9 @@ void minishell_interactive(t_minishell *minishell)
 		minishell->process_list = create_process_list(minishell, minishell->list_tokens);
 		if (minishell->process_list == NULL)
 			return ;
+		dprintf(2, "OHEEEEEE %lu\n", minishell->total_commands);
+		dprintf(1, "OHEEEEEE %lu\n", minishell->total_commands);
+		execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);
 	}
 }
@@ -54,6 +57,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	if (minishell->list_tokens == NULL)
 		return ;
 	minishell->process_list = create_process_list(minishell, minishell->list_tokens);
+	execute_cmds(minishell, minishell->total_commands);
 }
 
 int main(int ac, char **av, char **envp)
