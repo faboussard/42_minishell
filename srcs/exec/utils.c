@@ -49,12 +49,14 @@ void	ft_free_node_process_list(t_minishell *m, t_process_list *pl)
 		free(pl->good_path);
 	if (pl->tab_paths)
 		ft_free_tab(pl->tab_paths);
+	/*
 	if (pl->cmd_table)
 		ft_free_tab(pl->cmd_table);
+		*/
 	check_and_delete_if_tmp_file_exists("/tmp/.tmp_heredoc");
 	if (m->fd_in >= 0)
-		close(m->fd_in);
+		close(m->fd_in); 	
 	if (m->fd_out >= 0)
 		close(m->fd_out);
-	close(STDOUT_FILENO);
+	//	close(STDOUT_FILENO);
 }
