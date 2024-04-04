@@ -39,9 +39,9 @@ void minishell_interactive(t_minishell *minishell)
 	//enum e_token_operators	infile_token;
 	//enum e_token_operators	outfile_token;
 
-	//dprintf(2, "OPERATOR : %d\n", minishell->process_list->in_files_list->e_operator);
-	//infile_token = minishell->process_list->in_files_list->e_operator;
-	//outfile_token = minishell->process_list->out_files_list->e_operator;
+	//dprintf(2, "OPERATOR : %d\n", minishell->process_list->in_files_token->e_operator);
+	//infile_token = minishell->process_list->in_files_token->e_operator;
+	//outfile_token = minishell->process_list->out_files_token->e_operator;
 //		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
 //		execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);

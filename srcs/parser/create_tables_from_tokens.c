@@ -45,16 +45,41 @@ int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 //-c "echo ls > ls -l | ls -l "
 t_process_list *create_cmd_table(t_process_list *new_process_list, t_minishell *minishell)
 {
+	t_token_list *iterator;
 	size_t nbr_cmds_letters_int_pipe;
 
-    nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
+	nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
 	new_process_list->cmd_table = ft_calloc(nbr_cmds_letters_int_pipe, sizeof(char **));
 	if (new_process_list->cmd_table == NULL)
 		return NULL;
-    if (fill_cmds_and_args_array(minishell->list_tokens, new_process_list->cmd_table) == 0)
+	if (fill_cmds_and_args_array(minishell->list_tokens, new_process_list->cmd_table) == 0)
 		exit_msg(minishell, "Malloc failed at tokenization", 2);
-	return (new_process_list);
+
+	// Allocate memory only if not already allocated
+	if (new_process_list->in_files_token == NULL) {
+		new_process_list->in_files_token = ft_calloc(1, sizeof(t_token_list));
+		if (new_process_list->in_files_token == NULL) {
+			exit_msg(minishell, "Malloc failed for input files token", 2);
+		}
+	}
+	if (new_process_list->out_files_token == NULL) {
+		new_process_list->out_files_token = ft_calloc(1, sizeof(t_token_list));
+		if (new_process_list->out_files_token == NULL) {
+			exit_msg(minishell, "Malloc failed for output files token", 2);
+		}
+	}
+	iterator = minishell->list_tokens;
+	while (iterator->next != NULL)
+	{
+		if (iterator->e_operator == INPUT_REDIRECT || iterator->e_operator == HERE_DOC)
+			new_process_list->in_files_token = iterator->next;
+		if (iterator->e_operator == OUTPUT_REDIRECT || iterator->e_operator == APPEND)
+			new_process_list->out_files_token = iterator->next;
+		iterator = iterator->next;
+	}
+	return new_process_list;
 }
+
 
 void create_envp_table(t_minishell *minishell)
 {
