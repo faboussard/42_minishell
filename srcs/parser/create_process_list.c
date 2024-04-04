@@ -73,6 +73,7 @@ void create_in_files_token(t_process_list *new_process_list, t_minishell *minish
 			new_process_list->in_files_token->name = ft_strdup(iterator->name);
 			if (new_process_list->in_files_token->name == NULL)
 				exit_msg(minishell, "Memory allocation failed at tokenization", 2);
+			new_process_list->in_files_token->e_type = iterator->e_type;
 			new_process_list->in_files_token->next = NULL;
 		}
 		iterator = next;
@@ -99,6 +100,7 @@ void create_out_files_token(t_process_list *new_process_list, t_minishell *minis
 			new_process_list->out_files_token->name = ft_strdup(iterator->name);
 			if (new_process_list->out_files_token->name == NULL)
 				exit_msg(minishell, "Memory allocation failed at tokenization", 2);
+			new_process_list->out_files_token->e_type = iterator->e_type;
 			new_process_list->out_files_token->next = NULL;
 		}
 		iterator = next;
