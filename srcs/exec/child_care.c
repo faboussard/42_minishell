@@ -20,7 +20,7 @@ static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 	m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
 }
 
-static void	first_child(t_minishell *m, char **cmd, char **env)
+static void	first_child(t_minishell *m)
 {
 	if (m->fd_in > 0 && m->process_list->dev_null == 0)
 	{
@@ -31,7 +31,7 @@ static void	first_child(t_minishell *m, char **cmd, char **env)
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close(m->fd_in);
 			close_pipes(m->pipe_fd);
-//			my_execve(m->process_list->good_path, cmd, env, m);
+			my_execve(m, m->process_list);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);
@@ -40,7 +40,7 @@ static void	first_child(t_minishell *m, char **cmd, char **env)
 		close_and_redirect_pipe_to_stdin(m);
 }
 
-static void	last_child(t_minishell *m, char **cmd, char **env)
+static void	last_child(t_minishell *m)
 {
 	if (m->fd_out > 0)
 	{
@@ -51,7 +51,7 @@ static void	last_child(t_minishell *m, char **cmd, char **env)
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 			close(m->fd_out);
-//			my_execve(m->process_list->good_path, cmd, env, m);
+			my_execve(m, m->process_list);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);
@@ -60,7 +60,7 @@ static void	last_child(t_minishell *m, char **cmd, char **env)
 		close_pipes(m->pipe_fd);
 }
 
-static void	middle_child(t_minishell *m, char **cmd, char **env)
+static void	middle_child(t_minishell *m)
 {
 	if (m->fd_in > 0)
 	{
@@ -70,7 +70,7 @@ static void	middle_child(t_minishell *m, char **cmd, char **env)
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
-//			my_execve(m->process_list->good_path, cmd, env, m);
+			my_execve(m, m->process_list);
 		}
 		else
 			close(m->pipe_fd[WRITE_END]);
@@ -87,18 +87,18 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	pl = process_list;
 	if (safe_pipe(m) == 0)
 		return ;
-	first_child(m, pl->cmd_table, m->envp_table);
+	first_child(m);
 	pl = pl->next;
 	i = 0;
 	while (++i < m->total_commands)
 	{
 		if (safe_pipe(m) == 0)
 			return ;
-		middle_child(m, pl->cmd_table, m->envp_table);
+		middle_child(m);
 		pl = pl->next;
 	}
 	open_fd_outfile(m, pl->out_files_list->name);
 	if (safe_pipe(m) == 0)
 		return ;
-	last_child(m, pl->cmd_table, m->envp_table);
+	last_child(m);
 }
