@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:48:50 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:54:08 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	here_doc(t_minishell *m, char *limiter);
 //--------------------------- UTILS -----------------------------------//
 void	ft_free_tab(char **tab);
 void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl);
-void	ft_free_process_list(t_minishell *m, t_process_list *pl);
+void	ft_free_node_process_list(t_minishell *m, t_process_list *pl);
 //--------------------------- CHILD CARE ------------------------------//
 void	exec_several_cmds(t_minishell *m, t_process_list *process_list);
 //--------------------------- EXEC ------------------------------------//

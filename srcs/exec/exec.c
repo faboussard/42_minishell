@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:41:01 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/04 08:57:13 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ void	execute_cmds(t_minishell *minishell, int nb_cmds)
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
-	ft_free_process_list(minishell, minishell->process_list);
+	ft_free_node_process_list(minishell, minishell->process_list);
 }
