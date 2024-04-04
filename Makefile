@@ -10,7 +10,7 @@ vpath %c srcs lexer env_variables parser expansion utils exec
 LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string\
 				env_variables/env_variables\
-				parser/parser parser/create_tables_from_tokens parser/process_list\
+				parser/parser parser/create_process_list parser/process_list\
 				expansion/expansion \
 				utils/free utils/print utils/error \
 				exec/exec	exec/errors	exec/paths	exec/fd_management \

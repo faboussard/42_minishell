@@ -36,12 +36,6 @@ void minishell_interactive(t_minishell *minishell)
 		count_total_commands(minishell);
 		printf("total command is %zu\n", minishell->total_commands);
 		create_process_list(minishell);
-	//enum e_token_operators	infile_token;
-	//enum e_token_operators	outfile_token;
-
-	//dprintf(2, "OPERATOR : %d\n", minishell->process_list->in_files_list->e_operator);
-	//infile_token = minishell->process_list->in_files_list->e_operator;
-	//outfile_token = minishell->process_list->out_files_list->e_operator;
 		if (minishell->process_list == NULL)
 			return ;
 		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
@@ -66,7 +60,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 
 int main(int ac, char **av, char **envp)
 {
-	t_minishell 	minishell;
+	t_minishell	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
 	if (envp)
@@ -79,14 +73,14 @@ int main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-    printf("************ print list_envp ************\n\n"); // DELETE
-    print_list_envp(&minishell);
-	printf("************ print list_tokens ************\n"); // DELETE
-	print_token_list(minishell.list_tokens); //DELETE
-	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
-	print_process_list(minishell.process_list);  //DELETE
-    printf("********************** print env_table **********************\n\n"); // DELETE
-	print_array(minishell.envp_table);  //DELETE
+//    printf("************ print list_envp ************\n\n"); // DELETE
+//    print_list_envp(&minishell);
+//	printf("************ print list_tokens ************\n"); // DELETE
+//	print_token_list(minishell.list_tokens); //DELETE
+//	printf("************ process list (cmd table , in out files, limiters : ********* \n"); // DELETE
+//	print_process_list(minishell.process_list);  //DELETE
+//    printf("********************** print env_table **********************\n\n"); // DELETE
+//	print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
