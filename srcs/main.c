@@ -27,20 +27,23 @@ void minishell_interactive(t_minishell *minishell)
 		minishell->user_input = readline(PROMPT);
 		if (minishell->user_input == NULL)
 			break;
+		printf("the command is %s\n", minishell->user_input);
+
 		if (minishell->user_input[0] == 0)
 			continue;
 		set_signals_noninteractive();
 //        add_history(minishell->user_input);
 		minishell->history_count += 1;
-		 parse_input(minishell);
-		count_total_commands(minishell);
-		printf("total command is %zu\n", minishell->total_commands);
+		parse_input(minishell);
 		create_process_list(minishell);
+		printf("the process list first cmd is %s\n", minishell->process_list->cmd_table[0]);
+		printf("the process list first cmd is %s\n", minishell->process_list->cmd_table[1]);
 		if (minishell->process_list == NULL)
 			return ;
-		dprintf(2, "Avant execution, il y a %lu commandes !\n", minishell->total_commands);
 		execute_cmds(minishell, minishell->total_commands);
 		free(minishell->user_input);
+		ft_free_process_list(&(minishell->process_list));
+		ft_lstclear_token(&minishell->list_tokens);
 	}
 }
 

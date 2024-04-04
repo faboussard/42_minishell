@@ -15,6 +15,8 @@
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
+	dprintf(2, "GOOD PATH\t===\t%s\n", pl->good_path);
+	dprintf(2, "CMD_TABLE[0]\t===\t%s\n", pl->cmd_table[0]);
 	execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
@@ -44,7 +46,6 @@ static void	exec_one_cmd(t_minishell *m)
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 		my_execve(m, m->process_list);
-		//my_execve(m->process_list->cmd_table, m->envp_table, m);
 	else
 		close_fds(m->fd_in, m->fd_out);
 }
@@ -73,5 +74,5 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
-	//ft_free_node_process_list(minishell, minishell->process_list);
+	ft_free_node_process_list(minishell, minishell->process_list);
 }
