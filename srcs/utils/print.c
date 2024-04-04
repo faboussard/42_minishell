@@ -38,10 +38,6 @@ void print_process_list(t_process_list *process_list)
 			printf("no out_files_list\n");
 		else
 			print_token_list(current->out_files_list);
-		if (current->limiters == NULL)
-			printf("no limiters\n");
-		else
-			print_token_list(current->limiters);
 		current = current->next;
 	}
 }
