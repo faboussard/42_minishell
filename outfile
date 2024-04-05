@@ -1,0 +1,12 @@
+CMakeLists.txt
+COUCOU
+ignore_leaks.supp
+includes
+info.txt
+libft
+Makefile
+minishell
+outfile
+questions
+srcs
+tests.txt
