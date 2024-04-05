@@ -37,16 +37,6 @@ int define_token(t_token_list *new_token, char *string)
 	return (1);
 }
 
-char **split_user_input(t_minishell *minishell)
-{
-	char	**split;
-
-	split = split_with_quotes_management(minishell->user_input);
-	if (split == NULL)
-		exit_msg(minishell, "Malloc failed at split for tokenization", 2);
-	return (split);
-}
-
 void transform_to_token(t_minishell *minishell, char **split)
 {
 	int 			i;
@@ -71,16 +61,4 @@ void transform_to_token(t_minishell *minishell, char **split)
 		i++;
 	}
 	ft_free_all_tab(split);
-}
-
-int parse_input(t_minishell *minishell)
-{
-	char	**split;
-
-	split = split_user_input(minishell);
-	transform_to_token(minishell, split);
-	if (check_syntax(minishell) == 1)
-		return (1);
-	token_requalification(minishell->list_tokens);
-	return (0);
 }
