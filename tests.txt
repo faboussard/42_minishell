@@ -15,3 +15,23 @@ Please ask your administrator.
  on doit avoir builtin 0 :
 -c "cdc"
 -c "c"
+
+
+
+****************** redirections -*******************
+
+delimiters:
+faboussa@z1r9p4:~$ chmod 000 glagla
+faboussa@z1r9p4:~$ << babla > glagla ls OU << blabla ls > glagla
+                                           > blabla
+> blabla
+> babla
+bash: glagla: Permission denied
+
+---> doit ouvrir le outfile mais rien ecrire dedans
+
+faboussa@z1r9p4:~$ << stop > > | ls
+bash: syntax error near unexpected token `>'
+> stop
+
+si heredoc : louvrir + error message sans exit. ne soccupe pas du reste

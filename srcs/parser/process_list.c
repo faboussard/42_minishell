@@ -39,6 +39,38 @@ void add_process_to_list(t_process_list **process_list, t_process_list *new_proc
 		*process_list = new_process;
 }
 
+//
+//void create_in_out_files_token(t_process_list *new_process_list, t_minishell *minishell)
+//{
+//	t_token_list *current;
+//
+//	current = minishell->list_tokens;
+//	new_process_list->in_out_files_tokens = ft_calloc(1, sizeof(t_token_list));
+//	new_process_list->in_out_files_tokens = current;
+//	ft_list_remove_if(new_process_list->in_out_files_tokens);
+//}
+//
+//void ft_list_remove_if(t_token_list *begin_list)
+//{
+//	t_token_list	*cur;
+//
+//	if (begin_list == NULL)
+//		return;
+//	cur = begin_list;
+//	if (begin_list->e_type != APPEND_FILE && begin_list->e_type != IN_FILE && begin_list->e_type
+//	!= OUT_FILE && begin_list->e_type != DELIMITER)
+//	{
+//		begin_list = cur->next;
+//		free(cur);
+//		ft_list_remove_if(begin_list);
+//	}
+//	else
+//	{
+//		cur = begin_list;
+//		ft_list_remove_if(cur->next);
+//	}
+//}
+
 
 void create_process_list(t_minishell *minishell)
 {

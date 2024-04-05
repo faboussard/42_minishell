@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "parser.h"
 
+void create_in_out_files_token(t_process_list *new_process_list, t_minishell *minishell);
 
 int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 {
@@ -113,9 +114,9 @@ t_process_list *create_process_list_node(t_process_list *new_process_list, t_min
 
 	nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
 	create_cmd_table_array(new_process_list, nbr_cmds_letters_int_pipe, minishell);
+//	create_in_out_files_token(new_process_list, minishell);
 	create_in_files_token(new_process_list, minishell);
 	create_out_files_token(new_process_list, minishell);
-
 	return (new_process_list);
 }
 

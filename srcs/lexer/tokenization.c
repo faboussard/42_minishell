@@ -76,7 +76,7 @@ void check_syntax(t_minishell *minishell)
 		while (iterator != NULL && iterator->next != NULL)
 		{
 			next_token = iterator->next;
-			if (iterator->e_type == OPERATOR && next_token->e_type == OPERATOR)
+			if (is_redirect_token(iterator) && (is_redirect_token(next_token) || next_token->e_operator == PIPE))
 			{
 				print_operator_syntax_error(iterator);
 				free_minishell(minishell);
