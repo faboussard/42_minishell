@@ -14,10 +14,9 @@
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	dprintf(2, "I dont segfault yet !!!\t===\t\n");
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	dprintf(2, "GOOD PATH\t===\t%s\n", pl->good_path);
-	dprintf(2, "CMD_TABLE[0]\t===\t%s\n", pl->cmd_table[0]);
+	dprintf(2, "my_execve : GOOD PATH\t===\t%s\n", pl->good_path);
+	dprintf(2, "my_execve : CMD_TABLE[0]\t===\t%s\n", pl->cmd_table[0]);
 	execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
@@ -66,13 +65,14 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 {
 	if (nb_cmds < 1)
 		return ;
+	dprintf(2, "NOT YET !, %s\n", minishell->envp_table[0]);
 	set_paths(minishell, minishell->envp_table);
-	if (minishell->process_list->paths == NULL)
+	if (minishell->paths == NULL)
 		return ;
 	if (nb_cmds == 1)
 		exec_one_cmd(minishell);
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
-	ft_free_node_process_list(minishell, minishell->process_list);
+	//ft_free_node_process_list(minishell, minishell->process_list);
 }
