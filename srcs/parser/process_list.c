@@ -42,7 +42,7 @@ void add_process_to_list(t_process_list **process_list, t_process_list *new_proc
 
 void create_process_list(t_minishell *minishell)
 {
-	t_process_list *new_process_list;
+	t_process_list	*new_process_list;
 	t_token_list	*temp;
 
 	count_total_commands(minishell);
