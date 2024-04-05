@@ -22,30 +22,44 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		exit_command_not_found(m, pl->cmd_table[0]);
 }
 
-static void	exec_one_cmd(t_minishell *m)
+static void	exec_one_cmd(t_minishell *m,  t_process_list *pl)
 {
-	//  enum e_token_operators	infile_token;
-	//  enum e_token_operators	outfile_token;
-	//  infile_token = m->process_list->in_files_token->e_operator;
-	//  outfile_token = m->process_list->out_files_token->e_operator;
-	//  if (infile_token == HERE_DOC) // SEGFAULT
-	//  	here_doc(m, m->process_list->in_files_token->name);
-	//  if (infile_token == INPUT_REDIRECT || infile_token == HERE_DOC)
-	//  {
-	//  	open_fd_infile(m, m->process_list->in_files_token);
-	//  	m_safe_dup2(m, m->fd_in, STDIN_FILENO);
-	//  }
-	//  if (outfile_token == OUTPUT_REDIRECT || outfile_token == APPEND)
-	//  {
-	//  	open_fd_outfile(m, m->process_list->out_files_token->name);
-	//  	m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
-	//  }
+	  enum e_token_type	infile_token;
+	  enum e_token_type	outfile_token;
+
+	  infile_token = pl->in_files_token->e_type;
+	  outfile_token = pl->out_files_token->e_type;
+		dprintf(2, "Infile_token\t===\t%d\t===\t%s\n", infile_token, pl->in_files_token->name);
+		dprintf(2, "Outfile_token\t===\t%d\t===\t%s\n", outfile_token, pl->out_files_token->name);
+	  if (infile_token == DELIMITER)
+	  	here_doc(m, pl->in_files_token->name);
+	  if (infile_token == IN_FILE || infile_token == DELIMITER)
+	  {
+	  	open_fd_infile(m, pl->in_files_token);
+	  	m_safe_dup2(m, m->fd_in, STDIN_FILENO);
+		close(m->fd_in);
+	  }
+	  if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+	  {
+	  	open_fd_outfile(m, pl->out_files_token->name);
+	  	m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
+		close(m->fd_out);
+	  }
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
-		my_execve(m, m->process_list);
+		my_execve(m, pl);
 	else
+	{
+		if (infile_token == IN_FILE || infile_token == DELIMITER)
+			close(STDIN_FILENO);
+		if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+			close(STDOUT_FILENO);
 		close_fds(m->fd_in, m->fd_out);
+		waitpid(m->pid2, NULL, 0);
+	}
 }
+		// close(STDIN_FILENO); si je le close, le minishell s'arrete des que j'ai lancé une commande (comme ls)
+		//close(STDOUT_FILENO); si je le close, les commandes simples finissent dans une entree infinie
 
 static void	wait_children_and_give_exit_status(t_minishell *m)
 {
@@ -66,10 +80,14 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 	if (minishell->paths == NULL)
 		return ;
 	if (nb_cmds == 1)
-		exec_one_cmd(minishell);
+		exec_one_cmd(minishell, minishell->process_list);
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
+	
 	dprintf(2, "I promise I'not existing !\n");
-	// ft_free_node_process_list(minishell, minishell->process_list);
+	free(minishell->paths);
+	free(minishell->process_list->good_path);
+	ft_free_tab(minishell->process_list->tab_paths);
+	//ft_free_node_process_list(minishell, minishell->process_list);
 }
