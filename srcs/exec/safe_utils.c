@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:20:51 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:50:37 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:14:11 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ bool	safe_pipe(t_minishell *m)
 	}
 	return (1);
 }
+
 void	close_pipes(int *pipe_fd)
 {
 	if (!pipe_fd)

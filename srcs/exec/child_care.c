@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:51:49 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:13:21 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,11 @@ static void	last_child(t_minishell *m, t_process_list *process_list)
 		{
 			close_pipes(m->pipe_fd);
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
-			m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
-			close(m->fd_out);
-			dprintf(2, "I dont segfault before execve of LAST CHILD!!!\t===\t\n");
+			if (m->fd_out != STDOUT_FILENO)
+			{
+				m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
+				close(m->fd_out);
+			}
 			my_execve(m, process_list);
 		}
 		else
@@ -90,21 +92,19 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	pl = process_list;
 	if (safe_pipe(m) == 0)
 		return ;
-	//open_fd_infile(m, pl->in_files_list);
+	// open_fd_infile(m, pl->in_files_list);
 	m->fd_in = STDIN_FILENO;
 	first_child(m);
-
 	pl = pl->next;
 	i = 1;
 	while (++i < m->total_commands)
 	{
-		dprintf(2, "This loop sucks");
 		if (safe_pipe(m) == 0)
 			return ;
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	//open_fd_outfile(m, pl->out_files_list->name);
+	// open_fd_outfile(m, pl->out_files_list->name);
 	m->fd_out = STDOUT_FILENO;
 	if (safe_pipe(m) == 0)
 		return ;
