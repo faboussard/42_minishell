@@ -51,6 +51,7 @@ typedef struct s_minishell
 	int					fd_out;
 	int 				history_count;
 	char				*user_input;
+	char				*paths;		//---------> ANNOYS ME TOO MUCH IN PROCESS LIST, IT'D BETTER BE THERE
 	char 				**envp_table;
 	t_token_list		*list_tokens;
 	t_envp_list		    *list_envp;
@@ -73,11 +74,11 @@ typedef struct process_list
 	t_token_list	*in_files_token;
 	t_token_list	*out_files_token;
 //	t_token_list	*in_out_files_tokens;
-	char			*paths;
-	char			*good_path;
-	char			**tab_paths;
-	char 			**cmd_table; // < infile < infile ls -l | wc -l > outfile << stope
-	bool			dev_null;
+	char	*paths;
+	char	*good_path;
+	char	**tab_paths;
+	char 	**cmd_table; // < infile < infile ls -l | wc -l > outfile << stope
+	bool	dev_null;
 	struct	process_list	*next;
 } t_process_list;
 

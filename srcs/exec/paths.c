@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 09:51:27 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:40:45 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:13:53 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 		deal_with_pathed_cmd(m);
 		return ;
 	}
-	pl->tab_paths = ft_split(pl->paths, ':');
+	pl->tab_paths = ft_split(m->paths, ':');
 	if (pl->tab_paths == NULL || pl->cmd_table == NULL)
 		malloc_error_with_exit(m);
 	pl->good_path = join_sep(m, pl->tab_paths[0], pl->cmd_table[0], '/');
@@ -64,7 +64,7 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 		pl->good_path = join_sep(m, pl->tab_paths[i], pl->cmd_table[0], '/');
 		i++;
 	}
-	if (!(pl->tab_paths[i]) && !ft_strncmp("/usr", pl->paths, 2))
+	if (!(pl->tab_paths[i]) && !ft_strncmp("/usr", m->paths, 2))
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 	else if (!(pl->tab_paths[i]))
 		exit_command_not_found(m, pl->cmd_table[0]);
@@ -96,8 +96,8 @@ void	set_paths(t_minishell *m, char **env)
 	{
 		if (this_is_path(env[i]))
 		{
-			m->process_list->paths = ft_strdup(env[i] + 5);
-			if (m->process_list->paths == NULL)
+			m->paths = ft_strdup(env[i] + 5);
+			if (m->paths == NULL)
 			{
 				malloc_error_no_exit(m);
 				return ;
@@ -106,9 +106,9 @@ void	set_paths(t_minishell *m, char **env)
 		}
 		i++;
 	}
-	if (m->process_list->paths == NULL)
-		m->process_list->paths = ft_strdup("/usr");
-	if (m->process_list->paths == NULL)
+	if (m->paths == NULL)
+		m->paths = ft_strdup("/usr");
+	if (m->paths == NULL)
 		malloc_error_no_exit(m);
 }
 /*
