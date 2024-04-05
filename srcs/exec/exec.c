@@ -29,18 +29,18 @@ static void	exec_one_cmd(t_minishell *m)
 	//  enum e_token_operators	infile_token;
 	//  enum e_token_operators	outfile_token;
 
-	//  infile_token = m->process_list->in_files_list->e_operator;
-	//  outfile_token = m->process_list->out_files_list->e_operator;
+	//  infile_token = m->process_list->in_files_token->e_operator;
+	//  outfile_token = m->process_list->out_files_token->e_operator;
 	//  if (infile_token == HERE_DOC) // SEGFAULT
-	//  	here_doc(m, m->process_list->in_files_list->name);
+	//  	here_doc(m, m->process_list->in_files_token->name);
 	//  if (infile_token == INPUT_REDIRECT || infile_token == HERE_DOC)
 	//  {
-	//  	open_fd_infile(m, m->process_list->in_files_list);
+	//  	open_fd_infile(m, m->process_list->in_files_token);
 	//  	m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 	//  }
 	//  if (outfile_token == OUTPUT_REDIRECT || outfile_token == APPEND)
 	//  {
-	//  	open_fd_outfile(m, m->process_list->out_files_list->name);
+	//  	open_fd_outfile(m, m->process_list->out_files_token->name);
 	//  	m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 	//  }
 	m->pid2 = m_safe_fork(m);

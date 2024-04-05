@@ -65,7 +65,11 @@ void check_syntax(t_minishell *minishell)
 {
 	t_token_list *iterator;
 	t_token_list *next_token;
+	t_token_list *last_token;
 
+	last_token = ft_lstlast_token(minishell->list_tokens);
+	if (last_token != NULL && last_token->e_type == OPERATOR)
+		exit_msg(minishell, "syntax error near unexpected token `newline'", 1);
 	if (minishell->list_tokens != NULL)
 	{
 		iterator = minishell->list_tokens;
@@ -74,7 +78,7 @@ void check_syntax(t_minishell *minishell)
 			next_token = iterator->next;
 			if (iterator->e_type == OPERATOR && next_token->e_type == OPERATOR)
 			{
-				print_operator_syntax_error(iterator->next);
+				print_operator_syntax_error(iterator);
 				free_minishell(minishell);
 				exit(1);
 			}
@@ -83,16 +87,22 @@ void check_syntax(t_minishell *minishell)
 	}
 }
 
-void transform_to_token(t_minishell *minishell)
+char **split_user_input(t_minishell *minishell)
 {
-	int 			i;
-	t_token_list	*new_token;
-	char			**split;
+	char	**split;
 
-	i = 0;
 	split = split_with_quotes_management(minishell->user_input);
 	if (split == NULL)
 		exit_msg(minishell, "Malloc failed at split for tokenization", 2);
+	return (split);
+}
+
+void transform_to_token(t_minishell *minishell, char **split)
+{
+	int 			i;
+	t_token_list	*new_token;
+
+	i = 0;
 	while (split[i])
 	{
 		new_token = malloc(sizeof(t_token_list));
@@ -115,7 +125,10 @@ void transform_to_token(t_minishell *minishell)
 
 void parse_input(t_minishell *minishell)
 {
-	transform_to_token(minishell);
+	char	**split;
+
+	split = split_user_input(minishell);
+	transform_to_token(minishell, split);
 	check_syntax(minishell);
 	token_requalification(minishell->list_tokens);
 }
