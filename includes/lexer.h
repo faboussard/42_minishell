@@ -81,4 +81,10 @@ void count_total_commands(t_minishell *minishell);
 size_t count_letters_until_pipe(t_token_list *head);
 size_t count_cmds_until_pipe(t_token_list *head);
 
+/********************** check syntax *********************/
+
+int check_syntax(t_minishell *minishell);
+
+
+
 #endif //LEXER_H

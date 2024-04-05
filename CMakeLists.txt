@@ -98,6 +98,8 @@ add_executable(minishell
         srcs/exec/paths.c
         srcs/exec/safe_utils.c
         srcs/exec/utils.c
-        srcs/exec/old_exec.h)
+        srcs/utils/token_list.c
+        srcs/utils/token_list.c
+        srcs/lexer/check_syntax.c)
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

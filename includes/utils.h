@@ -46,4 +46,10 @@ void			ft_free_process_list(t_process_list **process_list);
 void			print_error(const char *error);
 int				print_operator_syntax_error(t_token_list *token);
 
+
+/******************** TOKEN LIST *****************/
+int	ft_lstsize_token(t_token_list *lst);
+t_token_list	*ft_lstlast_token(t_token_list *lst);
+void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token);
+
 #endif // GENERAL_H

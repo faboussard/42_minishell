@@ -34,4 +34,13 @@ faboussa@z1r9p4:~$ << stop > > | ls
 bash: syntax error near unexpected token `>'
 > stop
 
+
+
+faboussa@z1r9p4:~$ << stop > ||
+bash: syntax error near unexpected token `||'
+> stop
+
 si heredoc : louvrir + error message sans exit. ne soccupe pas du reste
+faboussa@z1r9p4:~$ << stop >>
+> stop
+bash: syntax error near unexpected token `newline'
