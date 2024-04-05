@@ -73,6 +73,7 @@ typedef struct process_list
 {
 	t_token_list	*in_files_list;
 	t_token_list	*out_files_list;
+	char	*paths;
 	char	*good_path;
 	char	**tab_paths;
 	char 	**cmd_table; // < infile < infile ls -l | wc -l > outfile << stope

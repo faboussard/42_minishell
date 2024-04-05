@@ -56,12 +56,12 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	parse_input(minishell);
 	create_process_list(minishell);
 	printf("total command is %zu\n", minishell->total_commands);
-	execute_cmds(minishell, minishell->total_commands);
+//	execute_cmds(minishell, minishell->total_commands);
 }
 
 int main(int ac, char **av, char **envp)
 {
-	t_minishell 	minishell;
+	t_minishell	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
 	if (envp)
