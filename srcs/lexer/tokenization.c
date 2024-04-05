@@ -14,6 +14,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include "parser.h"
+#include "signals.h"
 
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token_list *new_token)
 {
@@ -34,57 +35,6 @@ int define_token(t_token_list *new_token, char *string)
 		&& get_operator_token(new_token, string) == FALSE && string[0] != '-')
 		define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
 	return (1);
-}
-
-t_token_list	*ft_lstlast_token(t_token_list *lst)
-{
-	while (lst != NULL)
-	{
-		if (lst->next == NULL)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
-}
-
-void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
-{
-	t_token_list	*last;
-
-	if (*list_tokens != NULL)
-	{
-		last = ft_lstlast_token(*list_tokens);
-		if (last != NULL)
-			last->next = new_token;
-	}
-	else
-		*list_tokens = new_token;
-}
-
-void check_syntax(t_minishell *minishell)
-{
-	t_token_list *iterator;
-	t_token_list *next_token;
-	t_token_list *last_token;
-
-	last_token = ft_lstlast_token(minishell->list_tokens);
-	if (last_token != NULL && last_token->e_type == OPERATOR)
-		exit_msg(minishell, "syntax error near unexpected token `newline'", 1);
-	if (minishell->list_tokens != NULL)
-	{
-		iterator = minishell->list_tokens;
-		while (iterator != NULL && iterator->next != NULL)
-		{
-			next_token = iterator->next;
-			if (is_redirect_token(iterator) && (is_redirect_token(next_token) || next_token->e_operator == PIPE))
-			{
-				print_operator_syntax_error(iterator);
-				free_minishell(minishell);
-				exit(1);
-			}
-			iterator = iterator->next;
-		}
-	}
 }
 
 char **split_user_input(t_minishell *minishell)
@@ -123,12 +73,14 @@ void transform_to_token(t_minishell *minishell, char **split)
 	ft_free_all_tab(split);
 }
 
-void parse_input(t_minishell *minishell)
+int parse_input(t_minishell *minishell)
 {
 	char	**split;
 
 	split = split_user_input(minishell);
 	transform_to_token(minishell, split);
-	check_syntax(minishell);
+	if (check_syntax(minishell) == 1)
+		return (1);
 	token_requalification(minishell->list_tokens);
+	return (0);
 }

@@ -54,21 +54,6 @@
 //	}
 //}
 
-int	ft_lstsize_token(t_token_list *lst)
-{
-    int	i;
-    int	list_size;
-
-    i = 0;
-    while (lst)
-    {
-        i++;
-        lst = lst->next;
-    }
-    list_size = i;
-    return (list_size);
-}
-
 void arg_to_command(t_token_list *list_tokens)
 {
 	t_token_list  *iterator;

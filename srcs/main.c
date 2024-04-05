@@ -33,12 +33,14 @@ void	minishell_interactive(t_minishell *minishell)
 		set_signals_noninteractive();
 		//        add_history(minishell->user_input);
 		minishell->history_count += 1;
-		parse_input(minishell);
-		create_process_list(minishell);
-		if (minishell->process_list == NULL)
-			return ;
-		ft_init_process_list_and_minishell(minishell, minishell->process_list);
-		execute_cmds(minishell, minishell->total_commands);
+		if (parse_input(minishell) == 0)
+		{
+			create_process_list(minishell);
+			if (minishell->process_list == NULL)
+				return;
+			ft_init_process_list_and_minishell(minishell, minishell->process_list);
+//		execute_cmds(minishell, minishell->total_commands);
+		}
 		free(minishell->user_input);
 		ft_free_process_list(&(minishell->process_list));
 		ft_lstclear_token(&minishell->list_tokens);
@@ -53,10 +55,11 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
 	//	add_history(minishell->user_input);
 	minishell->history_count += 1;
-	parse_input(minishell);
-	create_process_list(minishell);
-	printf("total command is %zu\n", minishell->total_commands);
-	execute_cmds(minishell, minishell->total_commands);
+	if (parse_input(minishell) == 0)
+	{
+		create_process_list(minishell);
+//		execute_cmds(minishell, minishell->total_commands);
+	}
 }
 
 int	main(int ac, char **av, char **envp)
@@ -64,12 +67,12 @@ int	main(int ac, char **av, char **envp)
 	t_minishell	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
-	if (envp)
-		minishell.list_envp = create_envp_list(envp, &minishell);
-	if (minishell.list_envp == NULL)
-		exit_msg(&minishell, "Fatal : malloc failed", -1);
-	else
-		create_envp_table(&minishell);
+//	if (envp)
+//		minishell.list_envp = create_envp_list(envp, &minishell);
+//	if (minishell.list_envp == NULL)
+//		exit_msg(&minishell, "Fatal : malloc failed", -1);
+//	else
+//		create_envp_table(&minishell);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
@@ -79,7 +82,7 @@ int	main(int ac, char **av, char **envp)
 	//	printf("************ print list_tokens ************\n"); // DELETE
 	//	print_token_list(minishell.list_tokens); //DELETE
 	//	printf("************ process list (cmd table , in out files,limiters : ********* \n"); // DELETE
-	print_process_list(minishell.process_list); // DELETE
+//	print_process_list(minishell.process_list); // DELETE
 	//   printf("********************** print env_table **********************\n\n");
 		// DELETE
 	//	print_array(minishell.envp_table);  //DELETE
