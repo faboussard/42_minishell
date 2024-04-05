@@ -1,63 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                              :+:      :+:    :+:  */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:18:27 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "utils.h"
-#include <stdlib.h>
 #include "minishell.h"
-# include <readline/history.h>
+#include "utils.h"
+#include <readline/history.h>
+#include <stdlib.h>
 
-
-//commentaire pour fanny de fanny : laisser les declaration de next, invalid read sinon
-void ft_lstclear_envp(t_envp_list **lst)
+// commentaire pour fanny de fanny : laisser les declaration de next,
+//	invalid read sinon
+void	ft_lstclear_envp(t_envp_list **lst)
 {
-    t_envp_list *current;
-	t_envp_list *next;
+	t_envp_list	*current;
+	t_envp_list	*next;
 
 	current = *lst;
-    while (current != NULL)
-    {
+	while (current != NULL)
+	{
 		next = current->next;
-        if (current->target != NULL)
-            free(current->target);
-        if (current->value != NULL)
-            free(current->value);
-        free(current);
+		if (current->target != NULL)
+			free(current->target);
+		if (current->value != NULL)
+			free(current->value);
+		free(current);
 		current = next;
-    }
-    *lst = NULL;
+	}
+	*lst = NULL;
 }
 
-void ft_lstclear_token(t_token_list **lst)
+void	ft_lstclear_token(t_token_list **lst)
 {
-    t_token_list *current;
-    t_token_list *next;
+	t_token_list	*current;
+	t_token_list	*next;
 
 	current = *lst;
-    while (current != NULL)
-    {
-        next = current->next;
-        if (current->name != NULL)
-            free(current->name);
-        free(current);
-        current = next;
-    }
-    *lst = NULL;
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->name != NULL)
+			free(current->name);
+		free(current);
+		current = next;
+	}
+	*lst = NULL;
 }
 
-void ft_free_process_list(t_process_list **process_list)
+void	ft_free_process_list(t_process_list **process_list)
 {
-	t_process_list *current;
-	t_process_list *next;
+	t_process_list	*current;
+	t_process_list	*next;
 
 	current = *process_list;
 	while (current != NULL)
@@ -84,7 +84,7 @@ void	free_minishell(t_minishell *minishell)
 	if (minishell->user_input)
 		free(minishell->user_input);
 	if (minishell->list_envp != NULL)
-        ft_lstclear_envp(&minishell->list_envp);
+		ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)
 		ft_free_all_tab(minishell->envp_table);
 	if (minishell->process_list)
@@ -124,5 +124,3 @@ void	ft_free_tab_from_i(void **tab, int j)
 	}
 	free(tab);
 }
-
-
