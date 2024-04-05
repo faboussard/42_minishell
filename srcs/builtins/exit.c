@@ -32,6 +32,8 @@
 //except when the exit utility is invoked in that trap itself, in
 //        which case the shell shall exit immediately.
 
+//FAIRE EXIT QUAND ON FAIT CONTRLOLE D AUSSI ( pour linstant seul un % apparait)
+
 //void restore_terminal(t_minishell *minishell)
 //{
 //	free_minishell(minishell);

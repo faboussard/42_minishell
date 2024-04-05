@@ -104,3 +104,28 @@ void token_requalification(t_token_list *list_tokens)
 	arg_to_command(list_tokens);
 //	to_subshell(list_tokens);
 }
+
+
+char **split_user_input(t_minishell *minishell)
+{
+	char	**split;
+
+	split = split_with_quotes_management(minishell->user_input);
+	if (split == NULL)
+		exit_msg(minishell, "Malloc failed at split for tokenization", 2);
+	return (split);
+}
+
+int parse_input(t_minishell *minishell)
+{
+	char	**split;
+
+	split = split_user_input(minishell);
+	transform_to_token(minishell, split);
+	if (check_syntax(minishell) == 1)
+		return (1);
+	token_requalification(minishell->list_tokens);
+	expand_tokens(minishell);
+	create_process_list(minishell);
+	return (0);
+}

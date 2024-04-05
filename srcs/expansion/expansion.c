@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,49 +13,44 @@
 #include "lexer.h"
 #include "utils.h"
 
-int parentheses_error(const char *string)
+void expand_dollar_token(t_token_list *token, t_minishell *minishell)
 {
-	int 	i;
-	size_t	open_parentheses;
-	size_t	close_parentheses;
+	size_t	i;
+
 	i = 0;
-	open_parentheses = 0;
-	close_parentheses = 0;
-	while (string[i])
+	if (token->name[1] == '(' && token->name[ft_strlen(token->name)] == ')')
 	{
-		open_parentheses += string[i] == '(';
-		close_parentheses += string[i] == ')';
-		i++;
+		while (token->name[i])
+		{
+			token->name[i] = token->name[i + 2];
+			i++;
+		}
 	}
-	if (close_parentheses > open_parentheses)
-		return (print_error("syntax error near unexpected token `)'"), -1);
-	return (0);
+	else
+	{
+		while (token->name[i])
+		{
+			token->name[i] = token->name[i + 1];
+			i++;
+		}
+	}
+	token->name[i] = '\0';
 }
 
-int parentheses_on_arg(char *string)
+void expand_tokens(t_minishell *minishell)
 {
-	int	i;
-	int	count;
+	t_token_list *iterator;
 
-	i = 0;
-	count = 0;
-	while (string[i])
+	iterator = minishell->list_tokens;
+	while (iterator != NULL)
 	{
-		if (string[i] == '(' && string[i + 1] == '-')
+		if (iterator->e_type == ARGUMENT)
 		{
-			count = 1;
-			break;
+			if (iterator->name[0] == '$')
+				expand_dollar_token(iterator, minishell);
+//			else if (ft_strcmp(iterator->name, "$?") == 0)
+//				expand_question_mark_token(iterator, minishell);
 		}
-		i++;
+		iterator = iterator->next;
 	}
-	if (count == 1)
-	{
-		string = ft_substr(string, i, ft_strlen(string) - i);
-		string = ft_strtrim(string, "(");
-		string = ft_strtrim(string, ")");
-		ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
-		ft_putstr_fd(string, STDERR_FILENO);
-		return (-1);
-	}
-	return (0);
 }

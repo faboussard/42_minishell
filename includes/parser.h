@@ -18,6 +18,7 @@
 
 /************************** parser  **************************/
 
+char **split_user_input(t_minishell *minishell);
 int parse_input(t_minishell *minishell);
 void	token_requalification(t_token_list *list_tokens);
 int check_syntax(t_minishell *minishell);
@@ -44,5 +45,8 @@ void	parsing(t_minishell *minishell, int ac, char **av, char **envp);
 
 /********************* envp.c **************************/
 t_envp_list	*create_envp_list(char **envp, t_minishell *minishell);
+
+/********************* expansion.c ****************************/
+void expand_tokens(t_minishell *minishell);
 
 #endif //PARSER_H

@@ -66,12 +66,12 @@ typedef struct s_token
     struct s_token          *next;
 }	t_token_list;
 
+
 char	**split_with_quotes_management(char *string);
 
-int	parentheses_error(const char *string);
-int parentheses_on_arg(char *string);
+/********************* tokenization *********************/
 
-
+void	transform_to_token(t_minishell *minishell, char **split);
 void	define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token_list *new_token);
 bool	get_builtin_token(t_token_list *new_token, char *string);
 
