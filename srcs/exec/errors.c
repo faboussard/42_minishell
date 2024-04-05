@@ -32,8 +32,11 @@ void	exit_command_not_found(t_minishell *m, char *name)
 
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
+	(void)m;
+	/*
 	if (m != NULL)
 		ft_free_node_process_list(m, m->process_list);
+	*/
 	ft_putendl_fd(msg, 2);
 	exit(error_code);
 }
@@ -41,8 +44,10 @@ void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code)
 {
 	print_name(m, name);
+	/*
 	if (m != NULL)
 		ft_free_node_process_list(m, m->process_list);
+	*/
 	exit(error_code);
 }
 
@@ -60,13 +65,15 @@ void	print_name_and_give_status(t_minishell *m, char *name, int err)
 
 void	malloc_error_with_exit(t_minishell *m)
 {
+	/*
 	if (m != NULL)
 		ft_free_node_process_list(m, m->process_list);
-	exit_msg_minishell(m, "Malloc error", -1);
+	*/
+	exit_msg_minishell(m, "Malloc error", 1);
 }
 
 void	malloc_error_no_exit(t_minishell *m)
 {
-	ft_putstr_fd("Malloc error", 2);
+	ft_putstr_fd("Malloc error", 1);
 	m->status = -1;
 }

@@ -6,22 +6,21 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 09:43:37 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/19 09:43:37 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:17:57 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "utils.h"
 
-
-void print_process_list(t_process_list *process_list)
+void	print_process_list(t_process_list *process_list)
 {
-	t_process_list *current;
+	t_process_list	*current;
 
 	if (process_list == NULL)
 	{
 		printf("no list to  print\n");
-		return;
+		return ;
 	}
 	current = process_list;
 	while (current != NULL)
@@ -41,58 +40,61 @@ void print_process_list(t_process_list *process_list)
 		current = current->next;
 	}
 }
-void print_array(char **array)
-{
-    printf("----------------------- ARRAY      -----------------------\n");
-	int i;
 
+void	print_array(char **array)
+{
+	int	i;
+
+	printf("----------------------- ARRAY      -----------------------\n");
 	if (array == NULL)
 	{
-        printf("no array to print\n");
-		return;
+		printf("no array to print\n");
+		return ;
 	}
 	i = 0;
 	while (array[i] != NULL)
 	{
-        printf("%s\n", array[i]);
+		printf("%s\n", array[i]);
 		i++;
 	}
 }
 
-void print_token_list(t_token_list *list_tokens)
+void	print_token_list(t_token_list *list_tokens)
 {
-	t_token_list  *iterator;
+	t_token_list	*iterator;
 
 	if (list_tokens == NULL)
 	{
-        printf("no list to  print\n");
-		return;
+		printf("no list to  print\n");
+		return ;
 	}
-    printf("----------------------- tokens -----------------------\n");
+	printf("----------------------- tokens -----------------------\n");
 	iterator = list_tokens;
 	while (iterator != NULL)
 	{
-        printf("Name : %s, Type: %d, Builtin: %d, Operator: %d\n", iterator->name, iterator->e_type, iterator->e_builtin, iterator->e_operator);
+		printf("Name : %s, Type: %d, Builtin: %d, Operator: %d\n",
+			iterator->name, iterator->e_type, iterator->e_builtin,
+			iterator->e_operator);
 		iterator = iterator->next;
 	}
-    printf("\n");
+	printf("\n");
 }
 
-void print_list_envp(t_minishell *minishell)
+void	print_list_envp(t_minishell *minishell)
 {
-    t_envp_list *current;
+	t_envp_list	*current;
 
-    if (minishell->list_envp == NULL)
-    {
-        printf("no list to print\n");
-        return ;
-    }
-    printf("-----------------------  ENVP LIST -----------------------\n");
-    current = minishell->list_envp;
-    while (current != NULL)
-    {
-        printf("Target: %s, Value: %s\n", current->target, current->value);
-        current = current->next;
-    }
-    printf("\n");
+	if (minishell->list_envp == NULL)
+	{
+		printf("no list to print\n");
+		return ;
+	}
+	printf("-----------------------  ENVP LIST -----------------------\n");
+	current = minishell->list_envp;
+	while (current != NULL)
+	{
+		printf("Target: %s, Value: %s\n", current->target, current->value);
+		current = current->next;
+	}
+	printf("\n");
 }

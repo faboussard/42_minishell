@@ -31,7 +31,7 @@ void	ft_free_tab(char **tab)
 void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl)
 {
 	m->status = 0;
-	m->tmp_in = -1;
+	m->tmp_in = 0;
 	m->fd_in = -1;
 	m->fd_out = -1;
 	//pl->here_doc = 0;
@@ -40,7 +40,7 @@ void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl)
 	pl->good_path = NULL;
 	pl->tab_paths = NULL;
 }
-
+/*
 void	ft_free_node_process_list(t_minishell *m, t_process_list *pl)
 {
 	if (pl->paths)
@@ -49,10 +49,7 @@ void	ft_free_node_process_list(t_minishell *m, t_process_list *pl)
 		free(pl->good_path);
 	if (pl->tab_paths)
 		ft_free_tab(pl->tab_paths);
-	/*
-	if (pl->cmd_table)
-		ft_free_tab(pl->cmd_table);
-		*/
+
 	check_and_delete_if_tmp_file_exists("/tmp/.tmp_heredoc");
 	if (m->fd_in >= 0)
 		close(m->fd_in); 	
@@ -60,3 +57,4 @@ void	ft_free_node_process_list(t_minishell *m, t_process_list *pl)
 		close(m->fd_out);
 	//	close(STDOUT_FILENO);
 }
+*/
