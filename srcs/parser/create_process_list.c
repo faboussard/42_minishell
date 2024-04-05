@@ -56,8 +56,8 @@ void create_cmd_table_array(t_process_list *new_process_list, size_t size, t_min
 
 void create_in_files_token(t_process_list *new_process_list, t_minishell *minishell)
 {
-	t_token_list *iterator;
-	t_token_list *next;
+	t_token_list	*iterator;
+	t_token_list 	*next;
 
 	new_process_list->in_files_token = ft_calloc(1, sizeof(t_token_list));
 	if (new_process_list->in_files_token == NULL)
@@ -83,8 +83,8 @@ void create_in_files_token(t_process_list *new_process_list, t_minishell *minish
 
 void create_out_files_token(t_process_list *new_process_list, t_minishell *minishell)
 {
-	t_token_list *iterator;
-	t_token_list *next;
+	t_token_list	*iterator;
+	t_token_list	*next;
 
 	new_process_list->out_files_token = ft_calloc(1, sizeof(t_token_list));
 	if (new_process_list->out_files_token == NULL)

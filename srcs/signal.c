@@ -24,36 +24,47 @@ void	signal_print_newline(int signal)
 	rl_on_new_line();
 }
 
-void	sigint_handler(int signo, t_minishell *minishell)
+void	sigint_handler(int signo)
 {
-	(void)(signo);
-	free_minishell(minishell);
+	(void)signo;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void sigquit_handler(int signo) {
+	// Gestionnaire de signal pour Ctrl+\ (backslash)
+	(void)signo;
+	// Ne rien faire
 }
 
 void	set_signals_interactive(void)
 {
 	struct sigaction	action;
 
-	ignore_sigquit();
-	action.sa_handler = (void (*)(int))sigint_handler;
+	action.sa_handler = (__sighandler_t) sigint_handler;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = 0;
 	if (sigaction(SIGINT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
 		return ;
+
 	}
+	action.sa_handler = SIG_IGN; // Ignorer Ctrl
+    if (sigaction(SIGQUIT, &action, NULL) < 0)
+	{
+	perror("sigaction() failed");
+		return ;
+	}
+	signal(SIGTSTP, SIG_IGN);
 }
-
-void	signal_reset_prompt(int signo)
-{
-	(void)signo;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
+// interet de SIGUIT (ctrl + \ ) si on lignore ??
+/*In interactive mode:
+◦ ctrl-C displays a new prompt on a new line.
+◦ ctrl-D exits the shell.
+◦ ctrl-\ does nothing.*/
 void	set_signals_noninteractive(void)
 {
 	struct sigaction	action;
@@ -67,25 +78,6 @@ void	set_signals_noninteractive(void)
 		return ;
 	}
 	sigaction(SIGQUIT, &action, NULL);
-	if (sigaction(SIGQUIT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return ;
-	}
-}
-
-// interet de SIGUIT (ctrl + \ ) si on lignore ??
-/*In interactive mode:
-◦ ctrl-C displays a new prompt on a new line.
-◦ ctrl-D exits the shell.
-◦ ctrl-\ does nothing.*/
-void	ignore_sigquit(void)
-{
-	struct sigaction	action;
-
-	action.sa_handler = SIG_IGN;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = 0;
 	if (sigaction(SIGQUIT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
