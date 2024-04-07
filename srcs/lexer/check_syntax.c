@@ -69,13 +69,13 @@ int check_syntax(t_minishell *minishell)
 			if (iterator->e_operator == HERE_DOC && iterator->next->e_type != OPERATOR && iterator->next != NULL)
 				return (0);
 			if (check_consecutive_redirect_tokens(iterator))
-				return 1;
+				return (1);
 			if (check_operator_followed_by_pipe(iterator))
-				return 1;
+				return (1);
 			iterator = iterator->next;
 		}
 		if (check_last_token_redirect(minishell))
-			return 1;
+			return (1);
 		if (check_last_token_pipe(minishell))
 			return 1;
 		return 0;
