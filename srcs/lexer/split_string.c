@@ -109,8 +109,6 @@ char **split_with_quotes(t_minishell *minishell)
 	char *joined_string;
 	char **split;
 	size_t i;
-	size_t j;
-	char **temp;
 	char *string;
 
 	string = minishell->user_input;
@@ -186,7 +184,6 @@ char **split_with_quotes(t_minishell *minishell)
 
 	char **split_with_quotes_management(t_minishell *minishell)
 	{
-		size_t i;
 		char **split;
 
 		split = split_with_quotes(minishell);
