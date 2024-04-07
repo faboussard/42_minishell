@@ -79,8 +79,8 @@ int	main(int ac, char **av, char **envp)
 		print_token_list(minishell.list_tokens); //DELETE
 		printf("************ process list (cmd table , in out files,limiters : ********* \n"); // DELETE
 	print_process_list(minishell.process_list); // DELETE
-	   printf("********************** print env_table **********************\n\n");
-		print_array(minishell.envp_table);  //DELETE
+//	   printf("********************** print env_table **********************\n\n");
+//		print_array(minishell.envp_table);  //DELETE
 	free_minishell(&minishell);
 	return (0);
 }
