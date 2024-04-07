@@ -98,16 +98,13 @@ void expand_and_create_envp_table(t_minishell *minishell)
 	iterator = minishell->list_tokens;
 	while (iterator != NULL)
 	{
-		//si je trouve la substring dans user input et si les petits guillemets entourent la substring, dans ce cas je fais pas lexpansion
-		if (iterator->name[0] == '$' && ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 1)
-			break;
 //		if (iterator->name[0] == '$' && iterator->name[1] == '\0')
 //			//do something;
-		if (iterator->name[0] == '$' && iterator->name[1] != '\0')
-				expand_dollar_token(iterator, minishell);
+		if (iterator->name[0] == '$' && iterator->name[1] != '\0' && ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0)
+			expand_dollar_token(iterator, minishell);
+		iterator = iterator->next;
 //		else if (ft_strcmp(iterator->name, "$?") == 0)
 //			expand_question_mark_token(iterator, minishell);
-		iterator = iterator->next;
 	}
 	create_envp_table(minishell);
 }
