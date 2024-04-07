@@ -16,7 +16,30 @@ Please ask your administrator.
 -c "cdc"
 -c "c"
 
+**********************gestion des simple quotes *******************
 
+A GERER OU PAS ??? DELMANDER . du sujet je comprends quil ne faut pas gerer(fanny)
+
+05:26:51 juba@juba-desktop→ echo > 'bls
+> 'bls
+
+
+05:30:46 juba@juba-desktop→ ech 'bls
+>
+bash: unexpected EOF while looking for matching `''
+bash: syntax error: unexpected end of file
+
+05:31:01 juba@juba-desktop→ echo 'bls
+>
+bash: unexpected EOF while looking for matching `''
+bash: syntax error: unexpected end of file
+
+05:31:36 juba@juba-desktop→ echo bls'
+> bls'
+bls
+bls
+
+-----> reagit si on entre un seul tilde
 
 ****************** redirections -*******************
 
