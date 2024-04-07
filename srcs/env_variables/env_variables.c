@@ -39,7 +39,8 @@ t_envp_list *create_new_envp(char *target, char *content)
     }
     if (content) {
         new_envp->value = ft_strdup(content);
-        if (new_envp->value == NULL) {
+        if (new_envp->value == NULL)
+		{
             free(new_envp->target);
             free(new_envp);
             return NULL;

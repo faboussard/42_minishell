@@ -47,6 +47,6 @@ void	parsing(t_minishell *minishell, int ac, char **av, char **envp);
 t_envp_list	*create_envp_list(char **envp, t_minishell *minishell);
 
 /********************* expansion.c ****************************/
-void expand_tokens(t_minishell *minishell);
+void expand_and_create_envp_table(t_minishell *minishell);
 
 #endif //PARSER_H
