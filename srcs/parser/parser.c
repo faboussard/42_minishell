@@ -125,7 +125,7 @@ int parse_input(t_minishell *minishell)
 	if (check_syntax(minishell) == 1)
 		return (1);
 	token_requalification(minishell->list_tokens);
-	expand_tokens(minishell);
+	expand_and_create_envp_table(minishell);
 	create_process_list(minishell);
 	return (0);
 }

@@ -12,45 +12,73 @@
 
 #include "lexer.h"
 #include "utils.h"
+#include "parser.h"
+
+
+void identify_envp_token(t_token_list *token, t_minishell *minishell)
+{
+	t_envp_list *iterator;
+
+	iterator = minishell->list_envp;
+	while (iterator != NULL)
+	{
+		printf("token: %s\n", token->name);
+		printf("iterator: %s\n", iterator->target);
+		if (ft_strcmp(token->name, iterator->target) == 0)
+		{
+			token->name = ft_strdup(iterator->value);
+			if (token->name == NULL)
+				exit_msg(minishell, "Malloc failed at identify_envp_token", -1);
+		}
+		iterator = iterator->next;
+	}
+}
+
+void move_position_char(char *str, char c)
+{
+	char *char_to_ignore = strchr(str, c);
+	if (char_to_ignore != NULL)
+		ft_memmove(char_to_ignore, char_to_ignore + 1, strlen(char_to_ignore));
+}
+
+void ignore_equal_sign_envp(t_minishell *minishell)
+{
+	t_envp_list *iterator = minishell->list_envp;
+	while (iterator != NULL)
+	{
+		move_position_char(iterator->target, '=');
+		iterator = iterator->next;
+	}
+}
+
+void ignore_dollar_token(t_token_list *token, t_minishell *minishell)
+{
+	token->name = ft_strdup(token->name + 1);
+	if (token->name == NULL)
+		exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
+}
 
 void expand_dollar_token(t_token_list *token, t_minishell *minishell)
 {
-	size_t	i;
-
-	i = 0;
-	if (token->name[1] == '(' && token->name[ft_strlen(token->name)] == ')')
-	{
-		while (token->name[i])
-		{
-			token->name[i] = token->name[i + 2];
-			i++;
-		}
-	}
-	else
-	{
-		while (token->name[i])
-		{
-			token->name[i] = token->name[i + 1];
-			i++;
-		}
-	}
-	token->name[i] = '\0';
+	ignore_dollar_token(token, minishell);
+	ignore_equal_sign_envp(minishell);
+	identify_envp_token(token, minishell);
 }
 
-void expand_tokens(t_minishell *minishell)
+void expand_and_create_envp_table(t_minishell *minishell)
 {
 	t_token_list *iterator;
 
 	iterator = minishell->list_tokens;
 	while (iterator != NULL)
 	{
-		if (iterator->e_type == ARGUMENT)
-		{
-			if (iterator->name[0] == '$')
+//		if (iterator->name[0] == '$' && iterator->name[1] == '\0')
+//			//do something;
+		if (iterator->name[0] == '$' && iterator->name[1] != '\0')
 				expand_dollar_token(iterator, minishell);
-//			else if (ft_strcmp(iterator->name, "$?") == 0)
-//				expand_question_mark_token(iterator, minishell);
-		}
+//		else if (ft_strcmp(iterator->name, "$?") == 0)
+//			expand_question_mark_token(iterator, minishell);
 		iterator = iterator->next;
 	}
+	create_envp_table(minishell);
 }
