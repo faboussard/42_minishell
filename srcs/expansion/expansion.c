@@ -22,8 +22,6 @@ void identify_envp_token(t_token_list *token, t_minishell *minishell)
 	iterator = minishell->list_envp;
 	while (iterator != NULL)
 	{
-		printf("token: %s\n", token->name);
-		printf("iterator: %s\n", iterator->target);
 		if (ft_strcmp(token->name, iterator->target) == 0)
 		{
 			token->name = ft_strdup(iterator->value);
@@ -65,13 +63,44 @@ void expand_dollar_token(t_token_list *token, t_minishell *minishell)
 	identify_envp_token(token, minishell);
 }
 
+
+int	ft_strnstr_and_check(const char *big, const char *little, size_t len)
+{
+	size_t	i;
+	size_t	j;
+	char previous_char;
+	int		count = 0;
+
+	i = 0;
+	while (big[i] != '\0')
+	{
+		j = 0;
+		while (big[i + j] == little[j] && ((i + j) < len))
+		{
+			count ++;
+			if (count == 1)
+				previous_char = big[i + j - 1];
+			j++;
+			if (little[j] == '\0' && previous_char == '\'')
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 void expand_and_create_envp_table(t_minishell *minishell)
 {
 	t_token_list *iterator;
 
+
+
 	iterator = minishell->list_tokens;
 	while (iterator != NULL)
 	{
+		//si je trouve la substring dans user input et si les petits guillemets entourent la substring, dans ce cas je fais pas lexpansion
+		if (iterator->name[0] == '$' && ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 1)
+			break;
 //		if (iterator->name[0] == '$' && iterator->name[1] == '\0')
 //			//do something;
 		if (iterator->name[0] == '$' && iterator->name[1] != '\0')
