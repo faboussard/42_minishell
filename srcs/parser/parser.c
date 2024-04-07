@@ -92,7 +92,7 @@ int parse_input(t_minishell *minishell)
 {
 	char	**split;
 
-	split = split_with_quotes_management(minishell->user_input);
+	split = split_with_quotes_management(minishell);
 	if (split == NULL)
 		exit_msg(minishell, "Malloc failed at split for tokenization", 2);
 	transform_to_token(minishell, split);

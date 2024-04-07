@@ -67,7 +67,7 @@ typedef struct s_token
 }	t_token_list;
 
 
-char	**split_with_quotes_management(char *string);
+char **split_with_quotes_management(t_minishell *minishell);
 
 /********************* tokenization *********************/
 
