@@ -92,8 +92,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	pl = process_list;
 	if (safe_pipe(m) == 0)
 		return ;
-	// open_fd_infile(m, pl->in_files_list);
-	m->fd_in = STDIN_FILENO;
+	open_fd_infile(m, pl->in_files_token);
+	//m->fd_in = STDIN_FILENO;
 	first_child(m);
 	pl = pl->next;
 	i = 1;
