@@ -138,10 +138,10 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 	{
 		len_space = 0;
 		len_quote = 0;
-		if (s[i] == double_quote || s[i] == single_quote)
+		if (s[i] &&s[i] == double_quote || s[i] == single_quote)
 		{
 			i++;
-			while (s[i + len_quote] != double_quote && s[i + len_quote] != single_quote)
+			while (s[i + len_quote] && s[i + len_quote] != double_quote && s[i + len_quote] != single_quote)
 				len_quote++;
 			strs_array[j] = ft_substr(s, i, len_quote);
 			if (strs_array[j] == NULL)
@@ -149,9 +149,9 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 			j++;
 			i += len_quote;
 		}
-		if (s[i] != space && s[i] != double_quote && s[i] != single_quote)
+		if (s[i] && s[i] != space && s[i] != double_quote && s[i] != single_quote)
 		{
-			while (s[i + len_space] != space && s[i + len_space] != double_quote && s[i + len_space] != single_quote)
+			while (s[i + len_space] && s[i + len_space] != space && s[i + len_space] != double_quote && s[i + len_space] != single_quote)
 				len_space++;
 			strs_array[j] = ft_substr(s, i, len_space);
 			if (strs_array[j] == NULL)
@@ -159,7 +159,7 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 			j++;
 			i += len_space;
 		}
-		else
+		else if(s[i])
 			i++;
 	}
 	strs_array[j] = NULL;
