@@ -51,7 +51,11 @@ void ignore_equal_sign_envp(t_minishell *minishell)
 
 void ignore_dollar_token(t_token_list *token, t_minishell *minishell)
 {
-	token->name = ft_strdup(token->name + 1);
+	if (token->name != NULL) {
+		size_t len = ft_strlen(token->name); // Longueur de la sous-chaîne à copier
+		token->name = ft_memmove(token->name, token->name + 1, len); // Déplacer la sous-chaîne vers le début de la chaîne
+		token->name[len] = '\0'; // Terminer la chaîne correctement
+	}
 	if (token->name == NULL)
 		exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
 }
@@ -69,7 +73,6 @@ int	ft_strnstr_and_check(const char *big, const char *little, size_t len)
 	size_t	i;
 	size_t	j;
 	char previous_char;
-	int		count = 0;
 
 	i = 0;
 	while (big[i] != '\0')
@@ -77,10 +80,9 @@ int	ft_strnstr_and_check(const char *big, const char *little, size_t len)
 		j = 0;
 		while (big[i + j] == little[j] && ((i + j) < len))
 		{
-			count ++;
-			if (count == 1)
-				previous_char = big[i + j - 1];
 			j++;
+			if (j == 1)
+				previous_char = big[i - 1];
 			if (little[j] == '\0' && previous_char == '\'')
 				return (1);
 		}

@@ -228,7 +228,7 @@ char **split_with_quotes(t_minishell *minishell)
 			return (NULL);
 		return (split);
 	}
-	deal_with_quotations_marks(string);
+//	deal_with_quotations_marks(string);
 	split = ft_split_with_quotes(string, ' ', '\"', '\'');
 	if (!split)
 		return (NULL);
