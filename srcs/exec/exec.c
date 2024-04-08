@@ -22,6 +22,21 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		exit_command_not_found(m, pl->cmd_table[0]);
 }
 
+static void check_stdin_stdout(enum e_token_type	in, enum e_token_type	out)
+{
+    if (in == IN_FILE || in == DELIMITER)
+    {
+        close(STDIN_FILENO);
+/* Even if closed, it seems to reopen itself right away*/
+    }
+    if (out == OUT_FILE || out == APPEND_FILE)
+    {
+        close(STDOUT_FILENO);
+        if (open("/dev/tty", O_WRONLY) == -1)
+            ft_putendl_fd("Can't open standard output", 2);
+    }
+}
+
 static void	exec_one_cmd(t_minishell *m,  t_process_list *pl)
 {
 	  enum e_token_type	infile_token;
@@ -50,12 +65,9 @@ static void	exec_one_cmd(t_minishell *m,  t_process_list *pl)
 		my_execve(m, pl);
 	else
 	{
-		if (infile_token == IN_FILE || infile_token == DELIMITER)
-			close(STDIN_FILENO);
-		if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
-			close(STDOUT_FILENO);
+        waitpid(m->pid2, NULL, 0);
+        check_stdin_stdout(infile_token, outfile_token);
 		close_fds(m->fd_in, m->fd_out);
-		waitpid(m->pid2, NULL, 0);
 	}
 }
 		// close(STDIN_FILENO); si je le close, le minishell s'arrete des que j'ai lancé une commande (comme ls)
@@ -85,7 +97,7 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 		exec_several_cmds(minishell, minishell->process_list);
 	wait_children_and_give_exit_status(minishell);
 	
-	dprintf(2, "I promise I'not existing !\n");
+	dprintf(2, "I promise I'm not existing !\n");
 	free(minishell->paths);
 	free(minishell->process_list->good_path);
 	ft_free_tab(minishell->process_list->tab_paths);
