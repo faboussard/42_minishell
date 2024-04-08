@@ -82,6 +82,114 @@
 //}
 
 
+static void	*ft_free_all_alloc_new(char **strs_array, size_t start)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < start)
+	{
+		free(strs_array[i]);
+		i++;
+	}
+	free(strs_array);
+	return (NULL);
+}
+
+static size_t	count_letters_for_space(const char *str, char c)
+{
+	size_t	count;
+
+	count = 0;
+	while (*str != '\0')
+	{
+		if (*str != c)
+			count++;
+		str++;
+	}
+	return (count);
+}
+
+static size_t	count_letters_for_quotes(const char *str, char double_quote, char single_quote)
+{
+	size_t	count;
+
+	count = 0;
+	while (*str != '\0')
+	{
+		if (*str != double_quote && *str != single_quote)
+			count++;
+		str++;
+	}
+	return (count);
+}
+
+
+static char	**fill_array_with_strings(char **strs_array, const char *s, char space, char double_quote, char single_quote)
+{
+	size_t	i;
+	size_t	j;
+	size_t	len_space;
+	size_t	len_quote;
+
+	i = 0;
+	j = 0;
+	while (s[i] != '\0')
+	{
+		len_space = 0;
+		len_quote = 0;
+		if (s[i] == double_quote || s[i] == single_quote)
+		{
+			i++;
+			while (s[i + len_quote] != double_quote && s[i + len_quote] != single_quote)
+				len_quote++;
+			strs_array[j] = ft_substr(s, i, len_quote);
+			if (strs_array[j] == NULL)
+				return (ft_free_all_alloc_new(strs_array, j));
+			j++;
+			i += len_quote;
+		}
+		if (s[i] != space && s[i] != double_quote && s[i] != single_quote)
+		{
+			while (s[i + len_space] != space && s[i + len_space] != double_quote && s[i + len_space] != single_quote)
+				len_space++;
+			strs_array[j] = ft_substr(s, i, len_space);
+			if (strs_array[j] == NULL)
+				return (ft_free_all_alloc_new(strs_array, j));
+			j++;
+			i += len_space;
+		}
+		else
+			i++;
+	}
+	strs_array[j] = NULL;
+	return (strs_array);
+}
+
+char	**ft_split_with_quotes(char const *s, char space, char double_quote, char single_quote)
+{
+	char	**split;
+
+	if (s == NULL)
+		return (NULL);
+	split = malloc(sizeof(char **) * (count_letters_for_quotes(s, double_quote, single_quote) + count_letters_for_space(s, space) + 2));
+	if (split == NULL)
+		return (NULL);
+	split = fill_array_with_strings(split, s, space, double_quote, single_quote);
+	int i = 0;
+	while (split[i])
+	{
+		printf("split is %s\n", split[i]);
+		i++;
+	}
+	if (split == NULL)
+	{
+		free(split);
+		return (NULL);
+	}
+	return (split);
+}
+
 
 static void deal_with_quotations_marks(char *joined_cmd)
 {
@@ -105,8 +213,6 @@ static void deal_with_quotations_marks(char *joined_cmd)
 
 char **split_with_quotes(t_minishell *minishell)
 {
-	char *begin;
-	char *joined_string;
 	char **split;
 	size_t i;
 	char *string;
@@ -122,63 +228,10 @@ char **split_with_quotes(t_minishell *minishell)
 			return (NULL);
 		return (split);
 	}
-
-	i = 0;
-	while (string[i] == ' ')
-		i++;
-	string = ft_substr(string, i, ft_strlen(string) - i);
-	if (string == NULL)
-		return (NULL);
-
-	begin = malloc(sizeof(char) * i);
-	if (!begin)
-		return (NULL);
-	//on sepqre lq ou ya des espqces si jqmqis begin nest pas encadre de guillemets 5mot begin).
-	// puis on fait split sur les guillemets
-	ft_strlcpy(begin, string, i);
-	joined_string = ft_strjoin(begin, string + i);
-	free(begin);
-	if (!joined_string)
-		return (NULL);
-	deal_with_quotations_marks(joined_string);
-	split = ft_split(string,  '\'');
-	free(joined_string);
+	deal_with_quotations_marks(string);
+	split = ft_split_with_quotes(string, ' ', '\"', '\'');
 	if (!split)
 		return (NULL);
-	i = 0;
-
-	//split sur espaces
-	while (split[i])
-	{
-		if (ft_strchr(split[i], '\'') == 0 && ft_strchr(split[i], '\"') == 0 && !ft_strnstr_and_check(string, split[i], ft_strlen(string)))
-		{
-			char **temp = ft_split(split[i], ' '); // Split sur les espaces
-			if (!temp)
-				return NULL;
-			int k = 0;
-			int temp_size = 0;
-			while (temp[k])
-			{
-				temp_size++;
-				k++;
-			}
-			split = realloc(split, (i + temp_size + 1) * sizeof(char *)); // Augmenter la taille du tableau
-			if (!split)
-			{
-				// Gestion de l'échec de la réallocation mémoire
-				perror("Erreur lors de la réallocation de mémoire");
-				return (NULL);
-			}
-			k = 0;
-			while (temp[k])
-			{
-				split[i++] = temp[k++];
-			}
-			free(temp);
-		}
-		i++;
-	}
-	split[i] = NULL;
 	return (split);
 }
 
