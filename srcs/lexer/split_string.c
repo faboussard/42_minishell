@@ -125,6 +125,26 @@ static size_t	count_letters_for_quotes(const char *str, char double_quote, char 
 }
 
 
+//static void deal_with_quotations_marks(char *joined_cmd)
+//{
+//    size_t i;
+//    bool end_of_arg;
+//
+//    i = 0;
+//    end_of_arg = 0;
+//    while (joined_cmd[i])
+//    {
+//        if (joined_cmd[i] == '\'' && joined_cmd[i - 1] == '\"' && !end_of_arg)
+//            break;
+//        if (joined_cmd[i] == '\'' && (joined_cmd[i - 1] != '\"' || end_of_arg))
+//        {
+//            joined_cmd[i] = '\"';
+//            end_of_arg = 1;
+//        }
+//        i++;
+//    }
+//}
+
 static char	**fill_array_with_strings(char **strs_array, const char *s, char space, char double_quote, char single_quote)
 {
 	size_t	i;
@@ -166,6 +186,7 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 	return (strs_array);
 }
 
+
 char	**ft_split_with_quotes(char const *s, char space, char double_quote, char single_quote)
 {
 	char	**split;
@@ -188,27 +209,6 @@ char	**ft_split_with_quotes(char const *s, char space, char double_quote, char s
 		return (NULL);
 	}
 	return (split);
-}
-
-
-static void deal_with_quotations_marks(char *joined_cmd)
-{
-	size_t i;
-	bool end_of_arg;
-
-	i = 0;
-	end_of_arg = 0;
-	while (joined_cmd[i])
-	{
-		if (joined_cmd[i] == '\'' && joined_cmd[i - 1] == '\"' && !end_of_arg)
-			break;
-		if (joined_cmd[i] == '\'' && (joined_cmd[i - 1] != '\"' || end_of_arg))
-		{
-			joined_cmd[i] = '\"';
-			end_of_arg = 1;
-		}
-		i++;
-	}
 }
 
 char **split_with_quotes(t_minishell *minishell)
