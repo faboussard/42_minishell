@@ -15,7 +15,7 @@
 void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 {
 	if (in_files_list->e_type == DELIMITER)
-		m->fd_in = open("/tmp/.tmp_heredoc", O_CREAT | O_WRONLY | O_APPEND, 0666);
+		m->fd_in = open("/tmp/.tmp_heredoc", O_RDONLY);
 	else if (in_files_list->e_type == IN_FILE)
 		m->fd_in = open(in_files_list->name, O_RDONLY);
 	else
