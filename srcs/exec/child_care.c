@@ -118,7 +118,7 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	open_fd_outfile(m, pl->out_files_token->name);
+	open_fd_outfile(m, pl, pl->out_files_token->name);
 	if (safe_pipe(m) == 0)
 		return ;
 	last_child(m, pl);
