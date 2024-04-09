@@ -23,6 +23,10 @@
 #  define WRITE_END 1
 # endif
 
+//---------------------------- EXEC BUILTINS --------------------------//
+
+int exec_builtin(t_minishell *minishell, t_token_list *command);
+
 //---------------------------- SAFE UTILS -----------------------------//
 pid_t	m_safe_fork(t_minishell *minishell);
 void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd);
