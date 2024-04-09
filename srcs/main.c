@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:15:57 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:41:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,24 +76,14 @@ int main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-<<<<<<< HEAD
 //	  printf("************ print list_envp ************\n\n"); // DELETE
 //	  print_list_envp(&minishell);
-=======
-	//  printf("************ print list_envp ************\n\n"); // DELETE
-	//  print_list_envp(&minishell);
->>>>>>> origin/exec
 	printf("************ print list_tokens ************\n"); // DELETE
 	print_token_list(minishell.list_tokens); //DELETE
 	printf("************ process list (cmd table , in out files,limiters : ********* \n"); // DELETE
 	print_process_list(minishell.process_list); // DELETE
-<<<<<<< HEAD
 //	   printf("********************** print env_table **********************\n\n");
 //		print_array(minishell.envp_table);  //DELETE
-=======
-	printf("********************** print env_table **********************\n\n");
-	// print_array(minishell.envp_table);  //DELETE
->>>>>>> origin/exec
 	free_minishell(&minishell);
 	return (0);
 }
