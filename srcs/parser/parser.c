@@ -91,8 +91,11 @@ void token_requalification(t_token_list *list_tokens)
 int parse_input(t_minishell *minishell)
 {
 	char	**split;
+	char *string;
 
-	split = ft_split_with_quotes_management(minishell,minishell->user_input);
+	split = NULL;
+	string = minishell->user_input;
+	split = fill_array_with_quotes_management(string);
 	if (split == NULL)
 		return (1);
 	transform_to_token(minishell, split);

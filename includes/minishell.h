@@ -76,16 +76,8 @@ typedef struct s_process_list
 	char	**tab_paths;
 	char 	**cmd_table; // < infile < infile ls -l | wc -l > outfile << stope
 	bool	dev_null;
-	struct	process_list	*next;
+	struct	s_process_list	*next;
 } t_process_list;
-
-typedef struct s_quotes_struct
-{
-	char space;
-	char double_quote;
-	char single_quote;
-} t_quotes_struct;
-
 
 /*************************************** INIT MINISHELL ***************************************/
 

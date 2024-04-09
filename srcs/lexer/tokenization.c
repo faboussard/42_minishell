@@ -14,7 +14,6 @@
 #include "utils.h"
 #include <stdlib.h>
 #include "parser.h"
-#include "signals.h"
 
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator, t_token_list *new_token)
 {
@@ -45,7 +44,7 @@ void transform_to_token(t_minishell *minishell, char **split)
 	i = 0;
 	while (split[i])
 	{
-		new_token = malloc(sizeof(t_token_list));
+		new_token = ft_calloc(1, sizeof(t_token_list));
 		if (new_token == NULL)
 		{
 			ft_free_all_tab(split);
