@@ -36,7 +36,7 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd);
 char	*join_sep(t_minishell *m, char *s1, char *s2, char sep);
 //--------------------------- FD MANAGEMENT ---------------------------//
 void	open_fd_infile(t_minishell *m, t_token_list *in_files_list);
-void	open_fd_outfile(t_minishell *m, char *out);
+void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out);
 //--------------------------- HERE_DOC --------------------------------//
 void	here_doc(t_minishell *m, char *limiter);
 //--------------------------- UTILS -----------------------------------//
