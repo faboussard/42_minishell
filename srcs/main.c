@@ -20,16 +20,16 @@
 
 #define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
-void	minishell_interactive(t_minishell *minishell)
+void minishell_interactive(t_minishell *minishell)
 {
 	while (1)
 	{
 		set_signals_interactive();
 		minishell->user_input = readline(PROMPT);
 		if (minishell->user_input == NULL)
-			break ;
+			break;
 		if (minishell->user_input[0] == 0)
-			continue ;
+			continue;
 		set_signals_noninteractive();
 		//        add_history(minishell->user_input);
 		minishell->history_count += 1;
@@ -38,7 +38,7 @@ void	minishell_interactive(t_minishell *minishell)
 			if (minishell->process_list == NULL)
 				return;
 			ft_init_process_list_and_minishell(minishell, minishell->process_list);
-		execute_cmds(minishell, minishell->total_commands);
+			execute_cmds(minishell, minishell->total_commands);
 		}
 		free(minishell->user_input);
 		ft_free_process_list(&(minishell->process_list));
@@ -46,7 +46,7 @@ void	minishell_interactive(t_minishell *minishell)
 	}
 }
 
-void	minishell_non_interactive(t_minishell *minishell, char *data_input)
+void minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
 	set_signals_noninteractive();
 	minishell->user_input = ft_strdup(data_input);
@@ -63,9 +63,9 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	}
 }
 
-int	main(int ac, char **av, char **envp)
+int main(int ac, char **av, char **envp)
 {
-	t_minishell	minishell;
+	t_minishell minishell;
 
 	ft_init_minishell(&minishell, ac, av);
 	if (envp)
@@ -78,9 +78,9 @@ int	main(int ac, char **av, char **envp)
 		minishell_non_interactive(&minishell, av[2]);
 //	  printf("************ print list_envp ************\n\n"); // DELETE
 //	  print_list_envp(&minishell);
-		printf("************ print list_tokens ************\n"); // DELETE
-		print_token_list(minishell.list_tokens); //DELETE
-		printf("************ process list (cmd table , in out files,limiters : ********* \n"); // DELETE
+	printf("************ print list_tokens ************\n"); // DELETE
+	print_token_list(minishell.list_tokens); //DELETE
+	printf("************ process list (cmd table , in out files,limiters : ********* \n"); // DELETE
 	print_process_list(minishell.process_list); // DELETE
 //	   printf("********************** print env_table **********************\n\n");
 //		print_array(minishell.envp_table);  //DELETE
