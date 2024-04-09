@@ -47,7 +47,7 @@ void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
-		open_fd_outfile(m, pl->out_files_token->name);
+		open_fd_outfile(m, pl, pl->out_files_token->name);
 		m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 		close(m->fd_out);
 	}
