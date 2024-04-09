@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-//static void	deal_with_quotations_marks(char *joined_cmd)
+//static void	deal_single_and_double_quotes_togeter(char *joined_cmd)
 //{
 //	size_t	i;
 //	bool	end_of_arg;
@@ -56,7 +56,7 @@
 //	free(begin);
 //	if (!joined_string)
 //		return (NULL);
-//	deal_with_quotations_marks(joined_string);
+//	deal_single_and_double_quotes_togeter(joined_string);
 //	split = ft_split(joined_string, '\"');
 //	free(joined_string);
 //	if (!split)
@@ -125,25 +125,31 @@ static size_t	count_letters_for_quotes(const char *str, char double_quote, char 
 }
 
 
-//static void deal_with_quotations_marks(char *joined_cmd)
-//{
-//    size_t i;
-//    bool end_of_arg;
-//
-//    i = 0;
-//    end_of_arg = 0;
-//    while (joined_cmd[i])
-//    {
-//        if (joined_cmd[i] == '\'' && joined_cmd[i - 1] == '\"' && !end_of_arg)
-//            break;
-//        if (joined_cmd[i] == '\'' && (joined_cmd[i - 1] != '\"' || end_of_arg))
-//        {
-//            joined_cmd[i] = '\"';
-//            end_of_arg = 1;
-//        }
-//        i++;
-//    }
-//}
+#include <stdbool.h>
+#include <stddef.h>
+#include <string.h>
+
+static void deal_double_double_quotes_or_double_single_quotes(char *string)
+{
+	size_t i;
+	size_t len;
+
+	len = strlen(string);
+	i = 0;
+	while (i < len)
+	{
+		if ((string[i] == '\'' && string[i + 1] == '\'') || (string[i] == '\"' && string[i + 1] == '\"'))
+		{
+			ft_memmove(&string[i], &string[i + 1], len - i);
+			len--;
+		}
+		else
+		{
+			i++;
+		}
+	}
+}
+
 
 static char	**fill_array_with_strings(char **strs_array, const char *s, char space, char double_quote, char single_quote)
 {
@@ -206,7 +212,7 @@ char	**ft_split_with_quotes(char const *s, char space, char double_quote, char s
 }
 
 
-//static void deal_with_quotations_marks(char *joined_cmd)
+//static void deal_single_and_double_quotes_togeter(char *joined_cmd)
 //{
 //	size_t i;
 //	bool end_of_arg;
@@ -232,7 +238,7 @@ char **split_with_quotes(t_minishell *minishell)
 	char *string;
 
 	string = minishell->user_input;
-//	deal_with_quotations_marks(string);
+	deal_double_double_quotes_or_double_single_quotes(string);
 	split = ft_split_with_quotes(string, ' ', '\"', '\'');
 	if (!split)
 		return (NULL);
