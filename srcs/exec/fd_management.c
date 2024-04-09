@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:43:33 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:12:10 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		m->fd_in = open("/dev/null", O_RDONLY);
 		if (m->fd_in < 0)
 			ft_putendl_fd("No /dev/null/ found", 2);
-		// exit_msg_pipex(NULL, "No /dev/null/ found", -1);
-		//A CHANGER, pas d'exit du minishell
+		//	exit_msg_pipex(NULL, "No /dev/null/ found", -1);
+		//	A CHANGER, pas d'exit du minishell
 	}
 }
 /*
@@ -41,6 +41,7 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		mbernard@z1r9p2:/usr$ echo $?
 		1
 */
+
 void	open_fd_outfile(t_minishell *m, char *out)
 {
 	if (m->process_list->out_files_token->e_type == OUT_FILE)

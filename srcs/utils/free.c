@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:18:27 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:43:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ void	free_minishell(t_minishell *minishell)
 {
 	if (minishell->fd_in >= 0)
 		close(minishell->fd_in);
+	if (STDIN_FILENO >= 0)
+		close(STDIN_FILENO);
+	if (STDOUT_FILENO >= 0)
+		close(STDOUT_FILENO);
+	if (STDERR_FILENO >= 0)
+		close(STDERR_FILENO);
 	if (minishell->fd_out >= 0)
 		close(minishell->fd_out);
 	if (minishell->user_input)

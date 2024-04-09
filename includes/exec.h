@@ -6,7 +6,7 @@
 /*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:54:08 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:50:18 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,11 @@ void	here_doc(t_minishell *m, char *limiter);
 //--------------------------- UTILS -----------------------------------//
 void	ft_free_tab(char **tab);
 void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl);
-void	ft_free_node_process_list(t_minishell *m, t_process_list *pl);
+void	ft_free_pl_paths(t_minishell *minishell);
 //--------------------------- CHILD CARE ------------------------------//
 void	exec_several_cmds(t_minishell *m, t_process_list *process_list);
 //--------------------------- EXEC ------------------------------------//
 void	my_execve(t_minishell *m, t_process_list *pl);
-//void	my_execve(char **cmd_table, char **env, t_minishell *m);
-//void	execute_cmds(t_minishell *minishell, int nb_cmds);
 //--------------------------- ERRORS ------------------------------------//
 void	print_name(t_minishell *m, char *name);
 void	exit_command_not_found(t_minishell *m, char *name);
@@ -57,7 +55,5 @@ void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
 void	malloc_error_with_exit(t_minishell *m);
-//void	malloc_error_no_exit(t_minishell *m, t_process_list *p);
 void	malloc_error_no_exit(t_minishell *m);
 #endif
-
