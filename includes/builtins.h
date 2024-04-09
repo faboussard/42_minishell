@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h             			                    :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:15 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:10:10 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-#ifndef MINISHELL_BUILTINS_H
-#define MINISHELL_BUILTINS_H
-
-#include "libft.h"
-#include "minishell.h"
-
+# include "libft.h"
+# include "minishell.h"
 
 int	ft_exit_builtin(t_minishell *minishell);
 int	ft_env(t_minishell *minishell);
@@ -28,4 +26,4 @@ int	ft_pwd(t_minishell *minishell);
 int	ft_export(t_minishell *minishell);
 int	ft_unset(t_minishell *minishell);
 
-#endif //MINISHELL_BUILTINS_H
+#endif // MINISHELL_BUILTINS_H
