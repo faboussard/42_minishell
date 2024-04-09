@@ -118,16 +118,20 @@ int	ft_strnstr_and_check(const char *big, const char *little, size_t len)
 	return (0);
 }
 
-void expand_and_create_envp_table(t_minishell *minishell)
+void expander(t_minishell *minishell)
 {
 	t_token_list *iterator;
 
 	iterator = minishell->list_tokens;
 	while (iterator != NULL)
 	{
-		if (iterator->name[0] == '$' && iterator->name[1] != '\0' && ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0)
+		if (ft_strcmp(iterator->name, "$?") == 0)
+			printf("%d\n", minishell->status);
+		if (iterator->e_type != DELIMITER
+				&& iterator->name[0] == '$' && iterator->name[1] != '\0'
+				&& ft_strnstr_and_check(minishell->user_input, iterator->name
+										,ft_strlen(minishell->user_input)) == 0)
 			expand_dollar_token(iterator, minishell);
 		iterator = iterator->next;
 	}
-	create_envp_table(minishell);
 }

@@ -56,6 +56,9 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->history_count += 1;
 	if (parse_input(minishell) == 0)
 	{
+		if (minishell->process_list == NULL)
+			return;
+		ft_init_process_list_and_minishell(minishell, minishell->process_list);
 		execute_cmds(minishell, minishell->total_commands);
 	}
 }
