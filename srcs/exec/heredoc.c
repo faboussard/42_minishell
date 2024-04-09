@@ -31,6 +31,7 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 	while (1)
 	{
 		input = get_next_line(STDIN_FILENO);
+//			expand_input
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter,
 				limiter_len))
