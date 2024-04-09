@@ -17,85 +17,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-//static void	deal_single_and_double_quotes_togeter(char *joined_cmd)
-//{
-//	size_t	i;
-//	bool	end_of_arg;
-//
-//	i = 0;
-//	end_of_arg = 0;
-//	while (joined_cmd[i])
-//	{
-//		if (joined_cmd[i] == '\'' && joined_cmd[i - 1] == '\"' && !end_of_arg)
-//			break ;
-//		if (joined_cmd[i] == '\'' && (joined_cmd[i - 1] != '\"' || end_of_arg))
-//		{
-//			joined_cmd[i] = '\"';
-//			end_of_arg = 1;
-//		}
-//		i++;
-//	}
-//}
-//
-//char	**split_with_quotes(char *string)
-//{
-//	char	*begin;
-//	char	*joined_string;
-//	char 	**split;
-//	size_t	i;
-//
-//	i = 0;
-//	while (string[i] && string[i] != ' ')
-//		i++;
-//	i++;
-//	begin = malloc(sizeof(char) * i);
-//	if (!begin)
-//		return (NULL);
-//	ft_strlcpy(begin, string, i);
-//	joined_string = ft_strjoin(begin, string + i);
-//	free(begin);
-//	if (!joined_string)
-//		return (NULL);
-//	deal_single_and_double_quotes_togeter(joined_string);
-//	split = ft_split(joined_string, '\"');
-//	free(joined_string);
-//	if (!split)
-//		return (NULL);
-//	return (split);
-//}
-//
-//char	**split_with_quotes_management(char *string)
-//{
-//	size_t	i;
-//	char **split;
-//
-//	i = 0;
-//	while (string[i] && string[i] != '\'' && string[i] != '\"')
-//		i++;
-//	if (!string[i])
-//		split = ft_split(string, ' ');
-//	else
-//		split = split_with_quotes(string);
-//	if (split == NULL)
-//		return (NULL);
-//	return (split);
-//}
-
-
-//static void	*ft_free_all_alloc_new(char **strs_array, size_t start)
-//{
-//	size_t	i;
-//
-//	i = 0;
-//	while (i < start)
-//	{
-//		free(strs_array[i]);
-//		i++;
-//	}
-//	free(strs_array);
-//	return (NULL);
-//}
-
 static size_t	count_letters_for_space(const char *str, char c)
 {
 	size_t	count;
@@ -125,10 +46,6 @@ static size_t	count_letters_for_quotes(const char *str, char double_quote, char 
 }
 
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <string.h>
-
 static void deal_double_double_quotes_or_double_single_quotes(char *string)
 {
 	size_t i;
@@ -150,8 +67,7 @@ static void deal_double_double_quotes_or_double_single_quotes(char *string)
 	}
 }
 
-
-static char	**fill_array_with_strings(char **strs_array, const char *s, char space, char double_quote, char single_quote)
+static char	**fill_array_with_quotes_management(char **strs_array, const char *s, char space, char double_quote, char single_quote)
 {
 	size_t	i;
 	size_t	j;
@@ -164,10 +80,10 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 	{
 		len_space = 0;
 		len_quote = 0;
-		if (s[i] && (s[i] == double_quote || s[i] == single_quote))
+		if (s[i] == double_quote)
 		{
 			i++;
-			while (s[i + len_quote] && s[i + len_quote] != double_quote && s[i + len_quote] != single_quote)
+			while (s[i + len_quote] && s[i + len_quote] != double_quote)
 				len_quote++;
 			strs_array[j] = ft_substr(s, i, len_quote);
 			if (strs_array[j] == NULL)
@@ -175,9 +91,20 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 			j++;
 			i += len_quote;
 		}
-		if (s[i] && s[i] != space && s[i] != double_quote && s[i] != single_quote)
+		else if (s[i] == single_quote)
 		{
-			while (s[i + len_space] && s[i + len_space] != space && s[i + len_space] != double_quote && s[i + len_space] != single_quote)
+			i++;
+			while (s[i + len_quote] && s[i + len_quote] != single_quote)
+				len_quote++;
+			strs_array[j] = ft_substr(s, i, len_quote);
+			if (strs_array[j] == NULL)
+				return (ft_free_all_tab(strs_array), NULL);
+			j++;
+			i += len_quote;
+		}
+		else if (s[i] && s[i] != space)
+		{
+			while (s[i + len_space] && s[i + len_space] != space)
 				len_space++;
 			strs_array[j] = ft_substr(s, i, len_space);
 			if (strs_array[j] == NULL)
@@ -185,15 +112,14 @@ static char	**fill_array_with_strings(char **strs_array, const char *s, char spa
 			j++;
 			i += len_space;
 		}
-		else if(s[i])
-			i++;
+		i++;
 	}
 	strs_array[j] = NULL;
 	return (strs_array);
 }
 
 
-char	**ft_split_with_quotes(char const *s, char space, char double_quote, char single_quote)
+char	**ft_split_with_quotes_management(char const *s, char space, char double_quote, char single_quote)
 {
 	char	**split;
 
@@ -202,7 +128,7 @@ char	**ft_split_with_quotes(char const *s, char space, char double_quote, char s
 	split = malloc(sizeof(char **) * (count_letters_for_quotes(s, double_quote, single_quote) + count_letters_for_space(s, space) + 2));
 	if (split == NULL)
 		return (NULL);
-	split = fill_array_with_strings(split, s, space, double_quote, single_quote);
+	split = fill_array_with_quotes_management(split, s, space, double_quote, single_quote);
 	if (split == NULL)
 	{
 		free(split);
@@ -239,7 +165,7 @@ char **split_with_quotes(t_minishell *minishell)
 
 	string = minishell->user_input;
 	deal_double_double_quotes_or_double_single_quotes(string);
-	split = ft_split_with_quotes(string, ' ', '\"', '\'');
+	split = ft_split_with_quotes_management(string, ' ', '\"', '\'');
 	if (!split)
 		return (NULL);
 	return (split);
