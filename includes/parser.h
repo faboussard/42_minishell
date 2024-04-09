@@ -22,6 +22,11 @@ int parse_input(t_minishell *minishell);
 void	token_requalification(t_token_list *list_tokens);
 int	ft_strnstr_and_check(const char *big, const char *little, size_t len);
 char	**ft_split_with_quotes_management(t_minishell *minishell, char *s);
+char **fill_array_with_quotes_management(char *s);
+void	*ft_free_all_alloc(char **strs_array, size_t start);
+void deal_double_double_quotes_or_double_single_quotes(char *string);
+size_t	count_letters_for_quotes( char *str);
+size_t	count_letters_for_space( char *str);
 
 /**************************** count tokens **************************/
 

@@ -11,8 +11,8 @@ LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string lexer/check_syntax\
 				env_variables/env_variables\
 				parser/parser parser/create_process_list parser/process_list\
-				builtins/exit_builtin
-				expansion/expansion \
+				builtins/exit_builtin\
+				expansion/expansion\
 				utils/free utils/print utils/error utils/token_list\
 				exec/exec exec/exec_builtins exec/errors	exec/paths	exec/fd_management \
                 exec/safe_utils	exec/utils	exec/child_care	exec/heredoc

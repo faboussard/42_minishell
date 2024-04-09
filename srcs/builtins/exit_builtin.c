@@ -31,7 +31,6 @@
 
 //FAIRE EXIT QUAND ON FAIT CONTRLOLE D AUSSI ( pour linstant seul un % apparait)
 
-static int	get_exit_code(char *arg, bool *error);
 static bool	check_out_of_range(int neg, unsigned long long num, bool *error);
 
 static int	ft_atoi_long(const char *str, bool *error)
