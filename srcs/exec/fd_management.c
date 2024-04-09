@@ -42,17 +42,14 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		1
 */
 
-void	open_fd_outfile(t_minishell *m, char *out)
+void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 {
-	if (m->process_list->out_files_token->e_type == OUT_FILE)
+	if (pl->out_files_token->e_type == OUT_FILE)
 		m->fd_out = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	else if (m->process_list->out_files_token->e_type == APPEND_FILE)
+	else if (pl->out_files_token->e_type == APPEND_FILE)
 		m->fd_out = open(out, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
 		m->fd_out = STDOUT_FILENO;
 	if (m->fd_out < 0)
-	{
-		dprintf(2, "I'm stuck :'( %s\n", out);
 		print_name_and_exit_perror(m, out, 1);
-	}
 }
