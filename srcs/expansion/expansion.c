@@ -17,8 +17,9 @@
 
 void identify_envp_token(t_token_list *token, t_minishell *minishell)
 {
-	t_envp_list *iterator = minishell->list_envp;
+	t_envp_list *iterator;
 
+	iterator = minishell->list_envp;
 	while (iterator != NULL)
 	{
 		if (ft_strcmp(token->name, iterator->target) == 0)
@@ -38,14 +39,17 @@ void identify_envp_token(t_token_list *token, t_minishell *minishell)
 }
 
 
-void move_position_char(char *str, char c)
+void ignore_next_char(char *str, char c)
 {
-	char *char_to_ignore = strchr(str, c);
+	char *char_to_ignore;
+	size_t len;
+
+	char_to_ignore = strchr(str, c);
 	if (char_to_ignore != NULL)
 	{
-		size_t len = strlen(char_to_ignore);
-		memmove(char_to_ignore, char_to_ignore + 1, len); // Utilisation de memmove pour éviter les problèmes de chevauchement
-		char_to_ignore[len - 1] = '\0'; // Mettre à jour la fin de la chaîne
+		len = strlen(char_to_ignore);
+		ft_memmove(char_to_ignore, char_to_ignore + 1, len);
+		char_to_ignore[len - 1] = '\0';
 	}
 }
 
@@ -54,38 +58,40 @@ void ignore_equal_sign_envp(t_minishell *minishell)
 	t_envp_list *iterator = minishell->list_envp;
 	while (iterator != NULL)
 	{
-		move_position_char(iterator->target, '=');
+		ignore_next_char(iterator->target, '=');
 		iterator = iterator->next;
 	}
 }
 
-void ignore_dollar_token(t_token_list *token, t_minishell *minishell) {
+void ignore_dollar_token(t_token_list *token, t_minishell *minishell)
+{
+	char *new_name;
+	size_t len;
+
 	if (token->name != NULL)
 	{
-		size_t len = strlen(token->name);
-		char *new_name = malloc(len); // Allouer de la mémoire pour la nouvelle chaîne
+		len = strlen(token->name);
+		new_name = malloc(len);
 		if (new_name == NULL)
 			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
-		memcpy(new_name, token->name + 1, len); // Copier les caractères après le dollar
-		free(token->name); // Libérer l'ancienne chaîne
+		ft_memcpy(new_name, token->name + 1, len);
+		free(token->name);
 		token->name = new_name;
 	}
 }
 
-void expand_dollar_token(t_token_list *token, t_minishell *minishell) {
-	// Sauvegarder la chaîne d'origine
-	char *original_name = strdup(token->name);
+void expand_dollar_token(t_token_list *token, t_minishell *minishell)
+{
+	char *original_name;
+
+	original_name = strdup(token->name);
 	if (original_name == NULL)
 		exit_msg(minishell, "Malloc failed at expand_dollar_token", -1);
-
 	ignore_dollar_token(token, minishell);
 	ignore_equal_sign_envp(minishell);
 	identify_envp_token(token, minishell);
-
-	// Libérer la mémoire de l'ancienne chaîne si elle a été modifiée
-	if (strcmp(original_name, token->name) != 0) {
+	if (strcmp(original_name, token->name) != 0)
 		free(original_name);
-	}
 }
 
 
@@ -112,9 +118,13 @@ int	ft_strnstr_and_check(const char *big, const char *little, size_t len)
 	return (0);
 }
 
-void expand_and_create_envp_table(t_minishell *minishell) {
-	t_token_list *iterator = minishell->list_tokens;
-	while (iterator != NULL) {
+void expand_and_create_envp_table(t_minishell *minishell)
+{
+	t_token_list *iterator;
+
+	iterator = minishell->list_tokens;
+	while (iterator != NULL)
+	{
 		if (iterator->name[0] == '$' && iterator->name[1] != '\0' && ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0)
 			expand_dollar_token(iterator, minishell);
 		iterator = iterator->next;
