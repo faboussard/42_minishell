@@ -11,9 +11,10 @@ LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string lexer/check_syntax\
 				env_variables/env_variables\
 				parser/parser parser/create_process_list parser/process_list\
+				builtins/exit_builtin
 				expansion/expansion \
 				utils/free utils/print utils/error utils/token_list\
-				exec/exec	exec/errors	exec/paths	exec/fd_management \
+				exec/exec exec/exec_builtins exec/errors	exec/paths	exec/fd_management \
                 exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
 LIST_HEADERS	= utils lexer minishell parser signals exec
@@ -69,6 +70,7 @@ $(DIR_BUILD):
 	@mkdir -p $(DIR_BUILD)/expansion
 	@mkdir -p $(DIR_BUILD)/utils
 	@mkdir -p $(DIR_BUILD)/exec
+	@mkdir -p $(DIR_BUILD)/builtins
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)

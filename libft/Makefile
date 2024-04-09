@@ -5,6 +5,7 @@ SRCS=src/ft_is/ft_isalnum.c\
 	    src/ft_is/ft_isascii.c\
 	    src/ft_is/ft_isdigit.c\
 	    src/ft_is/ft_isprint.c\
+	    src/ft_is/ft_isspace.c\
 	    src/ft_lst/ft_lstadd_back.c\
 	    src/ft_lst/ft_lstadd_front.c\
 	    src/ft_lst/ft_lstclear.c\

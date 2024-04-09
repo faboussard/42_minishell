@@ -21,6 +21,7 @@
 int parse_input(t_minishell *minishell);
 void	token_requalification(t_token_list *list_tokens);
 int	ft_strnstr_and_check(const char *big, const char *little, size_t len);
+char	**ft_split_with_quotes_management(t_minishell *minishell, char *s);
 
 /**************************** count tokens **************************/
 

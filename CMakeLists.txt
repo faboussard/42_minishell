@@ -87,7 +87,7 @@ add_executable(minishell
         srcs/lexer/count_tokens.c
         srcs/init.c
         srcs/signal.c
-        srcs/builtins/exit.c
+        srcs/builtins/exit_builtin.c
         srcs/parser/process_list.c
         includes/exec.h
         srcs/exec/fd_management.c
@@ -100,6 +100,9 @@ add_executable(minishell
         srcs/exec/utils.c
         srcs/utils/token_list.c
         srcs/utils/token_list.c
-        srcs/lexer/check_syntax.c)
+        srcs/lexer/check_syntax.c
+        srcs/exec/exec_builtins.c
+        libft/src/ft_is/ft_isspace.c
+)
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

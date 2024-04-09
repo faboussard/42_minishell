@@ -18,7 +18,7 @@
 #include "minishell.h"
 
 
-int	ft_exit_builtin(t_minishell *minishell);
+int ft_exit_builtin(t_minishell *minishell, t_token_list *command);
 int	ft_env(t_minishell *minishell);
 int	ft_setenv(t_minishell *minishell);
 int	ft_unsetenv(t_minishell *minishell);

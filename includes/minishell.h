@@ -35,9 +35,7 @@
 typedef struct s_envp	t_envp_list;
 typedef struct s_token  t_token_list;
 typedef struct s_minishell t_minishell;
-typedef struct process_list t_process_list;
-typedef struct in_out_files_tokens t_in_out_files_tokens;
-typedef struct limiter_tokens t_limiter_tokens;
+typedef struct s_process_list t_process_list;
 
 typedef struct s_minishell
 {
@@ -69,11 +67,10 @@ typedef struct s_envp
 	struct s_envp 	*next;
 }	t_envp_list;
 
-typedef struct process_list
+typedef struct s_process_list
 {
 	t_token_list	*in_files_token;
 	t_token_list	*out_files_token;
-//	t_token_list	*in_out_files_tokens;
 	char	*paths;
 	char	*good_path;
 	char	**tab_paths;
@@ -81,6 +78,14 @@ typedef struct process_list
 	bool	dev_null;
 	struct	process_list	*next;
 } t_process_list;
+
+typedef struct s_quotes_struct
+{
+	char space;
+	char double_quote;
+	char single_quote;
+} t_quotes_struct;
+
 
 /*************************************** INIT MINISHELL ***************************************/
 
