@@ -11,10 +11,25 @@ faboussa@z1r9p4:~/minishell$ cat r
 Please ask your administrator.
 
 ************** builtins ************************
+
+//// GENERAL /////
 -c "d ls echo hihi echo export unset exit"
  on doit avoir builtin 0 :
 -c "cdc"
 -c "c"
+
+//// EXIT /////
+faboussa@z4r9p5:~$ exit l
+exit
+bash: exit: l: numeric argument required
+->status exit = 2,
+
+➜  ~ bash
+faboussa@z4r9p5:~$ exit 555555
+exit
+➜  ~ $?
+zsh: command not found: 35
+
 
 **********************gestion des simple quotes *******************
 

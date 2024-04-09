@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/22 12:10:36 by faboussa         ###   ########.fr       */
+/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(char c)
+#include "lexer.h"
+#include "minishell.h"
+#include "utils.h"
+#include "builtins.h"
+
+void restore_terminal(t_minishell *minishell)
 {
-	return (c >= '0' && c <= '9');
+	free_minishell(minishell);
+}
+
+int exec_builtin(t_minishell *minishell, t_token_list *command)
+{
+	if (command->e_builtin == EXIT)
+		return (ft_exit_builtin(minishell, command));
+	return (0);
 }

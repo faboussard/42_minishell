@@ -41,6 +41,7 @@ void			ft_free_tab_from_i(void **tab, int j);
 void			ft_lstclear_envp(t_envp_list **lst);
 void			ft_lstclear_token(t_token_list **lst);
 void			ft_free_process_list(t_process_list **process_list);
+void restore_terminal(t_minishell *minishell);
 
 /******************** ERROR ********************/
 void			print_error(const char *error);
