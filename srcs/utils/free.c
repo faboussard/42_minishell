@@ -97,8 +97,7 @@ void	free_minishell(t_minishell *minishell)
 		ft_free_process_list(&minishell->process_list);
 	if (minishell->list_tokens)
 		ft_lstclear_token(&minishell->list_tokens);
-	if (minishell->history_count != 0)
-		rl_clear_history();
+	rl_clear_history();
 }
 
 void	ft_free_all_tab(char **tab)

@@ -31,7 +31,7 @@ void minishell_interactive(t_minishell *minishell)
 		if (minishell->user_input[0] == 0)
 			continue;
 		set_signals_noninteractive();
-		//        add_history(minishell->user_input);
+		add_history(minishell->user_input);
 		minishell->history_count += 1;
 		if (parse_input(minishell) == 0)
 		{
@@ -52,7 +52,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
-	//	add_history(minishell->user_input);
+	add_history(minishell->user_input);
 	minishell->history_count += 1;
 	if (parse_input(minishell) == 0)
 	{
