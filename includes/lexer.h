@@ -30,7 +30,6 @@ enum e_token_type
     DELIMITER = 5,
 	APPEND_FILE = 6,
 	OPERATOR = 7,
-    SUBSHELL = 8,
 };
 
 enum e_token_operators
