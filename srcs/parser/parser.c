@@ -91,10 +91,13 @@ void token_requalification(t_token_list *list_tokens)
 int parse_input(t_minishell *minishell)
 {
 	char	**split;
+	char *string;
 
-	split = split_with_quotes_management(minishell);
+	split = NULL;
+	string = minishell->user_input;
+	split = fill_array_with_quotes_management(string);
 	if (split == NULL)
-		exit_msg(minishell, "Malloc failed at split for tokenization", 2);
+		return (1);
 	transform_to_token(minishell, split);
 	if (check_syntax(minishell) == 1)
 		return (1);

@@ -32,11 +32,12 @@ void minishell_interactive(t_minishell *minishell)
 			continue;
 		set_signals_noninteractive();
 		add_history(minishell->user_input);
-		minishell->history_count += 1;
 		if (parse_input(minishell) == 0)
 		{
 			if (minishell->process_list == NULL)
 				return;
+			ft_init_process_list_and_minishell(minishell, minishell->process_list);
+			exec_builtin(minishell, minishell->list_tokens);
 			ft_init_process_list_and_minishell(minishell, minishell->process_list);
 			execute_cmds(minishell, minishell->total_commands);
 		}
@@ -49,15 +50,16 @@ void minishell_interactive(t_minishell *minishell)
 void minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
 	set_signals_noninteractive();
+	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
 	add_history(minishell->user_input);
-	minishell->history_count += 1;
 	if (parse_input(minishell) == 0)
 	{
 		if (minishell->process_list == NULL)
 			return;
+		exec_builtin(minishell, minishell->list_tokens);
 		ft_init_process_list_and_minishell(minishell, minishell->process_list);
 		execute_cmds(minishell, minishell->total_commands);
 	}

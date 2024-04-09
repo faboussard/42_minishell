@@ -13,11 +13,9 @@
 #include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include "parser.h"
-#include "signals.h"
-#include "error.h"
 # include <readline/history.h>
-//
+#include "builtins.h"
+
 //The exit utility shall cause the shell to exit from its current
 //execution environment with the exit status specified by the
 //unsigned decimal integer n.  If the current execution environment
@@ -33,34 +31,75 @@
 //       which case the shell shall exit immediately.
 //
 //FAIRE EXIT QUAND ON FAIT CONTRLOLE D AUSSI ( pour linstant seul un % apparait)
-//
-//void restore_terminal(t_minishell *minishell)
-//{
-//	free_minishell(minishell);
-//}
-//
-//int exec_builtin(t_minishell *minishell, t_token_list *command)
-//{
-//	if (command->e_builtin == EXIT)
-//		return (ft_exit_builtin(minishell));
-//	return (0);
-//}
-//
-//unsigned int ft_exit_builtin(t_minishell *minishell)
-//{
-//	unsigned int	status;
-//
-//	write(1, "exit\n", 5);
-//	if (!minishell->list_tokens || !minishell->list_tokens->next)
-//	{
-//		restore_terminal(minishell);
-//		exit(0);
-//	}
-//	errno = 0;
-//	status = ft_atoi(minishell->list_tokens->next);
-//	if (minishell->list_tokens->next && errno != EINVAL)
-//	{
-//		print_error("exit: too many arguments");
-//		restore_terminal(minishell);
-//	}
-//}
+
+static bool	check_out_of_range(int neg, unsigned long long num, bool *error);
+
+static int	ft_atoi_long(const char *str, bool *error)
+{
+	unsigned long long	num;
+	int					neg;
+	int					i;
+
+	num = 0;
+	neg = 1;
+	i = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	if (str[i] == '+')
+		i++;
+	else if (str[i] == '-')
+	{
+		neg *= -1;
+		i++;
+	}
+	while (str[i] && ft_isdigit(str[i]))
+	{
+		num = (num * 10) + (str[i] - '0');
+		if (check_out_of_range(neg, num, error))
+			break ;
+		i++;
+	}
+	if (str[i] != '\0')
+		*error = true;
+	return (num * neg);
+}
+
+static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
+{
+	if ((neg == 1 && num > LONG_MAX)
+		|| (neg == -1 && num > -(unsigned long)LONG_MIN))
+		*error = true;
+	return (*error);
+}
+
+int ft_exit_builtin(t_minishell *minishell, t_token_list *command)
+{
+	int		exit_code;
+	bool	error;
+	error = false;
+
+	printf("exit\n");
+	if (!command->next)
+	{
+		restore_terminal(minishell);
+		exit(0);
+	}
+	exit_code = ft_atoi_long(command->next->name, &error);
+	if (command->next->next && !error)
+	{
+		print_error("minishell: exit: too many arguments");
+		minishell->status = 127;
+		//verifier le numero dexit . retourne 1 ou bien 127 ???
+		return (1);
+	}
+	else
+	{
+		if (error)
+		{
+			printf("minishell: exit: %s: numeric argument required",	command->next->name);
+			restore_terminal(minishell);
+			exit(2);
+		}
+		exit(exit_code % 256);
+	}
+}

@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.h                                          :+:      :+:    :+:   */
+/*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:09:51 by mbernard         ###   ########.fr       */
+/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTE_H
-# define EXECUTE_H
+#include "lexer.h"
+#include "minishell.h"
+#include "utils.h"
+#include "builtins.h"
 
-# include "libft.h"
-# include "minishell.h"
+void restore_terminal(t_minishell *minishell)
+{
+	free_minishell(minishell);
+}
 
-void	execute(t_minishell *minishell);
-
-#endif // MINISHELL_EXECUTE_H
+int exec_builtin(t_minishell *minishell, t_token_list *command)
+{
+	if (command->e_builtin == EXIT)
+		return (ft_exit_builtin(minishell, command));
+	return (0);
+}
