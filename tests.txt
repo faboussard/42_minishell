@@ -83,6 +83,12 @@ bls
 
 -c "$USER $USER= $USER=fafsasfaf"
 
+faboussa@z2r7p8:~$ echo $dgsdg$USER
+faboussa
+faboussa@z2r7p8:~$ echo adsdgs$USER
+adsdgsfaboussa
+
+
 -----> reagit si on entre un seul tilde
 
 ****************** redirections -*******************

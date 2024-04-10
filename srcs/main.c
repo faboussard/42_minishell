@@ -42,8 +42,8 @@ void minishell_interactive(t_minishell *minishell)
 			execute_cmds(minishell, minishell->total_commands);
 		}
 		free(minishell->user_input);
-		ft_free_process_list(&(minishell->process_list));
-		ft_lstclear_token(&minishell->list_tokens);
+//		ft_free_process_list(&(minishell->process_list));
+//		ft_lstclear_token(&minishell->list_tokens);
 	}
 }
 

@@ -32,20 +32,23 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 	char **split;
 
 	limiter_len = ft_strlen(limiter);
-	input_after_expand = NULL;
 	while (1)
 	{
+		input_after_expand = NULL;
 		input = get_next_line(STDIN_FILENO);
-		split = ft_split(input, ' ');
-		int i = 0;
-		while (split[i])
+		if (ft_strchr(input, '$') != NULL)
 		{
-			expand_dollar_string(&split[i], m);
-			input_after_expand = ft_calloc(1, 1);
-			input_after_expand = ft_strjoin(input_after_expand, split[i]);
-			i++;
+			split = ft_split(input, ' ');
+			int i = 0;
+			while (split[i])
+			{
+				expand_dollar_string(&split[i], m);
+				input_after_expand = ft_calloc(1, 1);
+				input_after_expand = ft_strjoin(input_after_expand, split[i]);
+				i++;
+			}
+			ft_free_tab(split);
 		}
-		ft_free_tab(split);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter,
 				limiter_len))
@@ -56,11 +59,13 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 			close(m->fd_in);
 			exit(0);
 		}
-		ft_putstr_fd(input_after_expand, m->fd_in);
+		if (input_after_expand  != NULL)
+			ft_putstr_fd(input_after_expand, m->fd_in);
+		else
+			ft_putstr_fd(input, m->fd_in);
 		free(input);
 		if (input_after_expand  != NULL)
 			free(input_after_expand);
-		input_after_expand = NULL;
 	}
 }
 

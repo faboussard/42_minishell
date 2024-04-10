@@ -14,6 +14,11 @@
 #include "utils.h"
 #include "parser.h"
 
+int define_strlen_iterator_target(t_envp_list *iterator)
+{
+
+}
+
 int check_equal_position_in_string(char *string, t_envp_list *iterator)
 {
 	int i;
@@ -33,32 +38,32 @@ void identify_envp_string(char **string, t_minishell *minishell)
 	t_envp_list *iterator = minishell->list_envp;
 	char *old_string = *string; // Conservez une copie de l'ancienne chaîne pour la libérer plus tard
 
-	while (iterator != NULL)
-	{
-		if (ft_strncmp(*string, iterator->target, ft_strlen(iterator->target) - 2) == 0)
+		while (iterator != NULL)
 		{
-			*string = ft_strdup(iterator->value);
-			if (*string == NULL)
+			if (ft_strncmp(*string, iterator->target, ft_strlen(*string)) == 0)
 			{
-				free(old_string); // Libérez l'ancienne chaîne en cas d'échec d'allocation
-				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
-			}
-			if (check_equal_position_in_string(old_string, iterator))
-			{
-				char *temp = *string;
-				*string = ft_strjoin(temp, "=");
-				free(temp); // Libérez la chaîne temporaire utilisée pour la concaténation
+				*string = ft_strdup(iterator->value);
 				if (*string == NULL)
 				{
 					free(old_string); // Libérez l'ancienne chaîne en cas d'échec d'allocation
 					exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 				}
+				if (check_equal_position_in_string(old_string, iterator))
+				{
+					char *temp = *string;
+					*string = ft_strjoin(temp, "=");
+					free(temp); // Libérez la chaîne temporaire utilisée pour la concaténation
+					if (*string == NULL)
+					{
+						free(old_string); // Libérez l'ancienne chaîne en cas d'échec d'allocation
+						exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
+					}
+				}
+				free(old_string); // Libérez l'ancienne chaîne maintenant que vous avez terminé avec elle
+				break;
 			}
-			free(old_string); // Libérez l'ancienne chaîne maintenant que vous avez terminé avec elle
-			break;
+			iterator = iterator->next;
 		}
-		iterator = iterator->next;
-	}
 }
 
 
@@ -99,16 +104,17 @@ void expand_dollar_string(char **string, t_minishell *minishell)
 	if (original_string == NULL)
 		exit_msg(minishell, "Malloc failed at expand_dollar_string", -1);
 	ignore_dollar_string(string, minishell);
+	//enelver le /n de la fin si necessaire.
 	identify_envp_string(string, minishell);
 	if (strcmp(original_string, *string) != 0)
 		free(original_string);
 }
 
 
-int	ft_strnstr_and_check(const char *big, const char *little, size_t len)
+int ft_strnstr_and_check(const char *big, const char *little, size_t len)
 {
-	size_t	i;
-	size_t	j;
+	size_t i;
+	size_t j;
 	char previous_char;
 
 	i = 0;
@@ -138,9 +144,11 @@ void expander(t_minishell *minishell)
 		if (ft_strcmp(iterator->name, "$?") == 0)
 			printf("%d\n", minishell->status);
 		if (iterator->e_type != DELIMITER
-				&& iterator->name[0] == '$' && iterator->name[1] != '\0'
-				&& ft_strnstr_and_check(minishell->user_input, iterator->name
-										,ft_strlen(minishell->user_input)) == 0)
+			&& ft_strchr(iterator->name, '$') != NULL
+			&& ft_strnstr(iterator->name, "$'", 2) == NULL
+//			&& ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0
+				)
+			//ajoter contiion ca menleve une lettre
 			expand_dollar_string(&iterator->name, minishell);
 		iterator = iterator->next;
 	}
