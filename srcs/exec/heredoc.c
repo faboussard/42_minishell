@@ -21,27 +21,46 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 	}
 }
 
+void expand_dollar_string(char **string, t_minishell *minishell);
+
 static void	writing_in_heredoc(t_minishell *m, char *limiter)
 {
 	size_t	limiter_len;
 	size_t	input_len;
 	char	*input;
+	char	*input_after_expand;
+	char **split;
 
 	limiter_len = ft_strlen(limiter);
+	input_after_expand = NULL;
 	while (1)
 	{
 		input = get_next_line(STDIN_FILENO);
-//			expand_input
+		split = ft_split(input, ' ');
+		int i = 0;
+		while (split[i])
+		{
+			expand_dollar_string(&split[i], m);
+			input_after_expand = ft_calloc(1, 1);
+			input_after_expand = ft_strjoin(input_after_expand, split[i]);
+			i++;
+		}
+		ft_free_tab(split);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter,
 				limiter_len))
 		{
 			free(input);
+			if (input_after_expand  != NULL)
+				free(input_after_expand);
 			close(m->fd_in);
 			exit(0);
 		}
-		ft_putstr_fd(input, m->fd_in);
+		ft_putstr_fd(input_after_expand, m->fd_in);
 		free(input);
+		if (input_after_expand  != NULL)
+			free(input_after_expand);
+		input_after_expand = NULL;
 	}
 }
 

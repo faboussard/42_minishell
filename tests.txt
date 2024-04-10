@@ -10,6 +10,35 @@ lol
 faboussa@z1r9p4:~/minishell$ cat r
 Please ask your administrator.
 
+➜  ~ cat << EOF
+heredoc> $USER$BLABLA
+heredoc> EOF
+faboussa
+➜  ~
+
+➜  ~ cat << EOF
+heredoc> $USER $BLABLA
+heredoc> EOF
+faboussa
+➜  ~
+
+faboussa@z2r8p4:~$ cat << EOF
+> $USER$USER
+> EOF
+faboussafaboussa
+faboussa@z2r8p4:~$
+
+faboussa@z2r8p4:~$ cat << EOF
+> sdbwrbb$USER
+> EOF
+sdbwrbbfaboussa
+
+faboussa@z2r8p4:~$ cat << stop
+> $USER=
+> stop
+faboussa=
+
+
 ************** builtins ************************
 
 //// GENERAL /////
@@ -31,9 +60,7 @@ exit
 zsh: command not found: 35
 
 
-**********************gestion des simple quotes *******************
-
-A GERER OU PAS ??? DELMANDER . du sujet je comprends quil ne faut pas gerer(fanny)
+********************** EXPANSIONS *******************
 
 05:26:51 juba@juba-desktop→ echo > 'bls
 > 'bls
@@ -53,6 +80,8 @@ bash: syntax error: unexpected end of file
 > bls'
 bls
 bls
+
+-c "$USER $USER= $USER=fafsasfaf"
 
 -----> reagit si on entre un seul tilde
 
