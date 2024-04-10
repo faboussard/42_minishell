@@ -64,7 +64,7 @@ $(DIR_BUILD)%.o: %.c Makefile | $(SUBDIRS)
 
 $(SUBDIRS): $(DIR_BUILD)
 	@echo "Création du sous-répertoire $@"
-	$(MKDIR) $@
+	@$(MKDIR) $@
 
 $(DIR_BUILD):
 	@echo "Création du répertoire $(DIR_BUILD)"
