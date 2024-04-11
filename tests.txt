@@ -62,24 +62,6 @@ zsh: command not found: 35
 
 ********************** EXPANSIONS *******************
 
-05:26:51 juba@juba-desktop→ echo > 'bls
-> 'bls
-
-
-05:30:46 juba@juba-desktop→ ech 'bls
->
-bash: unexpected EOF while looking for matching `''
-bash: syntax error: unexpected end of file
-
-05:31:01 juba@juba-desktop→ echo 'bls
->
-bash: unexpected EOF while looking for matching `''
-bash: syntax error: unexpected end of file
-
-05:31:36 juba@juba-desktop→ echo bls'
-> bls'
-bls
-bls
 
 -c "$USER $USER= $USER=fafsasfaf"
 
@@ -87,6 +69,12 @@ faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
+
+~/tommini main ❯ echo $USER=fgfgfg
+faboussa=fgfgfg
+
+~/tommini main ❯ echo $'USER'
+USER
 
 
 -----> reagit si on entre un seul tilde
