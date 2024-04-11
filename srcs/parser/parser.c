@@ -88,12 +88,30 @@ void token_requalification(t_token_list *list_tokens)
 	arg_to_command(list_tokens);
 }
 
+void check_sequence_dolloar_followed_by_quotes(char *user_input)
+{
+	size_t	i;
+	i = 0;
+
+	while (user_input[i + 1] != '\0')
+	{
+		if (user_input[i] == '$' && user_input[i + 1] == '\"')
+		{
+			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input - 1));
+		}
+		i++;
+	}
+}
+
 int parse_input(t_minishell *minishell)
 {
 	char	**split;
 	char *string;
 
 	split = NULL;
+	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
+	check_sequence_dolloar_followed_by_quotes(minishell->user_input);
+
 	string = minishell->user_input;
 	split = fill_array_with_quotes_management(string);
 	if (split == NULL)
