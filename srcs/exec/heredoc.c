@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:20:54 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 10:13:44 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:41:39 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 
 void expand_dollar_string(char **string, t_minishell *minishell);
 
-static void	handle_expand(t_minishell *m, char *input, char *input_after_expand)
+static void	handle_expand(t_minishell *m, char *input)
 {
-	char **split;
+	char 	**split;
+	char	*input_after_expand;
 
 	split = NULL;
+	input_after_expand = NULL;
 	if (ft_strchr(input, '$') != NULL)
 	{
 			split = ft_split(input, ' ');
@@ -49,17 +51,17 @@ static void	handle_expand(t_minishell *m, char *input, char *input_after_expand)
 	if (split != NULL)
 		ft_free_tab(split);
 }
+
 static void	writing_in_heredoc(t_minishell *m, char *limiter)
 {
 	size_t	limiter_len;
 	size_t	input_len;
 	char	*input;
-	char	*input_after_expand;
+
 
 	limiter_len = ft_strlen(limiter);
 	while (1)
 	{
-		input_after_expand = NULL;
 		input = get_next_line(STDIN_FILENO);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter,
@@ -69,7 +71,7 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 			close(m->fd_in);
 			exit(0);
 		}
-		handle_expand(m, input, input_after_expand);
+		handle_expand(m, input);
 		free(input);
 	}
 }
