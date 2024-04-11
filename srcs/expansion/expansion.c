@@ -35,6 +35,14 @@ int check_equal_position_in_string(char *string, char *string2)
 	return (0);
 }
 
+char *expand_equal_sign(char *string, char *temp)
+{
+	while (*string && *string != '=')
+		string++;
+	string = ft_strjoin_free_s1(temp, string);
+	return (string);
+}
+
 char  *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
@@ -48,10 +56,7 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 			if (temp == NULL)
 				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			if (check_equal_position_in_string(string, iterator->target))
-				string = ft_strjoin(temp, "=");
-			free(temp);
-			temp = NULL;
-			// temp est free dans tous les cas : si il a ete str join ou si il ne la pas ete
+				string = expand_equal_sign(string, temp);
 			return (string);
 		}
 		iterator = iterator->next;
@@ -151,7 +156,7 @@ char	*ft_strjoin_free_s1_and_s2(char  *s1, char *s2)
 	return (new_string);
 }
 
-char *add_non_sigil(char *string, int *i)
+char *add_until_dollar(char *string, int *i)
 {
 	char *return_string;
 	int j;
@@ -177,12 +182,12 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	i = 0;
 	while (string[i])
 	{
-		temp = add_non_sigil(string, &i);
+		temp = add_until_dollar(string, &i);
 		final_string = ft_strjoin_free_s1_and_s2(final_string, temp);
 		if (string[i] == '$')
 		{
 			i++;
-			sigil_string_to_check = add_non_sigil(string, &i);
+			sigil_string_to_check = add_until_dollar(string, &i);
 			expanded_sigil = identify_envp_string(sigil_string_to_check, minishell);
 			if (expanded_sigil != sigil_string_to_check)
 				final_string = ft_strjoin_free_s1_and_s2(final_string, expanded_sigil);
