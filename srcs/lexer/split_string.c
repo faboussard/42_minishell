@@ -48,15 +48,23 @@ size_t count_letters_for_quotes(char *str)
 
 void deal_double_double_quotes_or_double_single_quotes(char *user_input)
 {
-	size_t i;
+	size_t i = 0;
+	size_t len = strlen(user_input);
 
-	i = 0;
-	while (user_input[i])
+	while (i < len)
 	{
 		if ((user_input[i] == '\'' && user_input[i + 1] == '\'') ||
 			(user_input[i] == '\"' && user_input[i + 1] == '\"'))
-			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input - 1));
-		i++;
+		{
+			// Décaler le reste de la chaîne vers la gauche
+			ft_memmove(&user_input[i], &user_input[i + 2], len - i - 1);
+			len -= 2; // Réduire la longueur de la chaîne
+			user_input[len] = '\0'; // Terminer la chaîne
+		}
+		else
+		{
+			i++;
+		}
 	}
 }
 

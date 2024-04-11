@@ -88,7 +88,7 @@ void token_requalification(t_token_list *list_tokens)
 	arg_to_command(list_tokens);
 }
 
-void check_sequence_dolloar_followed_by_quotes(char *user_input)
+void check_sequence_dollar_followed_by_quotes(char *user_input)
 {
 	size_t	i;
 	i = 0;
@@ -110,8 +110,7 @@ int parse_input(t_minishell *minishell)
 
 	split = NULL;
 	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
-	check_sequence_dolloar_followed_by_quotes(minishell->user_input);
-
+	check_sequence_dollar_followed_by_quotes(minishell->user_input);
 	string = minishell->user_input;
 	split = fill_array_with_quotes_management(string);
 	if (split == NULL)
