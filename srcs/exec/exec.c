@@ -3,17 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/09 14:45:15 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:28:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
+bool	is_a_silent_builtin(char *cmd)
+{
+	if (ft_strncmp(cmd, "cd", 2) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "export", 6) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "unset", 5) == 0)
+		return (1);
+	return (0);
+}
+
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
+	if (is_a_silent_builtin(pl->cmd_table[0]))
+		exit(0);
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
 	execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)

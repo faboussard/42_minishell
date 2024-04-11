@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:11:14 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:13:32 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 
 # ifndef SUCCESSFULLY_ADDED
 #  define SUCCESSFULLY_ADDED 0
+# endif
+
+# ifndef HERE_DOC_TMP_FILE
+#  define HERE_DOC_TMP_FILE "/tmp/.tmp_heredoc"
 # endif
 
 # include "lexer.h"

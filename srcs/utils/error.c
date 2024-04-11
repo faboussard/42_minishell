@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:14:50 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:43:13 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,14 @@ void	exit_msg(t_minishell *minishell, char *msg, int error_code)
 		free_minishell(minishell);
 	ft_putendl_fd(msg, 2);
 	exit(error_code);
+}
+
+void	print_cmd_perror(char *cmd, char *name, int err)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(name, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(err), 2);
 }
