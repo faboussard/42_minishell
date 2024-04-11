@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/10 11:38:45 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:35:46 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include "minishell.h"
+# include "utils.h"
 
 int ft_exit_builtin(t_minishell *minishell, t_token_list *command);
 int	ft_env(t_minishell *minishell);
