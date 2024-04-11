@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/11 17:01:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 
 char	*ft_strjoin_free_s1(char *s1, char const *s2);
 char	*ft_strjoin_free_s1_and_s2(char *s1, char *s2);
+// int define_strlen_iterator_target(t_envp_list *iterator)
+// {
+// 	return (0);
+// }
 
 int check_equal_position_in_string(char *string, char *string2)
 {

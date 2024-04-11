@@ -3,7 +3,7 @@ NAME			=	minishell
 
 #-------------  VPATH  ---------------#
 
-vpath %c srcs lexer env_variables parser expansion utils exec
+vpath %c srcs lexer env_variables parser expansion utils exec builtins
 
 # --------------- FILES --------------- #
 
@@ -11,17 +11,19 @@ LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string lexer/check_syntax\
 				env_variables/env_variables\
 				parser/parser parser/create_process_list parser/process_list\
-				builtins/exit_builtin\
+				builtins/exit_builtin builtins/cd_builtin\
 				expansion/expansion\
 				utils/free utils/print utils/error utils/token_list\
 				exec/exec exec/exec_builtins exec/errors	exec/paths	exec/fd_management \
                 exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
-LIST_HEADERS	= utils lexer minishell parser signals exec
+LIST_HEADERS	= utils lexer minishell parser signals exec builtins
 
 # ------------ DIRECTORIES ------------ #
 
 DIR_BUILD		=	.build/
+SUBDIRS := .build/lexer .build/env_variables .build/parser .build/expansion \
+			.build/utils .build/exec .build/builtins
 DIR_HEADERS		=	includes/
 DIR_LIBFT		=	libft/
 HEADER_LIBFT    =   libft/inc/
@@ -56,21 +58,18 @@ $(NAME): $(OBJS) $(libft) Makefile
 
 # ---------- COMPILED RULES ----------- #
 
-$(DIR_BUILD)%.o: %.c Makefile | $(DIR_BUILD)
+$(DIR_BUILD)%.o: %.c Makefile | $(SUBDIRS)
 	$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
 
 #---------- CREATE REPO OBJS ---------#
 
+$(SUBDIRS): $(DIR_BUILD)
+	@echo "Création du sous-répertoire $@"
+	@$(MKDIR) $@
+
 $(DIR_BUILD):
 	@echo "Création du répertoire $(DIR_BUILD)"
-	$(MKDIR) $(DIR_BUILD)
-	@mkdir -p $(DIR_BUILD)/lexer
-	@mkdir -p $(DIR_BUILD)/env_variables
-	@mkdir -p $(DIR_BUILD)/parser
-	@mkdir -p $(DIR_BUILD)/expansion
-	@mkdir -p $(DIR_BUILD)/utils
-	@mkdir -p $(DIR_BUILD)/exec
-	@mkdir -p $(DIR_BUILD)/builtins
+	@$(MKDIR) $(DIR_BUILD)
 
 $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)

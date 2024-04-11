@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:41:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:23:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ void minishell_interactive(t_minishell *minishell)
 			if (minishell->process_list == NULL)
 				return;
 			ft_init_process_list_and_minishell(minishell, minishell->process_list);
-			exec_builtin(minishell, minishell->list_tokens);
-			ft_init_process_list_and_minishell(minishell, minishell->process_list);
+			if (minishell->total_commands == 1)
+				exec_builtin(minishell, minishell->list_tokens);
+			//ft_init_process_list_and_minishell(minishell, minishell->process_list);
 			execute_cmds(minishell, minishell->total_commands);
 		}
 		free(minishell->user_input);
-//		ft_free_process_list(&(minishell->process_list));
-//		ft_lstclear_token(&minishell->list_tokens);
+		ft_free_process_list(&(minishell->process_list));
+		ft_lstclear_token(&minishell->list_tokens);
 	}
 }
 
