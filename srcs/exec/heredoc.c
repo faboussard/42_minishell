@@ -21,7 +21,7 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 	}
 }
 
-void expand_dollar_string(char **string, t_minishell *minishell);
+char *expand_sigil(char *string, t_minishell *minishell);
 
 static void	handle_expand(t_minishell *m, char *input)
 {
@@ -36,7 +36,7 @@ static void	handle_expand(t_minishell *m, char *input)
 			int i = 0;
 			while (split[i])
 			{
-				expand_dollar_string(&split[i], m);
+				split[i] = expand_sigil(split[i], m);
 				input_after_expand = ft_calloc(1, 1);
 				input_after_expand = ft_strjoin(input_after_expand, split[i]);
 				i++;
@@ -57,7 +57,6 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 	size_t	limiter_len;
 	size_t	input_len;
 	char	*input;
-
 
 	limiter_len = ft_strlen(limiter);
 	while (1)

@@ -76,6 +76,16 @@ faboussa=fgfgfg
 ~/tommini main ❯ echo $'USER'
 USER
 
+faboussa@z1r12p5:~/minishell$ echo "g''"
+g''
+faboussa@z1r12p5:~/minishell$ echo "g"''""
+g
+
+faboussa@z1r12p5:~/minishell$ echo g"$USER"
+gfaboussa
+faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
+g$'USER'
+
 
 -----> reagit si on entre un seul tilde
 

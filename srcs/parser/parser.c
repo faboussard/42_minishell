@@ -109,8 +109,8 @@ int parse_input(t_minishell *minishell)
 	char *string;
 
 	split = NULL;
-	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
-	check_sequence_dollar_followed_by_quotes(minishell->user_input);
+//	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
+//	check_sequence_dollar_followed_by_quotes(minishell->user_input);
 	string = minishell->user_input;
 	split = fill_array_with_quotes_management(string);
 	if (split == NULL)

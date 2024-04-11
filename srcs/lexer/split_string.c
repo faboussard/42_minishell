@@ -53,18 +53,15 @@ void deal_double_double_quotes_or_double_single_quotes(char *user_input)
 
 	while (i < len)
 	{
-		if ((user_input[i] == '\'' && user_input[i + 1] == '\'') ||
+		if ((user_input[i] == '\'' && user_input[i + 1] == '\'' && (user_input[i - 1] != '\"')  && (user_input[i + 1] != '\"')) ||
 			(user_input[i] == '\"' && user_input[i + 1] == '\"'))
 		{
-			// Décaler le reste de la chaîne vers la gauche
 			ft_memmove(&user_input[i], &user_input[i + 2], len - i - 1);
-			len -= 2; // Réduire la longueur de la chaîne
-			user_input[len] = '\0'; // Terminer la chaîne
+			len -= 2;
+			user_input[len] = '\0';
 		}
 		else
-		{
 			i++;
-		}
 	}
 }
 
@@ -99,24 +96,7 @@ char **fill_array_with_quotes_management(char *s)
 		return NULL;
 	i = 0;
 	j = 0;
-	while (s[i] != '\0')
-	{
-		len = 0;
-		if (s[i] && (s[i] == '\"' || s[i] == '\''))
-		{
-			quote = s[i++];
-			while (s[i + len] && s[i + len] != quote)
-				len++;
-			split[j] = ft_substr(s, i, len);
-			if (split[j] == NULL)
-			{
-				ft_free_all_tab(split);
-				return (NULL);
-			}
-			j++;
-			i += len;
-		}
-		else if (s[i] && s[i] != ' ')
+	if (s[i] && s[i] != ' ')
 		{
 			while (s[i + len] && s[i + len] != ' ')
 				len++;

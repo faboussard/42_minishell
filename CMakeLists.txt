@@ -104,6 +104,7 @@ add_executable(minishell
         srcs/exec/exec_builtins.c
         libft/src/ft_is/ft_isspace.c
         includes/builtins.h
+        srcs/builtins/cd_builtin.c
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})
