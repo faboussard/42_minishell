@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/11 10:17:52 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:14:03 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void minishell_interactive(t_minishell *minishell)
 			if (minishell->process_list == NULL)
 				return;
 			ft_init_process_list_and_minishell(minishell, minishell->process_list);
-			exec_builtin(minishell, minishell->list_tokens);
+			if (minishell->total_commands == 1)
+				exec_builtin(minishell, minishell->list_tokens);
 			ft_init_process_list_and_minishell(minishell, minishell->process_list);
 			execute_cmds(minishell, minishell->total_commands);
 		}

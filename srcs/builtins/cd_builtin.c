@@ -6,20 +6,21 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/10 15:54:32 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:51:35 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
+# include "utils.h"
 /* int	no_such_file_or_directory(char *dir) */
 /* { */
 /* 	perror(ENOENT); */
 /* 	return (ENOENT); */
 /* } */
 
-int is_root_directory(void)
+int is_root_directory(t_minishell *m)
 {
+	(void)m;
     char cwd[PATH_MAX];
 
     if (getcwd(cwd, sizeof(cwd)) == NULL)
@@ -33,20 +34,21 @@ int is_root_directory(void)
         return 0;
 }
 
-static int	safe_chdir(char *dir)
+static int	safe_chdir(t_minishell *m, char *dir)
 {
+	(void)m;
 	if (chdir(dir) == -1)
 	{
-		perror("chdir");
+		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
 	return (0);
 }
+
 static int	go_into_sub_directory(t_minishell *m)
 {
 	struct stat	st;
 
-	(void)m;
 	if (lstat("..", &st) == -1)
 	{
 		perror("lstat");
@@ -58,15 +60,25 @@ static int	go_into_sub_directory(t_minishell *m)
 	Sinon
 	Ne rien faire
 	*/
-	return(safe_chdir(".."));
+	return(safe_chdir(m, ".."));
+}
+static int	go_into_directory(char	*dir)
+{
+	if (chdir(dir) != 0)
+	{
+		print_cmd_perror("cd", dir, errno);
+		return (1);
+	}
+	return (0);
 }
 
-static int	get_home(t_minishell *minishell)
+static int	get_home(t_minishell *m)
 {
-	(void)minishell;
+	(void)m;
 	char	*home_dir;
 	char	*new_path;
 	size_t	home_dir_len;
+	int	return_value;
 
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
@@ -83,9 +95,9 @@ static int	get_home(t_minishell *minishell)
 	}
 	ft_strlcpy(new_path, home_dir, home_dir_len + 1);
 	new_path[home_dir_len] = '/';
-	chdir(new_path);
+	return_value = go_into_directory(new_path);
 	free(new_path);
-	return (0);
+	return (return_value);
 }
 
 int	ft_cd(t_minishell *minishell, t_token_list *command)
@@ -105,17 +117,18 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 		return (go_into_sub_directory(minishell));
 	if (stat(dir, &st) == -1)
 	{
-		perror("stat");
+		print_cmd_perror("cd", dir, errno);;
 		return (1);
 	}
-	if (S_ISDIR(st.st_mode))
-		printf("%s est un répertoire\n", dir);
+	if (!(S_ISDIR(st.st_mode)))
+		print_cmd_perror("cd", dir, ENOTDIR);
 	else
-		printf("%s est un fichier régulier\n", dir);
-	if (access(dir, F_OK | X_OK))
-	{
-		perror("access");
-	}
+		return (go_into_directory(dir));
+	//dprintf(2, "bash: cd: %s: Not a directory\n", dir);
+	// if (access(dir, F_OK | X_OK))
+	// {
+	// 	perror("access");
+	// }
 	return (0);
 }
 /*
@@ -161,6 +174,7 @@ Le test est effectué avec les UID et GID réels du processus appelant,
 
 Si le processus appelant est privilégié (c'est-à-dire, son UID réel est nul),
 	une vérification X_OK sur un fichier régulier réussit même si le fichier n'a aucun bit d'exécution positionné.
+	
 d-w------- 2 mbernard 2023_lyon   6 Apr 10 11:04 dossier
 dr--r--r-- 2 mbernard 2023_lyon   6 Apr 10 11:04 dossier
 bash: cd: dossier/: Permission denied

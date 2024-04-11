@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:45:16 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/04 08:56:36 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:26:25 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@ void	exit_command_not_found(t_minishell *m, char *name)
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
 	(void)m;
-	/*
-	if (m != NULL)
-		ft_free_node_process_list(m, m->process_list);
-	*/
 	ft_putendl_fd(msg, 2);
 	exit(error_code);
 }
@@ -44,10 +40,6 @@ void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code)
 {
 	print_name(m, name);
-	/*
-	if (m != NULL)
-		ft_free_node_process_list(m, m->process_list);
-	*/
 	exit(error_code);
 }
 
@@ -65,10 +57,6 @@ void	print_name_and_give_status(t_minishell *m, char *name, int err)
 
 void	malloc_error_with_exit(t_minishell *m)
 {
-	/*
-	if (m != NULL)
-		ft_free_node_process_list(m, m->process_list);
-	*/
 	exit_msg_minishell(m, "Malloc error", 1);
 }
 

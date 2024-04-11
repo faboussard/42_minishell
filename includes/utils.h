@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/11 10:08:28 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:44:25 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void			check_and_delete_if_tmp_file_exists(char *tmp_file);
 /******************** ERROR ********************/
 void			print_error(const char *error);
 int				print_operator_syntax_error(t_token_list *token);
+void			print_cmd_perror(char *cmd, char *name, int err);
+
 
 /******************** TOKEN LIST *****************/
 int				ft_lstsize_token(t_token_list *lst);
