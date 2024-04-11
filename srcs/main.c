@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:41:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:17:52 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void minishell_interactive(t_minishell *minishell)
 			execute_cmds(minishell, minishell->total_commands);
 		}
 		free(minishell->user_input);
-//		ft_free_process_list(&(minishell->process_list));
-//		ft_lstclear_token(&minishell->list_tokens);
+		ft_free_process_list(&(minishell->process_list));
+		ft_lstclear_token(&minishell->list_tokens);
 	}
 }
 

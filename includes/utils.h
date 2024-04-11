@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:10:27 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:08:28 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void			ft_free_tab_from_i(void **tab, int j);
 void			ft_lstclear_envp(t_envp_list **lst);
 void			ft_lstclear_token(t_token_list **lst);
 void			ft_free_process_list(t_process_list **process_list);
-void restore_terminal(t_minishell *minishell);
+void 			restore_terminal(t_minishell *minishell);
+void			check_and_delete_if_tmp_file_exists(char *tmp_file);
 
 /******************** ERROR ********************/
 void			print_error(const char *error);
