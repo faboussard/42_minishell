@@ -14,8 +14,8 @@
 #include "utils.h"
 #include "parser.h"
 
-char	*ft_strjoin_free_s1(char const *s1, char const *s2);
-char	*ft_strjoin_free_s1_and_s2(char const *s1, char const *s2);
+char	*ft_strjoin_free_s1(char *s1, char const *s2);
+char	*ft_strjoin_free_s1_and_s2(char *s1, char *s2);
 
 int check_equal_position_in_string(char *string, char *string2)
 {
@@ -34,25 +34,25 @@ int check_equal_position_in_string(char *string, char *string2)
 char  *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
-	char *old_string = string;
 	char *temp;
 
 	while (iterator != NULL)
 	{
 		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target)) == 0)
 		{
-			temp = ft_strdup(iterator->value); // Allouez une nouvelle chaîne pour la valeur de l'environnement
+			temp = ft_strdup(iterator->value);
 			if (temp == NULL)
 				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
-			if (check_equal_position_in_string(old_string, iterator->target))
+			if (check_equal_position_in_string(string, iterator->target))
 				string = ft_strjoin(temp, "=");
 			free(temp);
+			temp = NULL;
 			// temp est free dans tous les cas : si il a ete str join ou si il ne la pas ete
 			return (string);
 		}
 		iterator = iterator->next;
 	}
-	return (old_string);
+	return (string);
 }
 
 
@@ -88,7 +88,7 @@ void ignore_dollar_string(char **string, t_minishell *minishell)
 }
 
 
-char	*ft_strjoin_free_s1(char const *s1, char const *s2)
+char	*ft_strjoin_free_s1(char *s1, char const *s2)
 {
 	char	*new_string;
 	size_t	i;
@@ -117,7 +117,7 @@ char	*ft_strjoin_free_s1(char const *s1, char const *s2)
 	return (new_string);
 }
 
-char	*ft_strjoin_free_s1_and_s2(char const *s1, char const *s2)
+char	*ft_strjoin_free_s1_and_s2(char  *s1, char *s2)
 {
 	char	*new_string;
 	size_t	i;
@@ -141,76 +141,57 @@ char	*ft_strjoin_free_s1_and_s2(char const *s1, char const *s2)
 		j++;
 		i++;
 	}
-	free((void*)s1);
+	free(s1);
+	free(s2);
 	new_string[i] = '\0';
 	return (new_string);
 }
 
-void expand_dollar_string(char **string, t_minishell *minishell)
+char *add_non_sigil(char *string, int *i)
+{
+	char *return_string;
+	int j;
+
+	j = 0;
+	return_string = ft_calloc(1, ft_strlen(string) + 1);
+	while (string[*i] && (string[*i] != '$' || string[*i + 1] == '\0'))
+		return_string[j++] = string[(*i)++];
+	return (return_string);
+}
+
+
+char *expand_sigil(char *string, t_minishell *minishell)
 {
 	int i;
-	int j;
-	int k;
-	char *cpy_string;
 	char *temp;
-	char *return_string;
+	char *sigil_string_to_check;
+	char *final_string;
+	char *expanded_sigil;
 
-	cpy_string = *string;
-	return_string = ft_calloc(1, ft_strlen(cpy_string) + 1);
+	final_string = NULL;
+	final_string = ft_calloc(1, 1);
 	i = 0;
-	k = 0;
-	while (cpy_string[i])
+	while (string[i])
 	{
-		while (cpy_string[i] && (cpy_string[i] != '$' || cpy_string[i + 1] == '\0'))
-			return_string[k++] = cpy_string[i++];
-		if (cpy_string[i] == '$')
+		temp = add_non_sigil(string, &i);
+		final_string = ft_strjoin_free_s1_and_s2(final_string, temp);
+		if (string[i] == '$')
 		{
 			i++;
-			temp = ft_calloc(1, ft_strlen(cpy_string) + 1);
-			j = 0;
-			while (cpy_string[i] && cpy_string[i] != '$')
-				temp[j++] = cpy_string[i++];
-			char *temp2 = identify_envp_string(temp, minishell);
-			if (temp2 != temp)
-				return_string = ft_strjoin_free_s1(return_string, temp2);
-			free(temp);
+			sigil_string_to_check = add_non_sigil(string, &i);
+			expanded_sigil = identify_envp_string(sigil_string_to_check, minishell);
+			if (expanded_sigil != sigil_string_to_check)
+				final_string = ft_strjoin_free_s1_and_s2(final_string, expanded_sigil);
+			free(sigil_string_to_check);
 		}
 	}
-	if (return_string)
-	{
-		free(*string);
-		*string = return_string;
-		free(return_string);
-	}
-}
-
-
-int ft_strnstr_and_check(const char *big, const char *little, size_t len)
-{
-	size_t i;
-	size_t j;
-	char previous_char;
-
-	i = 0;
-	while (big[i] != '\0')
-	{
-		j = 0;
-		while (big[i + j] == little[j] && ((i + j) < len))
-		{
-			j++;
-			if (j == 1)
-				previous_char = big[i + j - 1];
-			if (little[j] == '\0' && previous_char == '\'')
-				return (1);
-		}
-		i++;
-	}
-	return (0);
+	return (final_string);
 }
 
 void expander(t_minishell *minishell)
 {
 	t_token_list *iterator;
+	char *string;
 
 	iterator = minishell->list_tokens;
 	while (iterator != NULL)
@@ -222,8 +203,37 @@ void expander(t_minishell *minishell)
 			&& ft_strnstr(iterator->name, "$'", 2) == NULL
 //			&& ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0
 				)
-			//ajoter contiion ca menleve une lettre
-			expand_dollar_string(&iterator->name, minishell);
+		{
+			string = expand_sigil(iterator->name, minishell);
+			size_t length = ft_strlen(string) + 1;
+			ft_memmove(iterator->name, string, length);
+			free(string);
+		}
+
 		iterator = iterator->next;
 	}
 }
+
+//int ft_strnstr_and_check(const char *big, const char *little, size_t len)
+//{
+//	size_t i;
+//	size_t j;
+//	char previous_char;
+//
+//	i = 0;
+//	while (big[i] != '\0')
+//	{
+//		j = 0;
+//		while (big[i + j] == little[j] && ((i + j) < len))
+//		{
+//			j++;
+//			if (j == 1)
+//				previous_char = big[i + j - 1];
+//			if (little[j] == '\0' && previous_char == '\'')
+//				return (1);
+//		}
+//		i++;
+//	}
+//	return (0);
+//}
+
