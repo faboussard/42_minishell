@@ -103,6 +103,7 @@ add_executable(minishell
         srcs/lexer/check_syntax.c
         srcs/exec/exec_builtins.c
         libft/src/ft_is/ft_isspace.c
+        includes/builtins.h
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

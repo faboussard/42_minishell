@@ -53,4 +53,4 @@ t_token_list	*ft_lstlast_token(t_token_list *lst);
 void			add_token_to_list(t_token_list **list_tokens,
 					t_token_list *new_token);
 
-#endif // GENERAL_H
+#endif // UTILS_H
