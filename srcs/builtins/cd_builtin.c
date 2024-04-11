@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 13:51:35 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:43:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,37 @@ int is_root_directory(t_minishell *m)
         return 0;
 }
 
-static int	safe_chdir(t_minishell *m, char *dir)
-{
-	(void)m;
-	if (chdir(dir) == -1)
-	{
-		print_cmd_perror("cd", dir, errno);
-		return (1);
-	}
-	return (0);
-}
+// static int	safe_chdir(t_minishell *m, char *dir)
+// {
+// 	(void)m;
+// 	if (chdir(dir) == -1)
+// 	{
+// 		print_cmd_perror("cd", dir, errno);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
-static int	go_into_sub_directory(t_minishell *m)
-{
-	struct stat	st;
+// static int	go_into_sub_directory(t_minishell *m)
+// {
+// 	struct stat	st;
 
-	if (lstat("..", &st) == -1)
-	{
-		perror("lstat");
-		return (1);
-	}
-	/*
-	Si il y a un repertoire au-dessus,
-	faire safe_chdir
-	Sinon
-	Ne rien faire
-	*/
-	return(safe_chdir(m, ".."));
-}
+// 	if (lstat("..", &st) == -1)
+// 	{
+// 		perror("lstat");
+// 		return (1);
+// 	}
+// 	/*
+// 	Si il y a un repertoire au-dessus,
+// 	faire safe_chdir
+// 	Sinon
+// 	Ne rien faire
+// 	*/
+// 	return(safe_chdir(m, ".."));
+// }
 static int	go_into_directory(char	*dir)
 {
+	dprintf(2, "I enter go into directory ! the dir : %s\n:", dir);
 	if (chdir(dir) != 0)
 	{
 		print_cmd_perror("cd", dir, errno);
@@ -99,6 +100,16 @@ static int	get_home(t_minishell *m)
 	free(new_path);
 	return (return_value);
 }
+bool	should_go_home(t_token_list *command)
+{
+	if (command->next == NULL)
+		return(1);
+	if (ft_strncmp(command->next->name, "~", 2) == 0)
+		return(1);
+	if (ft_strncmp(command->next->name, "~/", 3) == 0)
+		return(1);
+	return (0);
+}
 
 int	ft_cd(t_minishell *minishell, t_token_list *command)
 {
@@ -107,14 +118,11 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	char		*dir;
 	struct stat	st;
 
-	if (command->next != NULL)
-		dir = command->next->name;
-	else
+	if (should_go_home(command) == 1)
 		return(get_home(minishell));
-	if (ft_strncmp(".", dir, 1) == 0)
-		return (0);
-	if (ft_strncmp("..", dir, 2) == 0)
-		return (go_into_sub_directory(minishell));
+	dir = command->next->name;
+	//if (ft_strncmp("..", dir, 3) == 0)
+	//	return (go_into_sub_directory(minishell));
 	if (stat(dir, &st) == -1)
 	{
 		print_cmd_perror("cd", dir, errno);;

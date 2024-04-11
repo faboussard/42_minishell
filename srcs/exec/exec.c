@@ -6,13 +6,13 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 14:15:08 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:28:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-bool	is_a_silent_buildin(char *cmd)
+bool	is_a_silent_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "cd", 2) == 0)
 		return (1);
@@ -25,7 +25,7 @@ bool	is_a_silent_buildin(char *cmd)
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	if (is_a_silent_buildin(pl->cmd_table[0]))
+	if (is_a_silent_builtin(pl->cmd_table[0]))
 		exit(0);
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
 	execve(pl->good_path, pl->cmd_table, m->envp_table);
@@ -98,7 +98,6 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 		ft_putendl_fd("minishell : dup error", 2);
 		return ;
 	}
-	
 	if (nb_cmds < 1)
 		return ;
 	set_paths(minishell, minishell->envp_table);
