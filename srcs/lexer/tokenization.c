@@ -52,17 +52,17 @@ void join_tokens(t_minishell *minishell)
 	char *joined_name;
 
 	iterator = minishell->list_tokens;
-	while (iterator->next != NULL)
+	while (iterator && iterator->next != NULL)
 	{
 		if (iterator->e_operator == DOUBLE_QUOTE)
 		{
-			while (iterator->e_operator != DOUBLE_QUOTE)
+			while (iterator->next->e_operator != DOUBLE_QUOTE)
 			{
 				joined_name = ft_strjoin(iterator->name, iterator->next->name);
 				free(iterator->name);
 				free(iterator->next->name);
-				iterator->name = "TOKEN_TO_DELETE";
-				iterator->next->name = joined_name;
+				iterator->name = joined_name;
+				//remove next token
 				iterator = iterator->next;
 			}
 		}
