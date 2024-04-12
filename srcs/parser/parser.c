@@ -105,21 +105,17 @@ void check_sequence_dollar_followed_by_quotes(char *user_input)
 
 int parse_input(t_minishell *minishell)
 {
-	char	**split;
 	char *string;
 
-	split = NULL;
 //	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
 //	check_sequence_dollar_followed_by_quotes(minishell->user_input);
 	string = minishell->user_input;
-	split = fill_array_with_quotes_management(string);
-	if (split == NULL)
-		return (1);
-	transform_to_token(minishell, split);
+	transform_to_token(minishell, string);
+	join_tokens(minishell);
 	if (check_syntax(minishell) == 1)
 		return (1);
 	token_requalification(minishell->list_tokens);
-	expander(minishell);
+//	expander(minishell);
 	create_envp_table(minishell);
 	create_process_list(minishell);
 	return (0);
