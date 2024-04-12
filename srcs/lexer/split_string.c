@@ -79,16 +79,3 @@ void *ft_free_all_alloc(char **strs_array, size_t start)
 	return (NULL);
 }
 
-//char	**ft_split_with_quotes_management(t_minishell *minishell, char *string)
-//{
-//	char	**split;
-//	size_t split_size;
-//
-//	if (string == NULL)
-//		return (NULL);
-//	split = NULL;
-//
-//	split = fill_array_with_quotes_management(split, string);
-//	return (split);
-//}
-

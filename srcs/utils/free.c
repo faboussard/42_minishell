@@ -18,6 +18,17 @@
 
 // commentaire pour fanny de fanny : laisser les declaration de next,
 //	invalid read sinon
+
+void free_token(t_token_list *token)
+{
+	if (token != NULL)
+	{
+		free(token->name);
+		free(token);
+	}
+}
+
+
 void	ft_lstclear_envp(t_envp_list **lst)
 {
 	t_envp_list	*current;
