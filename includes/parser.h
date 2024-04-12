@@ -16,6 +16,13 @@
 # include "libft.h"
 # include "minishell.h"
 
+/*************************token_list_utils**************************/
+void	ft_list_remove_if(t_token_list **begin_list, char *to_compare,
+						  void (*free_fct)(void *));
+
+/*************************join_tokens**************************/
+char find_sep(char c);
+
 /************************** parser  **************************/
 
 int parse_input(t_minishell *minishell);
