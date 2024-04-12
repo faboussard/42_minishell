@@ -15,11 +15,11 @@
 #include <stdbool.h>
 
 
-bool define_operator_token(t_token_list *new_token, const char *string, const char *operator[12])
+bool define_operator_token(t_token_list *new_token, const char *string, const char *operator[13])
 {
 	int i = 0;
 
-	while (i < 12)
+	while (i < 13)
 	{
 		if (operator[i] != NULL && !ft_strcmp(string, operator[i]))
 		{
@@ -35,7 +35,7 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 
 bool get_operator_token(t_token_list *new_token, const char *string)
 {
-	const char *operator[12] = {
+	const char *operator[13] = {
 			[OPEN_PARENTHESES] = "(",
 			[CLOSE_PARENTHESES] = ")",
 			[PIPE] = "|",
@@ -45,7 +45,8 @@ bool get_operator_token(t_token_list *new_token, const char *string)
 			[APPEND] = ">>",
 			[DOUBLE_QUOTE] = "\"",
 			[SINGLE_QUOTE] = "\'",
-			[IS_SPACE] = " "
+			[IS_SPACE] = " ",
+			[DOLLAR] = "$"
 	};
 	return (define_operator_token(new_token, string, operator));
 }

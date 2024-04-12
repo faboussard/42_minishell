@@ -14,29 +14,20 @@
 #include "utils.h"
 #include <stdlib.h>
 
-static void	move_cursor(t_token_list **cursor, t_token_list **previous_node)
+void	ft_list_remove_if(t_token_list **begin_list, char *content_ref)
 {
-	*previous_node = *cursor;
-	*cursor = (*cursor)->next;
-}
+	t_token_list	*to_free;
 
-void	ft_list_remove_if(t_token_list **begin_list, char *to_compare,
-						  void (*free_fct)(void *))
-{
-	t_token_list *t2;
-	t_token_list *t1;
-
-	t1 = *begin_list;
-	t2 = (*begin_list)->next;
-	while (t1 != NULL)
+	if (*begin_list)
 	{
-		if (ft_strcmp(to_compare, t1->name) == 0)
+		if (ft_strcmp((*begin_list)->name, content_ref) == 0)
 		{
-			t1->next = t2->next;
-			free_token(t2);
-			t1 = t1->next;
+			to_free = *begin_list;
+			*begin_list = (*begin_list)->next;
+			free_token(to_free);
+			ft_list_remove_if(begin_list, content_ref);
 		}
 		else
-			t1 = t1->next;
+			ft_list_remove_if(&(*begin_list)->next, content_ref);
 	}
 }

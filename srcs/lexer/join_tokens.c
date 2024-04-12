@@ -28,7 +28,7 @@ char find_sep(char c)
 	return (0);
 }
 
-void join_double_quotes(t_minishell *minishell, t_token_list **list)
+void join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	char *joined_name;
 	t_token_list *t2;
@@ -48,7 +48,7 @@ void join_double_quotes(t_minishell *minishell, t_token_list **list)
 	t1 = t1->next;
 }
 
-void join_tokens(t_minishell *minishell, t_token_list **list)
+void handler_join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
@@ -57,10 +57,10 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	{
 		if ((*list)->next != NULL && (*list)->e_operator == DOUBLE_QUOTE)
 		{
-			join_double_quotes(minishell, &minishell->list_tokens);
+			join_tokens(minishell, &minishell->list_tokens);
 			while ((*list)->next != NULL && (*list)->next->e_operator != DOUBLE_QUOTE)
-				join_double_quotes(minishell, list);
-			join_double_quotes(minishell, list);
+				join_tokens(minishell, list);
+			join_tokens(minishell, list);
 			(*list) = (*list)->next;
 		}
 		else

@@ -51,6 +51,8 @@ void arg_to_command(t_token_list *list_tokens)
 			next_token = iterator->next;
 			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != IN_FILE && next_token->e_type != OUT_FILE)
 				next_token->e_type = ARGUMENT;
+			if (iterator->e_operator == DOLLAR)
+				iterator->e_type = COMMAND;
 			iterator = iterator->next;
 		}
 	}
@@ -102,15 +104,18 @@ int parse_input(t_minishell *minishell)
 {
 	char *string;
 
-//	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
 //	check_sequence_dollar_followed_by_quotes(minishell->user_input);
 	string = minishell->user_input;
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
-	join_tokens(minishell, &minishell->list_tokens);
+	expander(minishell);
+	handler_join_tokens(minishell, &minishell->list_tokens);
+	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
+//	remove_quotes(minishell, minishell->list_tokens);
+
+//PARSING A PARTIR DICI
 	token_requalification(minishell->list_tokens);
-//	expander(minishell);
 	create_envp_table(minishell);
 	create_process_list(minishell);
 	return (0);

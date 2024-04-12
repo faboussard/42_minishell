@@ -8,7 +8,8 @@ vpath %c srcs lexer env_variables parser expansion utils exec builtins
 # --------------- FILES --------------- #
 
 LIST_SRCS		=  main signal init\
-				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string lexer/check_syntax\
+				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens\
+				lexer/split_string lexer/check_syntax lexer/token_lst_utils lexer/join_tokens\
 				env_variables/env_variables\
 				parser/parser parser/create_process_list parser/process_list\
 				builtins/exit_builtin builtins/cd_builtin\

@@ -22,6 +22,8 @@ void	ft_list_remove_if(t_token_list **begin_list, char *to_compare,
 
 /*************************join_tokens**************************/
 char find_sep(char c);
+void handler_join_tokens(t_minishell *minishell, t_token_list **list);
+void join_tokens(t_minishell *minishell, t_token_list **list);
 
 /************************** parser  **************************/
 
