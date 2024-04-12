@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/12 08:16:02 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:47:19 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,30 @@ int	is_root_directory(t_minishell *m)
 // 	}
 // 	return (0);
 // }
+bool contains_only_charset(const char *str, const char *charset)
+{
+    while (*str != '\0')
+    {
+        if (ft_strchr(charset, *str) == NULL)
+            return 0;
+        str++;
+    }
+    return 1;
+ }
 
 static int	go_into_directory(char *dir)
 {
-	dprintf(2, "I enter go into directory ! the dir : %s\n:", dir);
+	//dprintf(2, "I enter go into directory ! the dir : %s\n", dir);
+	char	cwd[PATH_MAX];
+
+	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+		return (-1);
+	}
 	if (chdir(dir) != 0)
 	{
+		//dprintf(2, "Ewww ! I can't go there you freak !\n");
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
@@ -100,13 +118,13 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	if (should_go_home(command) == 1)
 		return (get_home(minishell));
 	dir = command->next->name;
-	if (stat(dir, &st) == -1)
+	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
 	{
+		//dprintf(2, "I don't know why but fuck you\n");
 		print_cmd_perror("cd", dir, errno);
-		;
 		return (1);
 	}
-	if (!(S_ISDIR(st.st_mode)))
+	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
 		return (go_into_directory(dir));
@@ -118,6 +136,7 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	return (0);
 }
 /*
+http://pwet.fr/man/linux/commandes/posix/cd/
 cd ../../../
 char		*getcwd(char *buf, size_t size);
 La fonction getcwd() copie le chemin d'accès absolu du répertoire de travail courant dans la chaîne pointée par buf,
