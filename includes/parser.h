@@ -55,4 +55,7 @@ t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 void expander(t_minishell *minishell);
 void			expand_and_create_envp_table(t_minishell *minishell);
 
+/********************* check_syntax **************************/
+size_t check_quotes(t_minishell *minishell);
+
 #endif // PARSER_H

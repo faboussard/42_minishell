@@ -46,7 +46,29 @@ char find_sep(char c)
 	return (0);
 }
 
-void join_token(t_minishell *minishell, char *string)
+void join_tokens(t_minishell *minishell)
+{
+	t_token_list *iterator;
+	char *joined_name;
+
+	iterator = minishell->list_tokens;
+	while (iterator->next != NULL)
+	{
+		if (iterator->e_operator == DOUBLE_QUOTE)
+		{
+			while (iterator->e_operator != DOUBLE_QUOTE)
+			{
+				joined_name = ft_strjoin(iterator->name, iterator->next->name);
+				free(iterator->name);
+				free(iterator->next->name);
+				iterator->name = "TOKEN_TO_DELETE";
+				iterator->next->name = joined_name;
+				iterator = iterator->next;
+			}
+		}
+		iterator = iterator->next;
+	}
+}
 
 char *add_until_char(char *temp, char *string, int *i, char c);
 
