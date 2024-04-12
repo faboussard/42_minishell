@@ -6,32 +6,27 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 16:43:47 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/12 08:16:02 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-# include "utils.h"
-/* int	no_such_file_or_directory(char *dir) */
-/* { */
-/* 	perror(ENOENT); */
-/* 	return (ENOENT); */
-/* } */
+#include "utils.h"
 
-int is_root_directory(t_minishell *m)
+int	is_root_directory(t_minishell *m)
 {
-	(void)m;
-    char cwd[PATH_MAX];
+	char	cwd[PATH_MAX];
 
-    if (getcwd(cwd, sizeof(cwd)) == NULL)
-    {
-        perror("getcwd");
-        return -1;
-    }
-    if (ft_strncmp(cwd, "/", 1) == 0)
-        return 1;
-    else
-        return 0;
+	(void)m;
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		perror("getcwd");
+		return (-1);
+	}
+	if (ft_strncmp(cwd, "/", 1) == 0)
+		return (1);
+	else
+		return (0);
 }
 
 // static int	safe_chdir(t_minishell *m, char *dir)
@@ -45,24 +40,7 @@ int is_root_directory(t_minishell *m)
 // 	return (0);
 // }
 
-// static int	go_into_sub_directory(t_minishell *m)
-// {
-// 	struct stat	st;
-
-// 	if (lstat("..", &st) == -1)
-// 	{
-// 		perror("lstat");
-// 		return (1);
-// 	}
-// 	/*
-// 	Si il y a un repertoire au-dessus,
-// 	faire safe_chdir
-// 	Sinon
-// 	Ne rien faire
-// 	*/
-// 	return(safe_chdir(m, ".."));
-// }
-static int	go_into_directory(char	*dir)
+static int	go_into_directory(char *dir)
 {
 	dprintf(2, "I enter go into directory ! the dir : %s\n:", dir);
 	if (chdir(dir) != 0)
@@ -75,12 +53,12 @@ static int	go_into_directory(char	*dir)
 
 static int	get_home(t_minishell *m)
 {
-	(void)m;
 	char	*home_dir;
 	char	*new_path;
 	size_t	home_dir_len;
-	int	return_value;
+	int		return_value;
 
+	(void)m;
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
 	{
@@ -100,39 +78,39 @@ static int	get_home(t_minishell *m)
 	free(new_path);
 	return (return_value);
 }
+
 bool	should_go_home(t_token_list *command)
 {
 	if (command->next == NULL)
-		return(1);
+		return (1);
 	if (ft_strncmp(command->next->name, "~", 2) == 0)
-		return(1);
+		return (1);
 	if (ft_strncmp(command->next->name, "~/", 3) == 0)
-		return(1);
+		return (1);
 	return (0);
 }
 
 int	ft_cd(t_minishell *minishell, t_token_list *command)
 {
-	(void)minishell;
-	(void)command;
 	char		*dir;
 	struct stat	st;
 
+	(void)minishell;
+	(void)command;
 	if (should_go_home(command) == 1)
-		return(get_home(minishell));
+		return (get_home(minishell));
 	dir = command->next->name;
-	//if (ft_strncmp("..", dir, 3) == 0)
-	//	return (go_into_sub_directory(minishell));
 	if (stat(dir, &st) == -1)
 	{
-		print_cmd_perror("cd", dir, errno);;
+		print_cmd_perror("cd", dir, errno);
+		;
 		return (1);
 	}
 	if (!(S_ISDIR(st.st_mode)))
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
 		return (go_into_directory(dir));
-	//dprintf(2, "bash: cd: %s: Not a directory\n", dir);
+	// dprintf(2, "bash: cd: %s: Not a directory\n", dir);
 	// if (access(dir, F_OK | X_OK))
 	// {
 	// 	perror("access");
@@ -141,7 +119,7 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 }
 /*
 cd ../../../
-char	*getcwd(char *buf, size_t size);
+char		*getcwd(char *buf, size_t size);
 La fonction getcwd() copie le chemin d'accès absolu du répertoire de travail courant dans la chaîne pointée par buf,
 	qui est de longueur size.
 Si le chemin du répertoire en cours nécessite un tampon plus long que size octets,
@@ -152,22 +130,27 @@ Dans quels cas getcwd peut echouer ?
 
 `getcwd()` est une fonction de la bibliothèque standard C qui renvoie le chemin absolu du répertoire courant. Cette fonction peut échouer dans les cas suivants :
 
-1. Le tampon fourni n'est pas assez grand pour contenir le chemin complet du répertoire courant. Dans ce cas, `getcwd()` renvoie `NULL` et définit `errno` à `ERANGE`.
-2. Le répertoire courant a été supprimé ou déplacé. Dans ce cas, `getcwd()` renvoie `NULL` et définit `errno` à `ENOENT`.
+1. Le tampon fourni n'est pas assez grand pour contenir le chemin complet du répertoire courant. Dans ce cas,
+	`getcwd()` renvoie `NULL` et définit `errno` à `ERANGE`.
+2. Le répertoire courant a été supprimé ou déplacé. Dans ce cas,
+	`getcwd()` renvoie `NULL` et définit `errno` à `ENOENT`.
 mbernard@z4r9p5:~/test/test/test$ cd ..
 cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-3. Le processus n'a pas les permissions nécessaires pour accéder au répertoire courant ou à l'un de ses parents. Dans ce cas, `getcwd()` renvoie `NULL` et définit `errno` à `EACCES` ou `EPERM`.
+3. Le processus n'a pas les permissions nécessaires pour accéder au répertoire courant ou à l'un de ses parents. Dans ce cas,
+	`getcwd()` renvoie `NULL` et définit `errno` à `EACCES` ou `EPERM`.
 mbernard@z4r9p5:~/test/test$ cd ..
 bash: cd: ..: Permission denied
-4. Le système de fichiers est en mode lecture seule ou le processus a atteint sa limite de ressources. Dans ce cas, `getcwd()` renvoie `NULL` et définit `errno` à `EIO` ou `ENOMEM`.
-5. Le chemin du répertoire courant contient des liens symboliques circulaires. Dans ce cas, `getcwd()` peut renvoyer `NULL` et définir `errno` à `ELOOP`.
+4. Le système de fichiers est en mode lecture seule ou le processus a atteint sa limite de ressources. Dans ce cas,
+	`getcwd()` renvoie `NULL` et définit `errno` à `EIO` ou `ENOMEM`.
+5. Le chemin du répertoire courant contient des liens symboliques circulaires. Dans ce cas,
+	`getcwd()` peut renvoyer `NULL` et définir `errno` à `ELOOP`.
 mbernard@z4r9p5:~/test/test/test$ cd ..
 cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 
-int		chdir(const char *path);
+int			chdir(const char *path);
 chdir() remplace le répertoire de travail courant du processus appelant par celui indiqué dans le chemin path.
 https://www.thegeekstuff.com/2010/10/linux-error-codes/
-int		access(const char *pathname, int mode);
+int			access(const char *pathname, int mode);
 access() vérifie si le processus appelant peut accéder au fichier pathname. Si pathname est un lien symbolique,
 	il est déréférencé.
 
@@ -182,7 +165,7 @@ Le test est effectué avec les UID et GID réels du processus appelant,
 
 Si le processus appelant est privilégié (c'est-à-dire, son UID réel est nul),
 	une vérification X_OK sur un fichier régulier réussit même si le fichier n'a aucun bit d'exécution positionné.
-	
+
 d-w------- 2 mbernard 2023_lyon   6 Apr 10 11:04 dossier
 dr--r--r-- 2 mbernard 2023_lyon   6 Apr 10 11:04 dossier
 bash: cd: dossier/: Permission denied
