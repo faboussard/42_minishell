@@ -15,28 +15,23 @@
 #include "parser.h"
 #include <stdlib.h>
 
-//int check_parentheses(t_token_list *list_tokens)
-//{
-//	size_t	open_parentheses;
-//	size_t	close_parentheses;
-//	t_token_list	*iterator;
-//	t_token_list	*token;
-//
-//	open_parentheses = 0;
-//	close_parentheses = 0;
-//	iterator = list_tokens;
-//	while (iterator != NULL)
-//	{
-//		open_parentheses += iterator->e_operator == OPEN_PARENTHESES;
-//		close_parentheses += iterator->e_operator == CLOSE_PARENTHESES;
-//		iterator = iterator->next;
-//	}
-//	if (close_parentheses > open_parentheses)
-//		return (print_operator_syntax_error(token), -1);
-//	if (open_parentheses > close_parentheses)
-//		return (print_operator_syntax_error(token), -1);
-//	return (close_parentheses == open_parentheses);
-//}
+size_t check_quotes(t_minishell *minishell)
+{
+	size_t	quote;
+	t_token_list	*iterator;
+
+	quote = 0;
+	iterator = minishell->list_tokens;
+	while (iterator != NULL)
+	{
+		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+			quote ++;
+		iterator = iterator->next;
+	}
+	if (quote % 2 != 0)
+		return (print_error("unclosed quote"), 1);
+	return (0);
+}
 
 void arg_to_command(t_token_list *list_tokens)
 {
@@ -102,6 +97,7 @@ void check_sequence_dollar_followed_by_quotes(char *user_input)
 		i++;
 	}
 }
+void join_tokens(t_minishell *minishell);
 
 int parse_input(t_minishell *minishell)
 {
@@ -111,9 +107,9 @@ int parse_input(t_minishell *minishell)
 //	check_sequence_dollar_followed_by_quotes(minishell->user_input);
 	string = minishell->user_input;
 	transform_to_token(minishell, string);
-	join_tokens(minishell);
 	if (check_syntax(minishell) == 1)
 		return (1);
+	join_tokens(minishell);
 	token_requalification(minishell->list_tokens);
 //	expander(minishell);
 	create_envp_table(minishell);

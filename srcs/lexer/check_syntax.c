@@ -61,6 +61,8 @@ int check_syntax(t_minishell *minishell)
 {
 	t_token_list *iterator;
 
+	if (check_quotes(minishell))
+		return (1);
 	if (minishell->list_tokens != NULL)
 	{
 		iterator = minishell->list_tokens;

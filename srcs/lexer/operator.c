@@ -44,10 +44,9 @@ bool get_operator_token(t_token_list *new_token, const char *string)
 			[HERE_DOC] = "<<",
 			[APPEND] = ">>",
 			[DOUBLE_QUOTE] = "\"",
-			[SINGLE_QUOTE] = " \'",
+			[SINGLE_QUOTE] = "\'",
 			[IS_SPACE] = " "
 	};
-
 	return (define_operator_token(new_token, string, operator));
 }
 
