@@ -42,6 +42,9 @@ enum						e_token_operators
 	INPUT_REDIRECT = 5,
 	HERE_DOC = 6,
 	APPEND = 7,
+	DOUBLE_QUOTE = 8,
+	SINGLE_QUOTE = 9,
+	IS_SPACE = 10
 };
 
 enum						e_token_builtin
@@ -70,7 +73,7 @@ char				**split_with_quotes_management(t_minishell *minishell);
 /********************* tokenization *********************/
 
 void				transform_to_token(t_minishell *minishell,
-						char **split);
+						char *string);
 void				define_token_types(enum e_token_type type,
 						enum e_token_builtin builtin,
 						enum e_token_operators operator,

@@ -156,16 +156,16 @@ char	*ft_strjoin_free_s1_and_s2(char  *s1, char *s2)
 	return (new_string);
 }
 
-char *add_until_dollar(char *string, int *i)
+char *add_until_char(char *temp,char *string, int *i, char c)
 {
-	char *return_string;
 	int j;
 
 	j = 0;
-	return_string = ft_calloc(1, ft_strlen(string) + 1);
-	while (string[*i] && (string[*i] != '$' || string[*i + 1] == '\0'))
-		return_string[j++] = string[(*i)++];
-	return (return_string);
+	while (string[*i] && (string[*i] != c || string[*i + 1] == '\0'))
+		temp[j++] = string[(*i)++];
+	if (j != 0)
+		(*i)--;
+	return (temp);
 }
 
 
@@ -182,12 +182,13 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	i = 0;
 	while (string[i])
 	{
-		temp = add_until_dollar(string, &i);
+		temp = ft_calloc(1, ft_strlen(string) + 1);
+		temp = add_until_char(temp, string, &i, '$');
 		final_string = ft_strjoin_free_s1_and_s2(final_string, temp);
 		if (string[i] == '$')
 		{
 			i++;
-			sigil_string_to_check = add_until_dollar(string, &i);
+			sigil_string_to_check = add_until_char(temp, string, &i, '$');
 			expanded_sigil = identify_envp_string(sigil_string_to_check, minishell);
 			if (expanded_sigil != sigil_string_to_check)
 				final_string = ft_strjoin_free_s1_and_s2(final_string, expanded_sigil);
