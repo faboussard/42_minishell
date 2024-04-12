@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 14:28:47 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/12 08:27:10 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 bool	is_a_silent_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "cd", 2) == 0)
+	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "export", 6) == 0)
+	if (ft_strncmp(cmd, "export", 7) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "unset", 5) == 0)
+	if (ft_strncmp(cmd, "unset", 6) == 0)
 		return (1);
 	return (0);
 }
