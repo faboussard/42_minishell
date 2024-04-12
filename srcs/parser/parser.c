@@ -97,7 +97,6 @@ void check_sequence_dollar_followed_by_quotes(char *user_input)
 		i++;
 	}
 }
-void join_tokens(t_minishell *minishell);
 
 int parse_input(t_minishell *minishell)
 {
@@ -109,7 +108,7 @@ int parse_input(t_minishell *minishell)
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
-	join_tokens(minishell);
+	join_tokens(minishell, &minishell->list_tokens);
 	token_requalification(minishell->list_tokens);
 //	expander(minishell);
 	create_envp_table(minishell);

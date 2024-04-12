@@ -17,6 +17,7 @@
 # include "minishell.h"
 # include <stdbool.h>
 
+
 typedef struct s_minishell	t_minishell;
 
 enum						e_token_type

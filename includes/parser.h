@@ -54,6 +54,8 @@ t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 /********************* expansion.c ****************************/
 void expander(t_minishell *minishell);
 void			expand_and_create_envp_table(t_minishell *minishell);
+char *add_until_char(char *temp, char *string, int *i, char c);
+void join_tokens(t_minishell *minishell, t_token_list **list);
 
 /********************* check_syntax **************************/
 size_t check_quotes(t_minishell *minishell);
