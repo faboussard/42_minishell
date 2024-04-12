@@ -106,6 +106,8 @@ add_executable(minishell
         includes/builtins.h
         srcs/builtins/cd_builtin.c
         libft/src/ft_str/ft_split_either_sep.c
+        srcs/lexer/token_lst_utils.c
+        srcs/lexer/join_tokens.c
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})
