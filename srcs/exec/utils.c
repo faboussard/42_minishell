@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:29:13 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/09 14:44:38 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:58:14 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl)
 
 void	ft_free_pl_paths(t_minishell *minishell)
 {
-	free(minishell->paths);
-	free(minishell->process_list->good_path);
-	ft_free_tab(minishell->process_list->tab_paths);
+	if (minishell->paths != NULL)
+		free(minishell->paths);
+	if (minishell->process_list->good_path != NULL)
+		free(minishell->process_list->good_path);
+	if (minishell->process_list->tab_paths != NULL)
+		ft_free_tab(minishell->process_list->tab_paths);
 }

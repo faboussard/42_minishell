@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:10:27 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:44:25 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ void			ft_free_tab_from_i(void **tab, int j);
 void			ft_lstclear_envp(t_envp_list **lst);
 void			ft_lstclear_token(t_token_list **lst);
 void			ft_free_process_list(t_process_list **process_list);
-void restore_terminal(t_minishell *minishell);
+void 			restore_terminal(t_minishell *minishell);
+void			check_and_delete_if_tmp_file_exists(char *tmp_file);
 
 /******************** ERROR ********************/
 void			print_error(const char *error);
 int				print_operator_syntax_error(t_token_list *token);
+void			print_cmd_perror(char *cmd, char *name, int err);
+
 
 /******************** TOKEN LIST *****************/
 int				ft_lstsize_token(t_token_list *lst);
@@ -53,4 +56,4 @@ t_token_list	*ft_lstlast_token(t_token_list *lst);
 void			add_token_to_list(t_token_list **list_tokens,
 					t_token_list *new_token);
 
-#endif // GENERAL_H
+#endif // UTILS_H
