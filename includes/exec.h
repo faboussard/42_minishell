@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbernard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/09 14:50:18 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:07:53 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd);
 bool	safe_pipe(t_minishell *m);
 void	close_pipes(int *pipe_fd);
 void	close_fds(int fd_in, int fd_out);
-void	check_and_delete_if_tmp_file_exists(char *tmp_file);
 //--------------------------- PATHS -----------------------------------//
 void	set_paths(t_minishell *m, char **env);
 void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd);

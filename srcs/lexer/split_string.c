@@ -17,9 +17,9 @@
 #include <string.h>
 #include <stdbool.h>
 
- size_t	count_letters_for_space( char *str)
+size_t count_letters_for_space(char *str)
 {
-	size_t	count;
+	size_t count;
 
 	count = 0;
 	while (*str != '\0')
@@ -31,9 +31,9 @@
 	return (count);
 }
 
-size_t	count_letters_for_quotes( char *str)
+size_t count_letters_for_quotes(char *str)
 {
-	size_t	count;
+	size_t count;
 
 	count = 0;
 	while (*str != '\0')
@@ -46,30 +46,23 @@ size_t	count_letters_for_quotes( char *str)
 }
 
 
-void deal_double_double_quotes_or_double_single_quotes(char *string)
+void deal_double_double_quotes_or_double_single_quotes(char *user_input)
 {
 	size_t i;
-	size_t len;
 
-	len = strlen(string);
 	i = 0;
-	while (i < len)
+	while (user_input[i])
 	{
-		if ((string[i] == '\'' && string[i + 1] == '\'') || (string[i] == '\"' && string[i + 1] == '\"'))
-		{
-			ft_memmove(&string[i], &string[i + 1], len - i);
-			len--;
-		}
-		else
-		{
-			i++;
-		}
+		if ((user_input[i] == '\'' && user_input[i + 1] == '\'') ||
+			(user_input[i] == '\"' && user_input[i + 1] == '\"'))
+			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input - 1));
+		i++;
 	}
 }
 
-void	*ft_free_all_alloc(char **strs_array, size_t start)
+void *ft_free_all_alloc(char **strs_array, size_t start)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	while (i < start)
@@ -83,16 +76,15 @@ void	*ft_free_all_alloc(char **strs_array, size_t start)
 
 char **fill_array_with_quotes_management(char *s)
 {
-	size_t	i;
-	size_t	j;
-	size_t	len;
+	size_t i;
+	size_t j;
+	size_t len;
 	char quote;
-	char	**split;
+	char **split;
 	size_t split_size;
 
 	if (s == NULL)
 		return (NULL);
-	deal_double_double_quotes_or_double_single_quotes(s);
 	split_size = count_letters_for_quotes(s) + 1 + count_letters_for_space(s) + 1;
 	split = ft_calloc(split_size, sizeof(char *));
 	if (split == NULL)
@@ -115,8 +107,6 @@ char **fill_array_with_quotes_management(char *s)
 			}
 			j++;
 			i += len;
-			if (s[i] == quote)
-				i++;
 		}
 		else if (s[i] && s[i] != ' ')
 		{
@@ -130,8 +120,7 @@ char **fill_array_with_quotes_management(char *s)
 			}
 			j++;
 			i += len;
-		}
-		else
+		} else
 			i++;
 	}
 	split[j] = NULL;

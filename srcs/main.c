@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 15:41:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/12 08:23:58 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,27 @@
 
 #define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
-void minishell_interactive(t_minishell *minishell)
+void	minishell_interactive(t_minishell *minishell)
 {
 	while (1)
 	{
 		set_signals_interactive();
 		minishell->user_input = readline(PROMPT);
 		if (minishell->user_input == NULL)
-			break;
+			break ;
 		if (minishell->user_input[0] == 0)
-			continue;
+			continue ;
 		set_signals_noninteractive();
 		add_history(minishell->user_input);
 		if (parse_input(minishell) == 0)
 		{
 			if (minishell->process_list == NULL)
-				return;
-			ft_init_process_list_and_minishell(minishell, minishell->process_list);
-			exec_builtin(minishell, minishell->list_tokens);
-			ft_init_process_list_and_minishell(minishell, minishell->process_list);
+				return ;
+			ft_init_process_list_and_minishell(minishell,
+				minishell->process_list);
+			if (minishell->total_commands == 1
+				&& minishell->list_tokens->e_builtin != NO_BUILTIN)
+				exec_builtin(minishell, minishell->list_tokens);
 			execute_cmds(minishell, minishell->total_commands);
 		}
 		free(minishell->user_input);
@@ -47,9 +49,13 @@ void minishell_interactive(t_minishell *minishell)
 	}
 }
 
-void minishell_non_interactive(t_minishell *minishell, char *data_input)
+char	*expand_input(char *input, t_minishell *minishell);
+
+void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
 	set_signals_noninteractive();
+	//	char *input = "$USER $USER";
+	//	input = expand_input(input, minishell);
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
@@ -58,16 +64,16 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	if (parse_input(minishell) == 0)
 	{
 		if (minishell->process_list == NULL)
-			return;
+			return ;
 		exec_builtin(minishell, minishell->list_tokens);
 		ft_init_process_list_and_minishell(minishell, minishell->process_list);
-		execute_cmds(minishell, minishell->total_commands);
+		//		execute_cmds(minishell, minishell->total_commands);
 	}
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	t_minishell minishell;
+	t_minishell	minishell;
 
 	ft_init_minishell(&minishell, ac, av);
 	if (envp)
@@ -78,14 +84,16 @@ int main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-//	  printf("************ print list_envp ************\n\n"); // DELETE
-//	  print_list_envp(&minishell);
-	printf("************ print list_tokens ************\n"); // DELETE
-	print_token_list(minishell.list_tokens); //DELETE
+	//		printf("************ print list_envp ************\n\n"); // DELETE
+	//		print_list_envp(&minishell);
+	printf("************ print list_tokens ************\n");                              
+		// DELETE
+	print_token_list(minishell.list_tokens);        // DELETE
 	printf("************ process list (cmd table , in out files,limiters : ********* \n"); // DELETE
 	print_process_list(minishell.process_list); // DELETE
 //	   printf("********************** print env_table **********************\n\n");
-//		print_array(minishell.envp_table);  //DELETE
+//		print_array(minishell.envp_table); 
+//DELETE
 	free_minishell(&minishell);
 	return (0);
 }

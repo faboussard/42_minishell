@@ -11,7 +11,7 @@ LIST_SRCS		=  main signal init\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens lexer/split_string lexer/check_syntax\
 				env_variables/env_variables\
 				parser/parser parser/create_process_list parser/process_list\
-				builtins/exit_builtin\
+				builtins/exit_builtin builtins/cd_builtin\
 				expansion/expansion\
 				utils/free utils/print utils/error utils/token_list\
 				exec/exec exec/exec_builtins exec/errors	exec/paths	exec/fd_management \
@@ -22,7 +22,8 @@ LIST_HEADERS	= utils lexer minishell parser signals exec builtins
 # ------------ DIRECTORIES ------------ #
 
 DIR_BUILD		=	.build/
-SUBDIRS := .build/lexer .build/env_variables .build/parser .build/expansion .build/utils .build/exec .build/builtins
+SUBDIRS := .build/lexer .build/env_variables .build/parser .build/expansion \
+			.build/utils .build/exec .build/builtins
 DIR_HEADERS		=	includes/
 DIR_LIBFT		=	libft/
 HEADER_LIBFT    =   libft/inc/
