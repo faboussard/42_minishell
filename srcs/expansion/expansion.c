@@ -50,13 +50,14 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 
 	while (iterator != NULL)
 	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target)) == 0)
+		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) -1) == 0)
 		{
 			temp = ft_strdup(iterator->value);
 			if (temp == NULL)
 				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			if (check_equal_position_in_string(string, iterator->target))
 				string = expand_equal_sign(string, temp);
+			free(temp);
 			return (string);
 		}
 		iterator = iterator->next;
@@ -171,30 +172,10 @@ char *add_until_char(char *temp,char *string, int *i, char c)
 
 char *expand_sigil(char *string, t_minishell *minishell)
 {
-	int i;
-	char *temp;
-	char *sigil_string_to_check;
 	char *final_string;
-	char *expanded_sigil;
 
-	final_string = NULL;
 	final_string = ft_calloc(1, 1);
-	i = 0;
-	while (string[i])
-	{
-		temp = ft_calloc(1, ft_strlen(string) + 1);
-		temp = add_until_char(temp, string, &i, '$');
-		final_string = ft_strjoin_free_s1_and_s2(final_string, temp);
-		if (string[i] == '$')
-		{
-			i++;
-			sigil_string_to_check = add_until_char(temp, string, &i, '$');
-			expanded_sigil = identify_envp_string(sigil_string_to_check, minishell);
-			if (expanded_sigil != sigil_string_to_check)
-				final_string = ft_strjoin_free_s1_and_s2(final_string, expanded_sigil);
-			free(sigil_string_to_check);
-		}
-	}
+	final_string = identify_envp_string(string, minishell);
 	return (final_string);
 }
 
@@ -209,17 +190,19 @@ void expander(t_minishell *minishell)
 		if (ft_strcmp(iterator->name, "$?") == 0)
 			printf("%d\n", minishell->status);
 		if (iterator->e_type != DELIMITER
-			&& ft_strchr(iterator->name, '$') != NULL
-			&& ft_strnstr(iterator->name, "$'", 2) == NULL
+			&& iterator->e_operator == DOLLAR
+			&& iterator->next->e_type != OPERATOR
 //			&& ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0
 				)
 		{
-			string = expand_sigil(iterator->name, minishell);
-			size_t length = ft_strlen(string) + 1;
-			ft_memmove(iterator->name, string, length);
-			free(string);
+			string = expand_sigil(iterator->next->name, minishell);
+			if (string != iterator->next->name)
+			{
+				free(iterator->next->name);
+				iterator->next->name = ft_strdup(string);
+				free(string);
+			}
 		}
-
 		iterator = iterator->next;
 	}
 }

@@ -45,7 +45,8 @@ enum						e_token_operators
 	APPEND = 7,
 	DOUBLE_QUOTE = 8,
 	SINGLE_QUOTE = 9,
-	IS_SPACE = 10
+	IS_SPACE = 10,
+	DOLLAR = 11
 };
 
 enum						e_token_builtin
