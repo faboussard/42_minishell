@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 15:27:19 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:57:01 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 	m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
 }
 
-static void	first_child(t_minishell *m)
+static void	first_child(t_minishell *m, t_process_list *pl)
 {
-	if (m->fd_in >= 0 && m->process_list->dev_null == 0)
+	if (m->fd_in >= 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
@@ -33,7 +33,9 @@ static void	first_child(t_minishell *m)
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close(m->fd_in);
 			close_pipes(m->pipe_fd);
-			my_execve(m, m->process_list);
+			if (!ft_strncmp(pl->cmd_table[0], "cat", 4) && !pl->cmd_table[1])
+				exit(1);
+			my_execve(m, pl);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);
@@ -42,7 +44,7 @@ static void	first_child(t_minishell *m)
 		close_and_redirect_pipe_to_stdin(m);
 }
 
-static void	last_child(t_minishell *m, t_process_list *process_list)
+static void	last_child(t_minishell *m, t_process_list *pl)
 {
 	if (m->fd_out > 0)
 	{
@@ -56,7 +58,7 @@ static void	last_child(t_minishell *m, t_process_list *process_list)
 				m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 				close(m->fd_out);
 			}
-			my_execve(m, process_list);
+			my_execve(m, pl);
 		}
 		else
 		{
@@ -69,7 +71,7 @@ static void	last_child(t_minishell *m, t_process_list *process_list)
 		close_pipes(m->pipe_fd);
 }
 
-static void	middle_child(t_minishell *m, t_process_list *process_list)
+static void	middle_child(t_minishell *m, t_process_list *pl)
 {
 	if (m->fd_in >= 0)
 	{
@@ -79,7 +81,7 @@ static void	middle_child(t_minishell *m, t_process_list *process_list)
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
-			my_execve(m, process_list);
+			my_execve(m, pl);
 		}
 		else
 			close(m->pipe_fd[WRITE_END]);
@@ -108,7 +110,7 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	if (safe_pipe(m) == 0)
 		return ;
 	open_fd_infile(m, pl->in_files_token);
-	first_child(m);
+	first_child(m, pl);
 	pl = pl->next;
 	i = 1;
 	while (++i < m->total_commands)

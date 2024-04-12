@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/12 08:26:43 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:22:21 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 void restore_terminal(t_minishell *minishell)
 {
-	dprintf(2, "I'm about to free !");
+	//dprintf(2, "I'm about to free !");
 	free_minishell(minishell);
 }
 
