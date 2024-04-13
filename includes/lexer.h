@@ -85,7 +85,7 @@ bool				get_builtin_token(t_token_list *new_token,
 
 /********************* count *********************/
 
-void				count_total_commands(t_minishell *minishell);
+int count_token_by_operator(t_minishell *minishell, enum e_token_operators operator_type);
 size_t				count_letters_until_pipe(t_token_list *head);
 size_t				count_cmds_until_pipe(t_token_list *head);
 

@@ -17,8 +17,7 @@
 # include "minishell.h"
 
 /*************************token_list_utils**************************/
-void	ft_list_remove_if(t_token_list **begin_list, char *to_compare,
-						  void (*free_fct)(void *));
+void	ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)());
 
 /*************************join_tokens**************************/
 char find_sep(char c);

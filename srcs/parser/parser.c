@@ -25,24 +25,6 @@
 //4. ENLEVER LES TOKENS ESPACES
 // ATTENTION : regarder si = ou digits ( variables envp valable !)
 
-size_t check_quotes(t_minishell *minishell)
-{
-	size_t	quote;
-	t_token_list	*iterator;
-
-	quote = 0;
-	iterator = minishell->list_tokens;
-	while (iterator != NULL)
-	{
-		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-			quote ++;
-		iterator = iterator->next;
-	}
-	if (quote % 2 != 0)
-		return (print_error("unclosed quote"), 1);
-	return (0);
-}
-
 void arg_to_command(t_token_list *list_tokens)
 {
 	t_token_list  *iterator;
@@ -110,7 +92,7 @@ void check_sequence_dollar_followed_by_quotes(char *user_input)
 	}
 }
 
-void del_next_token(t_minishell *minishell, t_token_list **token)
+void del_next_token(t_token_list **token)
 {
 	t_token_list *t2;
 	t_token_list *t1;
@@ -132,9 +114,11 @@ void remove_single_quotes(t_minishell *minishell, t_token_list **list)
 	{
 		if ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->e_operator == DOUBLE_QUOTE)
 			(*list) = (*list)->next;
-		if ((*list)->next->next != NULL && ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next->e_operator != DOUBLE_QUOTE)
-		|| ((*list)->next->e_operator == DOUBLE_QUOTE && (*list)->e_operator != SINGLE_QUOTE) || (*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next == NULL)
-			del_next_token(minishell, &minishell->list_tokens);
+		if ((*list)->next->next != NULL &&
+			(((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
+			 ((*list)->next->e_operator == DOUBLE_QUOTE && (*list)->e_operator != SINGLE_QUOTE) ||
+			 ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next == NULL)))
+			del_next_token(&minishell->list_tokens);
 		else
 			(*list) = (*list)->next;
 	}
@@ -143,21 +127,26 @@ void remove_single_quotes(t_minishell *minishell, t_token_list **list)
 
 void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list);
 
+static int cmp(int op1, int op2)
+{
+	return (op1 - op2);
+}
+
 int parse_input(t_minishell *minishell)
 {
 	char *string;
 
 	string = minishell->user_input;
-	deal_double_double_quotes_or_double_single_quotes(string);
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
 	expander(minishell);
+//	deal_double_double_quotes_or_double_single_quotes(string);
 	in_squotes_join_tokens(minishell, &minishell->list_tokens);
 	in_dquotes_join_tokens(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, "\'", (void (*)(void *)) ft_lstclear_token);
-	ft_list_remove_if(&minishell->list_tokens, "\"", (void (*)(void *)) ft_lstclear_token);
-	ft_list_remove_if(&minishell->list_tokens, " ", (void (*)(void *)) ft_lstclear_token);
+	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
