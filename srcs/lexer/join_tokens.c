@@ -28,6 +28,18 @@ char find_sep(char c)
 	return (0);
 }
 
+void del_next_token(t_token_list **token)
+{
+	t_token_list *t2;
+	t_token_list *t1;
+
+	t1 = (*token);
+	t2 = (*token)->next;
+	t1->next = t2->next;
+	free_token(t2);
+	t1 = t1->next;
+}
+
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	char *joined_name;
@@ -43,9 +55,7 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	if (t1->name == NULL)
 		exit_msg(minishell, "Malloc failed at tokenization", 1);
 	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
-	t1->next = t2->next;
-	free_token(t2);
-	t1 = t1->next;
+	del_next_token(&t1);
 }
 
 void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
