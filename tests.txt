@@ -86,6 +86,8 @@ gfaboussa
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
 
+-c "\"' ha ha '\" "
+
 
 -----> reagit si on entre un seul tilde
 

@@ -14,20 +14,28 @@
 #include "utils.h"
 #include <stdlib.h>
 
-void	ft_list_remove_if(t_token_list **begin_list, char *content_ref)
-{
-	t_token_list	*to_free;
 
-	if (*begin_list)
+
+void	ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)())
+{
+	t_token_list	*remove;
+	t_token_list	*current;
+
+	current = *begin_list;
+	while (current && current->next)
 	{
-		if (ft_strcmp((*begin_list)->name, content_ref) == 0)
+		if ((*cmp)(current->next->e_operator, data_ref) == 0)
 		{
-			to_free = *begin_list;
-			*begin_list = (*begin_list)->next;
-			free_token(to_free);
-			ft_list_remove_if(begin_list, content_ref);
+			remove = current->next;
+			current->next = current->next->next;
+			free_token(remove);
 		}
-		else
-			ft_list_remove_if(&(*begin_list)->next, content_ref);
+		current = current->next;
+	}
+	current = *begin_list;
+	if (current && (*cmp)(current->e_operator, data_ref) == 0)
+	{
+		*begin_list = current->next;
+		free(current);
 	}
 }
