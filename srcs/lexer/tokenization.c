@@ -16,12 +16,7 @@
 #include "parser.h"
 
 
-//ETAPES
-//1. TOUT TOKENIZER
-//2. EXPAND ( AVANT LES GUILLEMETS CAR ON DIT : SI TOKEN DOLLAR : ON ANALYSE LE TOKEN SUIVANT
-//3. ENLEVER LES DOUBLES QUOTES
-//4. ENLEVER LES ESPACES
-// ATTENTION : regarder si = ou digits ( variables envp valable !)
+
 
 
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator,
