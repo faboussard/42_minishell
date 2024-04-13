@@ -88,6 +88,8 @@ g$'USER'
 
 -c "\"' ha ha '\" "
 
+-c "\"' ha "ha" '\" "
+
 
 -----> reagit si on entre un seul tilde
 

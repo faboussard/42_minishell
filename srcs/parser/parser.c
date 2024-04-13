@@ -77,55 +77,42 @@ void token_requalification(t_token_list *list_tokens)
 	arg_to_command(list_tokens);
 }
 
-void check_sequence_dollar_followed_by_quotes(char *user_input)
-{
-	size_t	i;
-	i = 0;
-
-	while (user_input[i + 1] != '\0')
-	{
-		if (user_input[i] == '$' && user_input[i + 1] == '\"')
-		{
-			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input - 1));
-		}
-		i++;
-	}
-}
-
-void del_next_token(t_token_list **token)
-{
-	t_token_list *t2;
-	t_token_list *t1;
-
-	t1 = (*token);
-	t2 = (*token)->next;
-	t1->next = t2->next;
-	free_token(t2);
-	t1 = t1->next;
-}
+//void check_sequence_dollar_followed_by_quotes(char *user_input)
+//{
+//	size_t	i;
+//	i = 0;
+//
+//	while (user_input[i + 1] != '\0')
+//	{
+//		if (user_input[i] == '$' && user_input[i + 1] == '\"')
+//		{
+//			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input - 1));
+//		}
+//		i++;
+//	}
+//}
 
 
-void remove_single_quotes(t_minishell *minishell, t_token_list **list)
-{
-	t_token_list *cpy;
+//void remove_single_quotes(t_minishell *minishell, t_token_list **list)
+//{
+//	t_token_list *cpy;
+//
+//	cpy = (*list);
+//	while ((*list)->next != NULL)
+//	{
+//		if ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->e_operator == DOUBLE_QUOTE)
+//			(*list) = (*list)->next;
+//		if ((*list)->next->next != NULL &&
+//			(((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
+//			 ((*list)->next->e_operator == DOUBLE_QUOTE && (*list)->e_operator != SINGLE_QUOTE) ||
+//			 ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next == NULL)))
+//			del_next_token(&minishell->list_tokens);
+//		else
+//			(*list) = (*list)->next;
+//	}
+//	*list = cpy;
+//}
 
-	cpy = (*list);
-	while ((*list)->next != NULL)
-	{
-		if ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->e_operator == DOUBLE_QUOTE)
-			(*list) = (*list)->next;
-		if ((*list)->next->next != NULL &&
-			(((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
-			 ((*list)->next->e_operator == DOUBLE_QUOTE && (*list)->e_operator != SINGLE_QUOTE) ||
-			 ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next == NULL)))
-			del_next_token(&minishell->list_tokens);
-		else
-			(*list) = (*list)->next;
-	}
-	*list = cpy;
-}
-
-void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list);
 
 int cmp(int op1, int op2)
 {
@@ -141,6 +128,8 @@ int parse_input(t_minishell *minishell)
 	if (check_syntax(minishell) == 1)
 		return (1);
 	expander(minishell);
+	//on ajoute le dollar au token suivant que dan cerstains ccas. revoir lordre
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	join_quotes(minishell, &minishell->list_tokens);
 	join_spaces(minishell, &minishell->list_tokens);
 	token_requalification(minishell->list_tokens);

@@ -57,6 +57,8 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			if (check_equal_position_in_string(string, iterator->target))
 				string = expand_equal_sign(string, temp);
+			else
+				string = ft_strdup(temp);
 			free(temp);
 			return (string);
 		}
