@@ -42,44 +42,58 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	free(joined_name);
 	if (t1->name == NULL)
 		exit_msg(minishell, "Malloc failed at tokenization", 1);
-	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, (t1));
+	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
 	t1->next = t2->next;
 	free_token(t2);
 	t1 = t1->next;
 }
 
-
-//poser la question comment joindre auqnd on q des dquotes dqns des dquotes. on donne un index aux guillkemets quand on passe dessus ??
-void in_dquotes_join_tokens(t_minishell *minishell, t_token_list **list)
+void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
 {
-
-			while ((*list)->next != NULL && (*list)->next->e_operator != DOUBLE_QUOTE)
-				join_tokens(minishell, list);
-			(*list) = (*list)->next;
-	}
-
-void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list)
-{
-			while ((*list)->next != NULL && (*list)->next->e_operator != SINGLE_QUOTE)
-				join_tokens(minishell, list);
-			(*list) = (*list)->next;
+	if (*list == NULL)
+		return;
+	*list = (*list)->next;
+	while ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != op)
+		join_tokens(minishell, list);
 }
 
-void manage_quotes(t_minishell *minishell, t_token_list **list)
+void join_quotes(t_minishell *minishell, t_token_list **list)
 {
-	t_token_list	*cpy;
+	t_token_list *cpy;
 
 	cpy = *list;
-	while (*list != NULL)
+	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list) ->e_operator == DOUBLE_QUOTE)
-			in_dquotes_join_tokens(minishell, list);
-		if ((*list) ->e_operator == SINGLE_QUOTE)
-			in_squotes_join_tokens(minishell, list);
-		(*list)  = (*list) ->next;
+		if ((*list)->e_operator == DOUBLE_QUOTE)
+		{
+			in_op_for_join(minishell, list, DOUBLE_QUOTE);
+		}
+		if ((*list)->e_operator == SINGLE_QUOTE)
+		{
+			in_op_for_join(minishell, list, SINGLE_QUOTE);
+		}
+		(*list) = (*list)->next;
 	}
 	*list = cpy;
 	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+}
+
+void join_spaces(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->next->e_operator == IS_SPACE || ((*list)->e_operator == IS_SPACE && *list == cpy))
+		{
+			in_op_for_join(minishell, list, IS_SPACE);
+			if (*list == NULL)
+				break;
+		}
+		(*list) = (*list)->next;
+	}
+	*list = cpy;
 	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 }

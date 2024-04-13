@@ -141,7 +141,8 @@ int parse_input(t_minishell *minishell)
 	if (check_syntax(minishell) == 1)
 		return (1);
 	expander(minishell);
-	manage_quotes(minishell, &minishell->list_tokens);
+	join_quotes(minishell, &minishell->list_tokens);
+	join_spaces(minishell, &minishell->list_tokens);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
