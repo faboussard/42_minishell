@@ -86,10 +86,13 @@ int check_syntax(t_minishell *minishell)
 	return 0;
 }
 
+// REVOIR CETTE FONCTION NE RENVOIE PQS FORCEMENT LA BONNE QUOTE
 int get_first_odd_quote(size_t quote_count, int first_odd_quote, int quote_type)
 {
 	if (quote_count % 2 != 0 && first_odd_quote == -1)
 		first_odd_quote = quote_type;
+	if (quote_count % 2 == 0 && first_odd_quote == quote_type)
+		first_odd_quote = -1;
 	return first_odd_quote;
 }
 
