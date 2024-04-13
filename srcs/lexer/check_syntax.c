@@ -86,7 +86,6 @@ int check_syntax(t_minishell *minishell)
 	return 0;
 }
 
-// REVOIR CETTE FONCTION NE RENVOIE PQS FORCEMENT LA BONNE QUOTE
 int get_first_odd_quote(size_t quote_count, int first_odd_quote, int quote_type)
 {
 	if (quote_count % 2 != 0 && first_odd_quote == -1)
@@ -131,5 +130,8 @@ size_t check_quotes(t_minishell *minishell)
 		}
 		iterator = iterator->next;
 	}
-	return (print_quote_syntax_error(first_odd_quote), 1);
+	if (first_odd_quote != -1)
+		return (print_quote_syntax_error(first_odd_quote), 1);
+	else
+		return (0);
 }

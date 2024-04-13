@@ -54,8 +54,6 @@ char	*expand_input(char *input, t_minishell *minishell);
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
 	set_signals_noninteractive();
-	//	char *input = "$USER $USER";
-	//	input = expand_input(input, minishell);
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
