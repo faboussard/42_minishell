@@ -48,7 +48,7 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	t1 = t1->next;
 }
 
-void handler_join_tokens(t_minishell *minishell, t_token_list **list)
+void in_dquotes_join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
@@ -57,15 +57,33 @@ void handler_join_tokens(t_minishell *minishell, t_token_list **list)
 	{
 		if ((*list)->next != NULL && (*list)->e_operator == DOUBLE_QUOTE)
 		{
-			join_tokens(minishell, &minishell->list_tokens);
+			(*list) = (*list)->next;
 			while ((*list)->next != NULL && (*list)->next->e_operator != DOUBLE_QUOTE)
 				join_tokens(minishell, list);
-			join_tokens(minishell, list);
 			(*list) = (*list)->next;
 		}
 		else
 			(*list) = (*list)->next;
 	}
 	*list = cpy;
-	ft_list_remove_if(&minishell->list_tokens, " ", (void (*)(void *)) ft_lstclear_token);
+}
+
+void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = (*list);
+	while ((*list) != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
+		{
+			(*list) = (*list)->next;
+			while ((*list)->next != NULL && (*list)->next->e_operator != SINGLE_QUOTE)
+				join_tokens(minishell, list);
+			(*list) = (*list)->next;
+		}
+		else
+			(*list) = (*list)->next;
+	}
+	*list = cpy;
 }

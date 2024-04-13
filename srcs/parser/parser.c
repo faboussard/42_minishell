@@ -15,6 +15,16 @@
 #include "parser.h"
 #include <stdlib.h>
 
+//ETAPES
+//1. TOUT TOKENIZER	: CHAQUE TOKEN EST UN OPERATEUR(ESPACE GUILLEMT PIPE AUTRE) OU UN MOT. les dollqrs et quillemets sont separes des mots.
+//2. EXPAND ( SI TOKEN DOLLAR : ON ANALYSE LE TOKEN SUIVANT). donc si guillements : expansion non faite
+// 3. JOIN CE QUIL Y A ENTRE QUOTES SANS LES QUOTES
+// 4. ENLEVER LES TOKEN SINGLESQUOTES S ILS NE SONT PAS PRECEDES OU SUIVIS DE TOKEN DQUOTES
+// JOINDRE LES TOKEN SINGLE QUOTES RESTQNTES A LEUR MOTS
+//3. ENLEVER LES TOKENS DQUOTES
+//4. ENLEVER LES TOKENS ESPACES
+// ATTENTION : regarder si = ou digits ( variables envp valable !)
+
 size_t check_quotes(t_minishell *minishell)
 {
 	size_t	quote;
@@ -100,21 +110,54 @@ void check_sequence_dollar_followed_by_quotes(char *user_input)
 	}
 }
 
+void del_next_token(t_minishell *minishell, t_token_list **token)
+{
+	t_token_list *t2;
+	t_token_list *t1;
+
+	t1 = (*token);
+	t2 = (*token)->next;
+	t1->next = t2->next;
+	free_token(t2);
+	t1 = t1->next;
+}
+
+
+void remove_single_quotes(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = (*list);
+	while ((*list)->next != NULL)
+	{
+		if ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->e_operator == DOUBLE_QUOTE)
+			(*list) = (*list)->next;
+		if ((*list)->next->next != NULL && ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next->e_operator != DOUBLE_QUOTE)
+		|| ((*list)->next->e_operator == DOUBLE_QUOTE && (*list)->e_operator != SINGLE_QUOTE) || (*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next == NULL)
+			del_next_token(minishell, &minishell->list_tokens);
+		else
+			(*list) = (*list)->next;
+	}
+	*list = cpy;
+}
+
+void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list);
+
 int parse_input(t_minishell *minishell)
 {
 	char *string;
 
-//	check_sequence_dollar_followed_by_quotes(minishell->user_input);
 	string = minishell->user_input;
+	deal_double_double_quotes_or_double_single_quotes(string);
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
 	expander(minishell);
-	handler_join_tokens(minishell, &minishell->list_tokens);
-	deal_double_double_quotes_or_double_single_quotes(minishell->user_input);
-//	remove_quotes(minishell, minishell->list_tokens);
-
-//PARSING A PARTIR DICI
+	in_squotes_join_tokens(minishell, &minishell->list_tokens);
+	in_dquotes_join_tokens(minishell, &minishell->list_tokens);
+	ft_list_remove_if(&minishell->list_tokens, "\'", (void (*)(void *)) ft_lstclear_token);
+	ft_list_remove_if(&minishell->list_tokens, "\"", (void (*)(void *)) ft_lstclear_token);
+	ft_list_remove_if(&minishell->list_tokens, " ", (void (*)(void *)) ft_lstclear_token);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
