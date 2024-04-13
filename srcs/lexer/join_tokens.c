@@ -50,51 +50,68 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 
 void in_dquotes_join_tokens(t_minishell *minishell, t_token_list **list)
 {
-	t_token_list *cpy;
-	int count;
+//	t_token_list *cpy;
+//	int count;
 
-	count = count_token_by_operator(minishell, DOUBLE_QUOTE);
-	cpy = (*list);
-	while ((*list) != NULL)
-	{
+//	count = count_token_by_operator(minishell, DOUBLE_QUOTE);
+//	cpy = (*list);
+//	while ((*list) != NULL)
+//	{
 		if ((*list)->next != NULL && (*list)->e_operator == DOUBLE_QUOTE)
 		{
-			count--;
-			if (count == 0)
-				break;
+//			count--;
+//			if (count == 0)
+//				break;
 			(*list) = (*list)->next;
 			while ((*list)->next != NULL && (*list)->next->e_operator != DOUBLE_QUOTE)
 				join_tokens(minishell, list);
 			(*list) = (*list)->next;
 		}
-		else
-			(*list) = (*list)->next;
+//		else
+//			(*list) = (*list)->next;
 	}
-	*list = cpy;
-}
+////	*list = cpy;
+//}
 
 //on fqit single quote en premier, donc on doit sqrruer que ya bien les double a join
 void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list)
 {
-	t_token_list *cpy;
-	int count;
+//	t_token_list *cpy;
+//	int count;
 
-	cpy = *list;
-	count = count_token_by_operator(minishell, SINGLE_QUOTE) - 1;
+//	cpy = *list;
+//	count = count_token_by_operator(minishell, SINGLE_QUOTE) - 1;
 	while ((*list) != NULL && (*list)->next != NULL)
 	{
 		if ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
 		{
-			count--;
-			if (count == 0)
-				break;
+//			count--;
+//			if (count == 0)
+//				break;
 			(*list) = (*list)->next;
 			while ((*list)->next != NULL && (*list)->next->e_operator != SINGLE_QUOTE)
 				join_tokens(minishell, list);
 			(*list) = (*list)->next;
 		}
-		else
-			(*list) = (*list)->next;
+	}
+//	*list = cpy;
+}
+
+void manage_quotes(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list	*cpy;
+
+	cpy = *list;
+	while (*list != NULL)
+	{
+		if ((*list) ->e_operator == DOUBLE_QUOTE)
+			in_dquotes_join_tokens(minishell, list);
+		if ((*list) ->e_operator == SINGLE_QUOTE)
+			in_squotes_join_tokens(minishell, list);
+		(*list)  = (*list) ->next;
 	}
 	*list = cpy;
+	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 }

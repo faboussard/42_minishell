@@ -23,6 +23,8 @@ void	ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)());
 char find_sep(char c);
 void in_dquotes_join_tokens(t_minishell *minishell, t_token_list **list);
 void join_tokens(t_minishell *minishell, t_token_list **list);
+void manage_quotes(t_minishell *minishell, t_token_list **list);
+int cmp(int op1, int op2);
 
 /************************** parser  **************************/
 

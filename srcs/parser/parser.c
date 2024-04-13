@@ -127,7 +127,7 @@ void remove_single_quotes(t_minishell *minishell, t_token_list **list)
 
 void in_squotes_join_tokens(t_minishell *minishell, t_token_list **list);
 
-static int cmp(int op1, int op2)
+int cmp(int op1, int op2)
 {
 	return (op1 - op2);
 }
@@ -141,12 +141,7 @@ int parse_input(t_minishell *minishell)
 	if (check_syntax(minishell) == 1)
 		return (1);
 	expander(minishell);
-//	deal_double_double_quotes_or_double_single_quotes(string);
-	in_squotes_join_tokens(minishell, &minishell->list_tokens);
-	in_dquotes_join_tokens(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
+	manage_quotes(minishell, &minishell->list_tokens);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
