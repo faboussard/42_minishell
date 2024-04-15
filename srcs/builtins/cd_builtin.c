@@ -19,10 +19,10 @@ int	is_root_directory(t_minishell *m)
 
 	(void)m;
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
-	{
-		perror("getcwd");
-		return (-1);
-	}
+    {
+        perror("getcwd");
+        return (-1);
+    }
 	if (ft_strncmp(cwd, "/", 1) == 0)
 		return (1);
 	else
@@ -114,17 +114,20 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	struct stat	st;
 
 	(void)minishell;
-	(void)command;
+	if (command->next != NULL && command->next->next != NULL)
+    {
+        ft_putendl_fd("minishell: cd: too many arguments", 2);
+        return (1);
+    }
 	if (should_go_home(command) == 1)
 		return (get_home(minishell));
 	dir = command->next->name;
 	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
 	{
-		//dprintf(2, "I don't know why but fuck you\n");
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
-	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
+    if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode))) // if doesn't begin with . and not dir
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
 		return (go_into_directory(dir));
