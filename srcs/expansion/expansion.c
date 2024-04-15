@@ -14,13 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-char	*ft_strjoin_free_s1(char *s1, char const *s2);
-char	*ft_strjoin_free_s1_and_s2(char *s1, char *s2);
-// int define_strlen_iterator_target(t_envp_list *iterator)
-// {
-// 	return (0);
-// }
-
 int check_equal_position_in_string(char *string, char *string2)
 {
 	int i;
@@ -39,34 +32,9 @@ char *expand_equal_sign(char *string, char *temp)
 {
 	while (*string && *string != '=')
 		string++;
-	string = ft_strjoin_free_s1(temp, string);
+	string = ft_strjoin(temp, string);
 	return (string);
 }
-
-char  *identify_envp_string(char *string, t_minishell *minishell)
-{
-	t_envp_list *iterator = minishell->list_envp;
-	char *temp;
-
-	while (iterator != NULL)
-	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) -1) == 0)
-		{
-			temp = ft_strdup(iterator->value);
-			if (temp == NULL)
-				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
-			if (check_equal_position_in_string(string, iterator->target))
-				string = expand_equal_sign(string, temp);
-			else
-				string = ft_strdup(temp);
-			free(temp);
-			return (string);
-		}
-		iterator = iterator->next;
-	}
-	return (string);
-}
-
 
 //void ignore_next_char(char *str, char c)
 //{
@@ -100,83 +68,40 @@ void ignore_dollar_string(char **string, t_minishell *minishell)
 }
 
 
-char	*ft_strjoin_free_s1(char *s1, char const *s2)
+char  *identify_envp_string(char *string, t_minishell *minishell)
 {
-	char	*new_string;
-	size_t	i;
-	size_t	j;
-	size_t	total_length;
+	t_envp_list *iterator = minishell->list_envp;
+	char *temp;
 
-	total_length = ft_strlen(s1) + ft_strlen(s2);
-	new_string = malloc(sizeof(char) * total_length + 1);
-	if (new_string == NULL)
-		return (0);
-	i = 0;
-	while (i < ft_strlen(s1))
+	while (iterator != NULL)
 	{
-		new_string[i] = s1[i];
-		i++;
+		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) -1) == 0)
+		{
+			temp = ft_strdup(iterator->value);
+			if (temp == NULL)
+				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
+			if (check_equal_position_in_string(string, iterator->target))
+				string = expand_equal_sign(string, temp);
+			else
+				string = ft_strdup(temp);
+			if (temp)
+			{
+				free(temp);
+				temp = NULL;
+			}
+			return (string);
+		}
+		iterator = iterator->next;
 	}
-	j = 0;
-	while (j < ft_strlen(s2))
-	{
-		new_string[i] = s2[j];
-		j++;
-		i++;
-	}
-	free((void*)s1);
-	new_string[i] = '\0';
-	return (new_string);
+	return (string);
 }
 
-char	*ft_strjoin_free_s1_and_s2(char  *s1, char *s2)
-{
-	char	*new_string;
-	size_t	i;
-	size_t	j;
-	size_t	total_length;
-
-	total_length = ft_strlen(s1) + ft_strlen(s2);
-	new_string = malloc(sizeof(char) * total_length + 1);
-	if (new_string == NULL)
-		return (0);
-	i = 0;
-	while (i < ft_strlen(s1))
-	{
-		new_string[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < ft_strlen(s2))
-	{
-		new_string[i] = s2[j];
-		j++;
-		i++;
-	}
-	free(s1);
-	free(s2);
-	new_string[i] = '\0';
-	return (new_string);
-}
-
-char *add_until_char(char *temp,char *string, int *i, char c)
-{
-	int j;
-
-	j = 0;
-	while (string[*i] && (string[*i] != c || string[*i + 1] == '\0'))
-		temp[j++] = string[(*i)++];
-	if (j != 0)
-		(*i)--;
-	return (temp);
-}
 
 
 char *expand_sigil(char *string, t_minishell *minishell)
 {
 	char *final_string;
 
-	final_string = ft_calloc(1, 1);
 	final_string = identify_envp_string(string, minishell);
 	return (final_string);
 }
@@ -193,42 +118,22 @@ void expander(t_minishell *minishell)
 			printf("%d\n", minishell->status);
 		if (iterator->e_type != DELIMITER
 			&& iterator->e_operator == DOLLAR
-			&& iterator->next->e_type != OPERATOR
-//			&& ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0
-				)
+			&& iterator->next->e_type != OPERATOR)
 		{
 			string = expand_sigil(iterator->next->name, minishell);
 			if (string != iterator->next->name)
 			{
 				free(iterator->next->name);
 				iterator->next->name = ft_strdup(string);
-				free(string);
 			}
+			else
+			{
+				del_next_token(&iterator);
+				string = NULL;
+			}
+			if (string)
+				free(string);
 		}
 		iterator = iterator->next;
 	}
 }
-
-//int ft_strnstr_and_check(const char *big, const char *little, size_t len)
-//{
-//	size_t i;
-//	size_t j;
-//	char previous_char;
-//
-//	i = 0;
-//	while (big[i] != '\0')
-//	{
-//		j = 0;
-//		while (big[i + j] == little[j] && ((i + j) < len))
-//		{
-//			j++;
-//			if (j == 1)
-//				previous_char = big[i + j - 1];
-//			if (little[j] == '\0' && previous_char == '\'')
-//				return (1);
-//		}
-//		i++;
-//	}
-//	return (0);
-//}
-

@@ -64,31 +64,40 @@ zsh: command not found: 35
 
 
 -c "$USER $USER= $USER=fafsasfaf"
+09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
+juba juba= juba=fafsasfaf
+
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
+$USER=
+
 
 faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
+
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
 
-~/tommini main ❯ echo $USER=fgfgfg
-faboussa=fgfgfg
 
 ~/tommini main ❯ echo $'USER'
 USER
 
+ -c " \"g''\" "
 faboussa@z1r12p5:~/minishell$ echo "g''"
 g''
+
+-c " \"g\"''\"\" " == NOK
 faboussa@z1r12p5:~/minishell$ echo "g"''""
 g
 
-faboussa@z1r12p5:~/minishell$ echo g"$USER"
-gfaboussa
+-c " g\"$'USER'\" "
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
 
 -c "\"' ha ha '\" "
 
 -c "\"' ha "ha" '\" "
+07:45:22 juba@juba-desktop ~ → echo "' ha "ha" '"
+' ha ha '
 
 
 -----> reagit si on entre un seul tilde
