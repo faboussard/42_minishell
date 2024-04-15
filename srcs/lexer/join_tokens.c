@@ -48,11 +48,20 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 
 void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
 {
+	int count;
+
+	count = 0;
 	if (*list == NULL)
 		return;
 	*list = (*list)->next;
 	while ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != op)
+	{
+		count = 1;
 		join_tokens(minishell, list);
+	}
+	*list = (*list)->next;
+	if (count == 0)
+		*list = (*list)->next;
 }
 
 void join_dollar_and_after_double_quote(t_minishell *minishell, t_token_list **list)
@@ -64,12 +73,41 @@ void join_dollar_and_after_double_quote(t_minishell *minishell, t_token_list **l
 	{
 		if ((*list)->e_operator == DOLLAR && (*list)->next->e_operator == DOUBLE_QUOTE)
 		{
-			del_next_token(list);
-			join_tokens(minishell, list);
+			remove_node(list, (*list));
 		}
 		(*list) = (*list)->next;
 	}
 	*list = cpy;
+}
+
+void delete_dollar_before_join(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOLLAR)
+			del_next_token(list);
+//		if ((*list)->e_operator == DOLLAR && (*list)->next->e_operator == DOUBLE_QUOTE)
+//			remove_node(list, (*list));
+		(*list) = (*list)->next;
+	}
+	*list = cpy;
+}
+
+int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
+{
+	t_token_list *cpy;
+
+	cpy = (*list)->next;
+	while (cpy != NULL)
+	{
+		if (cpy->e_operator == op)
+			return 1;
+		cpy = cpy->next;
+	}
+	return 0;
 }
 
 void join_quotes(t_minishell *minishell, t_token_list **list)
@@ -79,11 +117,25 @@ void join_quotes(t_minishell *minishell, t_token_list **list)
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->e_operator == DOUBLE_QUOTE)
+		if (((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE) || (*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == SINGLE_QUOTE)
+		{
+			(*list) = (*list)->next;
+			(*list) = (*list)->next;
+		}
+		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
+		{
 			in_op_for_join(minishell, list, DOUBLE_QUOTE);
-		if ((*list)->e_operator == SINGLE_QUOTE)
+			if ((*list) == NULL)
+				break;
+		}
+		else if ((*list)->e_operator == SINGLE_QUOTE && check_if_more_tokens(list, SINGLE_QUOTE))
+		{
 			in_op_for_join(minishell, list, SINGLE_QUOTE);
-		(*list) = (*list)->next;
+			if ((*list) == NULL)
+				break;
+		}
+		else
+			(*list) = (*list)->next;
 	}
 	*list = cpy;
 }
@@ -114,6 +166,8 @@ void join_spaces(t_minishell *minishell, t_token_list **list)
 		if ((*list)->e_operator == IS_SPACE || ((*list)->e_operator == IS_SPACE && *list == cpy)) // que se opasse til si un nespace puis plus rien
 		{
 			count = 1;
+			if (!(*list)->next || !(*list)->next->next)
+				break;
 			in_op_for_join(minishell, list, IS_SPACE);
 			if (*list == NULL)
 				break;
