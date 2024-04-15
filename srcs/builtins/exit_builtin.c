@@ -71,7 +71,23 @@ static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
 		*error = true;
 	return (*error);
 }
+/*
+bool	str_is_num(char *str)
+{
+	int x;
 
+	x = 0;
+	if (ft_strlen(str) == 1 && (str[x] < 0 || str[x] > 9))
+		return (0);
+	while (str[x])
+	{
+		if (ft_isalpha(str))
+			return (0);
+		x++;
+	}
+	return (1);
+}
+*/
 int ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 {
 	int		exit_code;
@@ -81,11 +97,18 @@ int ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 	printf("exit\n");
 	if (!command->next)
 	{
-		dprintf(2, "Hello you <3\n");
+		//dprintf(2, "Hello you <3\n");
 		restore_terminal(minishell);
 		exit(0);
 	}
+	/*
+	➜  42_minishell.c git:(builtins) ✗ bash -c "exit 123avd"
+	bash: line 0: exit: 123avd: numeric argument required
+	*/
 	exit_code = ft_atoi_long(command->next->name, &error);
+//	if (exit_code == 0 && !str_is_num(command->next->name))
+//		dprintf(2, "line 0: exit: 123avd: numeric argument required", command->next->name);
+// je vais le recoder // Melo
 	if (command->next->next && !error)
 	{
 		print_error("minishell: exit: too many arguments");
