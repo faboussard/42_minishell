@@ -62,14 +62,28 @@ zsh: command not found: 35
 
 ********************** EXPANSIONS *******************
 
-
--c "$USER $USER= $USER=fafsasfaf"
-09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
+*************************** TEST USERS ***********************
+-c "$USER $USER= $USER=fafsasfaf" = NOK DOLLQR EN TROP
+09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf" //// les dollqrs en trop
 juba juba= juba=fafsasfaf
 
-10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" //////////  === espaqce en trop qvqnt le =
 $USER=
 
+05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER" ////////// = DOLLAR EN TROP
+juba
+05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
+USER
+05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" ///////////// == DOLLQR EN TROP
+USER
+05:26:24 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
+juba
+05:26:37 juba@juba-desktop minishell ±|parsing ✗|→ echo '$USER'
+$USER
+
+-c " g\"$'USER'\" "
+faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
+g$'USER'
 
 faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
@@ -78,26 +92,39 @@ faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
 
 
-~/tommini main ❯ echo $'USER'
-USER
-
  -c " \"g''\" "
 faboussa@z1r12p5:~/minishell$ echo "g''"
 g''
 
--c " \"g\"''\"\" " == NOK
+-c " \"g\"''\"\" "
 faboussa@z1r12p5:~/minishell$ echo "g"''""
 g
 
--c " g\"$'USER'\" "
-faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
-g$'USER'
+
 
 -c "\"' ha ha '\" "
 
 -c "\"' ha "ha" '\" "
 07:45:22 juba@juba-desktop ~ → echo "' ha "ha" '"
-' ha ha '
+' ha ha '                       ////////////////////////////////////////////////////////////////////////////// == KO
+
+
+04:01:20 juba@juba-desktop minishell ±|parsing ✗|→ echo """"
+
+/////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
+04:01:26 juba@juba-desktop minishell ±|parsing ✗|→ echo "''"
+''
+04:01:32 juba@juba-desktop minishell ±|parsing ✗|→ echo ''''
+/////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
+
+04:10:04 juba@juba-desktop minishell ±|parsing ✗|→ echo """"''""""
+
+
+04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'""
+""
+
+04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'""
+""
 
 
 -----> reagit si on entre un seul tilde
