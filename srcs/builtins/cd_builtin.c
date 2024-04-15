@@ -108,18 +108,28 @@ bool	should_go_home(t_token_list *command)
 	return (0);
 }
 
+bool    too_many_args(t_token_list *command)
+{
+    if (command->next != NULL && command->next->next != NULL)
+    {
+        if (command->next->next->e_type != ARGUMENT && command->next->next->next == NULL)
+            return (0);
+        else
+            ft_putendl_fd("minishell: cd: too many arguments", 2);
+        return (1);
+    }
+    return (0);
+}
+
 int	ft_cd(t_minishell *minishell, t_token_list *command)
 {
 	char		*dir;
 	struct stat	st;
 
 	(void)minishell;
-	if (command->next != NULL && command->next->next != NULL)
-    {
-        ft_putendl_fd("minishell: cd: too many arguments", 2);
+    if (too_many_args(command))
         return (1);
-    }
-	if (should_go_home(command) == 1)
+    if (should_go_home(command) == 1)
 		return (get_home(minishell));
 	dir = command->next->name;
 	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
