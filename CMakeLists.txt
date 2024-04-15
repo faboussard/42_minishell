@@ -98,8 +98,8 @@ add_executable(minishell
         srcs/exec/paths.c
         srcs/exec/safe_utils.c
         srcs/exec/utils.c
-        srcs/utils/token_list.c
-        srcs/utils/token_list.c
+        srcs/lexer/token_list.c
+        srcs/lexer/token_list.c
         srcs/lexer/check_syntax.c
         srcs/exec/exec_builtins.c
         libft/src/ft_is/ft_isspace.c

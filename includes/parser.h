@@ -66,7 +66,7 @@ t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 void expander(t_minishell *minishell);
 void			expand_and_create_envp_table(t_minishell *minishell);
 char *add_until_char(char *temp, char *string, int *i);
-void join_dollar_and_after_double_quote(t_minishell *minishell, t_token_list **list);
+void join_dollar_and_after_double_quote(t_token_list **list);
 
 /********************* check_syntax **************************/
 size_t check_quotes(t_minishell *minishell);

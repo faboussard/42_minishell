@@ -74,12 +74,16 @@ $USER=
 juba
 05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
-05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" ///////////// == DOLLQR EN TROP
+05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" ///////////// SOUCI SUREMLENT SUR LE COMPTE + == DOLLQR EN TROP
 USER
 05:26:24 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
 05:26:37 juba@juba-desktop minishell ±|parsing ✗|→ echo '$USER'
 $USER
+
+10:11:58 juba@juba-desktop ~ → echo $""""USER""   //// KO
+USER
+
 
 -c " g\"$'USER'\" "
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
@@ -93,7 +97,7 @@ adsdgsfaboussa
 
 
  -c " \"g''\" "
-faboussa@z1r12p5:~/minishell$ echo "g''"
+faboussa@z1r12p5:~/minishell$ c
 g''
 
 -c " \"g\"''\"\" "
@@ -106,8 +110,7 @@ g
 
 -c "\"' ha "ha" '\" "
 07:45:22 juba@juba-desktop ~ → echo "' ha "ha" '"
-' ha ha '                       ////////////////////////////////////////////////////////////////////////////// == KO
-
+' ha ha '
 
 04:01:20 juba@juba-desktop minishell ±|parsing ✗|→ echo """"
 
@@ -118,12 +121,12 @@ g
 /////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
 
 04:10:04 juba@juba-desktop minishell ±|parsing ✗|→ echo """"''""""
+/////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
 
-
-04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'""
+04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'"" ///////////// KO
 ""
 
-04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'""
+04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'"" ///////////// KO
 ""
 
 

@@ -128,27 +128,27 @@ void remove_sep_tokens(t_minishell *minishell)
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 }
 
-int is_only_squote(char *str)
-{
-	int i;
-	int count;
-
-	i = 0;
-	count = 0;
-	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
-	{
-		i++;
-		while (str[i])
-		{
-			if (str[i] == '\'')
-				count++;
-			i++; // Incrémenter i à chaque itération
-		}
-		if (count == ft_strlen(str) - 2) // Vérifier si count est égal à la longueur de la chaîne - 2
-			return (1);
-	}
-	return (0);
-}
+//int is_only_squote(char *str)
+//{
+//	int i;
+//	int count;
+//
+//	i = 0;
+//	count = 0;
+//	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+//	{
+//		i++;
+//		while (str[i])
+//		{
+//			if (str[i] == '\'')
+//				count++;
+//			i++; // Incrémenter i à chaque itération
+//		}
+//		if (count == ft_strlen(str) - 2) // Vérifier si count est égal à la longueur de la chaîne - 2
+//			return (1);
+//	}
+//	return (0);
+//}
 
 
 //int is_only_dquote(char *str)
@@ -169,7 +169,7 @@ int is_only_squote(char *str)
 //	return (0);
 //}
 
-void delete_dollar_before_join(t_minishell *minishell, t_token_list **list);
+void delete_dollar_before_join(t_token_list **list);
 
 int parse_input(t_minishell *minishell)
 {
@@ -180,12 +180,13 @@ int parse_input(t_minishell *minishell)
 	if (check_syntax(minishell) == 1)
 		return (1);
 	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
-	join_dollar_and_after_double_quote(minishell, &minishell->list_tokens); // echo $"USER" -> USER. dabord on elimine le double quote
 	expander(minishell);
-	delete_dollar_before_join(minishell, &minishell->list_tokens); // echo "$USER" -> faboussa . dabord on expand, puis on supprime le dollar avant de join sur double quote
 	join_quotes(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	remove_sep_tokens(minishell);
+//	join_dollar_and_after_double_quote(&minishell->list_tokens); // echo $"USER" -> USER. dabord on elimine le double quote
+
+	//delete_dollar_before_join(&minishell->list_tokens); // echo "$USER" -> faboussa . dabord on expand, puis on supprime le dollar avant de join sur double quote
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	join_spaces(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);
