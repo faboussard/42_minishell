@@ -27,9 +27,11 @@ void del_next_token(t_token_list **token)
 
 void remove_node(t_token_list **begin_list, t_token_list *node_to_remove)
 {
-	t_token_list *current = *begin_list;
-	t_token_list *previous_node = NULL;
+	t_token_list *current;
+	t_token_list *previous_node;
 
+	current = *begin_list;
+	previous_node = NULL;
 	while (current != NULL && current != node_to_remove)
 	{
 		previous_node = current;
