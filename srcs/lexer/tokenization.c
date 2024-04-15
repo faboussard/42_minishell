@@ -16,9 +16,6 @@
 #include "parser.h"
 
 
-
-
-
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator,
 						t_token_list *new_token)
 {
@@ -31,7 +28,7 @@ int define_token(t_token_list *new_token, char *string)
 {
 	new_token->name = ft_strdup(string);
 	if (new_token->name == NULL)
-		return 0;
+		return (0);
 	new_token->next = NULL;
 	if (get_builtin_token(new_token, string) == FALSE
 		&& get_operator_token(new_token, string) == FALSE)
@@ -49,7 +46,7 @@ void create_token(t_minishell *minishell, char *string)
 		free(string);
 		exit_msg(minishell, "Malloc failed at tokenization", 2);
 	}
-	if (!define_token(new_token, string))
+	if (define_token(new_token, string) == 0)
 	{
 		free(string);
 		free(new_token);
@@ -58,11 +55,22 @@ void create_token(t_minishell *minishell, char *string)
 	add_token_to_list(&minishell->list_tokens, new_token);
 }
 
+char *add_until_char(char *temp,char *string, int *i)
+{
+	int		j;
+
+	j = 0;
+	while (string[*i] && !find_sep(string[*i]))
+		temp[j++] = string[(*i)++];
+	if (j != 0)
+		(*i)--;
+	return (temp);
+}
+
 void transform_to_token(t_minishell *minishell, char *string)
 {
 	int i;
 	char *temp;
-	char c;
 	int j;
 
 	i = 0;
@@ -75,13 +83,13 @@ void transform_to_token(t_minishell *minishell, char *string)
 			temp[1] = '\0';
 			create_token(minishell, temp);
 			i++;
-		} else if (string[i])
+		}
+		else if (string[i])
 		{
 			j = i;
 			while (string[j] && find_sep(string[j]) == 0)
 				j++;
-			c = find_sep(string[j]);
-			temp = add_until_char(temp, string, &i, c);
+			temp = add_until_char(temp, string, &i);
 			create_token(minishell, temp);
 			i++;
 		}

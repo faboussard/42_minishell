@@ -28,18 +28,6 @@ char find_sep(char c)
 	return (0);
 }
 
-void del_next_token(t_token_list **token)
-{
-	t_token_list *t2;
-	t_token_list *t1;
-
-	t1 = (*token);
-	t2 = (*token)->next;
-	t1->next = t2->next;
-	free_token(t2);
-	t1 = t1->next;
-}
-
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	char *joined_name;
@@ -54,8 +42,8 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	free(joined_name);
 	if (t1->name == NULL)
 		exit_msg(minishell, "Malloc failed at tokenization", 1);
-	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
 	del_next_token(&t1);
+	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
 }
 
 void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
@@ -67,6 +55,23 @@ void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_op
 		join_tokens(minishell, list);
 }
 
+void join_dollar_and_after_double_quote(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->e_operator == DOLLAR && (*list)->next->e_operator == DOUBLE_QUOTE)
+		{
+			del_next_token(list);
+			join_tokens(minishell, list);
+		}
+		(*list) = (*list)->next;
+	}
+	*list = cpy;
+}
+
 void join_quotes(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
@@ -75,34 +80,54 @@ void join_quotes(t_minishell *minishell, t_token_list **list)
 	while (*list != NULL && (*list)->next != NULL)
 	{
 		if ((*list)->e_operator == DOUBLE_QUOTE)
-		{
 			in_op_for_join(minishell, list, DOUBLE_QUOTE);
-		}
 		if ((*list)->e_operator == SINGLE_QUOTE)
-		{
 			in_op_for_join(minishell, list, SINGLE_QUOTE);
-		}
 		(*list) = (*list)->next;
 	}
 	*list = cpy;
-	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 }
 
-void join_spaces(t_minishell *minishell, t_token_list **list)
+void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->next->e_operator == IS_SPACE || ((*list)->e_operator == IS_SPACE && *list == cpy))
+		if ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == DOLLAR)
+			in_op_for_join(minishell, list, SINGLE_QUOTE);
+		(*list) = (*list)->next;
+	}
+	*list = cpy;
+}
+
+void join_spaces(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+	int count;
+
+	cpy = *list;
+	count = 0;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->e_operator == IS_SPACE || ((*list)->e_operator == IS_SPACE && *list == cpy)) // que se opasse til si un nespace puis plus rien
 		{
+			count = 1;
 			in_op_for_join(minishell, list, IS_SPACE);
 			if (*list == NULL)
 				break;
 		}
 		(*list) = (*list)->next;
+	}
+	*list = cpy;
+	if (count == 0)
+	{
+		while (*list != NULL && (*list)->next != NULL)
+		{
+			join_tokens(minishell, list);
+			(*list) = (*list)->next;
+		}
 	}
 	*list = cpy;
 	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);

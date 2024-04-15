@@ -25,6 +25,7 @@ void free_token(t_token_list *token)
 	{
 		free(token->name);
 		free(token);
+		token = NULL;
 	}
 }
 

@@ -95,7 +95,6 @@ int get_first_odd_quote(size_t quote_count, int first_odd_quote, int quote_type)
 	return first_odd_quote;
 }
 
-
 int print_quote_syntax_error(enum e_token_operators operator)
 {
 	if (operator == SINGLE_QUOTE)

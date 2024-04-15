@@ -83,6 +83,10 @@ void				define_token_types(enum e_token_type type,
 bool				get_builtin_token(t_token_list *new_token,
 						char *string);
 
+
+/********************* token_lst_utils.c *********************/
+void del_next_token(t_token_list **token);
+
 /********************* count *********************/
 
 int count_token_by_operator(t_minishell *minishell, enum e_token_operators operator_type);
