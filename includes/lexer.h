@@ -86,6 +86,7 @@ bool				get_builtin_token(t_token_list *new_token,
 
 /********************* token_lst_utils.c *********************/
 void del_next_token(t_token_list **token);
+void remove_node(t_token_list **begin_list, t_token_list *node_to_remove);
 
 /********************* count *********************/
 

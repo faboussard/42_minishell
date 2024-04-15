@@ -27,21 +27,21 @@
 
 void arg_to_command(t_token_list *list_tokens)
 {
-	t_token_list  *iterator;
+	t_token_list *iterator;
 	t_token_list *next_token;
 
-    iterator = list_tokens;
+	iterator = list_tokens;
 	if (ft_lstsize_token(iterator) == 1)
 	{
 		if (iterator->e_type == ARGUMENT)
-            iterator->e_type = COMMAND;
-	}
-	else
+			iterator->e_type = COMMAND;
+	} else
 	{
 		while (iterator->next != NULL)
 		{
 			next_token = iterator->next;
-			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != IN_FILE && next_token->e_type != OUT_FILE)
+			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != IN_FILE &&
+				next_token->e_type != OUT_FILE)
 				next_token->e_type = ARGUMENT;
 			if (iterator->e_operator == DOLLAR)
 				iterator->e_type = COMMAND;
@@ -52,23 +52,23 @@ void arg_to_command(t_token_list *list_tokens)
 
 void to_infile_or_outfile(t_token_list *list_tokens)
 {
-    t_token_list *iterator;
-    t_token_list *next_token;
+	t_token_list *iterator;
+	t_token_list *next_token;
 
-    iterator = list_tokens;
-    while (iterator->next != NULL)
-    {
-        next_token = iterator->next;
-        if (iterator->e_operator == INPUT_REDIRECT)
-            next_token->e_type = IN_FILE;
-        if (iterator->e_operator == OUTPUT_REDIRECT)
-            next_token->e_type = OUT_FILE;
+	iterator = list_tokens;
+	while (iterator->next != NULL)
+	{
+		next_token = iterator->next;
+		if (iterator->e_operator == INPUT_REDIRECT)
+			next_token->e_type = IN_FILE;
+		if (iterator->e_operator == OUTPUT_REDIRECT)
+			next_token->e_type = OUT_FILE;
 		if (iterator->e_operator == HERE_DOC)
 			next_token->e_type = DELIMITER;
 		if (iterator->e_operator == APPEND)
 			next_token->e_type = APPEND_FILE;
-        iterator = iterator->next;
-    }
+		iterator = iterator->next;
+	}
 }
 
 void token_requalification(t_token_list *list_tokens)
@@ -128,6 +128,62 @@ void remove_sep_tokens(t_minishell *minishell)
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 }
 
+int is_only_squote(char *str)
+{
+	int i;
+	int count;
+
+	i = 0;
+	count = 0;
+	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+	{
+		while (str[i])
+		{
+			if (str[i] == '\'')
+				count++;
+			i++; // Incrémenter i à chaque itération
+		}
+		if (count == ft_strlen(str) - 2) // Vérifier si count est égal à la longueur de la chaîne - 2
+			return (1);
+	}
+	return (0);
+}
+
+
+//int is_only_dquote(char *str)
+//{
+//	int i;
+//
+//	i = 0;
+//	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+//	{
+//		while (*str)
+//		{
+//			if (str[i] == '\'')
+//				i++;
+//		}
+//		if (i == ft_strlen(str) - 1)
+//			return (1);
+//	}
+//	return (0);
+//}
+
+void check_if_empy_tokens(t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if (is_only_squote((*list)->name))
+			remove_node(list, *list);
+//		if (is_only_quote((*list)->name))
+//			remove_node(list, *list);
+		(*list) = (*list)->next;
+	}
+	*list = cpy;
+}
+
 int parse_input(t_minishell *minishell)
 {
 	char *string;
@@ -140,7 +196,7 @@ int parse_input(t_minishell *minishell)
 	join_dollar_and_after_double_quote(minishell, &minishell->list_tokens);
 	expander(minishell);
 	join_quotes(minishell, &minishell->list_tokens);
-//	check_if_empy_tokens;
+	check_if_empy_tokens(&minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	remove_sep_tokens(minishell);
 	join_spaces(minishell, &minishell->list_tokens);
