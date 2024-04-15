@@ -59,6 +59,7 @@ typedef struct s_minishell
 	int								fd_out;
 	int								history_count;
 	char							*user_input;
+    char                            *current_path;
 	char							*paths;
 	char							**envp_table;
 	t_token_list					*list_tokens;
