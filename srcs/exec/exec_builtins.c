@@ -25,7 +25,9 @@ int exec_builtin(t_minishell *minishell, t_token_list *command)
 {
 	if (command->e_builtin == CD)
 		return (ft_cd(minishell, command));
-	if (command->e_builtin == EXIT)
+    if (command->e_builtin == PWD)
+        return (ft_pwd(minishell));
+    if (command->e_builtin == EXIT)
 		return (ft_exit_builtin(minishell, command));
 	return (0);
 }
