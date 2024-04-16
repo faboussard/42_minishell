@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/16 11:21:18 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:22:01 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 		ft_putendl_fd("Malloc error", 2);
 		return (ENOMEM);
 	}
-	dprintf(2, "env->value is %s\n", env->value, );
+	dprintf(2, "env->value is %s\n", env->value);
 	dprintf(2, "m->current_path is %s\n", m->current_path);
 	return (0);
 }
@@ -90,12 +90,16 @@ int	change_env_variable(t_minishell *m, char *var)
 	}
 	return (0);
 }
-
+// void	replace_old_path(t_minishell *m)
+// {
+// 	if (m->old_path)
+// 		free(m->old_path);
+// 	m->old_path = ft_strdup(m->current_path);
+// }
 static int	go_into_directory(t_minishell *m, char *dir)
 {
 	char	cwd[PATH_MAX];
 
-	// dprintf(2, "I enter go into directory ! the dir : %s\n", dir);
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
@@ -103,7 +107,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	}
 	if (chdir(dir) != 0)
 	{
-		// dprintf(2, "Ewww ! I can't go there you freak !\n");
+		dprintf(2, "Ewww ! I can't go there you freak !\n");
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
