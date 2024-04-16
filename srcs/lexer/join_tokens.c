@@ -48,27 +48,31 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 
 void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
 {
-	int count;
-	int count_quotes;
+	int count = 1;
 
-	count_quotes = count_token_by_operator(minishell, op);
-	count = 0;
-	(*list) = (*list)->next;
-	if (*list == NULL)
+	// Déplacez-vous vers le nœud suivant
+	if (*list == NULL || (*list)->next == NULL)
 		return;
+	*list = (*list)->next;
+
 	while ((*list) != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->next->e_operator == op && (*list)->next)
+		if ((*list)->next->e_operator == op)
 		{
 			count++;
 			remove_node(list, (*list)->next);
 		}
-		if (count == count_quotes || (*list)->next == NULL)
+
+		// Si le nombre d'opérateurs rencontrés atteint count_quotes ou si nous avons atteint la fin de la liste
+		if ((count == 2 && (*list)->e_operator != DOLLAR) || (*list)->next == NULL)
 			break;
-		if (count != count_quotes && (*list)->next->e_operator != op)
+
+		// Si le prochain nœud n'est pas un opérateur, fusionnez les jetons
+		if ((*list)->next->e_operator != op)
 			join_tokens(minishell, list);
 	}
 }
+
 
 void join_dollar_and_after_double_quote(t_token_list **list)
 {
@@ -117,6 +121,37 @@ int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
 	}
 	return 0;
 }
+
+void supress_double_operators(t_token_list **list)
+{
+	t_token_list *current = *list;
+	t_token_list *previous_node = NULL;
+	t_token_list *next_node = NULL;
+
+	while (current != NULL && current->next != NULL)
+	{
+		next_node = current->next; // Pointe vers le nœud suivant
+
+		if ((current->e_operator == DOUBLE_QUOTE && next_node->e_operator == DOUBLE_QUOTE)
+			|| (current->e_operator == SINGLE_QUOTE && next_node->e_operator == SINGLE_QUOTE))
+		{
+			if (previous_node != NULL) {
+				previous_node->next = next_node->next;
+				free_token(next_node);
+				current = previous_node; // Reste sur le même nœud pour vérifier si le suivant est également à supprimer
+			} else {
+				*list = next_node->next; // Si le nœud à supprimer est le premier de la liste
+				free_token(current);
+				current = *list; // Reste sur le nouveau premier nœud
+			}
+		} else {
+			previous_node = current;
+		}
+
+		current = current->next; // Avance à l'élément suivant
+	}
+}
+
 
 void join_quotes(t_minishell *minishell, t_token_list **list)
 {

@@ -108,32 +108,35 @@ char *expand_sigil(char *string, t_minishell *minishell)
 
 void expander(t_minishell *minishell)
 {
-	t_token_list *iterator;
-	char *string;
+	t_token_list *iterator = minishell->list_tokens;
 
-	iterator = minishell->list_tokens;
-	while (iterator != NULL)
+	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (ft_strcmp(iterator->name, "$?") == 0)
 			printf("%d\n", minishell->status);
-		if (iterator->e_type != DELIMITER
+
+		if (iterator->next->e_type != DELIMITER
 			&& iterator->e_operator == DOLLAR
 			&& iterator->next->e_type != OPERATOR)
 		{
-			string = expand_sigil(iterator->next->name, minishell);
+			char *string = expand_sigil(iterator->next->name, minishell);
 			if (string != iterator->next->name)
 			{
-				free(iterator->next->name);
-				iterator->next->name = ft_strdup(string);
+				t_token_list *to_remove = iterator;
+				iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
+				remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
+				free(iterator->name); // Libère la mémoire allouée pour le nom
+				iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
+				free(string); // Libère la mémoire allouée pour le nouveau string
+				continue;
 			}
 			else
 			{
-				del_next_token(&iterator);
-				string = NULL;
+				del_next_token(&iterator); // Supprime le nœud suivant
 			}
-			if (string)
-				free(string);
 		}
-		iterator = iterator->next;
+		iterator = iterator->next; // Avance l'itérateur pour passer au nœud suivant
 	}
 }
+
+
