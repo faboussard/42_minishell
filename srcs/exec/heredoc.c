@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "parser.h"
 
-void	check_and_delete_if_tmp_file_exists(char *tmp_file)
+void check_and_delete_if_tmp_file_exists(char *tmp_file)
 {
 	if (access(tmp_file, F_OK) == 0)
 	{
@@ -21,77 +22,112 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 	}
 }
 
-char *expand_sigil(char *string, t_minishell *minishell);
-
-static void	handle_expand(t_minishell *m, char *input)
+void handle_expand(t_minishell *m, char *input)
 {
-	char 	**split;
-	char	*input_after_expand;
+	char **split_space;
+	char **split_dollar;
+	char *input_after_expand;
+	char *temp;
+	int i = 0; // Initialise i à zéro
+	int j;
+	int count = -1;
 
-	split = NULL;
-	input_after_expand = NULL;
-	if (ft_strchr(input, '$') != NULL)
+	split_space = ft_split(input, ' ');
+	if (split_space == NULL)
+		exit_msg_minishell(m, "Fatal : malloc failed at handle expand", -1);
+	input_after_expand = ft_calloc(1, 1);
+	input_after_expand[0] = '\0';
+	while (split_space[i])
 	{
-			split = ft_split(input, '$');
-			int i = 0;
-			while (split[i])
+		if (ft_strchr(split_space[i], '$') != NULL)
+		{
+			j = 0;
+			temp = ft_calloc(ft_strlen(split_space[i]) + 1, sizeof(char)); // Alloue temp correctement
+			while (split_space[i][j] && split_space[i][j] != '$')
 			{
-				split[i] = expand_sigil(split[i], m);
-				input_after_expand = ft_calloc(1, 1);
-				input_after_expand = ft_strjoin(input_after_expand, split[i]);
-				i++;
+				temp[j] = split_space[i][j];
+				j++;
 			}
+			if (j != 0)
+			{
+				input_after_expand = ft_strjoin(input_after_expand, temp);
+				ft_memmove(split_space[i], split_space[i] + j, ft_strlen(split_space[i] + j) + 1);
+			}
+			free(temp);
+			temp = NULL;// Libère temp après utilisation
+			// on cherche les envp
+			j = 0; // Réinitialise j
+			split_dollar = ft_split(split_space[i], '$');
+			while (split_dollar[j])
+			{
+				temp = expand_sigil(split_dollar[j], m);
+				if (temp != split_dollar[j])
+				{
+					count ++;
+					if (count == i && count != 0)
+						input_after_expand = ft_strjoin(input_after_expand, " ");
+					input_after_expand = ft_strjoin(input_after_expand, temp);
+				}
+				free(split_dollar[j]);
+				temp = NULL;// Libère la mémoire allouée pour split_dollar[j]
+				j++;
+			}
+			free(split_dollar); // Libère la mémoire allouée pour split_dollar
+		}
+		else
+			input_after_expand = ft_strjoin(input_after_expand, split_space[i]);
+		free(split_space[i]); // Libère la mémoire allouée pour split_space[i]
+		i++; // Incrémente i à chaque itération
 	}
-	if (input_after_expand  != NULL)
-		ft_putstr_fd(input_after_expand, m->fd_in);
-	else
-		ft_putstr_fd(input, m->fd_in);
-	if (input_after_expand  != NULL)
-		free(input_after_expand);
-	if (split != NULL)
-		ft_free_tab(split);
+	free(split_space);
+	printf("ouput : %s\n",input_after_expand);
+//	if (input_after_expand != NULL)
+//		ft_putstr_fd(input_after_expand, m->fd_in);
+//	else
+//		ft_putstr_fd(input, m->fd_in);
+//	if (input_after_expand != NULL)
+//		free(input_after_expand);
 }
 
-static void	writing_in_heredoc(t_minishell *m, char *limiter)
+static void writing_in_heredoc(t_minishell *m, char *limiter)
 {
-	size_t	limiter_len;
-	size_t	input_len;
-	char	*input;
+	size_t limiter_len;
+	size_t input_len;
+	char *input;
 
 	limiter_len = ft_strlen(limiter);
 //	while (1)
 //	{
-		input = get_next_line(STDIN_FILENO);
-		input_len = ft_strlen(input) - 1;
-		if (input_len == limiter_len && !ft_strncmp(input, limiter,
-				limiter_len))
-		{
-			free(input);
-			close(m->fd_in);
-			exit(0);
-		}
-		handle_expand(m, input);
+	input = get_next_line(STDIN_FILENO);
+	input_len = ft_strlen(input) - 1;
+	if (input_len == limiter_len && !ft_strncmp(input, limiter,
+												limiter_len))
+	{
 		free(input);
+		close(m->fd_in);
+		exit(0);
+	}
+	handle_expand(m, input);
+	free(input);
 //	}
 }
 
-void	here_doc(t_minishell *m, char *limiter)
+void here_doc(t_minishell *m, char *limiter)
 {
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	m->fd_in = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	if (m->fd_in < 0)
 	{
 		perror("No /tmp/ directory found");
-		return ;
+		return;
 	}
 	// A CHANGER, pas d'exit du minishell
-	m->pid1 = m_safe_fork(m);
+//	m->pid1 = m_safe_fork(m);
 //	if (m->pid1 == 0)
-		writing_in_heredoc(m, limiter);
+	writing_in_heredoc(m, limiter);
 //	else
 //	{
-//		while (waitpid(-1, &(m->status), 0) && errno != 10)
-//			;
-//		close(m->fd_in);
+	while (waitpid(-1, &(m->status), 0) && errno != 10);
+	close(m->fd_in);
 //	}
 }

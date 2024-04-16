@@ -20,6 +20,7 @@
 
 #define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
+
 void	minishell_interactive(t_minishell *minishell)
 {
 	while (1)
@@ -49,10 +50,13 @@ void	minishell_interactive(t_minishell *minishell)
 	}
 }
 
-char	*expand_input(char *input, t_minishell *minishell);
-
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
+	char *input = "$USER $USER= $USER=fafsasfaf";
+
+	handle_expand(minishell, input);
+	printf("input : %s\n",input);
+	return;
 	set_signals_noninteractive();
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);

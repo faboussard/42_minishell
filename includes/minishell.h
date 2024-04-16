@@ -108,4 +108,8 @@ void								create_envp_hashmap(t_minishell *minishell,
 void								execute_cmds(t_minishell *minishell,
 										size_t nb_cmds);
 
+//// expand heredoc ///
+
+void handle_expand(t_minishell *m, char *input);
+
 #endif
