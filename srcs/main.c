@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
 #include "lexer.h"
+#include "exec.h"
 #include "minishell.h"
 #include "parser.h"
 #include "signals.h"
@@ -51,12 +51,12 @@ void	minishell_interactive(t_minishell *minishell)
 
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	char *input = "\"$USER\" '$USER='";
-
-	printf("input : %s\n",input);
-	handle_expand(minishell, input);
-
-	return;
+//	char *input = "\"$USER\" '$USER='";
+//
+//	printf("input : %s\n",input);
+//	handle_expand(minishell, input);
+//
+//	return;
 	set_signals_noninteractive();
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);

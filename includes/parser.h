@@ -71,7 +71,7 @@ char *expand_sigil(char *string, t_minishell *minishell);
 void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list);
 
 char *expand_variables(t_minishell *m, char **split_space);
-void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i);
+void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token);
 void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i);
 char *get_non_variable_part(char *token);
 int is_quoted_variable(char *token);
