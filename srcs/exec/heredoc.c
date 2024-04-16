@@ -32,7 +32,7 @@ static void	handle_expand(t_minishell *m, char *input)
 	input_after_expand = NULL;
 	if (ft_strchr(input, '$') != NULL)
 	{
-			split = ft_split(input, ' ');
+			split = ft_split(input, '$');
 			int i = 0;
 			while (split[i])
 			{
@@ -59,8 +59,8 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 	char	*input;
 
 	limiter_len = ft_strlen(limiter);
-	while (1)
-	{
+//	while (1)
+//	{
 		input = get_next_line(STDIN_FILENO);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter,
@@ -72,7 +72,7 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 		}
 		handle_expand(m, input);
 		free(input);
-	}
+//	}
 }
 
 void	here_doc(t_minishell *m, char *limiter)
@@ -86,12 +86,12 @@ void	here_doc(t_minishell *m, char *limiter)
 	}
 	// A CHANGER, pas d'exit du minishell
 	m->pid1 = m_safe_fork(m);
-	if (m->pid1 == 0)
+//	if (m->pid1 == 0)
 		writing_in_heredoc(m, limiter);
-	else
-	{
-		while (waitpid(-1, &(m->status), 0) && errno != 10)
-			;
-		close(m->fd_in);
-	}
+//	else
+//	{
+//		while (waitpid(-1, &(m->status), 0) && errno != 10)
+//			;
+//		close(m->fd_in);
+//	}
 }

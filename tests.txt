@@ -63,26 +63,32 @@ zsh: command not found: 35
 ********************** EXPANSIONS *******************
 
 *************************** TEST USERS ***********************
--c "$USER $USER= $USER=fafsasfaf" = NOK DOLLQR EN TROP
-09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf" //// les dollqrs en trop
+-c "$USER $USER= $USER=fafsasfaf"
+09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
 
-10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" //////////  === espaqce en trop qvqnt le =
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" /////// KO
 $USER=
 
-05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER" ////////// = DOLLAR EN TROP
+05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
 05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
-05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" ///////////// SOUCI SUREMLENT SUR LE COMPTE + == DOLLQR EN TROP
+05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
 USER
 05:26:24 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
 05:26:37 juba@juba-desktop minishell ±|parsing ✗|→ echo '$USER'
 $USER
 
-10:11:58 juba@juba-desktop ~ → echo $""""USER""   //// KO
+10:11:58 juba@juba-desktop ~ → echo $""""USER""
 USER
+
+~/tommini main ❯ echo "$$$$$USER"
+$$$$juba
+
+08:29:43 juba@juba-desktop tommini ±|main ✗|→ echo "$$$$USER"
+53585358USER
 
 
 -c " g\"$'USER'\" "
@@ -97,16 +103,12 @@ adsdgsfaboussa
 
 
  -c " \"g''\" "
-faboussa@z1r12p5:~/minishell$ c
+faboussa@z1r12p5:~/minishell$ echo  "g''"
 g''
 
 -c " \"g\"''\"\" "
 faboussa@z1r12p5:~/minishell$ echo "g"''""
 g
-
-
-
--c "\"' ha ha '\" "
 
 -c "\"' ha "ha" '\" "
 07:45:22 juba@juba-desktop ~ → echo "' ha "ha" '"
@@ -114,19 +116,16 @@ g
 
 04:01:20 juba@juba-desktop minishell ±|parsing ✗|→ echo """"
 
-/////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
 04:01:26 juba@juba-desktop minishell ±|parsing ✗|→ echo "''"
 ''
 04:01:32 juba@juba-desktop minishell ±|parsing ✗|→ echo ''''
-/////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
 
 04:10:04 juba@juba-desktop minishell ±|parsing ✗|→ echo """"''""""
-/////////////////////////////////////////////////////////////= ECHO COMMAND NOT FOUND
 
-04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'"" ///////////// KO
+04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'""
 ""
 
-04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'"" ///////////// KO
+04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'""
 ""
 
 
