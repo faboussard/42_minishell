@@ -14,14 +14,21 @@
 #include "utils.h"
 #include "parser.h"
 
-int check_equal_position_in_string(char *string, char *string2)
+int is_special_char(char c)
+{
+	if (c == '$' || c == '`' || c == '\\')
+		return (1);
+	return (0);
+}
+
+int check_special_char_after_expand(char *string, char *string2)
 {
 	int i;
 	int j;
 
 	i = 0;
 	j = ft_strlen(string2);
-	while (string[i] && string[i] != '=')
+	while (string[i] && string[i] != is_special_char(string[i]))
 		i++;
 	if (string[i] == string2[j - 1])
 		return (1);
@@ -80,7 +87,7 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 			temp = ft_strdup(iterator->value);
 			if (temp == NULL)
 				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
-			if (check_equal_position_in_string(string, iterator->target))
+			if (check_special_char_after_expand(string, iterator->target))
 				string = expand_equal_sign(string, temp);
 			else
 				string = ft_strdup(temp);

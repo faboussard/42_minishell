@@ -51,7 +51,7 @@ void	minishell_interactive(t_minishell *minishell)
 
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	char *input = "$USER";
+	char *input = "\"$USER\" '$USER='";
 
 	printf("input : %s\n",input);
 	handle_expand(minishell, input);

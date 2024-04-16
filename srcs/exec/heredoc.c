@@ -26,67 +26,56 @@ void handle_expand(t_minishell *m, char *input)
 {
 	char **split_space;
 	char *input_after_expand;
-	int count;
 
-	count = -1;
 	split_space = ft_split(input, ' ');
 	if (split_space == NULL)
 		exit_msg_minishell(m, "Fatal : malloc failed at handle expand", -1);
-	input_after_expand = expand_variables(m, split_space, &count);
+	input_after_expand = expand_variables(m, split_space);
 	if (input_after_expand != NULL)
 	{
 		printf("output : %s\n",input_after_expand);
 		ft_putstr_fd(input_after_expand, m->fd_in);
 	}
 	else
-	{
 		ft_putstr_fd(input, m->fd_in);
-	}
 	if (input_after_expand  != NULL)
 		free(input_after_expand);
 	if (split_space != NULL)
 		ft_free_tab(split_space);
 }
 
-char *expand_variables(t_minishell *m, char **split_space, int *count)
+char *expand_variables(t_minishell *m, char **split_space)
 {
 	char *input_after_expand = ft_calloc(1, 1);
 	input_after_expand[0] = '\0';
+	int count;
 
+	count = -1;
 	for (int i = 0; split_space[i]; i++)
 	{
 		if (is_quoted_variable(split_space[i]))
-		{
-			handle_quoted_variable(m, &input_after_expand, split_space[i], count);
-		}
+			handle_quoted_variable(m, &input_after_expand, split_space[i], &count, &i);
 		else
-		{
-			handle_regular_variable(m, &input_after_expand, split_space[i], count);
-		}
+			handle_regular_variable(m, &input_after_expand, split_space[i], &count, &i);
 	}
 	return input_after_expand;
 }
 
-void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token, int *count)
+void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i)
 {
 	char *expanded = expand_sigil(token, m);
 	if (expanded != token)
-	{
-//		(*count)++;
-//		if (*count != 0)
-//			*input_after_expand = ft_strjoin(*input_after_expand, " ");
 		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
-	}
 }
 
-void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count)
+void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i)
 {
 	char *temp = get_non_variable_part(token);
 
 	if (temp != NULL)
 	{
 		(*count)++;
-		if (*count != 0)
+		if (*count != 0 && *count == *i)
 			*input_after_expand = ft_strjoin(*input_after_expand, " ");
 		*input_after_expand = ft_strjoin(*input_after_expand, temp);
 		free(temp);
@@ -96,7 +85,7 @@ void handle_regular_variable(t_minishell *m, char **input_after_expand, char *to
 		exit_msg_minishell(m, "Malloc failed at handle expand", -1);
 	for (int j = 0; split_dollar[j]; j++)
 	{
-		handle_quoted_variable(m, input_after_expand, split_dollar[j], count);
+		handle_quoted_variable(m, input_after_expand, split_dollar[j], count, &j);
 		free(split_dollar[j]);
 	}
 	free(split_dollar);
@@ -108,16 +97,12 @@ char *get_non_variable_part(char *string)
 	char *temp;
 
 	while (string[i] && string[i] != '$')
-	{
 		i++;
-	}
-
 	if (i != 0)
 	{
 		temp = ft_substr(string, 0, i);
 		return temp;
 	}
-
 	return NULL;
 }
 
@@ -127,7 +112,6 @@ int is_quoted_variable(char *string)
 		return 1;
 	return 0;
 }
-
 
 static void writing_in_heredoc(t_minishell *m, char *limiter)
 {
