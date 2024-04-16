@@ -29,7 +29,7 @@ faboussa@z2r8p4:~$ cat << EOF
 faboussafaboussa
 faboussa@z2r8p4:~$
 
-12:08:38 → cat << "lala $USER"$USER $USER
+12:08:38 → cat << "lala $USER"$USER $USER   //// A TESTER NE PREND PAS LE DEUXIEME USER
 > lala $USER$USER
 
 faboussa@z2r8p4:~$ cat << EOF
