@@ -39,7 +39,8 @@ int check_consecutive_redirect_tokens(t_token_list *current_token)
 int check_operator_followed_by_pipe(t_token_list *current_token)
 {
 	t_token_list *next_token = current_token->next;
-	if (current_token->e_type == OPERATOR && next_token->e_operator == PIPE) {
+	if (is_redirect_token(current_token) && next_token->e_operator == PIPE)
+	{
 		print_operator_syntax_error(next_token);
 		return 1;
 	}

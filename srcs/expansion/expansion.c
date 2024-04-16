@@ -75,14 +75,14 @@ void ignore_dollar_string(char **string, t_minishell *minishell)
 }
 
 
-char  *identify_envp_string(char *string, t_minishell *minishell)
+char *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
 	char *temp;
 
 	while (iterator != NULL)
 	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) -1) == 0)
+		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
 		{
 			temp = ft_strdup(iterator->value);
 			if (temp == NULL)
@@ -102,7 +102,6 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 	}
 	return (string);
 }
-
 
 
 char *expand_sigil(char *string, t_minishell *minishell)
@@ -126,8 +125,7 @@ char *expand_sigil(char *string, t_minishell *minishell)
 		}
 		final_string = ft_strdup(temp);
 		free(temp);
-	}
-	else
+	} else
 		final_string = identify_envp_string(string, minishell);
 	return (final_string);
 }
@@ -139,28 +137,52 @@ void expander(t_minishell *minishell)
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (ft_strcmp(iterator->name, "$?") == 0)
-			printf("%d\n", minishell->status);
-
-		if (iterator->next->e_type != DELIMITER
-			&& iterator->e_operator == DOLLAR
-			&& iterator->next->e_type != OPERATOR)
 		{
-			char *string = expand_sigil(iterator->next->name, minishell);
-			if (string != iterator->next->name)
-			{
-				t_token_list *to_remove = iterator;
-				iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
-				remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
-				free(iterator->name); // Libère la mémoire allouée pour le nom
-				iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
-				free(string); // Libère la mémoire allouée pour le nouveau string
-				continue;
-			}
-			else
-				del_next_token(&iterator); // Supprime le nœud suivant
+			printf("%d\n", minishell->status);
+			return;
 		}
-		iterator = iterator->next; // Avance l'itérateur pour passer au nœud suivant
+		//////////// EVITER LES HEREDOC ///////////////////
+		if (iterator->e_operator == HERE_DOC)
+		{
+			// Avancer au prochain token
+			iterator = iterator->next;
+
+			// Ignorer les espaces
+			while (iterator && iterator->e_operator == IS_SPACE)
+				iterator = iterator->next;
+
+			// Rechercher le délimiteur du here document
+			while (iterator && iterator->next && iterator->e_type != IS_SPACE)
+			{
+				if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+				{
+					iterator = iterator->next;
+					while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE && iterator->e_operator != SINGLE_QUOTE)
+					iterator = iterator->next;
+				}
+				iterator = iterator->next;
+			}
+		}
+////// EXPANSION ////////////////
+	if (iterator->e_operator == DOLLAR && iterator->next->e_type != OPERATOR)
+	{
+		char *string = expand_sigil(iterator->next->name, minishell);
+		if (string != iterator->next->name)
+		{
+			t_token_list *to_remove = iterator;
+			iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
+			remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
+			free(iterator->name); // Libère la mémoire allouée pour le nom
+			iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
+			free(string); // Libère la mémoire allouée pour le nouveau string
+			continue;
+		}
+		else
+			del_next_token(&iterator); // Supprime le nœud suivant
 	}
+	iterator = iterator->next; // Avance l'itérateur pour passer au nœud suivant
+}
+
 }
 
 

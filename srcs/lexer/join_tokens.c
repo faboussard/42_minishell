@@ -147,7 +147,6 @@ void supress_double_operators(t_token_list **list)
 	}
 }
 
-
 void join_quotes(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
@@ -192,6 +191,7 @@ void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list)
 	}
 	*list = cpy;
 }
+
 
 void join_spaces(t_minishell *minishell, t_token_list **list)
 {
