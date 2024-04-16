@@ -22,6 +22,7 @@ heredoc> EOF
 faboussa
 ➜  ~
 
+****************************************** HEREDOC **********************************
 faboussa@z2r8p4:~$ cat << EOF
 > $USER$USER
 > EOF
@@ -37,6 +38,32 @@ faboussa@z2r8p4:~$ cat << stop
 > $USER=
 > stop
 faboussa=
+
+10:13:52 juba@juba-desktop ~ → cat << stop
+> $'USER'
+> stop
+$'USER'
+
+10:14:08 juba@juba-desktop ~ → cat << stop
+> b$blab$USER$bl
+> stop
+bjuba
+
+11:23:54 juba@juba-desktop ~ → cat << stop
+> $USER $USER= $USER=fafsasfaf
+> stop
+juba juba= juba=fafsasfaf
+
+11:45:42 juba@juba-desktop ~ → cat << stop
+> "$USER" '$USER='
+> stop
+"juba" 'juba='
+
+11:57:47 juba@juba-desktop ~ → cat << stop  ==== condition de garder le dollar si suivi de guillemets
+> $'USER' $"USER"
+> stop
+$'USER' $"USER"
+
 
 
 ************** builtins ************************
@@ -60,9 +87,7 @@ exit
 zsh: command not found: 35
 
 
-********************** EXPANSIONS *******************
-
-*************************** TEST USERS ***********************
+*************************** quotes ***********************
 -c "$USER $USER= $USER=fafsasfaf"
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
