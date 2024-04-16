@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/11 10:25:37 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/16 11:11:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	free_minishell(t_minishell *minishell)
 		close(minishell->fd_out);
 	if (minishell->user_input)
 		free(minishell->user_input);
+	if (minishell->current_path)
+		free(minishell->current_path);
 	if (minishell->list_envp != NULL)
 		ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)
@@ -91,7 +93,7 @@ void	free_minishell(t_minishell *minishell)
 		ft_free_process_list(&minishell->process_list);
 	if (minishell->list_tokens)
 		ft_lstclear_token(&minishell->list_tokens);
-	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE); 
+	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	rl_clear_history();
 	if (STDIN_FILENO >= 0)
 		close(STDIN_FILENO);

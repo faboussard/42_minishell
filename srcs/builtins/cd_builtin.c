@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/12 11:47:19 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/16 11:21:18 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int	is_root_directory(t_minishell *m)
 
 	(void)m;
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
-    {
-        perror("getcwd");
-        return (-1);
-    }
+	{
+		perror("getcwd");
+		return (-1);
+	}
 	if (ft_strncmp(cwd, "/", 1) == 0)
 		return (1);
 	else
@@ -39,22 +39,63 @@ int	is_root_directory(t_minishell *m)
 // 	}
 // 	return (0);
 // }
-bool contains_only_charset(const char *str, const char *charset)
+bool	contains_only_charset(const char *str, const char *charset)
 {
-    while (*str != '\0')
-    {
-        if (ft_strchr(charset, *str) == NULL)
-            return 0;
-        str++;
-    }
-    return 1;
- }
+	while (*str != '\0')
+	{
+		if (ft_strchr(charset, *str) == NULL)
+			return (0);
+		str++;
+	}
+	return (1);
+}
 
-static int	go_into_directory(char *dir)
+int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
-	//dprintf(2, "I enter go into directory ! the dir : %s\n", dir);
+	free(env->value);
+	env->value = ft_strdup(cwd);
+	if (m->current_path != NULL)
+		free(m->current_path);
+	m->current_path = ft_strdup(cwd);
+	if (env->value == NULL || m->current_path == NULL)
+	{
+		ft_putendl_fd("Malloc error", 2);
+		return (ENOMEM);
+	}
+	dprintf(2, "env->value is %s\n", env->value, );
+	dprintf(2, "m->current_path is %s\n", m->current_path);
+	return (0);
+}
+
+int	change_env_variable(t_minishell *m, char *var)
+{
+	t_envp_list	*env;
+	char		cwd[PATH_MAX];
+	size_t		var_len;
+
+	env = m->list_envp;
+	var_len = ft_strlen(var);
+	while (env && env)
+	{
+		if (strncmp(env->target, var, var_len) == 0)
+		{
+			if (getcwd(cwd, sizeof(cwd)) == NULL)
+			{
+				perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+				return (-1);
+			}
+			return (fill_env_value_and_current_path(m, env, cwd));
+		}
+		env = env->next;
+	}
+	return (0);
+}
+
+static int	go_into_directory(t_minishell *m, char *dir)
+{
 	char	cwd[PATH_MAX];
 
+	// dprintf(2, "I enter go into directory ! the dir : %s\n", dir);
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
@@ -62,10 +103,11 @@ static int	go_into_directory(char *dir)
 	}
 	if (chdir(dir) != 0)
 	{
-		//dprintf(2, "Ewww ! I can't go there you freak !\n");
+		// dprintf(2, "Ewww ! I can't go there you freak !\n");
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
+	change_env_variable(m, "PWD=");
 	return (0);
 }
 
@@ -92,7 +134,7 @@ static int	get_home(t_minishell *m)
 	}
 	ft_strlcpy(new_path, home_dir, home_dir_len + 1);
 	new_path[home_dir_len] = '/';
-	return_value = go_into_directory(new_path);
+	return_value = go_into_directory(m, new_path);
 	free(new_path);
 	return (return_value);
 }
@@ -108,17 +150,18 @@ bool	should_go_home(t_token_list *command)
 	return (0);
 }
 
-bool    too_many_args(t_token_list *command)
+bool	too_many_args(t_token_list *command)
 {
-    if (command->next != NULL && command->next->next != NULL)
-    {
-        if (command->next->next->e_type != ARGUMENT && command->next->next->next == NULL)
-            return (0);
-        else
-            ft_putendl_fd("minishell: cd: too many arguments", 2);
-        return (1);
-    }
-    return (0);
+	if (command->next != NULL && command->next->next != NULL)
+	{
+		if (command->next->next->e_type != ARGUMENT
+			&& command->next->next->next == NULL)
+			return (0);
+		else
+			ft_putendl_fd("minishell: cd: too many arguments", 2);
+		return (1);
+	}
+	return (0);
 }
 
 int	ft_cd(t_minishell *minishell, t_token_list *command)
@@ -127,9 +170,9 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	struct stat	st;
 
 	(void)minishell;
-    if (too_many_args(command))
-        return (1);
-    if (should_go_home(command) == 1)
+	if (too_many_args(command))
+		return (1);
+	if (should_go_home(command) == 1)
 		return (get_home(minishell));
 	dir = command->next->name;
 	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
@@ -137,10 +180,11 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
-    if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode))) // if doesn't begin with . and not dir
+	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
+		// if doesn't begin with . and is not dir
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
-		return (go_into_directory(dir));
+		return (go_into_directory(minishell, dir));
 	// dprintf(2, "bash: cd: %s: Not a directory\n", dir);
 	// if (access(dir, F_OK | X_OK))
 	// {
