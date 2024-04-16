@@ -69,6 +69,12 @@ char *add_until_char(char *temp, char *string, int *i);
 void join_dollar_and_after_double_quote(t_token_list **list);
 char *expand_sigil(char *string, t_minishell *minishell);
 
+char *expand_variables(t_minishell *m, char **split_space, int *count);
+void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token, int *count);
+void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count);
+char *get_non_variable_part(char *token);
+int is_quoted_variable(char *token);
+
 /********************* check_syntax **************************/
 size_t check_quotes(t_minishell *minishell);
 

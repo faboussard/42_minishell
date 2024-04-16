@@ -64,8 +64,6 @@ juba juba= juba=fafsasfaf
 > stop
 $'USER' $"USER"
 
-
-
 ************** builtins ************************
 
 //// GENERAL /////
