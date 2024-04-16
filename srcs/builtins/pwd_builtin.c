@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 11:32:23 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/16 10:14:24 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:48:54 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	print_env_var(t_minishell *m, char *var)
 
 	env = m->list_envp;
 	var_len = ft_strlen(var);
-	while (env && env)
+	while (env && env->next)
 	{
 		if (strncmp(env->target, var, var_len) == 0)
 		{

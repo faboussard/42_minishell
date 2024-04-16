@@ -6,10 +6,11 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/16 11:11:12 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:43:25 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "exec.h"
 #include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
@@ -77,14 +78,8 @@ void	ft_free_process_list(t_process_list **process_list)
 
 void	free_minishell(t_minishell *minishell)
 {
-	if (minishell->fd_in >= 0)
-		close(minishell->fd_in);
-	if (minishell->fd_out >= 0)
-		close(minishell->fd_out);
-	if (minishell->user_input)
-		free(minishell->user_input);
-	if (minishell->current_path)
-		free(minishell->current_path);
+	free_strs(minishell);
+	close_fds(minishell->fd_in, minishell->fd_out);
 	if (minishell->list_envp != NULL)
 		ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)
@@ -95,12 +90,7 @@ void	free_minishell(t_minishell *minishell)
 		ft_lstclear_token(&minishell->list_tokens);
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	rl_clear_history();
-	if (STDIN_FILENO >= 0)
-		close(STDIN_FILENO);
-	if (STDOUT_FILENO >= 0)
-		close(STDOUT_FILENO);
-	if (STDERR_FILENO >= 0)
-		close(STDERR_FILENO);
+	close_all_fds();
 }
 
 void	ft_free_all_tab(char **tab)
