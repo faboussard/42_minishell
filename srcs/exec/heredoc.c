@@ -63,7 +63,9 @@ char *expand_variables(t_minishell *m, char **split_space)
 
 void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i)
 {
-	char *expanded = expand_sigil(token, m);
+	char *expanded;
+
+	expanded= expand_sigil(token, m);
 	if (expanded != token)
 		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
 }

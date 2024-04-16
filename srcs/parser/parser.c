@@ -113,17 +113,14 @@ void token_requalification(t_token_list *list_tokens)
 //	*list = cpy;
 //}
 
-
 int cmp(int op1, int op2)
 {
 	return (op1 - op2);
 }
 
-void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list);
-
-
 void remove_sep_tokens(t_minishell *minishell)
 {
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 }
@@ -182,12 +179,8 @@ int parse_input(t_minishell *minishell)
 		return (1);
 	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
 	expander(minishell);
-//	supress_double_operators(&minishell->list_tokens);
 	join_quotes(minishell, &minishell->list_tokens);
 	remove_sep_tokens(minishell);
-
-	//delete_dollar_before_join(&minishell->list_tokens); // echo "$USER" -> faboussa . dabord on expand, puis on supprime le dollar avant de join sur double quote
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	join_spaces(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);

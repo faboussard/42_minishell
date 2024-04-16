@@ -48,13 +48,12 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 
 void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
 {
-	int count = 1;
+	int count;
 
-	// Déplacez-vous vers le nœud suivant
+	count = 1;
 	if (*list == NULL || (*list)->next == NULL)
 		return;
 	*list = (*list)->next;
-
 	while ((*list) != NULL && (*list)->next != NULL)
 	{
 		if ((*list)->next->e_operator == op)
@@ -62,12 +61,8 @@ void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_op
 			count++;
 			remove_node(list, (*list)->next);
 		}
-
-		// Si le nombre d'opérateurs rencontrés atteint count_quotes ou si nous avons atteint la fin de la liste
 		if ((count == 2 && (*list)->e_operator != DOLLAR) || (*list)->next == NULL)
 			break;
-
-		// Si le prochain nœud n'est pas un opérateur, fusionnez les jetons
 		if ((*list)->next->e_operator != op)
 			join_tokens(minishell, list);
 	}
@@ -130,7 +125,7 @@ void supress_double_operators(t_token_list **list)
 
 	while (current != NULL && current->next != NULL)
 	{
-		next_node = current->next; // Pointe vers le nœud suivant
+		next_node = current->next;
 
 		if ((current->e_operator == DOUBLE_QUOTE && next_node->e_operator == DOUBLE_QUOTE)
 			|| (current->e_operator == SINGLE_QUOTE && next_node->e_operator == SINGLE_QUOTE))
@@ -138,17 +133,17 @@ void supress_double_operators(t_token_list **list)
 			if (previous_node != NULL) {
 				previous_node->next = next_node->next;
 				free_token(next_node);
-				current = previous_node; // Reste sur le même nœud pour vérifier si le suivant est également à supprimer
-			} else {
-				*list = next_node->next; // Si le nœud à supprimer est le premier de la liste
+				current = previous_node;
+			} else
+			{
+				*list = next_node->next;
 				free_token(current);
-				current = *list; // Reste sur le nouveau premier nœud
+				current = *list;
 			}
-		} else {
-			previous_node = current;
 		}
-
-		current = current->next; // Avance à l'élément suivant
+		else
+			previous_node = current;
+		current = current->next;
 	}
 }
 

@@ -16,7 +16,7 @@
 
 int is_special_char(char c)
 {
-	if (c == '$' || c == '`' || c == '\\')
+	if (c == '$' || c == '`' || c == '\\' || c == '=')
 		return (1);
 	return (0);
 }
@@ -28,14 +28,14 @@ int check_special_char_after_expand(char *string, char *string2)
 
 	i = 0;
 	j = ft_strlen(string2);
-	while (string[i] && string[i] != is_special_char(string[i]))
+	while (string[i] && string[i] != is_special_char(string2[j - 1]))
 		i++;
-	if (string[i] == string2[j - 1])
+	if (string[i] == string2[j])
 		return (1);
 	return (0);
 }
 
-char *expand_equal_sign(char *string, char *temp)
+char *expand_sign(char *string, char *temp)
 {
 	while (*string && *string != '=')
 		string++;
@@ -88,7 +88,7 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 			if (temp == NULL)
 				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			if (check_special_char_after_expand(string, iterator->target))
-				string = expand_equal_sign(string, temp);
+				string = expand_sign(string, temp);
 			else
 				string = ft_strdup(temp);
 			if (temp)
@@ -108,8 +108,27 @@ char  *identify_envp_string(char *string, t_minishell *minishell)
 char *expand_sigil(char *string, t_minishell *minishell)
 {
 	char *final_string;
+	char *temp;
+	int i;
+	int j;
 
-	final_string = identify_envp_string(string, minishell);
+	i = 0;
+	j = 0;
+	temp = ft_calloc(1, ft_strlen(string) + 1);
+	if (ft_isdigit(string[i]))
+	{
+		i++;
+		while (string[i])
+		{
+			temp[j] = string[i];
+			i++;
+			j++;
+		}
+		final_string = ft_strdup(temp);
+		free(temp);
+	}
+	else
+		final_string = identify_envp_string(string, minishell);
 	return (final_string);
 }
 
@@ -138,9 +157,7 @@ void expander(t_minishell *minishell)
 				continue;
 			}
 			else
-			{
 				del_next_token(&iterator); // Supprime le nœud suivant
-			}
 		}
 		iterator = iterator->next; // Avance l'itérateur pour passer au nœud suivant
 	}
