@@ -36,7 +36,7 @@ int check_consecutive_redirect_tokens(t_token_list *current_token)
 	return 0;
 }
 
-int check_operator_followed_by_pipe(t_token_list *current_token)
+int check_redirect_operator_followed_by_pipe(t_token_list *current_token)
 {
 	t_token_list *next_token = current_token->next;
 	if (is_redirect_token(current_token) && next_token->e_operator == PIPE)
@@ -75,7 +75,7 @@ int check_syntax(t_minishell *minishell)
 				return (0);
 			if (check_consecutive_redirect_tokens(iterator))
 				return (1);
-			if (check_operator_followed_by_pipe(iterator))
+			if (check_redirect_operator_followed_by_pipe(iterator))
 				return (1);
 			iterator = iterator->next;
 		}
