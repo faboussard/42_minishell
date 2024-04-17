@@ -32,10 +32,7 @@ void handle_expand(t_minishell *m, char *input)
 		exit_msg_minishell(m, "Fatal : malloc failed at handle expand", -1);
 	input_after_expand = expand_variables(m, split_space);
 	if (input_after_expand != NULL)
-	{
-		printf("output : %s\n",input_after_expand);
 		ft_putstr_fd(input_after_expand, m->fd_in);
-	}
 	else
 		ft_putstr_fd(input, m->fd_in);
 	if (input_after_expand  != NULL)

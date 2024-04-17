@@ -144,45 +144,40 @@ void expander(t_minishell *minishell)
 		//////////// EVITER LES HEREDOC ///////////////////
 		if (iterator->e_operator == HERE_DOC)
 		{
-			// Avancer au prochain token
 			iterator = iterator->next;
-
-			// Ignorer les espaces
 			while (iterator && iterator->e_operator == IS_SPACE)
 				iterator = iterator->next;
-
-			// Rechercher le délimiteur du here document
 			while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
 			{
 				if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 				{
 					iterator = iterator->next;
-					while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE && iterator->e_operator != SINGLE_QUOTE)
-					iterator = iterator->next;
+					while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
+						   iterator->e_operator != SINGLE_QUOTE)
+						iterator = iterator->next;
 				}
 				iterator = iterator->next;
 			}
 		}
-////// EXPANSION ////////////////
-	if (iterator->e_operator == DOLLAR && iterator->next->e_type != OPERATOR)
-	{
-		char *string = expand_sigil(iterator->next->name, minishell);
-		if (string != iterator->next->name)
+		////////////// EXPANSION ////////////////
+		if (iterator->e_operator == DOLLAR && iterator->next->e_type != OPERATOR)
 		{
-			t_token_list *to_remove = iterator;
-			iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
-			remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
-			free(iterator->name); // Libère la mémoire allouée pour le nom
-			iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
-			free(string); // Libère la mémoire allouée pour le nouveau string
-			continue;
+			char *string = expand_sigil(iterator->next->name, minishell);
+			if (string != iterator->next->name)
+			{
+				t_token_list *to_remove = iterator;
+				iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
+				remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
+				free(iterator->name); // Libère la mémoire allouée pour le nom
+				iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
+				free(string); // Libère la mémoire allouée pour le nouveau string
+				continue;
+			} else
+				del_next_token(&iterator); // Supprime le nœud suivant
 		}
 		else
-			del_next_token(&iterator); // Supprime le nœud suivant
+			iterator = iterator->next;
 	}
-	iterator = iterator->next; // Avance l'itérateur pour passer au nœud suivant
-}
-
 }
 
 
