@@ -118,11 +118,6 @@ int cmp(int op1, int op2)
 	return (op1 - op2);
 }
 
-void remove_sep_tokens(t_minishell *minishell)
-{
-	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
-}
 
 //int is_only_squote(char *str)
 //{
@@ -166,7 +161,7 @@ void remove_sep_tokens(t_minishell *minishell)
 //}
 
 void delete_dollar_before_join(t_token_list **list);
-void supress_double_operators(t_token_list **list);
+void supress_double_quotes(t_token_list **list);
 
 int parse_input(t_minishell *minishell)
 {
@@ -176,10 +171,16 @@ int parse_input(t_minishell *minishell)
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
-//	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
+	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
+	rename_dollar_token_between_dquote(&minishell->list_tokens);
 	expander(minishell);
-	join_quotes(minishell, &minishell->list_tokens);
-	join_spaces(minishell, &minishell->list_tokens);
+	join_between_quotes(minishell, &minishell->list_tokens);
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
+//	supress_double_quotes(&minishell->list_tokens);
+	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+	join_between_spaces(minishell, &minishell->list_tokens);
+	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
