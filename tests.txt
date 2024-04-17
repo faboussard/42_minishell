@@ -29,8 +29,9 @@ faboussa@z2r8p4:~$ cat << EOF
 faboussafaboussa
 faboussa@z2r8p4:~$
 
-12:08:38 → cat << "lala $USER"$USER $USER   //// A TESTER NE PREND PAS LE DEUXIEME USER
+faboussa@z1r8p5:~$ cat << "lala $USER"$USER $USER
 > lala $USER$USER
+cat: faboussa: No such file or directory
 
 faboussa@z2r8p4:~$ cat << EOF
 > sdbwrbb$USER
@@ -93,12 +94,12 @@ zsh: command not found: 35
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
 
-10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" /////// KO
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
 $USER=
 
 05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
-05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
+05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER' // KO
 USER
 05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
 USER

@@ -152,7 +152,7 @@ void expander(t_minishell *minishell)
 				iterator = iterator->next;
 
 			// Rechercher le délimiteur du here document
-			while (iterator && iterator->next && iterator->e_type != IS_SPACE)
+			while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
 			{
 				if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 				{
