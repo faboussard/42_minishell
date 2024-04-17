@@ -21,7 +21,7 @@ void	ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)());
 
 /*************************join_tokens**************************/
 char find_sep(char c);
-void in_op_for_join(t_minishell *minishell, t_token_list **list, enum e_token_operators op);
+void join_between_quotes(t_minishell *minishell, t_token_list **list, enum e_token_operators op);
 void join_tokens(t_minishell *minishell, t_token_list **list);
 void join_quotes(t_minishell *minishell, t_token_list **list);
 void join_spaces(t_minishell *minishell, t_token_list **list);
@@ -50,6 +50,7 @@ void			create_process_list(t_minishell *minishell);
 t_process_list	*create_process_list_node(t_process_list *new_process_list,
 					t_minishell *minishell);
 void			create_envp_table(t_minishell *minishell);
+void remove_sep_tokens(t_minishell *minishell);
 
 /****************** OPERATORS ******************/
 

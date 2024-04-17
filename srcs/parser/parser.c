@@ -120,7 +120,6 @@ int cmp(int op1, int op2)
 
 void remove_sep_tokens(t_minishell *minishell)
 {
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 }
@@ -177,12 +176,10 @@ int parse_input(t_minishell *minishell)
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
-	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
+//	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
 	expander(minishell);
 	join_quotes(minishell, &minishell->list_tokens);
-	remove_sep_tokens(minishell);
 	join_spaces(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
