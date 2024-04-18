@@ -6,14 +6,14 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:20:54 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 10:41:39 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:05:58 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "parser.h"
 
-void check_and_delete_if_tmp_file_exists(char *tmp_file)
+void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 {
 	if (access(tmp_file, F_OK) == 0)
 	{
@@ -22,10 +22,10 @@ void check_and_delete_if_tmp_file_exists(char *tmp_file)
 	}
 }
 
-void handle_expand(t_minishell *m, char *input)
+void	handle_expand(t_minishell *m, char *input)
 {
-	char **split_space;
-	char *input_after_expand;
+	char	**split_space;
+	char	*input_after_expand;
 
 	split_space = ft_split(input, ' ');
 	if (split_space == NULL)
@@ -35,42 +35,48 @@ void handle_expand(t_minishell *m, char *input)
 		ft_putstr_fd(input_after_expand, m->fd_in);
 	else
 		ft_putstr_fd(input, m->fd_in);
-	if (input_after_expand  != NULL)
+	if (input_after_expand != NULL)
 		free(input_after_expand);
 	if (split_space != NULL)
 		ft_free_tab(split_space);
 }
 
-char *expand_variables(t_minishell *m, char **split_space)
+char	*expand_variables(t_minishell *m, char **split_space)
 {
-	char *input_after_expand = ft_calloc(1, 1);
-	input_after_expand[0] = '\0';
-	int count;
+	char	*input_after_expand;
+	int		count;
 
+	input_after_expand = ft_calloc(1, 1);
+	input_after_expand[0] = '\0';
 	count = -1;
 	for (int i = 0; split_space[i]; i++)
 	{
 		if (is_quoted_variable(split_space[i]))
 			handle_quoted_variable(m, &input_after_expand, split_space[i]);
 		else
-			handle_regular_variable(m, &input_after_expand, split_space[i], &count, &i);
+			handle_regular_variable(m, &input_after_expand, split_space[i],
+				&count, &i);
 	}
-	return input_after_expand;
+	return (input_after_expand);
 }
 
-void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token)
+void	handle_quoted_variable(t_minishell *m, char **input_after_expand,
+		char *token)
 {
-	char *expanded;
+	char	*expanded;
 
-	expanded= expand_sigil(token, m);
+	expanded = expand_sigil(token, m);
 	if (expanded != token)
 		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
 }
 
-void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i)
+void	handle_regular_variable(t_minishell *m, char **input_after_expand,
+		char *token, int *count, int *i)
 {
-	char *temp = get_non_variable_part(token);
+	char	*temp;
+	char	**split_dollar;
 
+	temp = get_non_variable_part(token);
 	if (temp != NULL)
 	{
 		(*count)++;
@@ -79,7 +85,7 @@ void handle_regular_variable(t_minishell *m, char **input_after_expand, char *to
 		*input_after_expand = ft_strjoin(*input_after_expand, temp);
 		free(temp);
 	}
-	char **split_dollar = ft_split(token, '$');
+	split_dollar = ft_split(token, '$');
 	if (split_dollar == NULL)
 		exit_msg_minishell(m, "Malloc failed at handle expand", -1);
 	for (int j = 0; split_dollar[j]; j++)
@@ -90,67 +96,69 @@ void handle_regular_variable(t_minishell *m, char **input_after_expand, char *to
 	free(split_dollar);
 }
 
-char *get_non_variable_part(char *string)
+char	*get_non_variable_part(char *string)
 {
-	int i = 0;
-	char *temp;
+	int		i;
+	char	*temp;
 
+	i = 0;
 	while (string[i] && string[i] != '$')
 		i++;
 	if (i != 0)
 	{
 		temp = ft_substr(string, 0, i);
-		return temp;
+		return (temp);
 	}
-	return NULL;
+	return (NULL);
 }
 
-int is_quoted_variable(char *string)
+int	is_quoted_variable(char *string)
 {
 	if (string[0] == '$' && (string[1] == '\'' || string[1] == '\"'))
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
-static void writing_in_heredoc(t_minishell *m, char *limiter)
+static void	writing_in_heredoc(t_minishell *m, char *limiter)
 {
-	size_t limiter_len;
-	size_t input_len;
-	char *input;
+	size_t	limiter_len;
+	size_t	input_len;
+	char	*input;
 
 	limiter_len = ft_strlen(limiter);
 	while (1)
 	{
-	input = get_next_line(STDIN_FILENO);
-	input_len = ft_strlen(input) - 1;
-	if (input_len == limiter_len && !ft_strncmp(input, limiter,
-												limiter_len))
-	{
+		input = get_next_line(STDIN_FILENO);
+		input_len = ft_strlen(input) - 1;
+		if (input_len == limiter_len && !ft_strncmp(input, limiter,
+				limiter_len))
+		{
+			free(input);
+			close(m->fd_in);
+			exit(0);
+		}
+		handle_expand(m, input);
 		free(input);
-		close(m->fd_in);
-		exit(0);
-	}
-	handle_expand(m, input);
-	free(input);
 	}
 }
 
-void here_doc(t_minishell *m, char *limiter)
+void	here_doc(t_minishell *m, char *limiter)
 {
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	m->fd_in = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	if (m->fd_in < 0)
 	{
 		perror("No /tmp/ directory found");
-		return;
+		return ;
 	}
 	// A CHANGER, pas d'exit du minishell
 	m->pid1 = m_safe_fork(m);
 	if (m->pid1 == 0)
-	writing_in_heredoc(m, limiter);
+		writing_in_heredoc(m, limiter);
 	else
 	{
-	while (waitpid(-1, &(m->status), 0) && errno != 10);
-	close(m->fd_in);
+		while (waitpid(-1, &(m->status), 0) && errno != 10)
+			;
+		close(m->fd_in);
 	}
 }
