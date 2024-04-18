@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 11:03:09 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:43:22 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ char	*join_sep(t_minishell *m, char *s1, char *s2, char sep);
 //--------------------------- FD MANAGEMENT ---------------------------//
 void	open_fd_infile(t_minishell *m, t_token_list *in_files_list);
 void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out);
-int		dup_original_fds(t_minishell *m, int *in, int *out);
-void	close_original_fds(t_minishell *m, int *in, int *out);
+int		dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds);
+void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds);
 //--------------------------- HERE_DOC --------------------------------//
 void	here_doc(t_minishell *m, char *limiter);
 //--------------------------- UTILS -----------------------------------//

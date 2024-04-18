@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 11:32:23 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/16 16:48:54 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:35:01 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	print_env_var(t_minishell *m, char *var)
 	var_len = ft_strlen(var);
 	while (env && env->next)
 	{
-		if (strncmp(env->target, var, var_len) == 0)
+		if (ft_strncmp(env->target, var, var_len) == 0)
 		{
 			ft_putendl_fd(env->value, 1);
 			return (1);

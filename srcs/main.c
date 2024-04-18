@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 09:41:11 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:55:57 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ int	main(int ac, char **av, char **envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
 		exit_msg(&minishell, "Fatal : malloc failed", -1);
+	if (set_env_var(&minishell, "PWD=") == 0)
+		set_current_path_with_cwd(&minishell);
+	ft_putendl_fd(minishell.current_path, 2);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else

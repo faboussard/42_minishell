@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 11:17:42 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:48:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 		print_name_and_exit_perror(m, out, 1);
 }
 
-int	dup_original_fds(t_minishell *m, int *in, int *out)
+int	dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 {
-	if (m->process_list->in_files_token->e_type != NO_TYPE)
+	if (m->process_list->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
 		*in = dup(STDIN_FILENO);
-	if (m->process_list->out_files_token->e_type != NO_TYPE)
+	if (m->process_list->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
 		*out = dup(STDOUT_FILENO);
 	if (*in == -1 || *out == -1)
 	{
@@ -69,9 +69,9 @@ int	dup_original_fds(t_minishell *m, int *in, int *out)
 	return (0);
 }
 
-void	close_original_fds(t_minishell *m, int *in, int *out)
+void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 {
-	if (m->process_list->in_files_token->e_type != NO_TYPE)
+	if (m->process_list->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
 	{
 		if (dup2(*in, STDIN_FILENO) == -1)
 		{
@@ -80,9 +80,9 @@ void	close_original_fds(t_minishell *m, int *in, int *out)
 		}
 		close(*in);
 	}
-	if (m->process_list->out_files_token->e_type != NO_TYPE)
+	if (m->process_list->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
 	{
-		if (dup2(*out, STDIN_FILENO) == -1)
+		if (dup2(*out, STDOUT_FILENO) == -1)
 		{
 			perror("minishell: dup2");
 			m->status = 1;

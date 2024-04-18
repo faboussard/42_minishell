@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:45:16 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 11:26:25 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:59:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ void	malloc_error_with_exit(t_minishell *m)
 
 void	malloc_error_no_exit(t_minishell *m)
 {
-	ft_putstr_fd("Malloc error", 1);
+	ft_putstr_fd("Malloc error", 2);
 	m->status = -1;
 }
