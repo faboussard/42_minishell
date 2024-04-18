@@ -182,7 +182,7 @@ void expander(t_minishell *minishell)
 			if (iterator->next->e_operator == DOUBLE_QUOTE)
 				count_dquote++;
 			if (iterator->next->e_operator == SINGLE_QUOTE)
-				count_dquote++;
+				count_squote++;
 			if (count_squote % 2 == 0 && count_squote != 0)
 			{
 				iterator = iterator->next;
