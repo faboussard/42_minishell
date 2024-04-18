@@ -17,6 +17,7 @@
 # include "minishell.h"
 # include <stdbool.h>
 
+
 typedef struct s_minishell	t_minishell;
 
 enum						e_token_type
@@ -42,6 +43,10 @@ enum						e_token_operators
 	INPUT_REDIRECT = 5,
 	HERE_DOC = 6,
 	APPEND = 7,
+	DOUBLE_QUOTE = 8,
+	SINGLE_QUOTE = 9,
+	IS_SPACE = 10,
+	DOLLAR = 11
 };
 
 enum						e_token_builtin
@@ -70,7 +75,7 @@ char				**split_with_quotes_management(t_minishell *minishell);
 /********************* tokenization *********************/
 
 void				transform_to_token(t_minishell *minishell,
-						char **split);
+						char *string);
 void				define_token_types(enum e_token_type type,
 						enum e_token_builtin builtin,
 						enum e_token_operators operator,
@@ -78,9 +83,14 @@ void				define_token_types(enum e_token_type type,
 bool				get_builtin_token(t_token_list *new_token,
 						char *string);
 
+
+/********************* token_lst_utils.c *********************/
+void del_next_token(t_token_list **token);
+void remove_node(t_token_list **begin_list, t_token_list *node_to_remove);
+
 /********************* count *********************/
 
-void				count_total_commands(t_minishell *minishell);
+int count_token_by_operator(t_minishell *minishell, enum e_token_operators operator_type);
 size_t				count_letters_until_pipe(t_token_list *head);
 size_t				count_cmds_until_pipe(t_token_list *head);
 

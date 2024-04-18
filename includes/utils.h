@@ -35,6 +35,7 @@ void			print_process_list(t_process_list *process_list);
 
 /******************** FREE ********************/
 
+void free_token(t_token_list *token);
 void			free_minishell(t_minishell *minishell);
 void			ft_free_all_tab(char **tab);
 void			ft_free_tab_from_i(void **tab, int j);
