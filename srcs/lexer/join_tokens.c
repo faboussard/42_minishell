@@ -58,20 +58,15 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 	{
 		if ((*list)->e_operator == op)
 			count++;
-		if (count == 2 && (*list)->e_operator == op && (*list)->next && (*list)->next->e_operator != IS_SPACE)
-			remove_node(list, *list);
-		if (count == 2 && (*list)->e_operator == op && (*list)->next && (*list)->next->e_operator == IS_SPACE)
-			remove_node(list, *list);
-		if (count == 2 && (*list)->next->e_operator == IS_SPACE && (*list)->next)
+		if (count == 2)
 			return;
-		else if (count == 2 && (*list)->next->e_operator == op)
-			(*list) = (*list)->next;
 		else if (count == 1 && (*list)->next->e_operator == op)
 		{
 			(*list) = (*list)->next;
 			return;
-		} else if (count == 1 ||
-				   (count == 2 && (*list)->next->e_operator != IS_SPACE && (*list)->next->e_operator != op))
+		} 
+		else if (count == 1 ||
+				(count == 2 && (*list)->next->e_operator != IS_SPACE && (*list)->next->e_operator != op))
 			join_tokens(minishell, list);
 		else
 			(*list) = (*list)->next;
@@ -202,34 +197,34 @@ void rename_dollar_token_between_dquote(t_token_list **list)
 	}
 }
 
-void join_if_between_quotes(t_minishell *minishell, t_token_list **list) {
-	t_token_list *current = *list;
-	t_token_list *previous_node = NULL;
+// void join_if_between_quotes(t_token_list **list) {
+// 	t_token_list *current = *list;
+// 	t_token_list *previous_node = NULL;
 
-	while (current != NULL && current->next != NULL && current->next->next != NULL) {
-		if (current->e_operator == DOUBLE_QUOTE && current->next->e_operator != DOUBLE_QUOTE && current->next->next->e_operator == DOUBLE_QUOTE)
-		{
-			if (previous_node)
-			{
-				previous_node->next = current->next;
-				free_token(current);
-				current->next = current->next->next->next;
-				free_token(current->next );
-			} else
-			{
-				*list = current->next;
-				free_token(current);
-				(*list)->next = current->next->next;
-				free_token(current->next);
-				current = *list;
-			}
-		} else
-		{
-			previous_node = current;
-			current = current->next;
-		}
-	}
-}
+// 	while (current != NULL && current->next != NULL && current->next->next != NULL) {
+// 		if (current->e_operator == DOUBLE_QUOTE && current->next->e_operator != DOUBLE_QUOTE && current->next->next->e_operator == DOUBLE_QUOTE)
+// 		{
+// 			if (previous_node)
+// 			{
+// 				previous_node->next = current->next;
+// 				free_token(current);
+// 				current->next = current->next->next->next;
+// 				free_token(current->next );
+// 			} else
+// 			{
+// 				*list = current->next;
+// 				free_token(current);
+// 				(*list)->next = current->next->next;
+// 				free_token(current->next);
+// 				current = *list;
+// 			}
+// 		} else
+// 		{
+// 			previous_node = current;
+// 			current = current->next;
+// 		}
+// 	}
+// }
 
 
 
