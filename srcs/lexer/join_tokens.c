@@ -150,7 +150,7 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 
 }
 
-void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list)
+void join_single_quote_and_dollar(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
