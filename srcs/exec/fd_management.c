@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 10:58:38 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:17:42 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 {
 	if (in_files_list->e_type == DELIMITER)
-		m->fd_in = open("/tmp/.tmp_heredoc", O_RDONLY);
+		m->fd_in = open(HERE_DOC_TMP_FILE, O_RDONLY);
 	else if (in_files_list->e_type == IN_FILE)
 		m->fd_in = open(in_files_list->name, O_RDONLY);
 	else
@@ -23,7 +23,7 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 	if (m->fd_in < 0)
 	{
 		if (in_files_list->e_type == DELIMITER)
-			print_name(m, "/tmp/.tmp_heredoc");
+			perror("minishell: /tmp/.tmp_heredoc");
 		else
 			print_name(m, in_files_list->name);
 		m->status = 1;
