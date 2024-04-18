@@ -7,14 +7,14 @@ vpath %c srcs lexer env_variables parser expansion utils exec builtins
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main signal init\
-				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens\
-				lexer/split_string lexer/check_syntax lexer/token_list lexer/token_lst_utils lexer/join_tokens\
-				env_variables/env_variables\
+LIST_SRCS		=  main signal init \
+				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens \
+				lexer/split_string lexer/check_syntax lexer/token_list lexer/token_lst_utils lexer/join_tokens \
+				env_variables/env_variables \
 				parser/parser parser/create_process_list parser/process_list\
 				builtins/exit_builtin builtins/cd_builtin builtins/pwd_builtin\
-				expansion/expansion\
-				utils/free utils/free_utils utils/print utils/error utils/token_list
+				expansion/expansion \
+				utils/free utils/free_utils utils/print utils/error \
 				exec/exec exec/exec_builtins exec/errors	exec/paths	exec/fd_management \
                 exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
@@ -41,7 +41,7 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
 CC				=	clang
 CFLAGS			=	-Wall -Wextra -Werror
-DEPS_FLAGS		=	-MMD -MP
+DEPS_FLAGS		=	-MMD -MP -g3
 
 # -------------  COMMANDS ------------- #
 
