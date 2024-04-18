@@ -31,6 +31,7 @@ SRCS=src/ft_is/ft_isalnum.c\
 	    src/ft_put/ft_putnbr_fd.c\
 	    src/ft_put/ft_putstr_fd.c\
 	    src/ft_str/ft_split.c\
+	    src/ft_str/ft_split_either_sep.c\
 	    src/ft_str/ft_strchr.c\
 	    src/ft_str/ft_strdup.c\
 	    src/ft_str/ft_striteri.c\

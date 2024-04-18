@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/11 09:28:28 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 17:01:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,34 @@
 #include "utils.h"
 #include "parser.h"
 
-// int define_strlen_iterator_target(t_envp_list *iterator)
-// {
-// 	return (0);
-// }
+int is_special_char(char c)
+{
+	if (c == '$' || c == '`' || c == '\\' || c == '=')
+		return (1);
+	return (0);
+}
 
-int check_equal_position_in_string(char *string, t_envp_list *iterator)
+int check_special_char_after_expand(char *string, char *string2)
 {
 	int i;
 	int j;
 
 	i = 0;
-	j = ft_strlen(iterator->target);
-	while (string[i] && string[i] != '=')
+	j = ft_strlen(string2);
+	while (string[i] && string[i] != is_special_char(string2[j - 1]))
 		i++;
-	if (string[i] == iterator->target[j - 1])
+	if (string[i] == string2[j])
 		return (1);
 	return (0);
 }
 
-void identify_envp_string(char **string, t_minishell *minishell)
+char *expand_sign(char *string, char *temp)
 {
-	t_envp_list *iterator = minishell->list_envp;
-	char *old_string = *string; // Conservez une copie de l'ancienne chaîne pour la libérer plus tard
-
-		while (iterator != NULL)
-		{
-			if (ft_strncmp(*string, iterator->target, ft_strlen(*string)) == 0)
-			{
-				*string = ft_strdup(iterator->value);
-				if (*string == NULL)
-				{
-					free(old_string); // Libérez l'ancienne chaîne en cas d'échec d'allocation
-					exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
-				}
-				if (check_equal_position_in_string(old_string, iterator))
-				{
-					char *temp = *string;
-					*string = ft_strjoin(temp, "=");
-					free(temp); // Libérez la chaîne temporaire utilisée pour la concaténation
-					if (*string == NULL)
-					{
-						free(old_string); // Libérez l'ancienne chaîne en cas d'échec d'allocation
-						exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
-					}
-				}
-				free(old_string); // Libérez l'ancienne chaîne maintenant que vous avez terminé avec elle
-				break;
-			}
-			iterator = iterator->next;
-		}
+	while (*string && *string != '=')
+		string++;
+	string = ft_strjoin(temp, string);
+	return (string);
 }
-
 
 //void ignore_next_char(char *str, char c)
 //{
@@ -89,67 +65,119 @@ void ignore_dollar_string(char **string, t_minishell *minishell)
 	if (*string != NULL)
 	{
 		len = strlen(*string);
-		new_string = malloc(len);
+		new_string = malloc(len); // La longueur est len - 1
 		if (new_string == NULL)
 			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
-		ft_memcpy(new_string, *string + 1, len);
+		ft_memmove(new_string, *string + 1, len - 1); // Utilisation de len - 1 pour la longueur
 		free(*string);
 		*string = new_string;
 	}
 }
 
-void expand_dollar_string(char **string, t_minishell *minishell)
+
+char *identify_envp_string(char *string, t_minishell *minishell)
 {
-	char *original_string = strdup(*string);
-	if (original_string == NULL)
-		exit_msg(minishell, "Malloc failed at expand_dollar_string", -1);
-	ignore_dollar_string(string, minishell);
-	//enelver le /n de la fin si necessaire.
-	identify_envp_string(string, minishell);
-	if (strcmp(original_string, *string) != 0)
-		free(original_string);
+	t_envp_list *iterator = minishell->list_envp;
+	char *temp;
+
+	while (iterator != NULL)
+	{
+		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
+		{
+			temp = ft_strdup(iterator->value);
+			if (temp == NULL)
+				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
+			if (check_special_char_after_expand(string, iterator->target))
+				string = expand_sign(string, temp);
+			else
+				string = ft_strdup(temp);
+			if (temp)
+			{
+				free(temp);
+				temp = NULL;
+			}
+			return (string);
+		}
+		iterator = iterator->next;
+	}
+	return (string);
 }
 
 
-int ft_strnstr_and_check(const char *big, const char *little, size_t len)
+char *expand_sigil(char *string, t_minishell *minishell)
 {
-	size_t i;
-	size_t j;
-	char previous_char;
+	char *final_string;
+	char *temp;
+	int i;
+	int j;
 
 	i = 0;
-	while (big[i] != '\0')
+	j = 0;
+	temp = ft_calloc(1, ft_strlen(string) + 1);
+	if (ft_isdigit(string[i]))
 	{
-		j = 0;
-		while (big[i + j] == little[j] && ((i + j) < len))
-		{
-			j++;
-			if (j == 1)
-				previous_char = big[i + j - 1];
-			if (little[j] == '\0' && previous_char == '\'')
-				return (1);
-		}
 		i++;
-	}
-	return (0);
+		while (string[i])
+		{
+			temp[j] = string[i];
+			i++;
+			j++;
+		}
+		final_string = ft_strdup(temp);
+		free(temp);
+	} else
+		final_string = identify_envp_string(string, minishell);
+	return (final_string);
 }
 
 void expander(t_minishell *minishell)
 {
-	t_token_list *iterator;
+	t_token_list *iterator = minishell->list_tokens;
 
-	iterator = minishell->list_tokens;
-	while (iterator != NULL)
+	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (ft_strcmp(iterator->name, "$?") == 0)
+		{
 			printf("%d\n", minishell->status);
-		if (iterator->e_type != DELIMITER
-			&& ft_strchr(iterator->name, '$') != NULL
-			&& ft_strnstr(iterator->name, "$'", 2) == NULL
-//			&& ft_strnstr_and_check(minishell->user_input, iterator->name, ft_strlen(minishell->user_input)) == 0
-				)
-			//ajoter contiion ca menleve une lettre
-			expand_dollar_string(&iterator->name, minishell);
-		iterator = iterator->next;
+			return;
+		}
+		//////////// EVITER LES HEREDOC ///////////////////
+		if (iterator->e_operator == HERE_DOC)
+		{
+			iterator = iterator->next;
+			while (iterator && iterator->e_operator == IS_SPACE)
+				iterator = iterator->next;
+			while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
+			{
+				if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+				{
+					iterator = iterator->next;
+					while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
+						   iterator->e_operator != SINGLE_QUOTE)
+						iterator = iterator->next;
+				}
+				iterator = iterator->next;
+			}
+		}
+		////////////// EXPANSION ////////////////
+		if (iterator->e_operator == DOLLAR && iterator->next->e_type != OPERATOR)
+		{
+			char *string = expand_sigil(iterator->next->name, minishell);
+			if (string != iterator->next->name)
+			{
+				t_token_list *to_remove = iterator;
+				iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
+				remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
+				free(iterator->name); // Libère la mémoire allouée pour le nom
+				iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
+				free(string); // Libère la mémoire allouée pour le nouveau string
+				continue;
+			} else
+				del_next_token(&iterator); // Supprime le nœud suivant
+		}
+		else
+			iterator = iterator->next;
 	}
 }
+
+

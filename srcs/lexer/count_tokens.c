@@ -30,32 +30,18 @@ size_t	count_letters_until_pipe(t_token_list *head)
 	return (num_commands);
 }
 
-size_t	count_cmds_until_pipe(t_token_list *head)
-{
-	size_t			num_commands;
-	t_token_list	*iterator;
-
-	num_commands = 0;
-	iterator = head;
-	while (iterator && iterator->e_operator != PIPE)
-	{
-		if (iterator->e_type == COMMAND || iterator->e_type == ARGUMENT)
-			num_commands++;
-		iterator = iterator->next;
-	}
-	return (num_commands);
-}
-
-void	count_total_commands(t_minishell *minishell)
+int count_token_by_operator(t_minishell *minishell, enum e_token_operators operator_type)
 {
 	t_token_list	*iterator;
+	int				i;
 
-	minishell->total_commands = 1;
+	i = 0;
 	iterator = minishell->list_tokens;
 	while (iterator)
 	{
-		if (iterator->e_operator == PIPE)
-			minishell->total_commands++;
+		if (iterator->e_operator == operator_type)
+			i++;
 		iterator = iterator->next;
 	}
+	return (i);
 }
