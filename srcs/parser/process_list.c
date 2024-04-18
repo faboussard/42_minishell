@@ -77,7 +77,7 @@ void create_process_list(t_minishell *minishell)
 	t_process_list	*new_process_list;
 	t_token_list	*temp;
 
-	count_total_commands(minishell);
+	minishell->total_commands += count_token_by_operator(minishell, PIPE);
 	temp = minishell->list_tokens;
 	while (minishell->list_tokens != NULL)
 	{
