@@ -46,9 +46,9 @@ int	print_operator_syntax_error(t_token_list *token)
 
 void	exit_msg(t_minishell *minishell, char *msg, int error_code)
 {
+	ft_putendl_fd(msg, 2);
 	if (minishell != NULL)
 		free_minishell(minishell);
-	ft_putendl_fd(msg, 2);
 	exit(error_code);
 }
 

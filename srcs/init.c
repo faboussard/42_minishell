@@ -31,6 +31,7 @@ void	ft_init_minishell(t_minishell *minishell, int ac, char **av)
 	ft_bzero(minishell, (sizeof(t_minishell)));
 	if (check_arguments(ac, av) == -1)
 		exit_msg(minishell, "Wrong arguments. Usage: ./minishell -c \"input line\"", -1);
+	minishell->total_commands = 1;
 }
 
 bool	is_interactive(t_minishell *minishell, int ac)
