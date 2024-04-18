@@ -137,7 +137,10 @@ void expander(t_minishell *minishell)
 	t_token_list *iterator;
 
 	iterator = minishell->list_tokens;
-
+	int count_dquote;
+	count_dquote = 0;
+	int count_squote;
+	count_squote = 0;
 
 	while (iterator != NULL && iterator->next != NULL)
 	{
@@ -164,21 +167,10 @@ void expander(t_minishell *minishell)
 				iterator = iterator->next;
 			}
 		}
-		////////////// EXPANSION ////////////////
-		// if ((iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE) 
-		// && iterator->next->e_operator == DOLLAR)
-		// {
-		// 	iterator = iterator->next;
-		// 	iterator = iterator->next;
-		// }
-		//attention si $ tout seul apres echo doit etre traite comme une commande, le redefinir.
-		int count_dquote;
-		count_dquote = 0;
-		int count_squote;
-		count_squote = 0;
-		if ( iterator->e_operator == SINGLE_QUOTE)
+		///////////////////////////////////////////////////
+		if (iterator->e_operator == SINGLE_QUOTE)
 			count_squote++;
-		if ( iterator->e_operator == DOUBLE_QUOTE)
+		if (iterator->e_operator == DOUBLE_QUOTE)
 			count_dquote++;
 		if (iterator->e_operator == DOLLAR)
 		{
@@ -187,11 +179,23 @@ void expander(t_minishell *minishell)
 				iterator = iterator->next;
 				continue;
 			}
-			if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
-			{
+			if (iterator->next->e_operator == DOUBLE_QUOTE)
 				count_dquote++;
-				count_squote++;
-				if (count_squote % 2 != 0 || count_dquote % 2 != 0)
+			if (iterator->next->e_operator == SINGLE_QUOTE)
+				count_dquote++;
+			if (count_squote % 2 == 0 && count_squote != 0)
+			{
+				iterator = iterator->next;
+				continue;
+			}
+			if (count_dquote % 2 == 0 && count_dquote != 0)
+			{
+				iterator = iterator->next;
+				continue;
+			}
+			if (iterator->next->e_operator == SINGLE_QUOTE)
+			{
+				if (count_squote % 2 != 0 && count_squote != 0)
 				{
 					t_token_list *to_remove = iterator;
 					iterator = iterator->next;
@@ -199,10 +203,18 @@ void expander(t_minishell *minishell)
 					continue;
 				}
 			}
-			if ((count_squote % 2 != 0 || count_dquote % 2 != 0) && count_squote != 0 && count_dquote != 0)
+			if (iterator->next->e_operator == DOUBLE_QUOTE)
 			{
-				iterator = iterator->next;
-			} else
+				if (count_dquote % 2 != 0 && count_dquote != 0)
+				{
+					t_token_list *to_remove = iterator;
+					iterator = iterator->next;
+					remove_node(&minishell->list_tokens, to_remove);
+					continue;
+				}
+			}
+
+			else
 			{
 				char *string = expand_sigil(iterator->next->name, minishell);
 				if (string != iterator->next->name)
