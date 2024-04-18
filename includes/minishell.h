@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/16 16:18:07 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:48:26 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 typedef struct s_envp			t_envp_list;
 typedef struct s_token			t_token_list;
@@ -110,6 +114,6 @@ void							execute_cmds(t_minishell *minishell,
 
 //// expand heredoc ///
 
-void handle_expand(t_minishell *m, char *input);
+void							handle_expand(t_minishell *m, char *input);
 
 #endif
