@@ -109,7 +109,7 @@ $USER=
 05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'='
 $USER=
 
-05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'//// KO
+05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
 05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" 
 USER
