@@ -24,7 +24,7 @@ char find_sep(char c);
 void join_tokens(t_minishell *minishell, t_token_list **list);
 void join_between_quotes(t_minishell *minishell, t_token_list **list);
 void join_between_spaces(t_minishell *minishell, t_token_list **list);
-void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list);
+void join_single_quote_and_dollar(t_minishell *minishell, t_token_list **list);
 void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op);
 void rename_dollar_token_between_dquote(t_token_list **list);
 void join_if_between_quotes(t_minishell *minishell, t_token_list **list);

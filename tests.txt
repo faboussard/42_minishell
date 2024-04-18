@@ -104,26 +104,33 @@ zsh: command not found: 35
 -c "$USER $USER= $USER=fafsasfaf"
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
-
-10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" /// boucle infinie 
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
+$USER=
+05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'='
 $USER=
 
-05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
-juba
-05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER' /// KO
+05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
 05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
 USER
 05:26:24 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
-05:26:37 juba@juba-desktop minishell ±|parsing ✗|→ echo '$USER'
+05:26:37 juba@juba-desktop minishell ±|parsing ✗|→ echo '$USER' /// KO
 $USER
+05:08:12 juba@juba-desktop minishell ±|parsing ✗|→ echo '    $USER'  /// KO
+    $USER: command not found
+05:26:39 juba@juba-desktop minishell ±|parsing ✗|→ echo '$    USER'  /// KO
+$    USER: command not found
+
 
 10:11:58 juba@juba-desktop ~ → echo $""""USER""
 USER
 
 ~/tommini main ❯ echo "$$$$$USER"
 $$$$juba
+06:02:51 juba@juba-desktop minishell ±|parsing ✗|→ echo "$$$$$USER"
+220050220050juba
+========> cas particulier ont traite ou pas ?
 
 08:29:43 juba@juba-desktop tommini ±|main ✗|→ echo "$$$$USER"
 
@@ -139,7 +146,7 @@ adsdgsfaboussa
 
 
  -c " \"g''\" "
-faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP
+faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP ?
 g''
 
 -c " \"g\"''\"\" "
