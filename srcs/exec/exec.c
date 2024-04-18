@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 09:19:43 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:00:58 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,12 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 	int	stdin_orig;
 	int	stdout_orig;
 
-	stdin_orig = dup(STDIN_FILENO);
-	stdout_orig = dup(STDOUT_FILENO);
+	stdin_orig = 0;
+	stdout_orig = 0;
+	if (minishell->process_list->in_files_token->e_type != NO_TYPE)
+		stdin_orig = dup(STDIN_FILENO);
+	if (minishell->process_list->out_files_token->e_type != NO_TYPE)
+		stdout_orig = dup(STDOUT_FILENO);
 	if (stdin_orig == -1 || stdout_orig == -1)
 	{
 		ft_putendl_fd("minishell : dup error", 2);
@@ -108,8 +112,14 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 	else
 		exec_several_cmds(minishell, minishell->process_list);
 	ft_free_pl_paths(minishell);
-	m_safe_dup2(minishell, stdin_orig, STDIN_FILENO);
-	close(stdin_orig);
-	m_safe_dup2(minishell, stdout_orig, STDOUT_FILENO);
-	close(stdout_orig);
+	if (minishell->process_list->in_files_token->e_type != NO_TYPE)
+	{
+		m_safe_dup2(minishell, stdin_orig, STDIN_FILENO);
+		close(stdin_orig);
+	}
+	if (minishell->process_list->out_files_token->e_type != NO_TYPE)
+	{
+		m_safe_dup2(minishell, stdout_orig, STDOUT_FILENO);
+		close(stdout_orig);
+	}
 }
