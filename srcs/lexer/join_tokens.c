@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:34:38 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,12 +186,13 @@ void rename_dollar_token_between_dquote(t_token_list **list)
 
 
 	iterator_prev = NULL;
-	while (iterator != NULL && iterator->next != NULL && iterator->next->next != NULL)
+	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator_prev && (iterator_prev->e_operator == DOUBLE_QUOTE || iterator_prev->e_operator == SINGLE_QUOTE) && iterator->e_operator == DOLLAR
 			&& (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE))
 		{
 			iterator->e_operator = NO_OPERATOR;
+			iterator->e_type = COMMAND;
 		}
 		else
 		{
@@ -201,37 +202,35 @@ void rename_dollar_token_between_dquote(t_token_list **list)
 	}
 }
 
-void join_if_between_quotes(t_minishell *minishell, t_token_list **list)
-{
+void join_if_between_quotes(t_minishell *minishell, t_token_list **list) {
 	t_token_list *current = *list;
-	t_token_list *previous_node;
+	t_token_list *previous_node = NULL;
 
-	previous_node = NULL;
-	while (current != NULL && current->next != NULL && current->next->next != NULL)
-	{
+	while (current != NULL && current->next != NULL && current->next->next != NULL) {
 		if (current->e_operator == DOUBLE_QUOTE && current->next->e_operator != DOUBLE_QUOTE && current->next->next->e_operator == DOUBLE_QUOTE)
 		{
 			if (previous_node)
 			{
 				previous_node->next = current->next;
 				free_token(current);
-				current->next = current->next->next;
-				free_token(current->next);
-			}
-			else
+				current->next = current->next->next->next;
+				free_token(current->next );
+			} else
 			{
 				*list = current->next;
-				current->next = current->next->next;
+				free_token(current);
+				(*list)->next = current->next->next;
 				free_token(current->next);
+				current = *list;
 			}
-		}
-		else
+		} else
 		{
 			previous_node = current;
 			current = current->next;
 		}
 	}
 }
+
 
 
 
