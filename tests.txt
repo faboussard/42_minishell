@@ -1,3 +1,14 @@
+//********************* TODO ***********************////
+
+10:36:57 juba@juba-desktop tommini ±|main ✗|→ ./minishell
+~/tommini main ❯ h$
+minishell: h$: command not found
+
+
+
+
+
+
 ************* HEREDOCS *************************
 
 faboussa@z1r9p4:~/minishell$ << EOF cat << stop cat << lol cat  > r
