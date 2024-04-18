@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 10:07:53 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:03:09 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 //---------------------------- EXEC BUILTINS --------------------------//
 
-int exec_builtin(t_minishell *minishell, t_token_list *command);
+int		exec_builtin(t_minishell *minishell, t_token_list *command);
 
 //---------------------------- SAFE UTILS -----------------------------//
 pid_t	m_safe_fork(t_minishell *minishell);
@@ -40,6 +40,8 @@ char	*join_sep(t_minishell *m, char *s1, char *s2, char sep);
 //--------------------------- FD MANAGEMENT ---------------------------//
 void	open_fd_infile(t_minishell *m, t_token_list *in_files_list);
 void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out);
+int		dup_original_fds(t_minishell *m, int *in, int *out);
+void	close_original_fds(t_minishell *m, int *in, int *out);
 //--------------------------- HERE_DOC --------------------------------//
 void	here_doc(t_minishell *m, char *limiter);
 //--------------------------- UTILS -----------------------------------//

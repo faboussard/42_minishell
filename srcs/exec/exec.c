@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 10:00:58 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:03:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 	else
 		exit_command_not_found(m, pl->cmd_table[0]);
-}
-
-static void	check_stdin_stdout(enum e_token_type in, enum e_token_type out)
-{
-	if (in == IN_FILE || in == DELIMITER)
-		close(STDIN_FILENO);
-	if (out == OUT_FILE || out == APPEND_FILE)
-		close(STDOUT_FILENO);
 }
 
 void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
@@ -81,7 +73,10 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
-		check_stdin_stdout(infile_token, outfile_token);
+		if (infile_token == IN_FILE || infile_token == DELIMITER)
+			close(STDIN_FILENO);
+		if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+			close(STDOUT_FILENO);
 		close_fds(m->fd_in, m->fd_out);
 	}
 }
@@ -93,15 +88,8 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 
 	stdin_orig = 0;
 	stdout_orig = 0;
-	if (minishell->process_list->in_files_token->e_type != NO_TYPE)
-		stdin_orig = dup(STDIN_FILENO);
-	if (minishell->process_list->out_files_token->e_type != NO_TYPE)
-		stdout_orig = dup(STDOUT_FILENO);
-	if (stdin_orig == -1 || stdout_orig == -1)
-	{
-		ft_putendl_fd("minishell : dup error", 2);
+	if (dup_original_fds(minishell, &stdin_orig, &stdout_orig))
 		return ;
-	}
 	if (nb_cmds < 1)
 		return ;
 	set_paths(minishell, minishell->envp_table);
@@ -111,15 +99,6 @@ void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
 		exec_one_cmd(minishell, minishell->process_list);
 	else
 		exec_several_cmds(minishell, minishell->process_list);
+	close_original_fds(minishell, &stdin_orig, &stdout_orig);
 	ft_free_pl_paths(minishell);
-	if (minishell->process_list->in_files_token->e_type != NO_TYPE)
-	{
-		m_safe_dup2(minishell, stdin_orig, STDIN_FILENO);
-		close(stdin_orig);
-	}
-	if (minishell->process_list->out_files_token->e_type != NO_TYPE)
-	{
-		m_safe_dup2(minishell, stdout_orig, STDOUT_FILENO);
-		close(stdout_orig);
-	}
 }
