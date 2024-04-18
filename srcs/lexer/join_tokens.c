@@ -142,16 +142,12 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 		}
 		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
 		{
-			if (join_if_between_quotes(list, DOUBLE_QUOTE))
-				continue ;
 			join_between_quotes_handler(minishell, list, DOUBLE_QUOTE);
 			if ((*list) == NULL)
 				break;
 		}
 		else if ((*list)->e_operator == SINGLE_QUOTE && check_if_more_tokens(list, SINGLE_QUOTE))
-		{
-			if (join_if_between_quotes(list, SINGLE_QUOTE))
-				continue ;
+		{;
 			join_between_quotes_handler(minishell, list, SINGLE_QUOTE);
 			if ((*list) == NULL)
 				break;
@@ -205,21 +201,39 @@ void rename_dollar_token_between_dquote(t_token_list **list)
 	}
 }
 
-int join_if_between_quotes(t_token_list **list, enum e_token_operators op)
+void join_if_between_quotes(t_minishell *minishell, t_token_list **list)
 {
-	if (*list != NULL && (*list)->next != NULL && (*list)->next->next != NULL)
+	t_token_list *current = *list;
+	t_token_list *previous_node;
+
+	previous_node = NULL;
+	while (current != NULL && current->next != NULL && current->next->next != NULL)
 	{
-		if ((*list)->e_operator == op && (*list)->next->e_operator != op && (*list)->next->e_operator != DOLLAR
-			&& (*list)->next->next->e_operator == op)
+		if (current->e_operator == DOUBLE_QUOTE && current->next->e_operator != DOUBLE_QUOTE && current->next->next->e_operator == DOUBLE_QUOTE)
 		{
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
-			return (1);
+			if (previous_node)
+			{
+				previous_node->next = current->next;
+				free_token(current);
+				current->next = current->next->next;
+				free_token(current->next);
+			}
+			else
+			{
+				*list = current->next;
+				current->next = current->next->next;
+				free_token(current->next);
+			}
+		}
+		else
+		{
+			previous_node = current;
+			current = current->next;
 		}
 	}
-	return 0;
 }
+
+
 
 void supress_double_quotes(t_token_list **list)
 {

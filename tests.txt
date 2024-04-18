@@ -132,7 +132,7 @@ faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP
 g''
 
 -c " \"g\"''\"\" "
-faboussa@z1r12p5:~/minishell$ echo "g"''""
+faboussa@z1r12p5:~/minishell$  echo  "g''"
 g
 
 -c "\"' ha "ha" '\" "
