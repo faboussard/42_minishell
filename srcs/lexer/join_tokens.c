@@ -56,20 +56,16 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 	(*list) = (*list)->next;
 	while ((*list) && (*list)->next)
 	{
-		if ((*list)->e_operator == op)
-			count++;
-		if (count == 2)
-			return;
-		else if (count == 1 && (*list)->next->e_operator == op)
+		if ((*list)->next->e_operator == op)
 		{
 			(*list) = (*list)->next;
-			return;
-		} 
-		else if (count == 1 ||
-				(count == 2 && (*list)->next->e_operator != IS_SPACE && (*list)->next->e_operator != op))
-			join_tokens(minishell, list);
-		else
 			(*list) = (*list)->next;
+			count++;
+		}
+		if (count == 2)
+			return;
+		else if (count == 1)
+			join_tokens(minishell, list);
 	}
 }
 
