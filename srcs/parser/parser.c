@@ -171,12 +171,13 @@ int parse_input(t_minishell *minishell)
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
-	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
+	supress_double_quotes(&minishell->list_tokens);
 	rename_dollar_token_between_dquote(&minishell->list_tokens);
+	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
+	join_if_between_quotes(minishell, &minishell->list_tokens);;
 	expander(minishell);
 	join_between_quotes(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
-//	supress_double_quotes(&minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);

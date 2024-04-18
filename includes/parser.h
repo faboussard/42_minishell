@@ -27,7 +27,7 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list);
 void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list);
 void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op);
 void rename_dollar_token_between_dquote(t_token_list **list);
-int join_if_between_quotes(t_token_list **list, enum e_token_operators op);
+void join_if_between_quotes(t_minishell *minishell, t_token_list **list);
 int cmp(int op1, int op2);
 
 /************************** parser  **************************/
