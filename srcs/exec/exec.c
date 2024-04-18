@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 11:03:49 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:48:56 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,32 +73,28 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
-		if (infile_token == IN_FILE || infile_token == DELIMITER)
-			close(STDIN_FILENO);
-		if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
-			close(STDOUT_FILENO);
 		close_fds(m->fd_in, m->fd_out);
 	}
 }
 
-void	execute_cmds(t_minishell *minishell, size_t nb_cmds)
+void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
 	int	stdin_orig;
 	int	stdout_orig;
 
 	stdin_orig = 0;
 	stdout_orig = 0;
-	if (dup_original_fds(minishell, &stdin_orig, &stdout_orig))
+	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
 		return ;
 	if (nb_cmds < 1)
 		return ;
-	set_paths(minishell, minishell->envp_table);
-	if (minishell->paths == NULL)
+	set_paths(m, m->envp_table);
+	if (m->paths == NULL)
 		return ;
 	if (nb_cmds == 1)
-		exec_one_cmd(minishell, minishell->process_list);
+		exec_one_cmd(m, m->process_list);
 	else
-		exec_several_cmds(minishell, minishell->process_list);
-	close_original_fds(minishell, &stdin_orig, &stdout_orig);
-	ft_free_pl_paths(minishell);
+		exec_several_cmds(m, m->process_list);
+	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
+	ft_free_pl_paths(m);
 }

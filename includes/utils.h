@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/16 17:40:43 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:54:48 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void			print_process_list(t_process_list *process_list);
 
 /******************** FREE ********************/
 
-void free_token(t_token_list *token);
+void			free_token(t_token_list *token);
 void			free_minishell(t_minishell *minishell);
 void			ft_free_all_tab(char **tab);
 void			ft_free_tab_from_i(void **tab, int j);
@@ -57,5 +57,9 @@ int				ft_lstsize_token(t_token_list *lst);
 t_token_list	*ft_lstlast_token(t_token_list *lst);
 void			add_token_to_list(t_token_list **list_tokens,
 					t_token_list *new_token);
+
+/******************** ENV UTILS *****************/
+void			set_current_path_with_cwd(t_minishell *m);
+bool			set_env_var(t_minishell *m, char *target);
 
 #endif // UTILS_H

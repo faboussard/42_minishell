@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:16:29 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:44:58 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	ft_init_minishell(t_minishell *minishell, int ac, char **av)
 {
 	ft_bzero(minishell, (sizeof(t_minishell)));
 	if (check_arguments(ac, av) == -1)
-		exit_msg(minishell, "Wrong arguments. Usage: ./minishell -c \"input line\"", -1);
+		exit_msg(minishell,
+			"Wrong arguments. Usage: ./minishell- c \"input line\"", -1);
 	minishell->total_commands = 1;
 }
 
