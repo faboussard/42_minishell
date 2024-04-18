@@ -105,12 +105,12 @@ zsh: command not found: 35
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
 
-10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" /// boucle infinie 
 $USER=
 
 05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
-05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
+05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER' /// KO
 USER
 05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
 USER
@@ -143,7 +143,7 @@ faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP
 g''
 
 -c " \"g\"''\"\" "
-faboussa@z1r12p5:~/minishell$  echo  "g''"
+faboussa@z1r12p5:~/minishell$  echo  "g"''""
 g
 
 -c "\"' ha "ha" '\" "

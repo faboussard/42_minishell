@@ -160,20 +160,32 @@ void expander(t_minishell *minishell)
 			}
 		}
 		////////////// EXPANSION ////////////////
-		if (iterator->e_operator == DOLLAR && iterator->next->e_type != OPERATOR)
+		// if ((iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE) 
+		// && iterator->next->e_operator == DOLLAR)
+		// {
+		// 	iterator = iterator->next;
+		// 	iterator = iterator->next;
+		// }
+
+		//attention si $ tout seul apres echo doit etre traite comme une commande, le redefinir. 
+		if (iterator->e_operator == DOLLAR)
 		{
-			char *string = expand_sigil(iterator->next->name, minishell);
-			if (string != iterator->next->name)
+			if (iterator->next->e_type != OPERATOR)
 			{
-				t_token_list *to_remove = iterator;
-				iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
-				remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
-				free(iterator->name); // Libère la mémoire allouée pour le nom
-				iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
-				free(string); // Libère la mémoire allouée pour le nouveau string
-				continue;
-			} else
-				del_next_token(&iterator); // Supprime le nœud suivant
+				char *string = expand_sigil(iterator->next->name, minishell);
+				if (string != iterator->next->name)
+				{
+					t_token_list *to_remove = iterator;
+					iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
+					remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
+					free(iterator->name); // Libère la mémoire allouée pour le nom
+					iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
+					free(string); // Libère la mémoire allouée pour le nouveau string
+					continue;
+				} 
+				else
+					del_next_token(&iterator); // Supprime le nœud suivant
+			}
 		}
 		else
 			iterator = iterator->next;
