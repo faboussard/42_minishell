@@ -172,10 +172,11 @@ int parse_input(t_minishell *minishell)
 	if (check_syntax(minishell) == 1)
 		return (1);
 //	supress_double_quotes(&minishell->list_tokens); // pas possible car : "''"
-	rename_dollar_token_between_dquote(&minishell->list_tokens);
+//	rename_dollar_token_between_dquote(&minishell->list_tokens); // bash pratique lexpansion des
+//	rename_last_dollar(&minishell->list_tokens);
 	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
+	expander(minishell); // bash pratique lexpansion des variable en excluant les variables entre quote
 	join_if_between_quotes(minishell, &minishell->list_tokens);;
-	expander(minishell);
 	join_between_quotes(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
