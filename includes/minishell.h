@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 07:59:11 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:34:44 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ typedef struct s_minishell
 	int							fd_out;
 	int							history_count;
 	char						*user_input;
-	char						*target_path;
-	char						*current_path;
-	char						*old_pwd;
+	char						target_path[PATH_MAX];
+	char						current_path[PATH_MAX];
+	char						old_pwd[PATH_MAX];
 	char						*paths;
 	char						**envp_table;
 	t_token_list				*list_tokens;

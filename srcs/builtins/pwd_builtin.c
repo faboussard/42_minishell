@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 11:32:23 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 14:35:01 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:17:42 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_pwd(t_minishell *minishell)
 
 	if (print_env_var(minishell, "PWD="))
 		return (0);
-	if (minishell->current_path != NULL)
+	if (minishell->current_path[0])
 	{
 		printf("%s\n", minishell->current_path);
 		return (0);
