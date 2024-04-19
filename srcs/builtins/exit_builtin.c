@@ -114,8 +114,6 @@ int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 	if (command->next->next && !error)
 	{
 		print_error("minishell: exit: too many arguments");
-		minishell->status = 127;
-		// verifier le numero dexit . retourne 1 ou bien 127 ???
 		return (1);
 	}
 	else

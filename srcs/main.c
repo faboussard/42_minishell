@@ -33,6 +33,7 @@ void minishell_interactive(t_minishell *minishell)
 			continue;
 		set_signals_noninteractive();
 		add_history(minishell->user_input);
+		minishell->status = set_or_get_last_status(-1, -1);
 		if (parse_input(minishell) == 0)
 		{
 			if (minishell->process_list == NULL)
