@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22.1)
 project(minishell C)
 
 set(CMAKE_C_STANDARD 99)
-#set(CMAKE_C_COMPILER "clang")
+set(CMAKE_C_COMPILER "clang")
 
 include_directories(includes)
 include_directories(libft/inc)
@@ -73,15 +73,19 @@ add_executable(minishell
 
 
         srcs/main.c
-        srcs/utils/error.c
+
         srcs/lexer/tokenization.c
         srcs/parser/parser.c
         srcs/lexer/operator.c
         srcs/lexer/builtin.c
+        srcs/lexer/split_string.c
+
         srcs/env_variables/env_variables.c
         srcs/expansion/expansion.c
+
         srcs/utils/free.c
-        srcs/lexer/split_string.c
+        srcs/utils/free_utils.c
+        srcs/utils/error.c
         srcs/utils/print.c
         srcs/parser/create_process_list.c
         srcs/lexer/count_tokens.c
@@ -110,6 +114,9 @@ add_executable(minishell
         srcs/lexer/join_tokens.c
         srcs/builtins/echo_builtin.c
         srcs/builtins/pwd_builtin.c
+        srcs/builtins/ft_realpath.c
+        srcs/builtins/builtins_utils.c
+        srcs/env_variables/env_utils.c
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

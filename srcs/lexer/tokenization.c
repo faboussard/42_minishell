@@ -72,11 +72,13 @@ void transform_to_token(t_minishell *minishell, char *string)
 	int i;
 	char *temp;
 	int j;
+	size_t len;
 
 	i = 0;
+	len = ft_strlen(string) + 1;
 	while (string[i])
 	{
-		temp = ft_calloc(1, ft_strlen(string) + 1);
+		temp = ft_calloc(1, len);
 		if (find_sep(string[i]))
 		{
 			temp[0] = string[i];
