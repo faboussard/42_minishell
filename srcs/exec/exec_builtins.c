@@ -22,6 +22,8 @@ void	restore_terminal(t_minishell *minishell)
 
 int	exec_builtin(t_minishell *minishell, t_token_list *command)
 {
+	if (command->e_builtin == ECHO)
+		return (ft_echo(command));
 	if (command->e_builtin == CD)
 		return (ft_cd(minishell, command));
 	if (command->e_builtin == PWD)
