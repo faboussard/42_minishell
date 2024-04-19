@@ -45,17 +45,20 @@ char	*expand_variables(t_minishell *m, char **split_space)
 {
 	char	*input_after_expand;
 	int		count;
+	int i;
 
 	input_after_expand = ft_calloc(1, 1);
 	input_after_expand[0] = '\0';
 	count = -1;
-	for (int i = 0; split_space[i]; i++)
+	i = 0;
+	while (split_space[i])
 	{
 		if (is_quoted_variable(split_space[i]))
 			handle_quoted_variable(m, &input_after_expand, split_space[i]);
 		else
 			handle_regular_variable(m, &input_after_expand, split_space[i],
 				&count, &i);
+		i++;
 	}
 	return (input_after_expand);
 }
@@ -75,7 +78,9 @@ void	handle_regular_variable(t_minishell *m, char **input_after_expand,
 {
 	char	*temp;
 	char	**split_dollar;
+	int j;
 
+	j = 0;
 	temp = get_non_variable_part(token);
 	if (temp != NULL)
 	{
@@ -88,12 +93,12 @@ void	handle_regular_variable(t_minishell *m, char **input_after_expand,
 	split_dollar = ft_split(token, '$');
 	if (split_dollar == NULL)
 		exit_msg_minishell(m, "Malloc failed at handle expand", -1);
-	for (int j = 0; split_dollar[j]; j++)
+	while (split_dollar[j])
 	{
 		handle_quoted_variable(m, input_after_expand, split_dollar[j]);
-		free(split_dollar[j]);
+		j++;
 	}
-	free(split_dollar);
+	ft_free_tab(split_dollar);
 }
 
 char	*get_non_variable_part(char *string)
