@@ -117,4 +117,6 @@ void							execute_cmds(t_minishell *minishell,
 
 void							handle_expand(t_minishell *m, char *input);
 
+int	set_or_get_last_status(int status, int flag);
+
 #endif
