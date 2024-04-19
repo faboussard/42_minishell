@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 14:54:48 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:31:13 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ void			ft_lstclear_token(t_token_list **lst);
 void			ft_free_process_list(t_process_list **process_list);
 void			restore_terminal(t_minishell *minishell);
 void			check_and_delete_if_tmp_file_exists(char *tmp_file);
+/*** FREE  UTILS *****/
 void			free_strs(t_minishell *m);
 void			close_all_fds(void);
+void			free_safely_str(char *str_to_free);
 
 /******************** ERROR ********************/
 void			print_error(const char *error);
@@ -60,6 +62,7 @@ void			add_token_to_list(t_token_list **list_tokens,
 
 /******************** ENV UTILS *****************/
 void			set_current_path_with_cwd(t_minishell *m);
-bool			set_env_var(t_minishell *m, char *target);
+bool			set_env_var(t_minishell *m, char **var, char *target);
+void			set_minishell_paths(t_minishell *m);
 
 #endif // UTILS_H

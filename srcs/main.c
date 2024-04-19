@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 14:55:57 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:24:18 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	minishell_interactive(t_minishell *minishell)
 				execute_cmds(minishell, minishell->total_commands);
 		}
 		minishell->total_commands = 1;
-		// CAPITAL ! L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE REMET PAS A 1 ENTRE DEUX PROMPTS !
+		// CAPITAL ! L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE REMET
+		// PAS A 1 ENTRE DEUX PROMPTS !
 		free(minishell->user_input);
 		ft_free_process_list(&(minishell->process_list));
 		ft_lstclear_token(&minishell->list_tokens);
@@ -60,6 +61,7 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	//	handle_expand(minishell, input);
 	//
 	//	return ;
+	ft_putendl_fd("WTH", 2);
 	set_signals_noninteractive();
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
@@ -90,23 +92,21 @@ int	main(int ac, char **av, char **envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
 		exit_msg(&minishell, "Fatal : malloc failed", -1);
-	if (set_env_var(&minishell, "PWD=") == 0)
-		set_current_path_with_cwd(&minishell);
-	ft_putendl_fd(minishell.current_path, 2);
+	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-	//		printf("************ print list_envp ************\n\n"); // DELETE
-	//		print_list_envp(&minishell);
+	//		printf("************ print list_envp ************\n\n"); //
+	// DELETE 		print_list_envp(&minishell);
 	// printf("************ print list_tokens ************\n");
 	// DELETE
 	// print_token_list(minishell.list_tokens);        // DELETE
 	// printf("************ process list (cmd table ,
 	//	in out files,limiters : ********* \n"); // DELETE
 	// print_process_list(minishell.process_list); // DELETE
-	//		printf("********************** print env_table **********************\n\n");
-	//		print_array(minishell.envp_table);
+	//		printf("********************** print env_table
+	//**********************\n\n"); 		print_array(minishell.envp_table);
 	// DELETE
 	free_minishell(&minishell);
 	return (0);

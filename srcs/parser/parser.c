@@ -1,47 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                            :+:      :+:    :+:  */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:18:29 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
+#include "utils.h"
 #include <stdlib.h>
 
-//ETAPES
-//1. TOUT TOKENIZER	: CHAQUE TOKEN EST UN OPERATEUR(ESPACE GUILLEMT PIPE AUTRE) OU UN MOT. les dollqrs et quillemets sont separes des mots.
-//2. EXPAND ( SI TOKEN DOLLAR : ON ANALYSE LE TOKEN SUIVANT). donc si guillements : expansion non faite
+// ETAPES
+// 1. TOUT TOKENIZER	: CHAQUE TOKEN EST UN OPERATEUR(ESPACE GUILLEMT PIPE AUTRE) OU UN MOT. les dollqrs et quillemets sont separes des mots.
+// 2. EXPAND ( SI TOKEN DOLLAR : ON ANALYSE LE TOKEN SUIVANT). donc si guillements : expansion non faite
 // 3. JOIN CE QUIL Y A ENTRE QUOTES SANS LES QUOTES
 // 4. ENLEVER LES TOKEN SINGLESQUOTES S ILS NE SONT PAS PRECEDES OU SUIVIS DE TOKEN DQUOTES
 // JOINDRE LES TOKEN SINGLE QUOTES RESTQNTES A LEUR MOTS
-//3. ENLEVER LES TOKENS DQUOTES
-//4. ENLEVER LES TOKENS ESPACES
+// 3. ENLEVER LES TOKENS DQUOTES
+// 4. ENLEVER LES TOKENS ESPACES
 // ATTENTION : regarder si = ou digits ( variables envp valable !)
 
-void arg_to_command(t_token_list *list_tokens)
+void	arg_to_command(t_token_list *list_tokens)
 {
-	t_token_list *iterator;
-	t_token_list *next_token;
+	t_token_list	*iterator;
+	t_token_list	*next_token;
 
 	iterator = list_tokens;
 	if (ft_lstsize_token(iterator) == 1)
 	{
 		if (iterator->e_type == ARGUMENT)
 			iterator->e_type = COMMAND;
-	} else
+	}
+	else
 	{
 		while (iterator->next != NULL)
 		{
 			next_token = iterator->next;
-			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR && next_token->e_type != IN_FILE &&
-				next_token->e_type != OUT_FILE)
+			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR
+				&& next_token->e_type != IN_FILE
+				&& next_token->e_type != OUT_FILE)
 				next_token->e_type = ARGUMENT;
 			if (iterator->e_operator == DOLLAR)
 				iterator->e_type = COMMAND;
@@ -50,13 +52,13 @@ void arg_to_command(t_token_list *list_tokens)
 	}
 }
 
-void to_infile_or_outfile(t_token_list *list_tokens)
+void	to_infile_or_outfile(t_token_list *list_tokens)
 {
-	t_token_list *iterator;
-	t_token_list *next_token;
+	t_token_list	*iterator;
+	t_token_list	*next_token;
 
 	iterator = list_tokens;
-	while (iterator->next != NULL)
+	while (iterator && iterator->next != NULL)
 	{
 		next_token = iterator->next;
 		if (iterator->e_operator == INPUT_REDIRECT)
@@ -71,13 +73,16 @@ void to_infile_or_outfile(t_token_list *list_tokens)
 	}
 }
 
-void token_requalification(t_token_list *list_tokens)
+void	token_requalification(t_token_list *list_tokens)
 {
-	to_infile_or_outfile(list_tokens);
-	arg_to_command(list_tokens);
+	if (list_tokens)
+	{
+		to_infile_or_outfile(list_tokens);
+		arg_to_command(list_tokens);
+	}
 }
 
-//void check_sequence_dollar_followed_by_quotes(char *user_input)
+// void check_sequence_dollar_followed_by_quotes(char *user_input)
 //{
 //	size_t	i;
 //	i = 0;
@@ -86,26 +91,30 @@ void token_requalification(t_token_list *list_tokens)
 //	{
 //		if (user_input[i] == '$' && user_input[i + 1] == '\"')
 //		{
-//			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input - 1));
+//			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input
+//					- 1));
 //		}
 //		i++;
 //	}
 //}
 
-
-//void remove_single_quotes(t_minishell *minishell, t_token_list **list)
+// void remove_single_quotes(t_minishell *minishell, t_token_list **list)
 //{
 //	t_token_list *cpy;
 //
 //	cpy = (*list);
 //	while ((*list)->next != NULL)
 //	{
-//		if ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->e_operator == DOUBLE_QUOTE)
+//		if ((*list)->next->e_operator == SINGLE_QUOTE
+//			&& (*list)->e_operator == DOUBLE_QUOTE)
 //			(*list) = (*list)->next;
 //		if ((*list)->next->next != NULL &&
-//			(((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
-//			 ((*list)->next->e_operator == DOUBLE_QUOTE && (*list)->e_operator != SINGLE_QUOTE) ||
-//			 ((*list)->next->e_operator == SINGLE_QUOTE && (*list)->next->next == NULL)))
+//			(((*list)->next->e_operator == SINGLE_QUOTE
+//					&& (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
+//				((*list)->next->e_operator == DOUBLE_QUOTE
+//					&& (*list)->e_operator != SINGLE_QUOTE) ||
+//				((*list)->next->e_operator == SINGLE_QUOTE
+//					&& (*list)->next->next == NULL)))
 //			del_next_token(&minishell->list_tokens);
 //		else
 //			(*list) = (*list)->next;
@@ -113,13 +122,12 @@ void token_requalification(t_token_list *list_tokens)
 //	*list = cpy;
 //}
 
-int cmp(int op1, int op2)
+int	cmp(int op1, int op2)
 {
 	return (op1 - op2);
 }
 
-
-//int is_only_squote(char *str)
+// int is_only_squote(char *str)
 //{
 //	int i;
 //	int count;
@@ -135,14 +143,14 @@ int cmp(int op1, int op2)
 //				count++;
 //			i++; // Incrémenter i à chaque itération
 //		}
-//		if (count == ft_strlen(str) - 2) // Vérifier si count est égal à la longueur de la chaîne - 2
+//		if (count == ft_strlen(str) - 2)
+// Vérifier si count est égal à la longueur de la chaîne - 2
 //			return (1);
 //	}
 //	return (0);
 //}
 
-
-//int is_only_dquote(char *str)
+// int is_only_dquote(char *str)
 //{
 //	int i;
 //
@@ -160,12 +168,12 @@ int cmp(int op1, int op2)
 //	return (0);
 //}
 
-void delete_dollar_before_join(t_token_list **list);
-void supress_double_quotes(t_token_list **list);
+void	delete_dollar_before_join(t_token_list **list);
+void	supress_double_quotes(t_token_list **list);
 
-int parse_input(t_minishell *minishell)
+int	parse_input(t_minishell *minishell)
 {
-	char *string;
+	char	*string;
 
 	string = minishell->user_input;
 	transform_to_token(minishell, string);
@@ -175,12 +183,12 @@ int parse_input(t_minishell *minishell)
 	rename_dollar_token_between_dquote(&minishell->list_tokens);
 	expander(minishell);
 	join_between_quotes(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
-//	supress_double_quotes(&minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *)DOLLAR, cmp);
+	//	supress_double_quotes(&minishell->list_tokens);
+	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *)IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);

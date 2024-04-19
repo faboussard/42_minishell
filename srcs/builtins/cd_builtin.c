@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 15:31:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:42:02 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,26 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (-1);
 	}
-	if (chdir(dir) != 0)
+	free_safely_str(m->target_path);
+	m->target_path = ft_realpath(m, dir);
+	if (m->target_path != NULL)
+	{
+		if (chdir(m->target_path) != 0)
+		{
+			dprintf(2, "Ewww ! I can't go there you freak !%s\n",
+				m->target_path);
+			print_cmd_perror("cd", m->target_path, errno);
+			return (1);
+		}
+	}
+	else if (chdir(dir) != 0)
 	{
 		dprintf(2, "Ewww ! I can't go there you freak !%s\n", dir);
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
 	change_env_variable(m, "PWD=");
+	dprintf(2, "m->target_path = %s\n", m->target_path);
 	return (0);
 }
 
@@ -122,7 +135,6 @@ static int	get_home(t_minishell *m)
 	size_t	home_dir_len;
 	int		return_value;
 
-	(void)m;
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
 	{
@@ -173,7 +185,6 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	char		*dir;
 	struct stat	st;
 
-	(void)minishell;
 	if (too_many_args(command))
 		return (1);
 	if (should_go_home(command) == 1)
@@ -191,13 +202,13 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
 		return (go_into_directory(minishell, dir));
-	// dprintf(2, "bash: cd: %s: Not a directory\n", dir);
-	// if (access(dir, F_OK | X_OK))
-	// {
-	// 	perror("access");
-	// }
 	return (0);
 }
+// dprintf(2, "bash: cd: %s: Not a directory\n", dir);
+// if (access(dir, F_OK | X_OK))
+// {
+// 	perror("access");
+// }
 /*
 http://pwet.fr/man/linux/commandes/posix/cd/
 cd ../../../
