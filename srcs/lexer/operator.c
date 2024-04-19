@@ -18,10 +18,12 @@
 bool define_operator_token(t_token_list *new_token, const char *string, const char *operator[13])
 {
 	int i = 0;
+	size_t len;
 
+	len = ft_strlen(string);
 	while (i < 13)
 	{
-		if (operator[i] != NULL && !ft_strcmp(string, operator[i]))
+		if (operator[i] != NULL && !ft_strncmp(string, operator[i], len))
 		{
 			new_token->e_type = OPERATOR;
 			new_token->e_operator = i;
