@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 08:42:02 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:46:26 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 		return (1);
 	}
 	if (contains_only_charset(dir, "./"))
-		return (go_into_directory(minishell, ft_realpath(minishell, dir)));
+		return (go_into_directory(minishell, dir));
 	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
 		// if doesn't begin with . and is not dir
 		print_cmd_perror("cd", dir, ENOTDIR);

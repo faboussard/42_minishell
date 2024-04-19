@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 10:24:18 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:05:51 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	//	handle_expand(minishell, input);
 	//
 	//	return ;
-	ft_putendl_fd("WTH", 2);
 	set_signals_noninteractive();
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
@@ -109,5 +108,5 @@ int	main(int ac, char **av, char **envp)
 	//**********************\n\n"); 		print_array(minishell.envp_table);
 	// DELETE
 	free_minishell(&minishell);
-	return (0);
+	return (minishell.status);
 }

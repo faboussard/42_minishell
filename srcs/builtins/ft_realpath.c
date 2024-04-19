@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 10:30:27 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:54:56 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ size_t	count_future_path_len(char *current_path, int up_moves)
 			slash_seen++;
 		i++;
 	}
+	i++;
 	return (i);
 }
 
