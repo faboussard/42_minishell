@@ -30,4 +30,5 @@ void	exec_builtin(t_minishell *minishell, t_token_list *command)
 		minishell->status = ft_pwd(minishell);
 	if (command->e_builtin == EXIT)
 		minishell->status = ft_exit_builtin(minishell, command);
+	set_or_get_last_status(minishell->status, 0);
 }
