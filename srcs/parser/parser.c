@@ -179,7 +179,7 @@ int	parse_input(t_minishell *minishell)
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 	{
-		minishell->status = 1;
+		minishell->status = set_or_get_last_status(2, 0);
 		return (1);
 	}
 	//	supress_double_quotes(&minishell->list_tokens);
