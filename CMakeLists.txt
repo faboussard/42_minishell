@@ -108,6 +108,8 @@ add_executable(minishell
         libft/src/ft_str/ft_split_either_sep.c
         srcs/lexer/token_lst_utils.c
         srcs/lexer/join_tokens.c
+        srcs/builtins/echo_builtin.c
+        srcs/builtins/pwd_builtin.c
 )
 
 target_link_libraries(minishell ${READLINE_LIBRARY})

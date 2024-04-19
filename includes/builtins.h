@@ -23,7 +23,7 @@ int		ft_env(t_minishell *minishell);
 int		ft_setenv(t_minishell *minishell);
 int		ft_unsetenv(t_minishell *minishell);
 int		ft_cd(t_minishell *minishell, t_token_list *command);
-int		ft_echo(t_minishell *minishell);
+int		ft_echo(t_token_list *command);
 int		ft_pwd(t_minishell *minishell);
 int		ft_export(t_minishell *minishell);
 int		ft_unset(t_minishell *minishell);
