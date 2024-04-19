@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 10:46:26 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:05:37 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,6 @@ int	is_root_directory(t_minishell *m)
 // 	}
 // 	return (0);
 // }
-bool	contains_only_charset(const char *str, const char *charset)
-{
-	while (*str != '\0')
-	{
-		if (ft_strchr(charset, *str) == NULL)
-			return (0);
-		str++;
-	}
-	return (1);
-}
 
 int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
@@ -75,7 +65,7 @@ int	change_env_variable(t_minishell *m, char *var)
 
 	env = m->list_envp;
 	var_len = ft_strlen(var);
-	while (env && env)
+	while (env && env->target)
 	{
 		if (strncmp(env->target, var, var_len) == 0)
 		{
