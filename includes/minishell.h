@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 11:48:26 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 07:59:11 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_minishell
 	int							fd_out;
 	int							history_count;
 	char						*user_input;
+	char						*target_path;
 	char						*current_path;
 	char						*old_pwd;
 	char						*paths;
