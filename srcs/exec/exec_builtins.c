@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 11:05:31 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:16:06 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@ void	restore_terminal(t_minishell *minishell)
 	free_minishell(minishell);
 }
 
-int	exec_builtin(t_minishell *minishell, t_token_list *command)
+void	exec_builtin(t_minishell *minishell, t_token_list *command)
 {
 	if (command->e_builtin == ECHO)
 		return (ft_echo(command));
 	if (command->e_builtin == CD)
-		return (ft_cd(minishell, command));
+		minishell->status = ft_cd(minishell, command);
 	if (command->e_builtin == PWD)
-		return (ft_pwd(minishell));
+		minishell->status = ft_pwd(minishell);
 	if (command->e_builtin == EXIT)
-		return (ft_exit_builtin(minishell, command));
-	return (0);
+		minishell->status = ft_exit_builtin(minishell, command);
 }

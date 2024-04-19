@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 10:54:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:18:30 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,16 @@ int	count_moves_to_root(char *cmd)
 	return (moves);
 }
 
-bool	cmd_contains_too_many_points(char *cmd)
+bool	invalid_num_of_pts(char *cmd)
 {
 	size_t	i;
 
 	i = 0;
+	if (cmd)
+	{
+		if (!ft_strchr(cmd, '.'))
+			return (0);
+	}
 	while (cmd && cmd[i] && cmd[i + 1] && cmd[i + 2])
 	{
 		if (cmd[i] == '.' && cmd[i + 1] == '.' && cmd[i + 2] == '.')
@@ -93,21 +98,25 @@ char	*ft_realpath(t_minishell *m, char *cmd)
 	int		moves_to_root;
 	size_t	future_path_len;
 
-	if (!cmd || !cmd[0] || !cmd[1] || cmd_contains_too_many_points(cmd))
-		return (cmd);
+	if (!cmd || !cmd[0] || !cmd[1] || invalid_num_of_pts(cmd)
+		|| !contains_only_charset(cmd, "./"))
+		return (NULL);
 	up_moves = count_up_moves(cmd);
-	ft_putendl_fd(m->current_path, 2);
 	moves_to_root = count_moves_to_root(m->current_path);
 	if (up_moves >= moves_to_root)
-		return ("/");
-	future_path_len = count_future_path_len(m->current_path, up_moves);
-	realpath = ft_calloc(future_path_len, sizeof(char));
+		realpath = ft_strdup("/");
+	else
+	{
+		future_path_len = count_future_path_len(m->current_path, up_moves);
+		realpath = ft_calloc(future_path_len, sizeof(char));
+		if (realpath != NULL)
+			ft_strlcpy(realpath, m->current_path, future_path_len);
+	}
 	if (realpath == NULL)
 	{
 		malloc_error_no_exit(m);
 		return (NULL);
 	}
-	ft_strlcpy(realpath, m->current_path, future_path_len);
 	m->target_path = realpath;
 	dprintf(2, "current path was %s\n", m->current_path);
 	dprintf(2, "going into %s with a len of %lu\n", realpath, future_path_len);
