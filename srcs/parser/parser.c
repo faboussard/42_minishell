@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 10:18:29 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:35:17 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,12 +179,18 @@ int	parse_input(t_minishell *minishell)
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
 		return (1);
-	join_dollar_and_single_quote(minishell, &minishell->list_tokens);
-	rename_dollar_token_between_dquote(&minishell->list_tokens);
-	expander(minishell);
-	join_between_quotes(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *)DOLLAR, cmp);
 	//	supress_double_quotes(&minishell->list_tokens);
+			// pas possible car : "''"
+	//	rename_dollar_token_between_dquote(&minishell->list_tokens);
+			// bash pratique lexpansion des
+	//	rename_last_dollar(&minishell->list_tokens);
+	//	join_single_quote_and_dollar(minishell, &minishell->list_tokens);
+	expander(minishell);
+		// bash pratique lexpansion des variable en excluant les variables entre quote. il supprime les autres dollars.
+							//	join_if_between_quotes(minishell,
+									&minishell->list_tokens); // pas necessaire,
+									on enleve le dollar uniquement pendant lexpansion
+	join_between_quotes(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);

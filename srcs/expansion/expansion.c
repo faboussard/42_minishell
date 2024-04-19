@@ -108,6 +108,7 @@ char *expand_sigil(char *string, t_minishell *minishell)
 {
 	char *final_string;
 	char *temp;
+
 	int i;
 	int j;
 
@@ -132,7 +133,14 @@ char *expand_sigil(char *string, t_minishell *minishell)
 
 void expander(t_minishell *minishell)
 {
-	t_token_list *iterator = minishell->list_tokens;
+
+	t_token_list *iterator;
+
+	iterator = minishell->list_tokens;
+	int count_dquote;
+	count_dquote = 0;
+	int count_squote;
+	count_squote = 0;
 
 	while (iterator != NULL && iterator->next != NULL)
 	{
@@ -159,23 +167,70 @@ void expander(t_minishell *minishell)
 				iterator = iterator->next;
 			}
 		}
-		////////////// EXPANSION ////////////////
-		if (iterator->e_operator == DOLLAR && iterator->next->e_type != OPERATOR)
+		///////////////////////////////////////////////////
+		if (iterator->e_operator == SINGLE_QUOTE)
+			count_squote++;
+		if (iterator->e_operator == DOUBLE_QUOTE)
+			count_dquote++;
+		if (iterator->e_operator == DOLLAR)
 		{
-			char *string = expand_sigil(iterator->next->name, minishell);
-			if (string != iterator->next->name)
+			if (count_squote == 1)
 			{
-				t_token_list *to_remove = iterator;
-				iterator = iterator->next; // Avance iterator avant de supprimer le nœud actuel
-				remove_node(&minishell->list_tokens, to_remove); // Supprime le nœud actuel
-				free(iterator->name); // Libère la mémoire allouée pour le nom
-				iterator->name = ft_strdup(string); // Remplace le nom par le nouveau string
-				free(string); // Libère la mémoire allouée pour le nouveau string
+				iterator = iterator->next;
 				continue;
-			} else
-				del_next_token(&iterator); // Supprime le nœud suivant
-		}
-		else
+			}
+			if (iterator->next->e_operator == DOUBLE_QUOTE)
+				count_dquote++;
+			if (iterator->next->e_operator == SINGLE_QUOTE)
+				count_squote++;
+			if (count_squote % 2 == 0 && count_squote != 0)
+			{
+				iterator = iterator->next;
+				continue;
+			}
+			if (count_dquote % 2 == 0 && count_dquote != 0)
+			{
+				iterator = iterator->next;
+				continue;
+			}
+			if (iterator->next->e_operator == SINGLE_QUOTE)
+			{
+				if (count_squote % 2 != 0 && count_squote != 0)
+				{
+					t_token_list *to_remove = iterator;
+					iterator = iterator->next;
+					remove_node(&minishell->list_tokens, to_remove);
+					continue;
+				}
+			}
+			if (iterator->next->e_operator == DOUBLE_QUOTE)
+			{
+				if (count_dquote % 2 != 0 && count_dquote != 0)
+				{
+					t_token_list *to_remove = iterator;
+					iterator = iterator->next;
+					remove_node(&minishell->list_tokens, to_remove);
+					continue;
+				}
+			}
+
+			else
+			{
+				char *string = expand_sigil(iterator->next->name, minishell);
+				if (string != iterator->next->name)
+				{
+					t_token_list *to_remove = iterator;
+					iterator = iterator->next;
+					remove_node(&minishell->list_tokens, to_remove);
+					free(iterator->name);
+					iterator->name = ft_strdup(string);
+					free(string);
+					continue;
+				} else
+					//surpprimer aussi le dollar . faire remove node ??
+					del_next_token(&iterator);
+			}
+		} else
 			iterator = iterator->next;
 	}
 }

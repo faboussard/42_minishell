@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:34:38 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,16 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 	(*list) = (*list)->next;
 	while ((*list) && (*list)->next)
 	{
-		if ((*list)->e_operator == op)
-			count++;
-		if (count == 2 && (*list)->e_operator == op && (*list)->next && (*list)->next->e_operator != IS_SPACE)
-			remove_node(list, *list);
-		if (count == 2 && (*list)->e_operator == op && (*list)->next && (*list)->next->e_operator == IS_SPACE)
-			remove_node(list, *list);
-		if (count == 2 && (*list)->next->e_operator == IS_SPACE && (*list)->next)
-			return;
-		else if (count == 2 && (*list)->next->e_operator == op)
-			(*list) = (*list)->next;
-		else if (count == 1 && (*list)->next->e_operator == op)
+		if ((*list)->next->e_operator == op)
 		{
 			(*list) = (*list)->next;
-			return;
-		} else if (count == 1 ||
-				   (count == 2 && (*list)->next->e_operator != IS_SPACE && (*list)->next->e_operator != op))
-			join_tokens(minishell, list);
-		else
 			(*list) = (*list)->next;
+			count++;
+		}
+		if (count == 2)
+			return;
+		else if (count == 1)
+			join_tokens(minishell, list);
 	}
 }
 
@@ -142,16 +133,12 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 		}
 		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
 		{
-			if (join_if_between_quotes(list, DOUBLE_QUOTE))
-				continue ;
 			join_between_quotes_handler(minishell, list, DOUBLE_QUOTE);
 			if ((*list) == NULL)
 				break;
 		}
 		else if ((*list)->e_operator == SINGLE_QUOTE && check_if_more_tokens(list, SINGLE_QUOTE))
-		{
-			if (join_if_between_quotes(list, SINGLE_QUOTE))
-				continue ;
+		{;
 			join_between_quotes_handler(minishell, list, SINGLE_QUOTE);
 			if ((*list) == NULL)
 				break;
@@ -163,7 +150,7 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 
 }
 
-void join_dollar_and_single_quote(t_minishell *minishell, t_token_list **list)
+void join_single_quote_and_dollar(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
@@ -190,12 +177,13 @@ void rename_dollar_token_between_dquote(t_token_list **list)
 
 
 	iterator_prev = NULL;
-	while (iterator != NULL && iterator->next != NULL && iterator->next->next != NULL)
+	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator_prev && (iterator_prev->e_operator == DOUBLE_QUOTE || iterator_prev->e_operator == SINGLE_QUOTE) && iterator->e_operator == DOLLAR
 			&& (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE))
 		{
 			iterator->e_operator = NO_OPERATOR;
+			iterator->e_type = COMMAND;
 		}
 		else
 		{
@@ -205,21 +193,37 @@ void rename_dollar_token_between_dquote(t_token_list **list)
 	}
 }
 
-int join_if_between_quotes(t_token_list **list, enum e_token_operators op)
-{
-	if (*list != NULL && (*list)->next != NULL && (*list)->next->next != NULL)
-	{
-		if ((*list)->e_operator == op && (*list)->next->e_operator != op && (*list)->next->e_operator != DOLLAR
-			&& (*list)->next->next->e_operator == op)
-		{
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
-			return (1);
-		}
-	}
-	return 0;
-}
+// void join_if_between_quotes(t_token_list **list) {
+// 	t_token_list *current = *list;
+// 	t_token_list *previous_node = NULL;
+
+// 	while (current != NULL && current->next != NULL && current->next->next != NULL) {
+// 		if (current->e_operator == DOUBLE_QUOTE && current->next->e_operator != DOUBLE_QUOTE && current->next->next->e_operator == DOUBLE_QUOTE)
+// 		{
+// 			if (previous_node)
+// 			{
+// 				previous_node->next = current->next;
+// 				free_token(current);
+// 				current->next = current->next->next->next;
+// 				free_token(current->next );
+// 			} else
+// 			{
+// 				*list = current->next;
+// 				free_token(current);
+// 				(*list)->next = current->next->next;
+// 				free_token(current->next);
+// 				current = *list;
+// 			}
+// 		} else
+// 		{
+// 			previous_node = current;
+// 			current = current->next;
+// 		}
+// 	}
+// }
+
+
+
 
 void supress_double_quotes(t_token_list **list)
 {

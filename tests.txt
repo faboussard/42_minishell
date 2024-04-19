@@ -1,3 +1,14 @@
+//********************* TODO ***********************////
+
+10:36:57 juba@juba-desktop tommini ±|main ✗|→ ./minishell
+~/tommini main ❯ h$
+minishell: h$: command not found
+
+
+
+
+
+
 ************* HEREDOCS *************************
 
 faboussa@z1r9p4:~/minishell$ << EOF cat << stop cat << lol cat  > r
@@ -93,52 +104,47 @@ zsh: command not found: 35
 -c "$USER $USER= $USER=fafsasfaf"
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
-
 10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
 $USER=
+05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'='
+$USER=
 
-05:11:54 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
-juba
 05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
-05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
+05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" 
 USER
 05:26:24 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba
 05:26:37 juba@juba-desktop minishell ±|parsing ✗|→ echo '$USER'
 $USER
-
+05:08:12 juba@juba-desktop minishell ±|parsing ✗|→ echo '    $USER'
+    $USER: command not found
+05:26:39 juba@juba-desktop minishell ±|parsing ✗|→ echo '$    USER'
+$    USER: command not found
 10:11:58 juba@juba-desktop ~ → echo $""""USER""
 USER
 
+///////////////////////////////////////////////////////////////
 ~/tommini main ❯ echo "$$$$$USER"
 $$$$juba
-
-08:29:43 juba@juba-desktop tommini ±|main ✗|→ echo "$$$$USER"
+06:02:51 juba@juba-desktop minishell ±|parsing ✗|→ echo "$$$$$USER"
+220050220050juba
+========> cas particulier ont traite ou pas ?
+////////////////////////////////////////////////////////////////////
 
 -c " g\"$'USER'\" "
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
-
 faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
-
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
-
-
- -c " \"g''\" "
-faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP
+faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP ?
 g''
-
--c " \"g\"''\"\" "
-faboussa@z1r12p5:~/minishell$ echo "g"''""
+faboussa@z1r12p5:~/minishell$  echo  "g"''""
 g
-
--c "\"' ha "ha" '\" "
-07:45:22 juba@juba-desktop ~ → echo "' ha "ha" '" //////////////////////// KO manque le dernier guillemet
+07:45:22 juba@juba-desktop ~ → echo "' ha "ha" '"
 ' ha ha '
-
 04:01:20 juba@juba-desktop minishell ±|parsing ✗|→ echo """"
 
 04:01:26 juba@juba-desktop minishell ±|parsing ✗|→ echo "''"
