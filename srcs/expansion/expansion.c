@@ -131,92 +131,89 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	return (final_string);
 }
 
+void handle_delimitor(t_token_list *iterator)
+{
+	iterator = iterator->next;
+	while (iterator && iterator->e_operator == IS_SPACE)
+		iterator = iterator->next;
+	while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
+	{
+		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+		{
+			iterator = iterator->next;
+			while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
+				   iterator->e_operator != SINGLE_QUOTE)
+				iterator = iterator->next;
+		}
+		iterator = iterator->next;
+	}
+}
+
+
+void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
+{
+	join_tokens(minishell, &iterator);
+	iterator->name = ft_itoa(minishell->status);
+	if (iterator->name == NULL)
+		exit_msg(minishell, "Malloc failed at expander", -1);
+}
+
+void add_quote_count(t_token_list *iterator, int *s_count, int *d_count)
+{
+	if (iterator->e_operator == DOUBLE_QUOTE)
+		(*d_count)++;
+	if (iterator->e_operator == SINGLE_QUOTE)
+		(*s_count)++;
+}
+
+void handle_quotes_before_expansion(t_token_list *iterator, t_minishell *minishell, int s_count, int d_count)
+{
+	if (iterator->next->e_operator == SINGLE_QUOTE)
+	{
+		if (s_count % 2 != 0 && s_count != 0)
+		{
+			t_token_list *to_remove = iterator;
+			iterator = iterator->next;
+			remove_node(&minishell->list_tokens, to_remove);
+		}
+	}
+	else if (iterator->next->e_operator == DOUBLE_QUOTE)
+	{
+		if (d_count % 2 != 0 && d_count != 0)
+		{
+			t_token_list *to_remove = iterator;
+			iterator = iterator->next;
+			remove_node(&minishell->list_tokens, to_remove);
+		}
+	}
+}
+
 void expander(t_minishell *minishell)
 {
 
 	t_token_list *iterator;
-
 	iterator = minishell->list_tokens;
-	int count_dquote;
-	count_dquote = 0;
-	int count_squote;
-	count_squote = 0;
+	int d_count;
+	int s_count;
 
+	s_count = 0;
+	d_count = 0;
 	while (iterator != NULL && iterator->next != NULL)
 	{
-		//////////// EVITER LES HEREDOC ///////////////////
 		if (iterator->e_operator == HERE_DOC)
-		{
-			iterator = iterator->next;
-			while (iterator && iterator->e_operator == IS_SPACE)
-				iterator = iterator->next;
-			while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
-			{
-				if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-				{
-					iterator = iterator->next;
-					while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
-						   iterator->e_operator != SINGLE_QUOTE)
-						iterator = iterator->next;
-				}
-				iterator = iterator->next;
-			}
-		}
-		///////////////////////////////////////////////////
-		if (iterator->e_operator == SINGLE_QUOTE)
-			count_squote++;
-		if (iterator->e_operator == DOUBLE_QUOTE)
-			count_dquote++;
-		if (iterator->e_operator == DOLLAR)
+			handle_delimitor(iterator);
+		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+			add_quote_count(iterator, &s_count, &d_count);
+		else if (iterator->e_operator == DOLLAR)
 		{
 			if (ft_strncmp(iterator->next->name, "?", 2) == 0)
+				change_name_to_status(minishell, iterator);
+			else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 			{
-				join_tokens(minishell, &iterator);
-				iterator->name = ft_itoa(minishell->status);
-				iterator = iterator->next;
-				continue ;
+				add_quote_count(iterator->next, &s_count, &d_count);
+				handle_quotes_before_expansion(iterator, minishell, s_count, d_count);
 			}
-			if (count_squote == 1)
-			{
-				iterator = iterator->next;
-				continue;
-			}
-			if (iterator->next->e_operator == DOUBLE_QUOTE)
-				count_dquote++;
-			if (iterator->next->e_operator == SINGLE_QUOTE)
-				count_squote++;
-			if (count_squote % 2 == 0 && count_squote != 0)
-			{
-				iterator = iterator->next;
-				continue;
-			}
-			if (count_dquote % 2 == 0 && count_dquote != 0)
-			{
-				iterator = iterator->next;
-				continue;
-			}
-			if (iterator->next->e_operator == SINGLE_QUOTE)
-			{
-				if (count_squote % 2 != 0 && count_squote != 0)
-				{
-					t_token_list *to_remove = iterator;
-					iterator = iterator->next;
-					remove_node(&minishell->list_tokens, to_remove);
-					continue;
-				}
-			}
-			if (iterator->next->e_operator == DOUBLE_QUOTE)
-			{
-				if (count_dquote % 2 != 0 && count_dquote != 0)
-				{
-					t_token_list *to_remove = iterator;
-					iterator = iterator->next;
-					remove_node(&minishell->list_tokens, to_remove);
-					continue;
-				}
-			}
-
-			else
+			else if (s_count % 2 == 0)
 			{
 				char *string = expand_sigil(iterator->next->name, minishell);
 				if (string != iterator->next->name)
@@ -228,12 +225,12 @@ void expander(t_minishell *minishell)
 					iterator->name = ft_strdup(string);
 					free(string);
 					continue;
-				} else
-					//surpprimer aussi le dollar . faire remove node ??
+				}
+				else
 					del_next_token(&iterator);
 			}
-		} else
-			iterator = iterator->next;
+		}
+		iterator = iterator->next;
 	}
 }
 
