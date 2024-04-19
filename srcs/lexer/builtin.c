@@ -19,11 +19,13 @@ bool	define_builtin_token(t_token_list *new_token, const char *string,
 		const char *builtins[8])
 {
 	int	i;
+	size_t len;
 
+	len = ft_strlen(string);
 	i = 0;
 	while (i < 8)
 	{
-		if (builtins[i] != NULL && !ft_strcmp(string, builtins[i]))
+		if (builtins[i] != NULL && !ft_strncmp(string, builtins[i], len))
 		{
 			new_token->e_builtin = i;
 			new_token->e_type = COMMAND;

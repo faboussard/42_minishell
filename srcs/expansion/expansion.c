@@ -125,9 +125,9 @@ char *expand_sigil(char *string, t_minishell *minishell)
 			j++;
 		}
 		final_string = ft_strdup(temp);
-		free(temp);
 	} else
 		final_string = identify_envp_string(string, minishell);
+	free(temp);
 	return (final_string);
 }
 
@@ -144,11 +144,6 @@ void expander(t_minishell *minishell)
 
 	while (iterator != NULL && iterator->next != NULL)
 	{
-		if (ft_strcmp(iterator->name, "$?") == 0)
-		{
-			printf("%d\n", minishell->status);
-			return;
-		}
 		//////////// EVITER LES HEREDOC ///////////////////
 		if (iterator->e_operator == HERE_DOC)
 		{
@@ -174,6 +169,13 @@ void expander(t_minishell *minishell)
 			count_dquote++;
 		if (iterator->e_operator == DOLLAR)
 		{
+			if (ft_strncmp(iterator->next->name, "?", 2) == 0)
+			{
+				join_tokens(minishell, &iterator);
+				iterator->name = ft_itoa(minishell->status);
+				iterator = iterator->next;
+				continue ;
+			}
 			if (count_squote == 1)
 			{
 				iterator = iterator->next;

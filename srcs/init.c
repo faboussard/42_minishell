@@ -20,7 +20,7 @@ static int	check_arguments(int ac, char **av)
 		return (-1);
 	if (ac == 3)
 	{
-		if (!av[1] || ft_strcmp(av[1], "-c") != 0 || !av[2] || av[2][0] == '\0')
+		if (!av[1] || ft_strncmp(av[1], "-c", 3) != 0 || !av[2] || av[2][0] == '\0')
 			return (-1);
 	}
 	return (0);
