@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 15:34:44 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:01:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,11 @@ void							create_envp_hashmap(t_minishell *minishell,
 
 /********************************** CREATE TABLES ***************************/
 
-void							execute_cmds(t_minishell *minishell,
-									size_t nb_cmds);
+void execute_cmds(t_minishell *minishell,
+                  size_t nb_cmds);
 
 //// expand heredoc ///
 
-void							handle_expand(t_minishell *m, char *input);
+void handle_expand(t_minishell *m, char *input);
 
 #endif
