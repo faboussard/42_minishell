@@ -42,8 +42,13 @@ int	is_root_directory(t_minishell *m)
 
 int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
-	ft_strlcpy(m->old_pwd, m->current_path, ft_strlen(m->current_path));
-	ft_strlcpy(m->current_path, cwd, ft_strlen(cwd));
+    size_t  curpath_len;
+    size_t  cwd_len;
+
+    curpath_len = ft_strlen(m->current_path);
+    cwd_len = ft_strlen(cwd);
+	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
+	ft_strlcpy(m->current_path, cwd, cwd_len);
 	free_safely_str(env->value);
 	env->value = ft_strdup(cwd);
 	if (env->value == NULL)
