@@ -37,7 +37,7 @@ void minishell_interactive(t_minishell *minishell)
 		if (parse_input(minishell) == 0)
 		{
 			if (minishell->process_list == NULL)
-				return;
+				continue ;
 			ft_init_process_list_and_minishell(minishell,
 											   minishell->process_list);
 			if (minishell->total_commands == 1
@@ -65,12 +65,12 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Fatal : malloc failed", -1);
+		exit_msg(minishell, "Fatal : malloc failed at main", 2);
 	add_history(minishell->user_input);
 	if (parse_input(minishell) == 0)
 	{
-		if (minishell->process_list == NULL)
-			return;
+//		if (minishell->process_list == NULL)
+//			return ;
 		if (minishell->total_commands == 1
 			&& minishell->list_tokens->e_builtin != NO_BUILTIN)
 			exec_builtin(minishell, minishell->list_tokens);

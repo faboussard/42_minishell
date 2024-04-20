@@ -20,7 +20,6 @@
 void	ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)());
 
 /*************************join_tokens**************************/
-char find_sep(char c);
 void join_tokens(t_minishell *minishell, t_token_list **list);
 void join_between_quotes(t_minishell *minishell, t_token_list **list);
 void join_between_spaces(t_minishell *minishell, t_token_list **list);
@@ -79,6 +78,7 @@ void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *tok
 void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i);
 char *get_non_variable_part(char *token);
 int is_quoted_variable(char *token);
+int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list);
 
 /********************* check_syntax **************************/
 size_t check_quotes(t_minishell *minishell);
