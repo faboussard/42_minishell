@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 16:16:34 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 12:59:08 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	change_env_variable(t_minishell *m, char *var)
 		{
 			if (getcwd(cwd, sizeof(cwd)) == NULL)
 			{
-				perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+				perror("cd: error retrieving current directory: \
+				getcwd: cannot access parent directories");
 				return (-1);
 			}
 			return (fill_env_value_and_current_path(m, env, cwd));

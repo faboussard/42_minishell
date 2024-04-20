@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 15:48:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:01:00 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,6 @@ void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
-	enum e_token_type	infile_token;
-	enum e_token_type	outfile_token;
-
-	infile_token = pl->in_files_token->e_type;
-	outfile_token = pl->out_files_token->e_type;
 	handle_infile_outfile(m, pl);
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
