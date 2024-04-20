@@ -32,10 +32,7 @@ void	arg_to_command(t_token_list *list_tokens)
 
 	iterator = list_tokens;
 	if (ft_lstsize_token(iterator) == 1)
-	{
-		if (iterator->e_type == ARGUMENT)
-			iterator->e_type = COMMAND;
-	}
+		iterator->e_type = COMMAND;
 	else
 	{
 		while (iterator->next != NULL)
@@ -168,8 +165,22 @@ int	cmp(int op1, int op2)
 //	return (0);
 //}
 
-void	delete_dollar_before_join(t_token_list **list);
-void	supress_double_quotes(t_token_list **list);
+void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list);
+
+int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list)
+{
+	int size_list;
+	int count_double_quote;
+	int count_single_quote;
+
+	size_list = ft_lstsize_token(*list);
+	count_double_quote = count_token_by_operator(minishell, DOUBLE_QUOTE);
+	count_single_quote = count_token_by_operator(minishell, SINGLE_QUOTE);
+	if (count_double_quote == size_list || count_single_quote == size_list)
+		return 1;
+	else
+		return 0;
+}
 
 int	parse_input(t_minishell *minishell)
 {
@@ -194,6 +205,7 @@ int	parse_input(t_minishell *minishell)
 	//								&minishell->list_tokens); // pas necessaire,
 	//								on enleve le dollar uniquement pendant lexpansion
 	join_between_quotes(minishell, &minishell->list_tokens);
+	join_quotes_between_spaces(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
