@@ -60,11 +60,11 @@ void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
-	enum e_token_type	infile_token;
-	enum e_token_type	outfile_token;
-
-	infile_token = pl->in_files_token->e_type;
-	outfile_token = pl->out_files_token->e_type;
+//	enum e_token_type	infile_token;
+//	enum e_token_type	outfile_token;
+//
+//	infile_token = pl->in_files_token->e_type;
+//	outfile_token = pl->out_files_token->e_type;
 	handle_infile_outfile(m, pl);
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
