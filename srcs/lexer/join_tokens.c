@@ -315,10 +315,10 @@ void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 				count_quotes++;
 				*list = (*list)->next;
 			}
-			if ((*list) && ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list))))
+			if ((*list) && ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list))) && count_quotes != 0)
 			{
 				*list = mutex;
-				while ((*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
+				while ((*list)->next && (*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
 				{
 					if ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
 						*list = (*list)->next;
