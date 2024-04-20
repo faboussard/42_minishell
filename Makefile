@@ -15,7 +15,7 @@ LIST_SRCS		=  main signal init \
 				builtins/exit_builtin builtins/cd_builtin builtins/ft_realpath builtins/pwd_builtin builtins/builtins_utils builtins/echo_builtin \
 				expansion/expansion \
 				utils/free utils/free_utils utils/print utils/error \
-				exec/exec exec/exec_builtins exec/errors	exec/paths	exec/fd_management \
+				exec/exec exec/exec_builtins exec/errors exec/errors_exit	exec/paths	exec/fd_management \
                 exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
 LIST_HEADERS	= utils lexer minishell parser signals exec builtins

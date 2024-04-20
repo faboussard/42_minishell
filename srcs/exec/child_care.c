@@ -6,21 +6,11 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 08:36:35 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:40:22 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-
-static void	close_and_redirect_pipe_to_stdin(t_minishell *m)
-{
-	if (m->pipe_fd[WRITE_END] >= 0)
-		close(m->pipe_fd[WRITE_END]);
-	if (m->fd_in >= 0)
-		close(m->fd_in);
-	m->fd_in = m->pipe_fd[READ_END];
-	m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
-}
 
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
@@ -109,7 +99,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	pl = process_list;
 	if (safe_pipe(m) == 0)
 		return ;
-	open_fd_infile(m, pl->in_files_token);
+	if (open_fd_infile(m, pl->in_files_token))
+		return ;
 	first_child(m, pl);
 	pl = pl->next;
 	i = 1;

@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 12:17:47 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:35:06 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
-	add_history(minishell->user_input);
+	//add_history(minishell->user_input); --> pas d'history dans le non interactif, si ?
 	if (parse_input(minishell) == 0)
 	{
 		if (minishell->process_list == NULL)

@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/20 13:01:00 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:31:52 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		exit_command_not_found(m, pl->cmd_table[0]);
 }
 
-void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
+int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
 	enum e_token_type	infile_token;
 	enum e_token_type	outfile_token;
@@ -46,21 +46,25 @@ void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 		here_doc(m, pl->in_files_token->name);
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
-		open_fd_infile(m, pl->in_files_token);
+		if (open_fd_infile(m, pl->in_files_token))
+			return (1);
 		m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 		close(m->fd_in);
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
-		open_fd_outfile(m, pl, pl->out_files_token->name);
+		if (open_fd_outfile(m, pl, pl->out_files_token->name))
+			return (1);
 		m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 		close(m->fd_out);
 	}
+	return (0);
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
-	handle_infile_outfile(m, pl);
+	if (handle_infile_outfile(m, pl))
+		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 		my_execve(m, pl);
