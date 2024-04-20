@@ -97,9 +97,7 @@ typedef struct s_process_list
 
 /********************************** INIT MINISHELL ***************************/
 
-void							ft_init_minishell(t_minishell *minishell,
-									int ac, char **av);
-bool							is_interactive(t_minishell *minishell, int ac);
+bool							is_interactive(t_minishell *minishell, int argc, char **argv);
 
 /*********************************** CREATE CHAINS ***************************/
 

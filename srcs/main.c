@@ -69,8 +69,8 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	add_history(minishell->user_input);
 	if (parse_input(minishell) == 0)
 	{
-//		if (minishell->process_list == NULL)
-//			return ;
+		if (minishell->process_list == NULL)
+			return ;
 		if (minishell->total_commands == 1
 			&& minishell->list_tokens->e_builtin != NO_BUILTIN)
 			exec_builtin(minishell, minishell->list_tokens);
@@ -91,17 +91,33 @@ void ft_print_minishell(t_minishell *minishell)
 	print_array(minishell->envp_table);
 }
 
+bool	is_interactive(t_minishell *minishell, int argc, char **argv)
+{
+	if (argc == 1 || ft_strcmp(argv[1], "-c") != 0)
+	{
+		minishell->interactive = true;
+		return (true);
+	}
+	else if (argc > 2)
+	{
+		minishell->interactive = false;
+		return (false);
+	}
+	return (2);
+}
+
 int main(int ac, char **av, char **envp)
 {
 	t_minishell minishell;
 
-	ft_init_minishell(&minishell, ac, av);
+	ft_bzero(&minishell, (sizeof(t_minishell)));
+	minishell.total_commands = 1;
 	if (envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
 		exit_msg(&minishell, "Fatal : malloc failed", -1);
 	set_minishell_paths(&minishell);
-	if (is_interactive(&minishell, ac) == true)
+	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);

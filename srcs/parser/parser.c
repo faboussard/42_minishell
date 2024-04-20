@@ -44,6 +44,8 @@ void	arg_to_command(t_token_list *list_tokens)
 				next_token->e_type = ARGUMENT;
 			if (iterator->e_operator == DOLLAR)
 				iterator->e_type = COMMAND;
+			if (iterator->e_type == ARGUMENT && next_token->e_type != OPERATOR)
+				next_token->e_type = ARGUMENT;
 			iterator = iterator->next;
 		}
 	}

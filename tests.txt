@@ -9,7 +9,12 @@ faboussa@z3r8p5:~/minishell$ ls |
 bash: syntax error: unexpected end of file
 exit
 
+////////////////////////////////////////////////////////////
+revoir avec melodie
+09:54:02 juba@juba-desktop minishell ±|parsing ✗|→ minishell -c "echo "" "" "" test "
+minishell: command not found
 
+/////////////////////////////////////////////////////////
 
 
 
