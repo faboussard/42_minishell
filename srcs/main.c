@@ -61,11 +61,8 @@ void minishell_non_interactive(t_minishell *minishell, char *data_input)
 	//	printf("input : %s\n",input);
 	//	handle_expand(minishell, input);
 	//	return ;
-	set_signals_noninteractive();
-	minishell->user_input = NULL;
 	minishell->user_input = ft_strdup(data_input);
-	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Fatal : malloc failed at main", 2);
+	set_signals_noninteractive();
 	add_history(minishell->user_input);
 	if (parse_input(minishell) == 0)
 	{
@@ -93,17 +90,44 @@ void ft_print_minishell(t_minishell *minishell)
 
 bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 {
-	if (argc == 1 || ft_strcmp(argv[1], "-c") != 0)
+	if (argc == 1 || ft_strncmp(argv[1], "-c", 2) != 0)
 	{
 		minishell->interactive = true;
 		return (true);
 	}
-	else if (argc > 2)
+	else if (argc > 2 && ft_strncmp(argv[1], "-c", 2) == 0)
 	{
 		minishell->interactive = false;
 		return (false);
 	}
+	else
+	{
+		exit_msg(minishell,
+				 "Wrong arguments.\nUsage:\nNon_interactive mode - ./minishell -c \"input line\" \nInteractive mode - ./minishell", -1);
+	}
 	return (2);
+}
+
+void format_input(t_minishell *minishell, char **av)
+{
+	int i;
+	char *temp;
+
+	minishell->user_input = ft_calloc(1, 1);
+	minishell->user_input [0] = '\0';
+	i = 0;
+	while (av[i])
+	{
+		temp = ft_strdup(av[i]);
+		minishell->user_input = ft_strjoin(	minishell->user_input , temp);
+		if (minishell->user_input  == NULL)
+			exit_msg(minishell, "Malloc failed at main", -1);
+		free_safely_str(temp);
+		i++;
+	}
+	minishell->user_input  = ft_strtrim(minishell->user_input , "\"");
+	if (minishell->user_input  == NULL)
+		exit_msg(minishell, "Malloc failed at main", -1);
 }
 
 int main(int ac, char **av, char **envp)
@@ -120,7 +144,10 @@ int main(int ac, char **av, char **envp)
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
+	{
+//		format_input(&minishell, av + 2);
 		minishell_non_interactive(&minishell, av[2]);
+	}
 //ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
