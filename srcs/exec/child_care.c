@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/20 13:40:22 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:14:55 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close(m->fd_in);
 			close_pipes(m->pipe_fd);
-			if (!ft_strncmp(pl->cmd_table[0], "cat", 4) && !pl->cmd_table[1])
+			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
+					&& !pl->cmd_table[1]))
 				exit(1);
 			my_execve(m, pl);
 		}
