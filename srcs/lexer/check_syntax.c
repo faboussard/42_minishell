@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 11:04:10 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/21 15:00:00 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,29 @@ int	print_quote_syntax_error(enum e_token_operators operator)
 		return (print_error("minishell: unexpected EOF while looking for matching `\"'\nminishell: syntax error: unexpected end of file"),
 				1);
 	return (0);
+}
+
+/* Idee de fonction pour gerer les quote qui ne generent pas une syntax error comme elles le devraient*/
+bool	quote_should_not_be_seen_as_a_real_quote(char *str, char quote,
+		size_t i)
+{
+	bool	first_quote_is_open;
+	char	other_quote;
+	size_t	j;
+
+	if (quote == '\'')
+		other_quote = '\"';
+	else
+		other_quote = '\'';
+	first_quote_is_open = 0;
+	j = 0;
+	while (j < i && str[j])
+	{
+		if (str[j] == other_quote)
+			first_quote_is_open = !first_quote_is_open;
+		j++;
+	}
+	return (first_quote_is_open);
 }
 
 size_t	check_quotes(t_minishell *minishell)
