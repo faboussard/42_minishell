@@ -9,6 +9,15 @@ faboussa@z3r8p5:~/minishell$ ls |
 bash: syntax error: unexpected end of file
 exit
 
+
+A variable may be assigned to by a statement of the form
+
+name=[value]
+If value is not given, the variable is assigned the null string.  !!!!!!!!!
+All values undergo tilde expansion,
+ parameter and variable expansion, command substitution, arithmetic expansion, and quote removal (see Shell Parameter Expansion).
+
+ relire les signaux code et doc de shell
 ////////////////////////////////////////////////////////////
 revoir avec melodie
 09:54:02 juba@juba-desktop minishell ±|parsing ✗|→ minishell -c "echo "" "" "" test "

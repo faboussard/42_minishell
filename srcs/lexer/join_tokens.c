@@ -268,7 +268,7 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->e_operator == IS_SPACE)
+		while ((*list)->e_operator == IS_SPACE)
 			*list = (*list)->next;
 		if ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE)
 		{
@@ -284,6 +284,26 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
+void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list)
+{
+	char *empty_string;
+	empty_string = ft_strdup("\0");
+	if (empty_string == NULL)
+		exit_msg(minishell, "Malloc failed at join between spaces", 2);
+	free((*list)->name);
+	(*list)->name = empty_string;
+}
+
+void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *current = *list;
+	while (current != NULL)
+	{
+		if (current->e_operator == DOUBLE_QUOTE || current->e_operator == SINGLE_QUOTE)
+			change_iterator_name_to_empty_string(minishell, list);
+		current = current->next;
+	}
+}
 
 void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 {
@@ -292,20 +312,10 @@ void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 	int count_quotes;
 
 	cpy = *list;
-	if (count_if_only_quotes_in_all_list(minishell, list))
-		{
-			join_tokens(minishell, list);
-			free((*list)->name);
-			(*list)->name = ft_strdup("\'\'");
-			if ((*list)->name == NULL)
-				exit_msg(minishell, "Malloc failed at join between spaces", 2);
-			return;
-		}
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
+		while ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
 			*list = (*list)->next;
-
 		mutex = *list;
 		while ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
 		{
@@ -314,6 +324,16 @@ void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 			{
 				count_quotes++;
 				*list = (*list)->next;
+				if (*list == NULL)
+				{
+					*list = mutex;
+					while ((*list)->next)
+					{
+						join_tokens(minishell, list);
+						change_iterator_name_to_empty_string(minishell, list);
+						*list = (*list)->next;
+					}
+				}
 			}
 			if ((*list) && ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list))) && count_quotes != 0)
 			{
@@ -332,6 +352,5 @@ void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 		if (*list != NULL)
 			*list = (*list)->next;
 	}
-
 	*list = cpy;
 }

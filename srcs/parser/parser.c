@@ -184,6 +184,18 @@ int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list
 		return 0;
 }
 
+//void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
+//{
+//	t_token_list *cpy;
+//	t_token_list *mutex;
+//
+//	cpy = *list;
+//	while (*list != NULL && (*list)->next != NULL)
+//	{
+//		if (iterator_is_only_quotes(*list))
+//	}
+//}
+
 int	parse_input(t_minishell *minishell)
 {
 	char	*string;
@@ -211,6 +223,7 @@ int	parse_input(t_minishell *minishell)
 	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
+//	replace_tokens_with_only_quotes_by_null(minishell);
 	ft_list_remove_if(&minishell->list_tokens, (void *)IS_SPACE, cmp);
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
