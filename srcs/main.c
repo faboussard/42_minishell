@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/22 09:20:34 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:45:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,25 +114,44 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	}
 	return (2);
 }
-
+// minishell->user_input[0] = '\0'; // inutile : calloc remplit déja avec des \0
+/*
+temp = ft_strdup(av[i]);
+minishell->user_input = ft_strjoin(minishell->user_input, temp);
+--> leaks assurés ici. Version modifiée ci-dessous dans la fonction non commentée
+*/
+// minishell->user_input = ft_strtrim(minishell->user_input, "\"");
+/*
+	Ma gestion des protections malloc est alambiquée mais doit fonctionner :
+	Si temp N'est PAS NULL, alors on alloue minishell->user_input.
+	Si minishell->user_input est NULL, l'un des deux mallocs a échoué, donc exit
+	(d'ailleurs, plutot juste un message d'erreur + un return
+	sans fermer tout le minishell serait bien ici je pense)
+	Et toujours des free_safely_str avant de vérifier le malloc pour ne pas exit/return avant d'avoir free un malloc
+*/
 void	format_input(t_minishell *minishell, char **av)
 {
 	int		i;
 	char	*temp;
 
 	minishell->user_input = ft_calloc(1, 1);
-	minishell->user_input[0] = '\0';
 	i = 0;
 	while (av[i])
 	{
-		temp = ft_strdup(av[i]);
-		minishell->user_input = ft_strjoin(minishell->user_input, temp);
+		temp = ft_strjoin(minishell->user_input, av[i]);
+		free_safely_str(minishell->user_input);
+		if (temp != NULL)
+			minishell->user_input = ft_strdup(temp);
+		free_safely_str(temp);
 		if (minishell->user_input == NULL)
 			exit_msg(minishell, "Malloc failed at main", -1);
-		free_safely_str(temp);
 		i++;
 	}
-	minishell->user_input = ft_strtrim(minishell->user_input, "\"");
+	temp = ft_strdup(minishell->user_input);
+	free_safely_str(minishell->user_input);
+	if (temp != NULL)
+		minishell->user_input = ft_strtrim(temp, "\"");
+	free_safely_str(temp);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Malloc failed at main", -1);
 }
