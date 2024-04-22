@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/22 09:08:38 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:58:32 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,15 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	return (0);
 }
 
-static int	get_home(t_minishell *m)
+static int	get_home(t_minishell *m, t_token_list *command)
 {
 	char	*home_dir;
 	char	*new_path;
 	size_t	home_dir_len;
 	int		return_value;
 
+	(void)command;
+	// if (command->next && ft_strncmp(command->next->name, "~", 2) == 0)
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
 	{
@@ -171,7 +173,7 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	if (too_many_args(command))
 		return (1);
 	if (should_go_home(command) == 1)
-		return (get_home(minishell));
+		return (get_home(minishell, command));
 	dir = command->next->name;
 	if (ft_strncmp(dir, "-", 2) == 0)
 		return (go_into_directory(minishell, minishell->old_pwd));
