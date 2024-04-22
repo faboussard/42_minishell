@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:19:07 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:58:07 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 bool	define_builtin_token(t_token_list *new_token, const char *string,
 		const char *builtins[8])
 {
-	int	i;
-	size_t len;
+	int		i;
+	size_t	len;
 
-	len = ft_strlen(string);
+	len = ft_strlen(string) + 1;
 	i = 0;
 	while (i < 8)
 	{
