@@ -199,7 +199,13 @@ int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list
 int	parse_input(t_minishell *minishell)
 {
 	char	*string;
-
+// passer les espaces inutiles.
+//des uqon crois eun uote, on prend lindex de lautre
+	//utiliser ft_strchr pour trouver la prochaine quote
+	//utiliser is_space
+	//utiliser ft_substr
+	//remove quotes avant de join les espaces..
+	//pas dejoin entre quotes !!!!!!
 	string = minishell->user_input;
 	transform_to_token(minishell, string);
 	if (check_syntax(minishell) == 1)
