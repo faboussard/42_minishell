@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/22 09:16:46 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:20:34 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	else
 	{
 		exit_msg(minishell,
-					"Wrong arguments.\nUsage:\nNon_interactive mode
-						-./ minishell - c \"input line\" \nInteractive mode
+					"Wrong arguments.\nUsage:\nNon_interactive mode \
+						-./ minishell - c \"input line\" \nInteractive mode \
 						-./ minishell ",
-						- 1);
+					-1);
 	}
 	return (2);
 }
