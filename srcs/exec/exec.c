@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/20 13:31:52 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:12:59 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
+		// m->status = set_or_get_last_status(m->status, 0);
 		close_fds(m->fd_in, m->fd_out);
 	}
 }
@@ -94,6 +95,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->process_list);
 	else
 		exec_several_cmds(m, m->process_list);
+	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);
 }

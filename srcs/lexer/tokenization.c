@@ -60,7 +60,7 @@ char *add_until_char(char *temp,char *string, int *i)
 	int		j;
 
 	j = 0;
-	while (string[*i] && !find_sep(string[*i]))
+	while (string[*i] && !char_is_operator(string[*i]))
 		temp[j++] = string[(*i)++];
 	if (j != 0)
 		(*i)--;
@@ -79,7 +79,7 @@ void transform_to_token(t_minishell *minishell, char *string)
 	while (string[i])
 	{
 		temp = ft_calloc(1, len);
-		if (find_sep(string[i]))
+		if (char_is_operator(string[i]))
 		{
 			temp[0] = string[i];
 			temp[1] = '\0';
@@ -89,7 +89,7 @@ void transform_to_token(t_minishell *minishell, char *string)
 		else if (string[i])
 		{
 			j = i;
-			while (string[j] && find_sep(string[j]) == 0)
+			while (string[j] && !char_is_operator(string[j]))
 				j++;
 			temp = add_until_char(temp, string, &i);
 			create_token(minishell, temp);

@@ -24,9 +24,19 @@ void	signal_print_newline(int signal)
 	rl_on_new_line();
 }
 
+int	set_or_get_last_status(int status, int flag)
+{
+	static int	last_status;
+
+	if (flag == 0)
+		last_status = status;
+	return (last_status);
+}
+
 void	sigint_handler(int signo)
 {
 	(void)signo;
+	set_or_get_last_status(130, 0);
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -39,7 +49,7 @@ void sigquit_handler(int signo) {
 	// Ne rien faire
 }
 
-void	set_signals_interactive(void)
+void	set_signals_interactive()
 {
 	struct sigaction	action;
 
@@ -55,7 +65,7 @@ void	set_signals_interactive(void)
 	action.sa_handler = SIG_IGN; // Ignorer Ctrl
     if (sigaction(SIGQUIT, &action, NULL) < 0)
 	{
-	perror("sigaction() failed");
+		perror("sigaction() failed");
 		return ;
 	}
 	signal(SIGTSTP, SIG_IGN);

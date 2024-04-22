@@ -70,8 +70,6 @@ typedef struct s_token
 	struct s_token			*next;
 }							t_token_list;
 
-char				**split_with_quotes_management(t_minishell *minishell);
-
 /********************* tokenization *********************/
 
 void				transform_to_token(t_minishell *minishell,
@@ -82,7 +80,8 @@ void				define_token_types(enum e_token_type type,
 						t_token_list *new_token);
 bool				get_builtin_token(t_token_list *new_token,
 						char *string);
-
+bool	char_is_operator(char c);
+bool	is_redirect_token_or_pipe(t_token_list *token);
 
 /********************* token_lst_utils.c *********************/
 void del_next_token(t_token_list **token);

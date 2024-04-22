@@ -64,6 +64,24 @@ bool	is_redirect_token(t_token_list *token)
 			|| token->e_operator == APPEND);
 }
 
+bool	is_redirect_token_or_pipe(t_token_list *token)
+{
+	if (token == NULL || token->e_type != OPERATOR)
+		return (0);
+	return (token->e_operator == INPUT_REDIRECT
+			|| token->e_operator == OUTPUT_REDIRECT
+			|| token->e_operator == HERE_DOC
+			|| token->e_operator == APPEND
+			|| token->e_operator == PIPE);
+}
+
+bool char_is_operator(char c)
+{
+	if (c == '|' || c == '>' || c == '<' || c == '$' || c == '\"' || c == '\'' || c == ' ')
+		return true;
+	return false;
+}
+
 
 
 
