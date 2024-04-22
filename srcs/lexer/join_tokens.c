@@ -15,18 +15,18 @@
 #include <stdlib.h>
 #include "parser.h"
 
-char find_sep(char c)
-{
-	if (c == ' ' || c == '\t')
-		return (' ');
-	if (c == '\'')
-		return ('\'');
-	if (c == '\"')
-		return ('\"');
-	if (c == '$')
-		return ('\"');
-	return (0);
-}
+//char find_sep(char c)
+//{
+//	if (c == ' ')
+//		return (' ');
+//	if (c == '\'')
+//		return ('\'');
+//	if (c == '\"')
+//		return ('\"');
+//	if (c == '$')
+//		return ('\"');
+//	return (0);
+//}
 
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
@@ -268,12 +268,89 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->e_operator == IS_SPACE)
+		while ((*list)->e_operator == IS_SPACE)
 			*list = (*list)->next;
-		while ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE)
+		if ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE)
+		{
+			if (is_redirect_token_or_pipe((*list)->next))
+				*list = (*list)->next;
+			else if ((*list)->e_operator != IS_SPACE)
 				join_tokens(minishell, list);
+			if ( (*list)->next == NULL)
+				break;
+		}
 		*list = (*list)->next;
 	}
 	*list = cpy;
 }
 
+void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list)
+{
+	char *empty_string;
+	empty_string = ft_strdup("\0");
+	if (empty_string == NULL)
+		exit_msg(minishell, "Malloc failed at join between spaces", 2);
+	free((*list)->name);
+	(*list)->name = empty_string;
+}
+
+void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *current = *list;
+	while (current != NULL)
+	{
+		if (current->e_operator == DOUBLE_QUOTE || current->e_operator == SINGLE_QUOTE)
+			change_iterator_name_to_empty_string(minishell, list);
+		current = current->next;
+	}
+}
+
+void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+	t_token_list *mutex;
+	int count_quotes;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		while ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
+			*list = (*list)->next;
+		mutex = *list;
+		while ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
+		{
+			count_quotes = 0;
+			while ((*list) && ((*list)->e_operator == DOUBLE_QUOTE || (*list)->e_operator == SINGLE_QUOTE))
+			{
+				count_quotes++;
+				*list = (*list)->next;
+				if (*list == NULL)
+				{
+					*list = mutex;
+					while ((*list)->next)
+					{
+						join_tokens(minishell, list);
+						change_iterator_name_to_empty_string(minishell, list);
+						*list = (*list)->next;
+					}
+				}
+			}
+			if ((*list) && ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list))) && count_quotes != 0)
+			{
+				*list = mutex;
+				while ((*list)->next && (*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
+				{
+					if ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
+						*list = (*list)->next;
+					else
+						join_tokens(minishell, list);
+				}
+			}
+			else if ((*list))
+				*list = (*list)->next;
+		}
+		if (*list != NULL)
+			*list = (*list)->next;
+	}
+	*list = cpy;
+}

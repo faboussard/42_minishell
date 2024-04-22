@@ -4,8 +4,26 @@
 ~/tommini main ❯ h$
 minishell: h$: command not found
 
+faboussa@z3r8p5:~/minishell$ ls |
+>
+bash: syntax error: unexpected end of file
+exit
 
 
+A variable may be assigned to by a statement of the form
+
+name=[value]
+If value is not given, the variable is assigned the null string.  !!!!!!!!!
+All values undergo tilde expansion,
+ parameter and variable expansion, command substitution, arithmetic expansion, and quote removal (see Shell Parameter Expansion).
+
+ relire les signaux code et doc de shell
+////////////////////////////////////////////////////////////
+revoir avec melodie
+09:54:02 juba@juba-desktop minishell ±|parsing ✗|→ minishell -c "echo "" "" "" test "
+minishell: command not found
+
+/////////////////////////////////////////////////////////
 
 
 
@@ -39,45 +57,50 @@ faboussa@z2r8p4:~$ cat << stop
 > EOF
 faboussafaboussa
 faboussa@z2r8p4:~$
-
 faboussa@z1r8p5:~$ cat << "lala $USER"$USER $USER
 > lala $USER$USER
 cat: faboussa: No such file or directory
-
 faboussa@z2r8p4:~$ cat << stop
 > sdbwrbb$USER
 > EOF
 sdbwrbbfaboussa
-
 faboussa@z2r8p4:~$ cat << stop
 > $USER=
 > stop
 faboussa=
-
 10:13:52 juba@juba-desktop ~ → cat << stop ////////////////////////////////////// KO output vide
 > $'USER'
 > stop
 $'USER'
-
 10:14:08 juba@juba-desktop ~ → cat << stop
 > b$blab$USER$bl
 > stop
 bjuba
-
 11:23:54 juba@juba-desktop ~ → cat << stop //////////////////////// KO manque les espaces
 > $USER $USER= $USER=fafsasfaf
 > stop
 juba juba= juba=fafsasfaf
-
 11:45:42 juba@juba-desktop ~ → cat << stop
 > "$USER" '$USER='
 > stop
 "juba" 'juba='
-
 11:57:47 juba@juba-desktop ~ → cat << stop  ==== condition de garder le dollar si suivi de guillemets ////////////////////////////////////// KO output vide
 > $'USER' $"USER"
 > stop
 $'USER' $"USER"
+
+
+faboussa@z3r8p5:~/minishell$ cat << a""
+> $USER
+> a
+$USER
+faboussa@z3r8p5:~/minishell$ cat << a
+> $USER
+> a
+faboussa
+
+faboussa@z3r8p5:~/minishell$ echo $SHLVL
+5
 
 ************** builtins ************************
 
@@ -108,10 +131,9 @@ juba juba= juba=fafsasfaf
 $USER=
 05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'='
 $USER=
-
 05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
-05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER" 
+05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
 USER
 05:26:24 juba@juba-desktop minishell ±|parsing ✗|→ echo "$USER"
 juba

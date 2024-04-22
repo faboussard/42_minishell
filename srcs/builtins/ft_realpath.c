@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 16:23:17 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 08:44:37 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ size_t	count_future_path_len(char *current_path, int up_moves)
 	return (i);
 }
 
-bool	ft_realpath(t_minishell *m, char *cmd)
+void	ft_realpath(t_minishell *m, char *cmd)
 {
 	int		up_moves;
 	int		moves_to_root;
@@ -102,7 +102,10 @@ bool	ft_realpath(t_minishell *m, char *cmd)
 
 	if (!cmd || !cmd[0] || !cmd[1] || invalid_num_of_pts(cmd)
 		|| !contains_only_charset(cmd, "./"))
-		return (0);
+	{
+		ft_strlcpy(m->target_path, cmd, ft_strlen(cmd) + 1);
+		return ;
+	}
 	up_moves = count_up_moves(cmd);
 	moves_to_root = count_moves_to_root(m->current_path);
 	if (up_moves >= moves_to_root)
@@ -112,7 +115,7 @@ bool	ft_realpath(t_minishell *m, char *cmd)
 		future_path_len = count_future_path_len(m->current_path, up_moves);
 		ft_strlcpy(m->target_path, m->current_path, future_path_len);
 	}
-	return (1);
+	return ;
 }
 
 /*

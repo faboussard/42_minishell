@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/20 12:59:08 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:08:38 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ int	is_root_directory(t_minishell *m)
 
 int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
-    size_t  curpath_len;
-    size_t  cwd_len;
+	size_t	curpath_len;
+	size_t	cwd_len;
 
-    curpath_len = ft_strlen(m->current_path);
-    cwd_len = ft_strlen(cwd);
+	curpath_len = ft_strlen(m->current_path) + 1;
+	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
 	ft_strlcpy(m->current_path, cwd, cwd_len);
 	free_safely_str(env->value);
@@ -56,8 +56,6 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 		ft_putendl_fd("Malloc error", 2);
 		return (ENOMEM);
 	}
-	dprintf(2, "env->value is %s\n", env->value);
-	dprintf(2, "m->current_path is %s\n", m->current_path);
 	return (0);
 }
 
@@ -100,19 +98,11 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (-1);
 	}
-	if (ft_realpath(m, dir))
+	ft_realpath(m, dir);
+	if (chdir(m->target_path) != 0)
 	{
-		if (chdir(m->target_path) != 0)
-		{
-			dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
-			print_cmd_perror("cd", m->target_path, errno);
-			return (1);
-		}
-	}
-	else if (chdir(dir) != 0)
-	{
-		dprintf(2, "Ewww ! I can't go there you freak !%s\n", dir);
-		print_cmd_perror("cd", dir, errno);
+		dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
+		print_cmd_perror("cd", m->target_path, errno);
 		return (1);
 	}
 	change_env_variable(m, "PWD=");
@@ -171,15 +161,13 @@ bool	too_many_args(t_token_list *command)
 	}
 	return (0);
 }
-/*
-	OLD_PWD : cd -
 
-*/
 int	ft_cd(t_minishell *minishell, t_token_list *command)
 {
 	char		*dir;
 	struct stat	st;
 
+	dprintf(2, "m->current_path IS %s\n", minishell->current_path);
 	if (too_many_args(command))
 		return (1);
 	if (should_go_home(command) == 1)

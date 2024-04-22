@@ -143,6 +143,8 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 			exit(0);
 		}
 		handle_expand(m, input);
+		// ajouter a la reqalif si le delimiteur est un quoted heredoc ou un non quotes heredoc
+		// cela changera sa gestion a lexpansion du heredoc
 		free(input);
 	}
 }
