@@ -47,7 +47,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 //			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
 //					&& !pl->cmd_table[1]))
 //			here_cat(m);
- //           else
+//           else
 			    my_execve(m, pl);
 		}
 		else
@@ -114,7 +114,7 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	m->status = WEXITSTATUS(status);
 }
 
-void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
+void	exec_several_cmds(t_minishell *m, t_process_list *process_list, int stdin_orig)
 {
 	size_t			i;
 	t_process_list	*pl;
@@ -122,6 +122,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	pl = process_list;
 	if (safe_pipe(m) == 0)
 		return ;
+    if (pl->in_files_token->e_type== DELIMITER)
+		here_doc(m, pl->in_files_token->name, stdin_orig);
 	if (open_fd_infile(m, pl->in_files_token))
 		return ;
 	first_child(m, pl);
@@ -131,10 +133,14 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list)
 	{
 		if (safe_pipe(m) == 0)
 			return ;
+        if (pl->in_files_token->e_type== DELIMITER)
+            here_doc(m, pl->in_files_token->name, stdin_orig);
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	open_fd_outfile(m, pl, pl->out_files_token->name);
+    if (pl->in_files_token->e_type== DELIMITER)
+        here_doc(m, pl->in_files_token->name, stdin_orig);
+    open_fd_outfile(m, pl, pl->out_files_token->name);
 	if (safe_pipe(m) == 0)
 		return ;
 	last_child(m, pl);

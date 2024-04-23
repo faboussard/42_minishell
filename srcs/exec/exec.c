@@ -60,7 +60,7 @@ int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	infile_token = pl->in_files_token->e_type;
 	outfile_token = pl->out_files_token->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token->name);
+		here_doc(m, pl->in_files_token->name, STDIN_FILENO);
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
 		if (open_fd_infile(m, pl->in_files_token))
@@ -97,7 +97,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
 	int	stdin_orig;
 	int	stdout_orig;
-
 	stdin_orig = 0;
 	stdout_orig = 0;
 	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
@@ -110,7 +109,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->process_list);
 	else
-		exec_several_cmds(m, m->process_list);
+		exec_several_cmds(m, m->process_list, stdin_orig);
 	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);
