@@ -26,7 +26,6 @@ void	free_token(t_token_list *token)
 	{
 		free_safely_str(token->name);
 		free(token);
-		token = NULL;
 	}
 }
 
