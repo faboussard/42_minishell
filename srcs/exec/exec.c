@@ -83,7 +83,6 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
-		// m->status = set_or_get_last_status(m->status, 0);
 		close_fds(m->fd_in, m->fd_out);
 	}
 }
