@@ -16,7 +16,7 @@ LIST_SRCS		=  main signal init \
 				expansion/expansion \
 				utils/free utils/free_utils utils/print utils/error \
 				exec/exec exec/exec_builtins exec/errors exec/errors_exit	exec/paths	exec/fd_management \
-                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
+                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc #exec/here_cat
 
 LIST_HEADERS	= utils lexer minishell parser signals exec builtins
 
@@ -78,7 +78,7 @@ $(libft): FORCE
 valgrind:       $(NAME)
 		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
-debug: CFLAGS := $(filter-out -Werror,$(CFLAGS))
+debug: CFLAGS += -g
 debug: all
 
 clean:

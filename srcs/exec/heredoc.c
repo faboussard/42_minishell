@@ -67,12 +67,12 @@ void	handle_quoted_variable(t_minishell *m, char **input_after_expand,
 		char *variable)
 {
 	char	*expanded;
-	char	*temp;
+//	char	*temp;
 
 	expanded = expand_sigil(variable, m);
 	if (expanded != variable)
 	{
-		temp = ft_calloc(1, 1);
+	//	temp = ft_calloc(1, 1);
 		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
 	}
 }
