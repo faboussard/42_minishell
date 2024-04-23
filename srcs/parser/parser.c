@@ -196,6 +196,30 @@ int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list
 //	}
 //}
 
+void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->e_operator == INPUT_REDIRECT && (*list)->next->e_operator == INPUT_REDIRECT)
+		{
+			join_tokens(minishell, list);
+			(*list)->e_type = OPERATOR;
+			(*list)->e_operator = HERE_DOC;
+		}
+		if ((*list)->e_operator == OUTPUT_REDIRECT && (*list)->next->e_operator == OUTPUT_REDIRECT)
+		{
+			join_tokens(minishell, list);
+			(*list)->e_type = OPERATOR;
+			(*list)->e_operator = APPEND;
+		}
+		*list = (*list)->next;
+	}
+	*list = cpy;
+}
+
 int	parse_input(t_minishell *minishell)
 {
 	char	*string;
@@ -208,6 +232,7 @@ int	parse_input(t_minishell *minishell)
 	//pas dejoin entre quotes !!!!!!
 	string = minishell->user_input;
 	transform_to_token(minishell, string);
+	define_heredoc_and_append(minishell, &minishell->list_tokens);
 	if (check_syntax(minishell) == 1)
 	{
 		minishell->status = set_or_get_last_status(2, 0);
