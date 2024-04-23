@@ -250,7 +250,7 @@ int	parse_input(t_minishell *minishell)
 	//								&minishell->list_tokens); // pas necessaire,
 	//								on enleve le dollar uniquement pendant lexpansion
 	join_between_quotes(minishell, &minishell->list_tokens);
-	join_quotes_between_spaces(minishell, &minishell->list_tokens);
+//	join_quotes_between_spaces(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
