@@ -220,6 +220,23 @@ void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
+void supress_two_consecutive_empty_names(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if (strcmp((*list)->name, "\0") == 0 && strcmp((*list)->next->name, "\0") == 0)
+		{
+			join_tokens(minishell, list);
+			continue;
+		}
+		*list = (*list)->next;
+	}
+	*list = cpy;
+}
+
 int	parse_input(t_minishell *minishell)
 {
 	char	*string;
@@ -250,6 +267,7 @@ int	parse_input(t_minishell *minishell)
 	//								&minishell->list_tokens); // pas necessaire,
 	//								on enleve le dollar uniquement pendant lexpansion
 	join_between_quotes(minishell, &minishell->list_tokens);
+	supress_two_consecutive_empty_names(minishell, &minishell->list_tokens);
 //	join_quotes_between_spaces(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
