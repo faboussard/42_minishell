@@ -15,20 +15,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-int	check_last_token_pipe(t_minishell *minishell)
-{
-	t_token_list	*last_token;
-
-	last_token = ft_lstlast_token(minishell->list_tokens);
-	if (ft_lstsize_token(minishell->list_tokens) == 1
-		&& last_token->e_operator == PIPE)
-	{
-		print_operator_syntax_error(last_token);
-		return (1);
-	}
-	return (0);
-}
-
 int	check_consecutive_redirect_tokens(t_token_list *current_token)
 {
 	t_token_list	*next_token;
@@ -55,12 +41,12 @@ int	check_redirect_operator_followed_by_pipe(t_token_list *current_token)
 	return (0);
 }
 
-int	check_last_token_redirect(t_minishell *minishell)
+int	check_last_token_redirect_or_pipe(t_minishell *minishell)
 {
 	t_token_list	*last_token;
 
 	last_token = ft_lstlast_token(minishell->list_tokens);
-	if (last_token != NULL && is_redirect_token(last_token))
+	if (last_token != NULL && is_redirect_token_or_pipe(last_token))
 	{
 		print_operator_syntax_error(last_token);
 		return (1);
@@ -70,16 +56,39 @@ int	check_last_token_redirect(t_minishell *minishell)
 
 // REVOIR pour la question du here doc on execute ou on lqnce le message avant ??
 
+static bool	quote_should_not_be_seen_as_a_real_quote(char *str, char quote)
+{
+	bool	first_quote_is_open;
+	char	other_quote;
+	size_t	j;
+
+	if (quote == '\'')
+		other_quote = '\"';
+	else
+		other_quote = '\'';
+	first_quote_is_open = 0;
+	j = 0;
+	while (str[j])
+	{
+		if (str[j] == other_quote)
+			first_quote_is_open = !first_quote_is_open;
+		j++;
+	}
+	return (first_quote_is_open);
+}
+
 int	check_syntax(t_minishell *minishell)
 {
 	t_token_list	*iterator;
 
-	if (check_quotes(minishell))
+	if (quote_should_not_be_seen_as_a_real_quote(minishell->user_input, '\''))
+		return (1);
+	if (quote_should_not_be_seen_as_a_real_quote(minishell->user_input, '\"'))
 		return (1);
 	if (minishell->list_tokens != NULL)
 	{
 		iterator = minishell->list_tokens;
-		while (iterator != NULL && iterator->next != NULL)
+		while (iterator != NULL && iterator->next != NULL && iterator->next->e_operator != PIPE)
 		{
 			if (iterator->e_operator == HERE_DOC
 				&& iterator->next->e_type != OPERATOR && iterator->next != NULL)
@@ -90,9 +99,7 @@ int	check_syntax(t_minishell *minishell)
 				return (1);
 			iterator = iterator->next;
 		}
-		if (check_last_token_redirect(minishell))
-			return (1);
-		if (check_last_token_pipe(minishell))
+		if (check_last_token_redirect_or_pipe(minishell))
 			return (1);
 	}
 	return (0);
@@ -119,27 +126,7 @@ int	print_quote_syntax_error(enum e_token_operators operator)
 }
 
 /* Idee de fonction pour gerer les quote qui ne generent pas une syntax error comme elles le devraient*/
-bool	quote_should_not_be_seen_as_a_real_quote(char *str, char quote,
-		size_t i)
-{
-	bool	first_quote_is_open;
-	char	other_quote;
-	size_t	j;
 
-	if (quote == '\'')
-		other_quote = '\"';
-	else
-		other_quote = '\'';
-	first_quote_is_open = 0;
-	j = 0;
-	while (j < i && str[j])
-	{
-		if (str[j] == other_quote)
-			first_quote_is_open = !first_quote_is_open;
-		j++;
-	}
-	return (first_quote_is_open);
-}
 
 size_t	check_quotes(t_minishell *minishell)
 {
