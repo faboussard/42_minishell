@@ -78,7 +78,7 @@ $(libft): FORCE
 valgrind:       $(NAME)
 		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
-debug: CFLAGS := $(filter-out -Werror,$(CFLAGS))
+debug: CFLAGS += -g
 debug: all
 
 clean:
