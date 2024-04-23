@@ -14,35 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-int is_special_char(char c)
-{
-	if (c == '$' || c == '`' || c == '\\' || c == '=')
-		return (1);
-	return (0);
-}
-
-int check_special_char_after_expand(char *string, char *string2)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = ft_strlen(string2);
-	while (string[i] && string[i] != is_special_char(string2[j - 1]))
-		i++;
-	if (string[i] == string2[j])
-		return (1);
-	return (0);
-}
-
-char *expand_sign(char *string, char *temp)
-{
-	while (*string && *string != '=')
-		string++;
-	string = ft_strjoin(temp, string);
-	return (string);
-}
-
 //void ignore_next_char(char *str, char c)
 //{
 //	char *char_to_ignore;
@@ -57,23 +28,22 @@ char *expand_sign(char *string, char *temp)
 //	}
 //}
 
-void ignore_dollar_string(char **string, t_minishell *minishell)
-{
-	char *new_string;
-	size_t len;
-
-	if (*string != NULL)
-	{
-		len = strlen(*string);
-		new_string = malloc(len); // La longueur est len - 1
-		if (new_string == NULL)
-			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
-		ft_memmove(new_string, *string + 1, len - 1); // Utilisation de len - 1 pour la longueur
-		free(*string);
-		*string = new_string;
-	}
-}
-
+//void ignore_dollar_string(char **string, t_minishell *minishell)
+//{
+//	char *new_string;
+//	size_t len;
+//
+//	if (*string != NULL)
+//	{
+//		len = strlen(*string);
+//		new_string = malloc(len); // La longueur est len - 1
+//		if (new_string == NULL)
+//			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
+//		ft_memmove(new_string, *string + 1, len - 1); // Utilisation de len - 1 pour la longueur
+//		free(*string);
+//		*string = new_string;
+//	}
+//}
 
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
@@ -131,25 +101,6 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	return (final_string);
 }
 
-void handle_delimitor(t_token_list *iterator)
-{
-	iterator = iterator->next;
-	while (iterator && iterator->e_operator == IS_SPACE)
-		iterator = iterator->next;
-	while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
-	{
-		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-		{
-			iterator = iterator->next;
-			while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
-				   iterator->e_operator != SINGLE_QUOTE)
-				iterator = iterator->next;
-		}
-		iterator = iterator->next;
-	}
-}
-
-
 void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 {
 	join_tokens(minishell, &iterator);
@@ -157,14 +108,6 @@ void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 	iterator->name = ft_itoa(minishell->status);
 	if (iterator->name == NULL)
 		exit_msg(minishell, "Malloc failed at expander", -1);
-}
-
-void add_quote_count(t_token_list *iterator, int *s_count, int *d_count)
-{
-	if (iterator->e_operator == DOUBLE_QUOTE)
-		(*d_count)++;
-	if (iterator->e_operator == SINGLE_QUOTE)
-		(*s_count)++;
 }
 
 void handle_quotes_before_expansion(t_token_list *iterator, t_minishell *minishell, int s_count, int d_count)

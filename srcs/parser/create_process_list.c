@@ -134,10 +134,7 @@ void create_envp_table(t_minishell *minishell)
 	{
 		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
 		if (minishell->envp_table[i] == NULL)
-        {
-            ft_free_all_tab(minishell->envp_table);
-            return;
-        }
+			exit_msg(minishell, "Malloc failed at creating envp table", 2);
         current = current->next;
 		i++;
 	}

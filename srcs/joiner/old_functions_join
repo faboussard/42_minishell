@@ -1,74 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenization.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 10:34:38 by faboussa         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "lexer.h"
-#include "utils.h"
-#include <stdlib.h>
-#include "parser.h"
-
-//char find_sep(char c)
-//{
-//	if (c == ' ')
-//		return (' ');
-//	if (c == '\'')
-//		return ('\'');
-//	if (c == '\"')
-//		return ('\"');
-//	if (c == '$')
-//		return ('\"');
-//	return (0);
-//}
-
-void join_tokens(t_minishell *minishell, t_token_list **list)
-{
-	char *joined_name;
-	t_token_list *t2;
-	t_token_list *t1;
-
-	t1 = (*list);
-	t2 = (*list)->next;
-	joined_name = ft_strjoin(t1->name, t2->name);
-	free(t1->name);
-	t1->name = ft_strdup(joined_name);
-	free(joined_name);
-	if (t1->name == NULL)
-		exit_msg(minishell, "Malloc failed at tokenization", 1);
-	del_next_token(&t1);
-	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
-}
-
-void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
-{
-	int count;
-
-	count = 1;
-	if (*list == NULL || (*list)->next == NULL || (*list)->next->next == NULL)
-		return;
-	(*list) = (*list)->next;
-	while ((*list) && (*list)->next)
-	{
-		if ((*list)->next->e_operator == op)
-		{
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
-			count++;
-		}
-		if (count == 2)
-			return;
-		else if (count == 1)
-			join_tokens(minishell, list);
-	}
-}
-
 //void join_dollar_and_after_double_quote(t_token_list **list)
 //{
 //	t_token_list *current = *list;
@@ -103,55 +32,6 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 //	*list = cpy;
 //}
 
-int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
-{
-	t_token_list *cpy;
-
-	cpy = (*list)->next;
-	while (cpy != NULL)
-	{
-		if (cpy->e_operator == op)
-			return 1;
-		cpy = cpy->next;
-	}
-	return 0;
-}
-
-
-void join_between_quotes(t_minishell *minishell, t_token_list **list)
-{
-	t_token_list *cpy;
-
-	cpy = *list;
-	while (*list != NULL && (*list)->next != NULL)
-	{
-		if (((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
-		|| ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == SINGLE_QUOTE))
-		{
-			join_tokens(minishell, list);
-			free((*list)->name);
-			(*list)->name = ft_strdup("\0");
-			if ((*list) == NULL)
-				exit_msg(minishell, "Malloc failed at join_between_quotes", 2);
-		}
-		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
-		{
-			join_between_quotes_handler(minishell, list, DOUBLE_QUOTE);
-			if ((*list) == NULL)
-				break;
-		}
-		else if ((*list)->e_operator == SINGLE_QUOTE && check_if_more_tokens(list, SINGLE_QUOTE))
-		{;
-			join_between_quotes_handler(minishell, list, SINGLE_QUOTE);
-			if ((*list) == NULL)
-				break;
-		}
-		else
-			(*list) = (*list)->next;
-	}
-	*list = cpy;
-
-}
 
 void join_single_quote_and_dollar(t_minishell *minishell, t_token_list **list)
 {
@@ -258,45 +138,6 @@ void supress_double_quotes(t_token_list **list)
 	}
 }
 
-
-//temp = current->next;
-//remove_node(begin_list, current);
-//current = temp;
-
-
-void join_between_spaces(t_minishell *minishell, t_token_list **list)
-{
-	t_token_list *cpy;
-
-	cpy = *list;
-	while (*list != NULL && (*list)->next != NULL)
-	{
-		while ((*list)->e_operator == IS_SPACE)
-			*list = (*list)->next;
-		if ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE)
-		{
-			if (is_redirect_token_or_pipe((*list)->next))
-				*list = (*list)->next;
-			else if ((*list)->e_operator != IS_SPACE)
-				join_tokens(minishell, list);
-			if ( (*list)->next == NULL)
-				break;
-		}
-		*list = (*list)->next;
-	}
-	*list = cpy;
-}
-
-void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list)
-{
-	char *empty_string;
-	empty_string = ft_strdup("\0");
-	if (empty_string == NULL)
-		exit_msg(minishell, "Malloc failed at join between spaces", 2);
-	free((*list)->name);
-	(*list)->name = empty_string;
-}
-
 void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *current = *list;
@@ -357,3 +198,114 @@ void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 	}
 	*list = cpy;
 }
+
+// void check_sequence_dollar_followed_by_quotes(char *user_input)
+//{
+//	size_t	i;
+//	i = 0;
+//
+//	while (user_input[i + 1] != '\0')
+//	{
+//		if (user_input[i] == '$' && user_input[i + 1] == '\"')
+//		{
+//			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input
+//					- 1));
+//		}
+//		i++;
+//	}
+//}
+
+// void remove_single_quotes(t_minishell *minishell, t_token_list **list)
+//{
+//	t_token_list *cpy;
+//
+//	cpy = (*list);
+//	while ((*list)->next != NULL)
+//	{
+//		if ((*list)->next->e_operator == SINGLE_QUOTE
+//			&& (*list)->e_operator == DOUBLE_QUOTE)
+//			(*list) = (*list)->next;
+//		if ((*list)->next->next != NULL &&
+//			(((*list)->next->e_operator == SINGLE_QUOTE
+//					&& (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
+//				((*list)->next->e_operator == DOUBLE_QUOTE
+//					&& (*list)->e_operator != SINGLE_QUOTE) ||
+//				((*list)->next->e_operator == SINGLE_QUOTE
+//					&& (*list)->next->next == NULL)))
+//			del_next_token(&minishell->list_tokens);
+//		else
+//			(*list) = (*list)->next;
+//	}
+//	*list = cpy;
+//}
+
+
+int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list)
+{
+	int size_list;
+	int count_double_quote;
+	int count_single_quote;
+
+	size_list = ft_lstsize_token(*list);
+	count_double_quote = count_token_by_operator(minishell, DOUBLE_QUOTE);
+	count_single_quote = count_token_by_operator(minishell, SINGLE_QUOTE);
+	if (count_double_quote == size_list || count_single_quote == size_list)
+		return 1;
+	else
+		return 0;
+}
+
+
+// int is_only_squote(char *str)
+//{
+//	int i;
+//	int count;
+//
+//	i = 0;
+//	count = 0;
+//	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+//	{
+//		i++;
+//		while (str[i])
+//		{
+//			if (str[i] == '\'')
+//				count++;
+//			i++; // Incrémenter i à chaque itération
+//		}
+//		if (count == ft_strlen(str) - 2)
+// Vérifier si count est égal à la longueur de la chaîne - 2
+//			return (1);
+//	}
+//	return (0);
+//}
+
+// int is_only_dquote(char *str)
+//{
+//	int i;
+//
+//	i = 0;
+//	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+//	{
+//		while (*str)
+//		{
+//			if (str[i] == '\'')
+//				i++;
+//		}
+//		if (i == ft_strlen(str) - 1)
+//			return (1);
+//	}
+//	return (0);
+//}
+
+
+//void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
+//{
+//	t_token_list *cpy;
+//	t_token_list *mutex;
+//
+//	cpy = *list;
+//	while (*list != NULL && (*list)->next != NULL)
+//	{
+//		if (iterator_is_only_quotes(*list))
+//	}
+//}
