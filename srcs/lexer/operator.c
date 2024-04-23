@@ -34,7 +34,6 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 	return (false);
 }
 
-
 bool get_operator_token(t_token_list *new_token, const char *string)
 {
 	const char *operator[13] = {
@@ -52,7 +51,6 @@ bool get_operator_token(t_token_list *new_token, const char *string)
 	};
 	return (define_operator_token(new_token, string, operator));
 }
-
 
 bool	is_redirect_token(t_token_list *token)
 {

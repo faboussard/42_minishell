@@ -65,3 +65,22 @@ void ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)())
 	}
 }
 
+
+void ft_list_remove_if2(t_token_list **begin_list, void *data_ref, int (*cmp)())
+{
+	t_token_list *current = *begin_list;
+	t_token_list *temp;
+
+	while (current != NULL)
+	{
+		if ((*cmp)(current->e_operator, data_ref) == 0)
+		{
+			temp = current->next;
+			remove_node(begin_list, current);
+			current = temp;
+		}
+		else
+			current = current->next;
+	}
+}
+
