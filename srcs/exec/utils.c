@@ -12,6 +12,15 @@
 
 #include "exec.h"
 
+void	check_and_delete_if_tmp_file_exists(char *tmp_file)
+{
+    if (access(tmp_file, F_OK) == 0)
+    {
+        if (unlink(tmp_file) == -1)
+            perror("");
+    }
+}
+
 void	ft_free_tab(char **tab)
 {
 	size_t	i;
@@ -38,6 +47,7 @@ void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl)
 	pl->paths = NULL;
 	pl->good_path = NULL;
 	pl->tab_paths = NULL;
+    check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 }
 
 void	ft_free_pl_paths(t_minishell *minishell)
