@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/16 18:21:49 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:52:59 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // commentaire pour fanny de fanny : laisser les declaration de next,
 //	invalid read sinon
 
-void free_token(t_token_list *token)
+void	free_token(t_token_list *token)
 {
 	if (token != NULL)
 	{
@@ -29,7 +29,6 @@ void free_token(t_token_list *token)
 		token = NULL;
 	}
 }
-
 
 void	ft_lstclear_envp(t_envp_list **lst)
 {
@@ -79,7 +78,7 @@ void	ft_free_process_list(t_process_list **process_list)
 		if (current->cmd_table)
 			ft_free_all_tab(current->cmd_table);
 		if (current->in_files_token)
-			ft_lstclear_token(&current->in_files_token);f
+			ft_lstclear_token(&current->in_files_token);
 		if (current->out_files_token)
 			ft_lstclear_token(&current->out_files_token);
 		free(current);

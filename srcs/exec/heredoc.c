@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:20:54 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 11:05:58 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:55:57 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*expand_variables(t_minishell *m, char **split_space)
 {
 	char	*input_after_expand;
 	int		count;
-	int i;
+	int		i;
 
 	input_after_expand = ft_calloc(1, 1);
 	input_after_expand[0] = '\0';
@@ -74,7 +74,7 @@ void	handle_quoted_variable(t_minishell *m, char **input_after_expand,
 	{
 		temp = ft_calloc(1, 1);
 		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
-
+	}
 }
 
 void	handle_regular_variable(t_minishell *m, char **input_after_expand,
@@ -82,7 +82,7 @@ void	handle_regular_variable(t_minishell *m, char **input_after_expand,
 {
 	char	*temp;
 	char	**split_dollar;
-	int j;
+	int		j;
 
 	j = 0;
 	temp = get_non_variable_part(m, variable);
@@ -105,7 +105,7 @@ void	handle_regular_variable(t_minishell *m, char **input_after_expand,
 	ft_free_tab(split_dollar);
 }
 
-char	*get_non_variable_part(t_minishell *m,char *string)
+char	*get_non_variable_part(t_minishell *m, char *string)
 {
 	int		i;
 	char	*temp;
