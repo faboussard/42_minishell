@@ -82,7 +82,6 @@ void transform_to_token(t_minishell *minishell, char *string)
 		if (char_is_operator(string[i]))
 		{
 			temp[0] = string[i];
-			temp[1] = '\0';
 			create_token(minishell, temp);
 			i++;
 		}
@@ -95,10 +94,6 @@ void transform_to_token(t_minishell *minishell, char *string)
 			create_token(minishell, temp);
 			i++;
 		}
-		if (temp)
-		{
-			free(temp);
-			temp = NULL;
-		}
+		free_safely_str(temp);
 	}
 }

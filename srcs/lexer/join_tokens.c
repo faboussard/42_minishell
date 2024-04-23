@@ -128,8 +128,11 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 		if (((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
 		|| ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == SINGLE_QUOTE))
 		{
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
+			join_tokens(minishell, list);
+			free((*list)->name);
+			(*list)->name = ft_strdup("\0");
+			if ((*list) == NULL)
+				exit_msg(minishell, "Malloc failed at join_between_quotes", 2);
 		}
 		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
 		{
