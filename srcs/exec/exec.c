@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/22 17:52:51 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:54:30 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * Problem: m->list_tokens is not a good parameter, should be process_list
  * The list_tokens never changes, while process_list is iterated over
  */
-bool	is_a_builtin(t_minishell *m, char *cmd)
+int	is_a_builtin(t_minishell *m, char *cmd)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
 		m->status = ft_echo(m->list_tokens);
@@ -29,6 +29,12 @@ bool	is_a_builtin(t_minishell *m, char *cmd)
 		m->status = ft_pwd(m);
 	else if (ft_strncmp(cmd, "exit", 5) == 0)
 		m->status = ft_exit_builtin(m, m->list_tokens);
+	// else if (ft_strncmp(cmd, "env", 4) == 0)
+	//     m->status = ft_env(m, m->list_tokens);
+	// else if (ft_strncmp(cmd, "unset", 6) == 0)
+	//     m->status = ft_unset(m);
+	// else if (ft_strncmp(cmd, "exit", 5) == 0)
+	//     m->status = ft_exit_builtin(m, m->list_tokens);
 	else
 		return (0);
 	set_or_get_last_status(m->status, 0);
@@ -38,7 +44,7 @@ bool	is_a_builtin(t_minishell *m, char *cmd)
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	if (!(is_a_builtin(pl->cmd_table[0])))
+	if (!(is_a_builtin(m, pl->cmd_table[0])))
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);

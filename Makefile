@@ -39,7 +39,7 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
 # ------------ COMPILATION ------------ #
 
-CC				=	clang
+CC				=	cc
 CFLAGS			=	-Wall -Wextra -Werror
 DEPS_FLAGS		=	-MMD -MP -g3
 
