@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22.1)
 project(minishell C)
 
 set(CMAKE_C_STANDARD 99)
-#set(CMAKE_C_COMPILER "clang")
+set(CMAKE_C_COMPILER "clang")
 
 include_directories(includes)
 include_directories(libft/inc)
@@ -87,16 +87,19 @@ add_executable(minishell
         srcs/utils/free_utils.c
         srcs/utils/error.c
         srcs/utils/print.c
+
         srcs/parser/create_process_list.c
         srcs/lexer/count_tokens.c
         srcs/init.c
         srcs/signal.c
         srcs/builtins/exit_builtin.c
         srcs/parser/process_list.c
+
         includes/exec.h
         srcs/exec/fd_management.c
         srcs/exec/exec.c
         srcs/exec/errors.c
+        srcs/exec/errors_exit.c
         srcs/exec/child_care.c
         srcs/exec/heredoc.c
         srcs/exec/paths.c

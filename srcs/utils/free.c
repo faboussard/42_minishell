@@ -24,7 +24,7 @@ void free_token(t_token_list *token)
 {
 	if (token != NULL)
 	{
-		free(token->name);
+		free_safely_str(token->name);
 		free(token);
 		token = NULL;
 	}
@@ -79,7 +79,7 @@ void	ft_free_process_list(t_process_list **process_list)
 		if (current->cmd_table)
 			ft_free_all_tab(current->cmd_table);
 		if (current->in_files_token)
-			ft_lstclear_token(&current->in_files_token);
+			ft_lstclear_token(&current->in_files_token);f
 		if (current->out_files_token)
 			ft_lstclear_token(&current->out_files_token);
 		free(current);

@@ -170,8 +170,8 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	struct stat	st;
 
 	dprintf(2, "m->current_path IS %s\n", minishell->current_path);
-	if (too_many_args(command))
-		return (1);
+	//if (too_many_args(command))
+	//	return (1);
 	if (should_go_home(command) == 1)
 		return (get_home(minishell, command));
 	dir = command->next->name;

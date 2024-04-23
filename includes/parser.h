@@ -76,9 +76,9 @@ char *expand_sigil(char *string, t_minishell *minishell);
 char *expand_variables(t_minishell *m, char **split_space);
 void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token);
 void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i);
-char *get_non_variable_part(char *token);
 int is_quoted_variable(char *token);
 int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list);
+char	*get_non_variable_part(t_minishell *m,char *string);
 
 /********************* check_syntax **************************/
 size_t check_quotes(t_minishell *minishell);

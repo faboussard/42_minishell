@@ -78,14 +78,14 @@ int get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *mini
     {
         i++;
         content = ft_substr(*envp, i, ft_strlen(*envp) - i);
-        //content peut etre null donc pas de protection de malloc ? ... a revoir
+        if (content == NULL)
+			exit_msg(minishell, "Malloc failed at parsing environment variables", 2);
         if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
             return (0);
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
-        if (content != NULL)
-            free(content);
+		free_safely_str(content);
 	}
-	free(target);
+	free_safely_str(target);
 	return (1);
 }
 

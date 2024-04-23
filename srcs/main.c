@@ -65,7 +65,6 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed", -1);
 	set_signals_noninteractive();
-	// add_history(minishell->user_input); --> pas d'history dans le non interactif
 	if (parse_input(minishell) == 0)
 	{
 		if (minishell->process_list == NULL)
@@ -107,7 +106,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	else
 	{
 		exit_msg(minishell,
-					"Wrong arguments.\nUsage:\nNon_interactive mode \
+					"Wrong arguments.\nUsage:\nNon_interactive mode\
 						-./ minishell - c \"input line\" \nInteractive mode \
 						-./ minishell ",
 					-1);
@@ -144,7 +143,7 @@ void	format_input(t_minishell *minishell, char **av)
 			minishell->user_input = ft_strdup(temp);
 		free_safely_str(temp);
 		if (minishell->user_input == NULL)
-			exit_msg(minishell, "Malloc failed at main", -1);
+			exit_msg(minishell, "Malloc failed at format_input", -1);
 		i++;
 	}
 	temp = ft_strdup(minishell->user_input);
@@ -153,7 +152,7 @@ void	format_input(t_minishell *minishell, char **av)
 		minishell->user_input = ft_strtrim(temp, "\"");
 	free_safely_str(temp);
 	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Malloc failed at main", -1);
+		exit_msg(minishell, "Malloc failed at format_input", -1);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -165,13 +164,14 @@ int	main(int ac, char **av, char **envp)
 	if (envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
-		exit_msg(&minishell, "Fatal : malloc failed", -1);
+		exit_msg(&minishell, "Fatal : malloc failed at main", -1);
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
 	{
 		//		format_input(&minishell, av + 2);
+		// attention si format input fail, faire un exit msg
 		minishell_non_interactive(&minishell, av[2]);
 	}
 	// ft_print_minishell(&minishell);
