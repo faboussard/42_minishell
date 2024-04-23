@@ -161,7 +161,7 @@ faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
-faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP ?
+faboussa@z1r12p5:~/minishell$ echo  "g''"
 g''
 faboussa@z1r12p5:~/minishell$  echo  "g"''""
 g
