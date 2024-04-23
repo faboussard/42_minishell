@@ -12,6 +12,27 @@
 
 #include "exec.h"
 
+//void	here_doc(t_minishell *m, char *limiter)
+//{
+//    check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
+//    m->fd_in = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_APPEND, 0666);
+//    if (m->fd_in < 0)
+//    {
+//        perror("No /tmp/ directory found");
+//        return ;
+//    }
+//    // A CHANGER, pas d'exit du minishell
+//    m->pid1 = m_safe_fork(m);
+//    if (m->pid1 == 0)
+//        writing_in_heredoc(m, limiter);
+//    else
+//    {
+//        while (waitpid(-1, &(m->status), 0) && errno != 10)
+//            ;
+//        close(m->fd_in);
+//    }
+//}
+
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
 	if (m->fd_in >= 0 && pl->dev_null == 0)
@@ -23,10 +44,11 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close(m->fd_in);
 			close_pipes(m->pipe_fd);
-			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
-					&& !pl->cmd_table[1]))
-				exit(1);
-			my_execve(m, pl);
+//			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
+//					&& !pl->cmd_table[1]))
+//			here_cat(m);
+ //           else
+			    my_execve(m, pl);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);

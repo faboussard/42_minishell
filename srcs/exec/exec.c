@@ -44,7 +44,7 @@ int	is_a_builtin(t_minishell *m, char *cmd)
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	if (!(is_a_builtin(m, pl->cmd_table[0])))
+	//if (!(is_a_builtin(m, pl->cmd_table[0])))
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);

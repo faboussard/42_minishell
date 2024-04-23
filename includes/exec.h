@@ -41,6 +41,7 @@ void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds);
 void	close_and_redirect_pipe_to_stdin(t_minishell *m);
 //--------------------------- HERE_DOC --------------------------------//
 void	here_doc(t_minishell *m, char *limiter);
+void	here_cat(t_minishell *m);
 //--------------------------- UTILS -----------------------------------//
 void	ft_free_tab(char **tab);
 void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl);

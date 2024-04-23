@@ -13,6 +13,7 @@
 #include "builtins.h"
 #include "utils.h"
 
+/*
 int	is_root_directory(t_minishell *m)
 {
 	char	cwd[PATH_MAX];
@@ -28,6 +29,7 @@ int	is_root_directory(t_minishell *m)
 	else
 		return (0);
 }
+*/
 
 // static int	safe_chdir(t_minishell *m, char *dir)
 // {
