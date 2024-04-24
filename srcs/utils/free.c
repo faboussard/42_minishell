@@ -17,9 +17,6 @@
 #include <readline/history.h>
 #include <stdlib.h>
 
-// commentaire pour fanny de fanny : laisser les declaration de next,
-//	invalid read sinon
-
 void	free_token(t_token_list *token)
 {
 	if (token != NULL)
@@ -101,34 +98,4 @@ void	free_minishell(t_minishell *minishell)
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	rl_clear_history();
 	close_all_fds();
-}
-
-void	ft_free_all_tab(char **tab)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-void	ft_free_tab_from_i(void **tab, int j)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (i < j)
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
 }

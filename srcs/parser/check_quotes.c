@@ -31,7 +31,7 @@ void check_open_quote(bool *open_quote, int *opened_quote_type, t_token_list **i
 	}
 }
 
-size_t check_quotes(t_minishell *minishell)
+bool check_quotes(t_minishell *minishell)
 {
 	bool open_quote;
 	int opened_quote_type;
@@ -48,7 +48,9 @@ size_t check_quotes(t_minishell *minishell)
 			iterator = iterator->next;
 	}
 	if (open_quote == true)
-		return (print_quote_syntax_error(opened_quote_type), 1);
-	else
-		return (0);
+	{
+		print_quote_syntax_error(opened_quote_type);
+		return (1);
+	}
+	return (0);
 }

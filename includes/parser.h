@@ -50,15 +50,12 @@ void			create_process_list(t_minishell *minishell);
 t_process_list	*create_process_list_node(t_process_list *new_process_list,
 					t_minishell *minishell);
 void			create_envp_table(t_minishell *minishell);
-void remove_sep_tokens(t_minishell *minishell);
+void create_cmd_table_array(t_process_list *new_process_list, size_t size, t_minishell *minishell);
 
 /****************** OPERATORS ******************/
 
 bool			get_operator_token(t_token_list *new_token, char *string);
 bool			is_redirect_token(t_token_list *token);
-
-/******************** init.c **********************/
-void			parsing(t_minishell *minishell, int ac, char **av, char **envp);
 
 /********************* envp.c **************************/
 t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
@@ -76,13 +73,12 @@ char *expand_variables(t_minishell *m, char **split_space);
 void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token);
 void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i);
 int is_quoted_variable(char *token);
-int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list);
 char	*get_non_variable_part(t_minishell *m,char *string);
 
 /********************* check_syntax **************************/
-size_t check_quotes(t_minishell *minishell);
-int print_quote_syntax_error(enum e_token_operators operator);
-int	print_operator_syntax_error(t_token_list *token);
+bool check_quotes(t_minishell *minishell);
+bool print_quote_syntax_error(enum e_token_operators operator);
+bool print_operator_syntax_error(t_token_list *token);
 
 
 #endif // PARSER_H

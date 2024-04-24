@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 
-int print_quote_syntax_error(enum e_token_operators operator)
+bool print_quote_syntax_error(enum e_token_operators operator)
 {
 	if (operator == SINGLE_QUOTE)
 		return (print_error(
@@ -29,7 +29,7 @@ int print_quote_syntax_error(enum e_token_operators operator)
 	return (0);
 }
 
-int	print_operator_syntax_error(t_token_list *token)
+bool print_operator_syntax_error(t_token_list *token)
 {
 	int	error;
 

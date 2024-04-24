@@ -51,7 +51,7 @@ void			free_safely_str(char *str_to_free);
 
 /******************** ERROR ********************/
 void			print_error(const char *error);
-int				print_operator_syntax_error(t_token_list *token);
+bool print_operator_syntax_error(t_token_list *token);
 void			print_cmd_perror(char *cmd, char *name, int err);
 
 /******************** TOKEN LIST *****************/
