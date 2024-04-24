@@ -112,27 +112,27 @@ void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 		exit_msg(minishell, "Malloc failed at expander", -1);
 }
 
-void handle_quotes_before_expansion(t_token_list *iterator, t_minishell *minishell, int s_count, int d_count)
-{
-	if (iterator->next->e_operator == SINGLE_QUOTE)
-	{
-		if (s_count % 2 != 0 && s_count != 0)
-		{
-			t_token_list *to_remove = iterator;
-			iterator = iterator->next;
-			remove_node(&minishell->list_tokens, to_remove);
-		}
-	}
-	else if (iterator->next->e_operator == DOUBLE_QUOTE)
-	{
-		if (d_count % 2 != 0 && d_count != 0)
-		{
-			t_token_list *to_remove = iterator;
-			iterator = iterator->next;
-			remove_node(&minishell->list_tokens, to_remove);
-		}
-	}
-}
+//void handle_quotes_before_expansion(t_token_list *iterator, t_minishell *minishell, int s_count, int d_count)
+//{
+//	if (iterator->next->e_operator == SINGLE_QUOTE)
+//	{
+//		if (s_count % 2 != 0 && s_count != 0)
+//		{
+//			t_token_list *to_remove = iterator;
+//			iterator = iterator->next;
+//			remove_node(&minishell->list_tokens, to_remove);
+//		}
+//	}
+//	else if (iterator->next->e_operator == DOUBLE_QUOTE)
+//	{
+//		if (d_count % 2 != 0 && d_count != 0)
+//		{
+//			t_token_list *to_remove = iterator;
+//			iterator = iterator->next;
+//			remove_node(&minishell->list_tokens, to_remove);
+//		}
+//	}
+//}
 
 void expander(t_minishell *minishell)
 {
@@ -152,13 +152,10 @@ void expander(t_minishell *minishell)
 			add_quote_count(iterator, &s_count, &d_count);
 		else if (iterator->e_operator == DOLLAR)
 		{
-			if (ft_strncmp(iterator->next->name, "?", 2) == 0)
+			if (ft_strncmp(iterator->next->name, "?", 2) == 0) 		//mettre ici lexpanion du shelllevel ?
 				change_name_to_status(minishell, iterator);
 			else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-			{
 				add_quote_count(iterator->next, &s_count, &d_count);
-				handle_quotes_before_expansion(iterator, minishell, s_count, d_count);
-			}
 			else if (s_count % 2 == 0)
 			{
 				char *string = expand_sigil(iterator->next->name, minishell);
