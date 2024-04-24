@@ -34,8 +34,6 @@ int	print_operator_syntax_error(t_token_list *token)
 	int	error;
 
 	error = token->e_operator;
-//	if (token->next == NULL && error == PIPE)
-//		return (print_error("minishell: syntax error near unexpected token `newline'"), 1);
 	if (error == PIPE && token->next != NULL)
 		print_error("syntax error: unexpected end of file");
 	else if (error == PIPE && token->next == NULL)

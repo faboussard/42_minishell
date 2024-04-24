@@ -9,11 +9,11 @@ vpath %c srcs lexer joiner env_variables parser expansion utils exec builtins
 
 LIST_SRCS		=  main signal init \
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens \
-				lexer/split_string lexer/token_list lexer/token_utils \
+				lexer/token_list lexer/token_utils \
 				joiner/join_tokens joiner/join_tokens_utils \
 				env_variables/env_variables env_variables/env_utils \
 				parser/parser parser/create_process_list parser/process_list parser/check_syntax  parser/print_error_syntax\
-				parser/token_requalif parser/token_requalif_utils \
+				parser/token_requalif parser/token_requalif_utils   parser/check_quotes\
 				builtins/exit_builtin builtins/cd_builtin builtins/ft_realpath builtins/pwd_builtin builtins/builtins_utils builtins/echo_builtin \
 				expansion/expansion expansion/expansion_utils expansion/add_after_special_char \
 				utils/free utils/free_utils utils/print utils/error \

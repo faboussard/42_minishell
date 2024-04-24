@@ -74,6 +74,7 @@ typedef struct s_token
 
 void				transform_to_token(t_minishell *minishell,
 						char *string);
+void create_token(t_minishell *minishell, char *string);
 void				define_token_types(enum e_token_type type,
 						enum e_token_builtin builtin,
 						enum e_token_operators operator,
