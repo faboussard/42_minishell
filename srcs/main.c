@@ -63,7 +63,7 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	//	return ;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Fatal : malloc failed", -1);
+		exit_msg(minishell, "Fatal : malloc failed at minishell_non_interactive", 2);
 	set_signals_noninteractive();
 	if (parse_input(minishell) == 0)
 	{
@@ -166,7 +166,7 @@ int	main(int ac, char **av, char **envp)
 	if (envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
-		exit_msg(&minishell, "Fatal : malloc failed at main", -1);
+		exit_msg(&minishell, "Fatal : malloc failed at main", 2);
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);

@@ -164,11 +164,8 @@ void expander(t_minishell *minishell)
 				char *string = expand_sigil(iterator->next->name, minishell);
 				if (string != iterator->next->name)
 				{
-					t_token_list *to_remove = iterator;
-					iterator = iterator->next;
-					remove_node(&minishell->list_tokens, to_remove);
-					free(iterator->name);
-					iterator->name = ft_strdup(string);
+					join_tokens(minishell, &iterator);
+					change_iterator_name_to_empty_string(minishell, &iterator, string);
 					free(string);
 					continue;
 				}

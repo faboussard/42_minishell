@@ -27,7 +27,7 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 
 /************************* join_tokens_utils.c **************************/
 
-void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list);
+void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list, char *new_name);
 int check_if_more_tokens(t_token_list **list, enum e_token_operators op);
 
 /************************* token_requlif.c **************************/
