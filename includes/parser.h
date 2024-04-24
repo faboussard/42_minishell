@@ -72,7 +72,7 @@ int check_special_char_after_expand(char *string, char *string2);
 char *expand_variables(t_minishell *m, char **split_space);
 void handle_quoted_variable(t_minishell *m, char **input_after_expand, char *token);
 void handle_regular_variable(t_minishell *m, char **input_after_expand, char *token, int *count, int *i);
-int is_quoted_variable(char *token);
+bool is_quoted_variable(char *token);
 char	*get_non_variable_part(t_minishell *m,char *string);
 void change_name_to_status(t_minishell *minishell, t_token_list *iterator);
 
