@@ -97,6 +97,6 @@ void add_quote_count(t_token_list *iterator, int *s_count, int *d_count);
 
 /********************** check syntax *********************/
 
-int					check_syntax(t_minishell *minishell);
+bool check_syntax(t_minishell *minishell);
 
 #endif // LEXER_H

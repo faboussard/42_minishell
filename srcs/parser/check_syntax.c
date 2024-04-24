@@ -15,14 +15,7 @@
 #include "utils.h"
 #include <stdlib.h>
 
-/*RULES: ORDER IN CODE IS IMPORTANT
- * 1/ is pipe is the only token in the list : special message
- * 2 / two redirect cannot be consecutive
- * 3 / redirect operator or pile must be followed by a word
- * 4/ check quotes
- * */
-
-int check_last_token_redirect_or_pipe(t_minishell *minishell)
+bool check_last_token_redirect_or_pipe(t_minishell *minishell)
 {
 	t_token_list *last_token;
 
@@ -40,7 +33,7 @@ int check_last_token_redirect_or_pipe(t_minishell *minishell)
 	return (0);
 }
 
-int check_syntax(t_minishell *minishell)
+bool check_syntax(t_minishell *minishell)
 {
 	t_token_list *current_token;
 	current_token = minishell->list_tokens;
