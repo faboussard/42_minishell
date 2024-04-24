@@ -90,6 +90,8 @@ void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
+	if (list == NULL || *list == NULL)
+		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{

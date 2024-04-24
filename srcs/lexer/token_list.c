@@ -57,9 +57,12 @@ void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 
 void ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)())
 {
-	t_token_list *current = *begin_list;
+	t_token_list *current;
 	t_token_list *temp;
 
+	if (begin_list == NULL || *begin_list == NULL)
+		return ;
+	current = *begin_list;
 	while (current != NULL)
 	{
 		if ((*cmp)(current->e_operator, data_ref) == 0)

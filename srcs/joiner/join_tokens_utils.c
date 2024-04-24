@@ -38,4 +38,6 @@ void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list *
 		exit_msg(minishell, "Malloc failed at join between spaces", 2);
 	free((*list)->name);
 	(*list)->name = empty_string;
+	(*list)->e_type = COMMAND;
+	(*list)->e_operator = 0;
 }

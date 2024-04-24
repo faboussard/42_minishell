@@ -25,7 +25,7 @@
 // 4. ENLEVER LES TOKENS ESPACES
 // ATTENTION : regarder si = ou digits ( variables envp valable !)
 
-static int	cmp(int op1, int op2)
+static int cmp(int op1, int op2)
 {
 	return (op1 - op2);
 }
@@ -34,6 +34,8 @@ void remove_empty_in_words(t_token_list **list)
 {
 	t_token_list *cpy;
 
+	if (list == NULL || *list == NULL)
+		return;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
@@ -51,6 +53,8 @@ void supress_two_consecutive_empty_names(t_minishell *minishell, t_token_list **
 {
 	t_token_list *cpy;
 
+	if (list == NULL || *list == NULL)
+		return;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
@@ -70,36 +74,24 @@ void token_rework(t_minishell *minishell)
 	join_between_quotes(minishell, &minishell->list_tokens);
 	supress_two_consecutive_empty_names(minishell, &minishell->list_tokens);
 	remove_empty_in_words(&minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *)SINGLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
-//	replace_tokens_with_only_quotes_by_null(minishell);
 	define_heredoc_and_append(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *)IS_SPACE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 }
 
-int	parse_input(t_minishell *minishell)
+int parse_input(t_minishell *minishell)
 {
-	char	*string;
-// passer les espaces inutiles.
-//des uqon crois eun uote, on prend lindex de lautre
-	//utiliser ft_strchr pour trouver la prochaine quote
-	//utiliser is_space
-	//utiliser ft_substr
-	//remove quotes avant de join les espaces..
-	//pas dejoin entre quotes !!!!!!
+	char *string;
 	string = minishell->user_input;
 	transform_to_token(minishell, string);
-	//	supress_double_quotes(&minishell->list_tokens);
-	// pas possible car : "''"
-	//	rename_dollar_token_between_dquote(&minishell->list_tokens);
-	// bash pratique lexpansion des
-	//	rename_last_dollar(&minishell->list_tokens);
-	//	join_single_quote_and_dollar(minishell, &minishell->list_tokens);
+	if (check_quotes(minishell))
+		return (1);
 	expander(minishell);
-	// bash pratique lexpansion des variable en excluant les variables entre quote. il supprime les autres dollars.
-	//	join_if_between_quotes(minishell, &minishell->list_tokens); // pas necessaire on enleve le dollar uniquement pendant lexpansion
 	token_rework(minishell);
+	if (minishell->list_tokens == NULL)
+		return (1);
 	token_requalification(minishell->list_tokens);
 	if (check_syntax(minishell) == 1)
 	{

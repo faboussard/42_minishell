@@ -13,7 +13,6 @@
 #include "lexer.h"
 #include "utils.h"
 #include <stdlib.h>
-#include "parser.h"
 
 void create_token(t_minishell *minishell, char *string)
 {

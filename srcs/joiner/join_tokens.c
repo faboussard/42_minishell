@@ -61,12 +61,17 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
+	if (list == NULL || *list == NULL)
+		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
 		if (((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
 		|| ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == SINGLE_QUOTE))
+		{
 			change_iterator_name_to_empty_string(minishell, list);
+			*list = (*list)->next;
+		}
 		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
 		{
 			join_between_quotes_handler(minishell, list, DOUBLE_QUOTE);
@@ -90,6 +95,8 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
+	if (list == NULL || *list == NULL)
+		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
