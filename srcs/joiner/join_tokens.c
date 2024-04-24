@@ -69,8 +69,9 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 		if (((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
 		|| ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == SINGLE_QUOTE))
 		{
+			join_tokens(minishell, list);
 			change_iterator_name_to_empty_string(minishell, list);
-			*list = (*list)->next;
+			continue ;
 		}
 		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
 		{
