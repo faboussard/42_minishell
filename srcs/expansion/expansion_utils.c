@@ -19,6 +19,8 @@ char *expand_sign(char *string, char *temp)
 	while (*string && *string != '=')
 		string++;
 	string = ft_strjoin(temp, string);
+	if (string == NULL)
+		exit_msg(NULL, "Malloc failed at expand_sign", 2);
 	return (string);
 }
 
