@@ -41,7 +41,7 @@ void	arg_to_command(t_token_list *list_tokens);
 /************************** parser  **************************/
 
 int parse_input(t_minishell *minishell);
-void	token_requalification(t_minishell *minishell, t_token_list *list_tokens);
+void	token_requalification(t_token_list *list_tokens);
 void	*ft_free_all_alloc(char **strs_array, size_t start);
 
 /**************************** parse tokens **************************/
@@ -81,5 +81,8 @@ char	*get_non_variable_part(t_minishell *m,char *string);
 
 /********************* check_syntax **************************/
 size_t check_quotes(t_minishell *minishell);
+int print_quote_syntax_error(enum e_token_operators operator);
+int	print_operator_syntax_error(t_token_list *token);
+
 
 #endif // PARSER_H
