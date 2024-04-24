@@ -71,6 +71,8 @@ void supress_two_consecutive_empty_names(t_minishell *minishell, t_token_list **
 
 void token_rework(t_minishell *minishell)
 {
+	if (minishell->list_tokens == NULL)
+		return ;
 	join_between_quotes(minishell, &minishell->list_tokens);
 	supress_two_consecutive_empty_names(minishell, &minishell->list_tokens);
 	remove_empty_in_words(&minishell->list_tokens);
