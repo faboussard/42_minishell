@@ -89,16 +89,6 @@ juba juba= juba=fafsasfaf
 > stop
 $'USER' $"USER"
 
-
-faboussa@z3r8p5:~/minishell$ cat << a""
-> $USER
-> a
-$USER
-faboussa@z3r8p5:~/minishell$ cat << a
-> $USER
-> a
-faboussa
-
 faboussa@z3r8p5:~/minishell$ echo $SHLVL
 5
 

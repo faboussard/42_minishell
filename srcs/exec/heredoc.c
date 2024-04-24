@@ -12,6 +12,7 @@
 
 #include "exec.h"
 #include "parser.h"
+#include "utils.h"
 
 void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 {
@@ -29,14 +30,13 @@ void	handle_expand(t_minishell *m, char *input)
 
 	split_space = ft_split(input, ' ');
 	if (split_space == NULL)
-		exit_msg_minishell(m, "Fatal : malloc failed at handle expand", -1);
+		exit_msg_minishell(m, "Fatal : malloc failed at handle expand", 2);
 	input_after_expand = expand_variables(m, split_space);
 	if (input_after_expand != NULL)
 		ft_putstr_fd(input_after_expand, m->fd_in);
 	else
 		ft_putstr_fd(input, m->fd_in);
-	if (input_after_expand != NULL)
-		free(input_after_expand);
+	free_safely_str(input_after_expand);
 	if (split_space != NULL)
 		ft_free_tab(split_space);
 }
@@ -94,10 +94,7 @@ void	handle_regular_variable(t_minishell *m, char **input_after_expand,
 	if (split_dollar == NULL)
 		exit_msg_minishell(m, "Malloc failed at handle expand", -1);
 	while (split_dollar[j])
-	{
-		handle_quoted_variable(m, input_after_expand, split_dollar[j]);
-		j++;
-	}
+		handle_quoted_variable(m, input_after_expand, split_dollar[j++]);
 	ft_free_tab(split_dollar);
 }
 
@@ -119,7 +116,7 @@ char	*get_non_variable_part(t_minishell *m, char *string)
 	return (NULL);
 }
 
-int	is_quoted_variable(char *string)
+bool is_quoted_variable(char *string)
 {
 	if (string[0] == '$' && (string[1] == '\'' || string[1] == '\"'))
 		return (1);
@@ -144,9 +141,11 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter)
 			close(m->fd_in);
 			exit(0);
 		}
+//		if (limiter->e_type_limiter == 1)
+//			ft_putendl_fd(input, m->fd_in);
+//		else
+// PAS DEXPANSION SI DOUBLE QUOTE < LE FAIRE OU PAS
 		handle_expand(m, input);
-		// ajouter a la reqalif si le delimiteur est un quoted heredoc ou un non quotes heredoc
-		// cela changera sa gestion a lexpansion du heredoc
 		free(input);
 	}
 }
