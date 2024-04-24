@@ -17,11 +17,11 @@
 
 
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator,
-						t_token_list *new_token)
+						t_token_list *token)
 {
-	new_token->e_type = type;
-	new_token->e_builtin = builtin;
-	new_token->e_operator = operator;
+	token->e_type = type;
+	token->e_builtin = builtin;
+	token->e_operator = operator;
 }
 
 int define_token(t_token_list *new_token, char *string)

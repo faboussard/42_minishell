@@ -103,49 +103,59 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	return (final_string);
 }
 
+void update_quote_counts(t_token_list *token, int *single_quote_count, int *double_quote_count)
+{
+	if (token->e_operator == SINGLE_QUOTE)
+		(*single_quote_count)++;
+	else if (token->e_operator == DOUBLE_QUOTE)
+		(*double_quote_count)++;
+}
+
+void process_dollar_token(t_minishell *minishell, t_token_list **iterator, int single_quote_count)
+{
+	char *expanded_string;
+
+	if (ft_strncmp((*iterator)->next->name, "?", 2) == 0)
+		change_name_to_status(minishell, *iterator);
+	else
+	{
+		if (single_quote_count % 2 != 0)
+			(*iterator) = (*iterator)->next;
+		else
+		{
+			expanded_string = expand_sigil((*iterator)->next->name, minishell);
+			if (expanded_string != (*iterator)->next->name)
+			{
+				join_tokens(minishell, iterator);
+				change_iterator_name_to_empty_string(minishell, iterator, expanded_string);
+				free(expanded_string);
+				return;
+			}
+		}
+	}
+}
+
 void expander(t_minishell *minishell)
 {
-
 	t_token_list *iterator;
-	iterator = minishell->list_tokens;
-	int d_count;
-	int s_count;
+	int single_quote_count;
+	int double_quote_count;
 
-	s_count = 0;
-	d_count = -1;
+	single_quote_count = 0;
+	double_quote_count = 0;
+	iterator = minishell->list_tokens;
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
 			handle_delimitor(iterator);
-		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-			add_quote_count(iterator, &s_count, &d_count);
+		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+			update_quote_counts(iterator, &single_quote_count, &double_quote_count);
 		else if (iterator->e_operator == DOLLAR)
-		{
-			if (ft_strncmp(iterator->next->name, "?", 2) == 0)        //mettre ici lexpanion du shelllevel ?
-				change_name_to_status(minishell, iterator);
-			else
-			{
-				if (s_count % 2 != 0)
-				{
-					iterator = iterator->next;
-					continue;
-				}
-				else
-				{
-					char *string = expand_sigil(iterator->next->name, minishell);
-					if (string != iterator->next->name)
-					{
-						join_tokens(minishell, &iterator);
-						change_iterator_name_to_empty_string(minishell, &iterator, string);
-						free(string);
-						continue;
-					}
-				}
-				remove_node(&minishell->list_tokens, iterator);
-			}
-		}
+			process_dollar_token(minishell, &iterator, single_quote_count);
 		iterator = iterator->next;
 	}
 }
+
+
 
 
