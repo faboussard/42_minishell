@@ -154,10 +154,9 @@ $$$$juba
 ========> cas particulier ont traite ou pas ?
 ////////////////////////////////////////////////////////////////////
 
--c " g\"$'USER'\" "
-faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
+faboussa@z1r12p5:~/minishell$ echo g"$'USER'" /// KO - le premier ' disparait
 g$'USER'
-faboussa@z2r7p8:~$ echo $dgsdg$USER
+faboussa@z2r7p8:~$ echo $dgsdg$USER // KO - dollar en trop
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
@@ -177,9 +176,9 @@ g
 
 04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'""
 ""
-
-04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'""
+faboussa@z1r11p5:~$ echo ""'""'""
 ""
+
 
 
 -----> reagit si on entre un seul tilde
