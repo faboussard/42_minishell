@@ -33,6 +33,8 @@
 //    }
 //}
 
+//close(m->fd_in); qui etait dans first child degage car cat | cat
+
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
 	if (m->fd_in >= 0 && pl->dev_null == 0)
@@ -42,8 +44,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		{
 			m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-			close(m->fd_in);
-			close_pipes(m->pipe_fd);
+			close_pipes(m->pipe_fd);pwd
 //			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
 //					&& !pl->cmd_table[1]))
 //			here_cat(m);
@@ -123,7 +124,7 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list, int stdin_o
 	if (safe_pipe(m) == 0)
 		return ;
     if (pl->in_files_token->e_type== DELIMITER)
-		here_doc(m, pl->in_files_token->name, stdin_orig);
+		here_doc(m, pl->in_files_token->name, stdin_orig, m->fd_in);
 	if (open_fd_infile(m, pl->in_files_token))
 		return ;
 	first_child(m, pl);
@@ -134,12 +135,12 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list, int stdin_o
 		if (safe_pipe(m) == 0)
 			return ;
         if (pl->in_files_token->e_type== DELIMITER)
-            here_doc(m, pl->in_files_token->name, stdin_orig);
+            here_doc(m, pl->in_files_token->name, stdin_orig, m->tmp_in);
 		middle_child(m, pl);
 		pl = pl->next;
 	}
     if (pl->in_files_token->e_type== DELIMITER)
-        here_doc(m, pl->in_files_token->name, stdin_orig);
+        here_doc(m, pl->in_files_token->name, stdin_orig, m->tmp_in);
     open_fd_outfile(m, pl, pl->out_files_token->name);
 	if (safe_pipe(m) == 0)
 		return ;

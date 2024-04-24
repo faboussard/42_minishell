@@ -25,10 +25,6 @@
 #  define HERE_DOC_TMP_FILE "/tmp/.tmp_heredoc"
 # endif
 
-# ifndef HERE_CAT_TMP_FILE
-#  define HERE_CAT_TMP_FILE "/tmp/.tmp_here_cat"
-# endif
-
 # include "lexer.h"
 # include "libft.h"
 # include "minishell.h"
