@@ -88,26 +88,28 @@ void update_quote_counts(t_token_list *token, int *single_quote_count, int *doub
 		(*double_quote_count)++;
 }
 
-void process_dollar_token(t_minishell *minishell, t_token_list **iterator, int single_quote_count)
+void process_dollar_token(t_minishell *minishell, t_token_list **list, int single_quote_count)
 {
 	char *expanded_string;
 
-	if (ft_strncmp((*iterator)->next->name, "?", 2) == 0)
-		change_name_to_status(minishell, *iterator);
+	if (ft_strncmp((*list)->next->name, "?", 2) == 0)
+		change_name_to_status(minishell, *list);
 	else
 	{
 		if (single_quote_count % 2 != 0)
-			(*iterator) = (*iterator)->next;
+			(*list) = (*list)->next;
 		else
 		{
-			expanded_string = expand_sigil((*iterator)->next->name, minishell);
-			if (expanded_string != (*iterator)->next->name)
+			expanded_string = expand_sigil((*list)->next->name, minishell);
+			if (expanded_string != (*list)->next->name)
 			{
-				join_tokens(minishell, iterator);
-				change_iterator_name_to_empty_string(minishell, iterator, expanded_string);
+				join_tokens(minishell, list);
+				change_iterator_name_to_empty_string(minishell, list, expanded_string);
 				free(expanded_string);
 				return;
 			}
+			else
+				remove_node(list, (*list)->next);
 		}
 	}
 }
@@ -128,7 +130,11 @@ void expander(t_minishell *minishell)
 		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 			update_quote_counts(iterator, &single_quote_count, &double_quote_count);
 		else if (iterator->e_operator == DOLLAR)
+		{
+			if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
+				update_quote_counts(iterator->next, &single_quote_count, &double_quote_count);
 			process_dollar_token(minishell, &iterator, single_quote_count);
+		}
 		iterator = iterator->next;
 	}
 }
