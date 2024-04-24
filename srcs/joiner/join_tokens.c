@@ -60,27 +60,21 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 void join_between_quotes(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
+	int quote_type;
 
-	if (list == NULL || *list == NULL)
-		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if (((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOUBLE_QUOTE)
-		|| ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == SINGLE_QUOTE))
+		quote_type = (*list)->e_operator;
+		if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && quote_type == (int)(*list)->next->e_operator)
 		{
-			change_iterator_name_to_empty_string(minishell, list);
-			*list = (*list)->next;
+			join_tokens(minishell, list);
+			change_iterator_name_to_empty_string(minishell, list, "\0");
+			continue ;
 		}
-		else if ((*list)->e_operator == DOUBLE_QUOTE && check_if_more_tokens(list, DOUBLE_QUOTE))
+		else if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && check_if_more_tokens(list, quote_type))
 		{
-			join_between_quotes_handler(minishell, list, DOUBLE_QUOTE);
-			if ((*list) == NULL)
-				break;
-		}
-		else if ((*list)->e_operator == SINGLE_QUOTE && check_if_more_tokens(list, SINGLE_QUOTE))
-		{;
-			join_between_quotes_handler(minishell, list, SINGLE_QUOTE);
+			join_between_quotes_handler(minishell, list, quote_type);
 			if ((*list) == NULL)
 				break;
 		}
@@ -88,7 +82,6 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 			(*list) = (*list)->next;
 	}
 	*list = cpy;
-
 }
 
 void join_between_spaces(t_minishell *minishell, t_token_list **list)

@@ -30,10 +30,11 @@ int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
 }
 
 
-void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list)
+void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list, char *new_name)
 {
 	char *empty_string;
-	empty_string = ft_strdup("\0");
+
+	empty_string = ft_strdup(new_name);
 	if (empty_string == NULL)
 		exit_msg(minishell, "Malloc failed at join between spaces", 2);
 	free((*list)->name);
