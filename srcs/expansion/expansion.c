@@ -103,37 +103,6 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	return (final_string);
 }
 
-void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
-{
-	join_tokens(minishell, &iterator);
-	free(iterator->name);
-	iterator->name = ft_itoa(minishell->status);
-	if (iterator->name == NULL)
-		exit_msg(minishell, "Malloc failed at expander", -1);
-}
-
-//void handle_quotes_before_expansion(t_token_list *iterator, t_minishell *minishell, int s_count, int d_count)
-//{
-//	if (iterator->next->e_operator == SINGLE_QUOTE)
-//	{
-//		if (s_count % 2 != 0 && s_count != 0)
-//		{
-//			t_token_list *to_remove = iterator;
-//			iterator = iterator->next;
-//			remove_node(&minishell->list_tokens, to_remove);
-//		}
-//	}
-//	else if (iterator->next->e_operator == DOUBLE_QUOTE)
-//	{
-//		if (d_count % 2 != 0 && d_count != 0)
-//		{
-//			t_token_list *to_remove = iterator;
-//			iterator = iterator->next;
-//			remove_node(&minishell->list_tokens, to_remove);
-//		}
-//	}
-//}
-
 void expander(t_minishell *minishell)
 {
 
@@ -143,7 +112,7 @@ void expander(t_minishell *minishell)
 	int s_count;
 
 	s_count = 0;
-	d_count = 0;
+	d_count = -1;
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
@@ -152,22 +121,27 @@ void expander(t_minishell *minishell)
 			add_quote_count(iterator, &s_count, &d_count);
 		else if (iterator->e_operator == DOLLAR)
 		{
-			if (ft_strncmp(iterator->next->name, "?", 2) == 0) 		//mettre ici lexpanion du shelllevel ?
+			if (ft_strncmp(iterator->next->name, "?", 2) == 0)        //mettre ici lexpanion du shelllevel ?
 				change_name_to_status(minishell, iterator);
-			else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-				add_quote_count(iterator->next, &s_count, &d_count);
-			else if (s_count % 2 == 0)
+			else
 			{
-				char *string = expand_sigil(iterator->next->name, minishell);
-				if (string != iterator->next->name)
+				if (s_count % 2 != 0)
 				{
-					join_tokens(minishell, &iterator);
-					change_iterator_name_to_empty_string(minishell, &iterator, string);
-					free(string);
+					iterator = iterator->next;
 					continue;
 				}
 				else
-					del_next_token(&iterator);
+				{
+					char *string = expand_sigil(iterator->next->name, minishell);
+					if (string != iterator->next->name)
+					{
+						join_tokens(minishell, &iterator);
+						change_iterator_name_to_empty_string(minishell, &iterator, string);
+						free(string);
+						continue;
+					}
+				}
+				remove_node(&minishell->list_tokens, iterator);
 			}
 		}
 		iterator = iterator->next;

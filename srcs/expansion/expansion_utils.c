@@ -39,3 +39,13 @@ void handle_delimitor(t_token_list *iterator)
 		iterator = iterator->next;
 	}
 }
+
+
+void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
+{
+	join_tokens(minishell, &iterator);
+	free(iterator->name);
+	iterator->name = ft_itoa(minishell->status);
+	if (iterator->name == NULL)
+		exit_msg(minishell, "Malloc failed at expander", -1);
+}
