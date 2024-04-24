@@ -78,6 +78,7 @@ void token_rework(t_minishell *minishell)
 	remove_empty_in_words(&minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
 	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
 	define_heredoc_and_append(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);

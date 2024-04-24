@@ -46,6 +46,7 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 	{
 		if ((*list)->next->e_operator == op)
 		{
+			define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, (*list));
 			(*list) = (*list)->next;
 			(*list) = (*list)->next;
 			count++;
