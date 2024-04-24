@@ -150,6 +150,9 @@ faboussa@z1r11p5:~/minishell$  echo "    $USER"
     faboussa
 10:11:58 juba@juba-desktop ~ → echo $""""USER""
 USER
+faboussa@z1r11p5:~/minishell$  echo "$1234USER"
+234USER
+
 
 ///////////////////////////////////////////////////////////////
 ~/tommini main ❯ echo "$$$$$USER"

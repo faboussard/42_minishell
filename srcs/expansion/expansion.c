@@ -48,23 +48,18 @@
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
-	char *temp;
 
 	while (iterator != NULL)
 	{
 		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
 		{
-			temp = ft_strdup(iterator->value);
-			if (temp == NULL)
-				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			if (check_special_char_after_expand(string, iterator->target))
-				string = expand_sign(string, temp);
+				string = expand_sign(string, iterator->value);
 			else
-				string = ft_strdup(temp);
-			if (temp)
 			{
-				free(temp);
-				temp = NULL;
+				string = ft_strdup(iterator->value);
+				if (string == NULL)
+					exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			}
 			return (string);
 		}
@@ -77,29 +72,11 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 char *expand_sigil(char *string, t_minishell *minishell)
 {
 	char *final_string;
-	char *temp;
 
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	temp = ft_calloc(1, ft_strlen(string) + 1);
-	if (temp == NULL)
-		exit_msg(minishell, "Malloc failed at expand_sigil", -1);
-	if (ft_isdigit(string[i]))
-	{
-		i++;
-		while (string[i])
-		{
-			temp[j] = string[i];
-			i++;
-			j++;
-		}
-		final_string = ft_strdup(temp);
-	} else
+	if (ft_isdigit(*string))
+		final_string = ft_strdup(string + 1);
+	else
 		final_string = identify_envp_string(string, minishell);
-	free(temp);
 	return (final_string);
 }
 
