@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/16 18:21:49 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:52:59 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,14 @@
 #include <readline/history.h>
 #include <stdlib.h>
 
-// commentaire pour fanny de fanny : laisser les declaration de next,
-//	invalid read sinon
-
-void free_token(t_token_list *token)
+void	free_token(t_token_list *token)
 {
 	if (token != NULL)
 	{
-		free(token->name);
+		free_safely_str(token->name);
 		free(token);
-		token = NULL;
 	}
 }
-
 
 void	ft_lstclear_envp(t_envp_list **lst)
 {
@@ -103,34 +98,4 @@ void	free_minishell(t_minishell *minishell)
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	rl_clear_history();
 	close_all_fds();
-}
-
-void	ft_free_all_tab(char **tab)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-void	ft_free_tab_from_i(void **tab, int j)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (i < j)
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
 }

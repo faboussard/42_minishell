@@ -31,13 +31,13 @@ t_envp_list *create_new_envp(char *target, char *content)
     new_envp = malloc(sizeof(t_envp_list));
     if (new_envp == NULL)
         return NULL;
-
     new_envp->target = ft_strdup(target);
     if (new_envp->target == NULL) {
         free(new_envp);
         return NULL;
     }
-    if (content) {
+    if (content)
+	{
         new_envp->value = ft_strdup(content);
         if (new_envp->value == NULL)
 		{
@@ -48,7 +48,7 @@ t_envp_list *create_new_envp(char *target, char *content)
         new_envp->value_size = ft_strlen(new_envp->value);
     }
     new_envp->target_size = ft_strlen(new_envp->target);
-    return new_envp;
+    return (new_envp);
 }
 
 static int add_new_envp(t_envp_list **list_envp, char *target, char *content)
@@ -78,14 +78,14 @@ int get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *mini
     {
         i++;
         content = ft_substr(*envp, i, ft_strlen(*envp) - i);
-        //content peut etre null donc pas de protection de malloc ? ... a revoir
+        if (content == NULL)
+			exit_msg(minishell, "Malloc failed at parsing environment variables", 2);
         if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
             return (0);
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
-        if (content != NULL)
-            free(content);
+		free_safely_str(content);
 	}
-	free(target);
+	free_safely_str(target);
 	return (1);
 }
 

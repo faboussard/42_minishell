@@ -20,7 +20,7 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 	int i = 0;
 	size_t len;
 
-	len = ft_strlen(string);
+	len = ft_strlen(string) + 1;
 	while (i < 13)
 	{
 		if (operator[i] != NULL && !ft_strncmp(string, operator[i], len))
@@ -33,7 +33,6 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 	}
 	return (false);
 }
-
 
 bool get_operator_token(t_token_list *new_token, const char *string)
 {
@@ -53,7 +52,6 @@ bool get_operator_token(t_token_list *new_token, const char *string)
 	return (define_operator_token(new_token, string, operator));
 }
 
-
 bool	is_redirect_token(t_token_list *token)
 {
 	if (token == NULL || token->e_type != OPERATOR)
@@ -62,6 +60,24 @@ bool	is_redirect_token(t_token_list *token)
 			|| token->e_operator == OUTPUT_REDIRECT
 			|| token->e_operator == HERE_DOC
 			|| token->e_operator == APPEND);
+}
+
+bool	is_redirect_token_or_pipe(t_token_list *token)
+{
+	if (token == NULL || token->e_type != OPERATOR)
+		return (0);
+	return (token->e_operator == INPUT_REDIRECT
+			|| token->e_operator == OUTPUT_REDIRECT
+			|| token->e_operator == HERE_DOC
+			|| token->e_operator == APPEND
+			|| token->e_operator == PIPE);
+}
+
+bool char_is_operator(char c)
+{
+	if (c == '|' || c == '>' || c == '<' || c == '$' || c == '\"' || c == '\'' || c == ' ')
+		return true;
+	return false;
 }
 
 

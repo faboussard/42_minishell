@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:20:54 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 11:05:58 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:55:57 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*expand_variables(t_minishell *m, char **split_space)
 {
 	char	*input_after_expand;
 	int		count;
-	int i;
+	int		i;
 
 	input_after_expand = ft_calloc(1, 1);
 	input_after_expand[0] = '\0';
@@ -64,33 +64,33 @@ char	*expand_variables(t_minishell *m, char **split_space)
 }
 
 void	handle_quoted_variable(t_minishell *m, char **input_after_expand,
-		char *token)
+		char *variable)
 {
 	char	*expanded;
 
-	expanded = expand_sigil(token, m);
-	if (expanded != token)
+	expanded = expand_sigil(variable, m);
+	if (expanded != variable)
 		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
 }
 
 void	handle_regular_variable(t_minishell *m, char **input_after_expand,
-		char *token, int *count, int *i)
+		char *variable, int *count, int *i)
 {
 	char	*temp;
 	char	**split_dollar;
-	int j;
+	int		j;
 
 	j = 0;
-	temp = get_non_variable_part(token);
+	temp = get_non_variable_part(m, variable);
 	if (temp != NULL)
 	{
 		(*count)++;
-		if (*count != 0 && *count == *i)
+		if (*count != 0 && *count >= *i)
 			*input_after_expand = ft_strjoin(*input_after_expand, " ");
 		*input_after_expand = ft_strjoin(*input_after_expand, temp);
 		free(temp);
 	}
-	split_dollar = ft_split(token, '$');
+	split_dollar = ft_split(variable, '$');
 	if (split_dollar == NULL)
 		exit_msg_minishell(m, "Malloc failed at handle expand", -1);
 	while (split_dollar[j])
@@ -101,7 +101,7 @@ void	handle_regular_variable(t_minishell *m, char **input_after_expand,
 	ft_free_tab(split_dollar);
 }
 
-char	*get_non_variable_part(char *string)
+char	*get_non_variable_part(t_minishell *m, char *string)
 {
 	int		i;
 	char	*temp;
@@ -112,6 +112,8 @@ char	*get_non_variable_part(char *string)
 	if (i != 0)
 	{
 		temp = ft_substr(string, 0, i);
+		if (temp == NULL)
+			exit_msg_minishell(m, "Malloc failed at handle expand", -1);
 		return (temp);
 	}
 	return (NULL);

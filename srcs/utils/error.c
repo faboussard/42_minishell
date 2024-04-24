@@ -20,30 +20,6 @@ void	print_error(const char *error)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-int	print_operator_syntax_error(t_token_list *token)
-{
-	int	error;
-
-	error = token->e_operator;
-	if (token->next == NULL && error != PIPE)
-		return (print_error("minishell: syntax error near unexpected token `newline'"), 1);
-	if (error == OPEN_PARENTHESES)
-		return (print_error("minishell: syntax error near unexpected token `('"), 1);
-	else if (error == CLOSE_PARENTHESES)
-		return (print_error("minishell: syntax error near unexpected token `)'"), 1);
-	else if (error == PIPE)
-		print_error("minishell: syntax error near unexpected token `|'");
-	else if (error == INPUT_REDIRECT)
-		return (print_error("minishell: syntax error near unexpected token `<'"), 1);
-	else if (error == OUTPUT_REDIRECT)
-		return (print_error("minishell: syntax error near unexpected token `>'"), 1);
-	else if (error == HERE_DOC)
-		return (print_error("minishell: syntax error near unexpected token `<<'"), 1);
-	else if (error == APPEND)
-		return (print_error("minishell: syntax error near unexpected token `>>'"), 1);
-	return (1);
-}
-
 void	exit_msg(t_minishell *minishell, char *msg, int error_code)
 {
 	ft_putendl_fd(msg, 2);

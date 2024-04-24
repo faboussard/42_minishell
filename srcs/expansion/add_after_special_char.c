@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_builtins.c                                    :+:      :+:    :+:   */
+/*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/20 13:05:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/11 17:01:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
 #include "lexer.h"
-#include "minishell.h"
 #include "utils.h"
+#include "parser.h"
 
-void	restore_terminal(t_minishell *minishell)
+int is_special_char(char c)
 {
-	free_minishell(minishell);
+	if (c == '$' || c == '`' || c == '=')
+		return (1);
+	return (0);
 }
 
-void	exec_builtin(t_minishell *minishell, t_token_list *command)
+int check_special_char_after_expand(char *string, char *string2)
 {
-	if (command->e_builtin == ECHO)
-		minishell->status = ft_echo(command);
-	if (command->e_builtin == CD)
-		minishell->status = ft_cd(minishell, command);
-	if (command->e_builtin == PWD)
-		minishell->status = ft_pwd(minishell);
-	if (command->e_builtin == EXIT)
-		minishell->status = ft_exit_builtin(minishell, command);
-	set_or_get_last_status(minishell->status, 0);
+	int i;
+	int j;
+
+	i = 0;
+	j = ft_strlen(string2);
+	while (string[i] && string[i] != is_special_char(string2[j - 1]))
+		i++;
+	if (string[i] == string2[j])
+		return (1);
+	return (0);
 }
