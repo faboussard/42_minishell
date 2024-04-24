@@ -122,17 +122,13 @@ exit
 ➜  ~ $?
 zsh: command not found: 35
 
+*************************** EXPANSION  ***********************
 
-// SUPPRIMER LE DOLLAR SI EXPANSION OK
-
-// SUPPRIMER LE DOLLAR SI NEST PAS ENTOURE DE QUOTES
-
-*************************** quotes ***********************
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
-10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"=" /// KO un espace en trop
+10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
 $USER=
-05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'=' /// KO un espace en trop
+05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'='
 $USER=
 05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
@@ -152,22 +148,16 @@ faboussa@z1r11p5:~/minishell$  echo "    $USER"
 USER
 faboussa@z1r11p5:~/minishell$  echo "$1234USER"
 234USER
-
-
-///////////////////////////////////////////////////////////////
-~/tommini main ❯ echo "$$$$$USER"
-$$$$juba
-06:02:51 juba@juba-desktop minishell ±|parsing ✗|→ echo "$$$$$USER"
-220050220050juba
-========> cas particulier ont traite ou pas ?
-////////////////////////////////////////////////////////////////////
-
-faboussa@z1r12p5:~/minishell$ echo g"$'USER'" /// KO - le premier ' disparait
+faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
-faboussa@z2r7p8:~$ echo $dgsdg$USER // KO - dollar en trop
+faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
+
+
+*************************** QUOTES  ***********************
+
 faboussa@z1r12p5:~/minishell$ echo  "g''"
 g''
 faboussa@z1r12p5:~/minishell$  echo  "g"''""
@@ -186,10 +176,6 @@ g
 ""
 faboussa@z1r11p5:~$ echo ""'""'""
 ""
-
-
-
------> reagit si on entre un seul tilde
 
 ****************** redirections -*******************
 
