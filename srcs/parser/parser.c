@@ -39,9 +39,9 @@ void remove_empty_in_words(t_token_list **list)
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if (strcmp((*list)->name, "\0") == 0 && (*list)->next->e_type == COMMAND)
+		if (ft_strcmp((*list)->name, "\0") == 0 && (*list)->next->e_type == COMMAND)
 			(*list)->e_operator = DOUBLE_QUOTE;
-		if (strcmp((*list)->next->name, "\0") == 0 && (*list)->e_type == COMMAND)
+		if (ft_strcmp((*list)->next->name, "\0") == 0 && (*list)->e_type == COMMAND)
 			(*list)->next->e_operator = DOUBLE_QUOTE;
 		*list = (*list)->next;
 	}
@@ -58,7 +58,7 @@ void supress_two_consecutive_empty_names(t_minishell *minishell, t_token_list **
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if (strcmp((*list)->name, "\0") == 0 && strcmp((*list)->next->name, "\0") == 0)
+		if (ft_strcmp((*list)->name, "\0") == 0 && strcmp((*list)->next->name, "\0") == 0)
 		{
 			join_tokens(minishell, list);
 			continue;
