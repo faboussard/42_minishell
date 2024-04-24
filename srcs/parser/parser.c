@@ -74,6 +74,7 @@ void token_rework(t_minishell *minishell)
 	ft_list_remove_if(&minishell->list_tokens, (void *)DOUBLE_QUOTE, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
 //	replace_tokens_with_only_quotes_by_null(minishell);
+	define_heredoc_and_append(minishell, &minishell->list_tokens);
 	ft_list_remove_if(&minishell->list_tokens, (void *)IS_SPACE, cmp);
 }
 
@@ -99,7 +100,7 @@ int	parse_input(t_minishell *minishell)
 	// bash pratique lexpansion des variable en excluant les variables entre quote. il supprime les autres dollars.
 	//	join_if_between_quotes(minishell, &minishell->list_tokens); // pas necessaire on enleve le dollar uniquement pendant lexpansion
 	token_rework(minishell);
-	token_requalification(minishell, minishell->list_tokens);
+	token_requalification(minishell->list_tokens);
 	if (check_syntax(minishell) == 1)
 	{
 		minishell->status = set_or_get_last_status(2, 0);

@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 
-void	token_requalification(t_minishell *minishell, t_token_list *list_tokens)
+void	token_requalification(t_token_list *list_tokens)
 {
 	if (list_tokens)
 	{
@@ -24,6 +24,5 @@ void	token_requalification(t_minishell *minishell, t_token_list *list_tokens)
 		arg_to_command(list_tokens);
 		define_builtins(list_tokens);
 		define_operators(list_tokens);
-		define_heredoc_and_append(minishell, &minishell->list_tokens);
 	}
 }

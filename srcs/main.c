@@ -134,6 +134,8 @@ void	format_input(t_minishell *minishell, char **av)
 	char	*temp;
 
 	minishell->user_input = ft_calloc(1, 1);
+	if (minishell->user_input == NULL)
+		exit_msg(minishell, "Malloc failed at format_input", -1);
 	i = 0;
 	while (av[i])
 	{

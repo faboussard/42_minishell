@@ -85,6 +85,8 @@ char *expand_sigil(char *string, t_minishell *minishell)
 	i = 0;
 	j = 0;
 	temp = ft_calloc(1, ft_strlen(string) + 1);
+	if (temp == NULL)
+		exit_msg(minishell, "Malloc failed at expand_sigil", -1);
 	if (ft_isdigit(string[i]))
 	{
 		i++;

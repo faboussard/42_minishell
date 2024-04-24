@@ -15,10 +15,21 @@
 #include "utils.h"
 #include <stdlib.h>
 
-int	check_consecutive_redirect_tokens(t_token_list *current_token)
-{
-	t_token_list	*next_token;
+/*RULES:
+ *
+ *
+ *
+ *
+ *
+ *
+ * */
 
+int check_consecutive_redirect_tokens(t_token_list *current_token)
+{
+	t_token_list *next_token;
+
+	if (current_token->next == NULL)
+		return (0);
 	next_token = current_token->next;
 	if (is_redirect_token(current_token) && is_redirect_token(next_token))
 	{
@@ -28,10 +39,12 @@ int	check_consecutive_redirect_tokens(t_token_list *current_token)
 	return (0);
 }
 
-int	check_redirect_operator_followed_by_pipe(t_token_list *current_token)
+int check_redirect_operator_followed_by_pipe(t_token_list *current_token)
 {
-	t_token_list	*next_token;
+	t_token_list *next_token;
 
+	if (current_token->next == NULL)
+		return (0);
 	next_token = current_token->next;
 	if (is_redirect_token(current_token) && next_token->e_operator == PIPE)
 	{
@@ -41,9 +54,9 @@ int	check_redirect_operator_followed_by_pipe(t_token_list *current_token)
 	return (0);
 }
 
-int	check_last_token_redirect_or_pipe(t_minishell *minishell)
+int check_last_token_redirect_or_pipe(t_minishell *minishell)
 {
-	t_token_list	*last_token;
+	t_token_list *last_token;
 
 	last_token = ft_lstlast_token(minishell->list_tokens);
 	if (last_token != NULL && is_redirect_token_or_pipe(last_token))
@@ -56,11 +69,11 @@ int	check_last_token_redirect_or_pipe(t_minishell *minishell)
 
 // REVOIR pour la question du here doc on execute ou on lqnce le message avant ??
 
-static bool	quote_should_not_be_seen_as_a_real_quote(char *str, char quote)
+static bool quote_should_not_be_seen_as_a_real_quote(char *str, char quote)
 {
-	bool	first_quote_is_open;
-	char	other_quote;
-	size_t	j;
+	bool first_quote_is_open;
+	char other_quote;
+	size_t j;
 
 	if (quote == '\'')
 		other_quote = '\"';
@@ -77,35 +90,30 @@ static bool	quote_should_not_be_seen_as_a_real_quote(char *str, char quote)
 	return (first_quote_is_open);
 }
 
-int	check_syntax(t_minishell *minishell)
+int check_syntax(t_minishell *minishell)
 {
-	t_token_list	*iterator;
+	t_token_list *iterator;
+	iterator = minishell->list_tokens;
 
 	if (quote_should_not_be_seen_as_a_real_quote(minishell->user_input, '\''))
 		return (1);
 	if (quote_should_not_be_seen_as_a_real_quote(minishell->user_input, '\"'))
 		return (1);
-	if (minishell->list_tokens != NULL)
+	if (check_last_token_redirect_or_pipe(minishell))
+		return (1);
+
+	while (iterator != NULL)
 	{
-		iterator = minishell->list_tokens;
-		while (iterator != NULL && iterator->next != NULL && iterator->next->e_operator != PIPE)
-		{
-			if (iterator->e_operator == HERE_DOC
-				&& iterator->next->e_type != OPERATOR && iterator->next != NULL)
-				return (0);
-			if (check_consecutive_redirect_tokens(iterator))
-				return (1);
-			if (check_redirect_operator_followed_by_pipe(iterator))
-				return (1);
-			iterator = iterator->next;
-		}
-		if (check_last_token_redirect_or_pipe(minishell))
+		if (check_consecutive_redirect_tokens(iterator))
 			return (1);
+		if (check_redirect_operator_followed_by_pipe(iterator))
+			return (1);
+		iterator = iterator->next;
 	}
 	return (0);
 }
 
-int	get_first_odd_quote(size_t quote_count, int first_odd_quote, int quote_type)
+int get_first_odd_quote(size_t quote_count, int first_odd_quote, int quote_type)
 {
 	if (quote_count % 2 != 0 && first_odd_quote == -1)
 		first_odd_quote = quote_type;
@@ -114,21 +122,10 @@ int	get_first_odd_quote(size_t quote_count, int first_odd_quote, int quote_type)
 	return (first_odd_quote);
 }
 
-int	print_quote_syntax_error(enum e_token_operators operator)
-{
-	if (operator== SINGLE_QUOTE)
-		return (print_error("minishell: unexpected EOF while looking for matching `''\nminishell: syntax error: unexpected end of file"),
-			1);
-	else if (operator== DOUBLE_QUOTE)
-		return (print_error("minishell: unexpected EOF while looking for matching `\"'\nminishell: syntax error: unexpected end of file"),
-				1);
-	return (0);
-}
-
 /* Idee de fonction pour gerer les quote qui ne generent pas une syntax error comme elles le devraient*/
 
 
-size_t	check_quotes(t_minishell *minishell)
+size_t check_quotes(t_minishell *minishell)
 {
 	size_t quote_double;
 	size_t quote_simple;
@@ -145,13 +142,13 @@ size_t	check_quotes(t_minishell *minishell)
 		{
 			quote_double++;
 			first_odd_quote = get_first_odd_quote(quote_double, first_odd_quote,
-					DOUBLE_QUOTE);
+												  DOUBLE_QUOTE);
 		}
 		if (iterator->e_operator == SINGLE_QUOTE)
 		{
 			quote_simple++;
 			first_odd_quote = get_first_odd_quote(quote_simple, first_odd_quote,
-					SINGLE_QUOTE);
+												  SINGLE_QUOTE);
 		}
 		iterator = iterator->next;
 	}

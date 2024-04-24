@@ -31,13 +31,13 @@ t_envp_list *create_new_envp(char *target, char *content)
     new_envp = malloc(sizeof(t_envp_list));
     if (new_envp == NULL)
         return NULL;
-
     new_envp->target = ft_strdup(target);
     if (new_envp->target == NULL) {
         free(new_envp);
         return NULL;
     }
-    if (content) {
+    if (content)
+	{
         new_envp->value = ft_strdup(content);
         if (new_envp->value == NULL)
 		{
@@ -48,7 +48,7 @@ t_envp_list *create_new_envp(char *target, char *content)
         new_envp->value_size = ft_strlen(new_envp->value);
     }
     new_envp->target_size = ft_strlen(new_envp->target);
-    return new_envp;
+    return (new_envp);
 }
 
 static int add_new_envp(t_envp_list **list_envp, char *target, char *content)
