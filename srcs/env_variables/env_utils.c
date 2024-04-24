@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 14:26:23 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 10:32:18 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 08:45:43 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	set_current_path_with_cwd(t_minishell *m)
 		perror("minishell: getcwd");
 		return ;
 	}
-	m->current_path = ft_strdup(cwd);
-	if (m->current_path == NULL)
-		ft_putendl_fd("minishell : malloc error", 2);
+	ft_strlcpy(m->current_path, cwd, ft_strlen(cwd) + 1);
 }
 
 bool	set_env_var(t_minishell *m, char **var, char *target)
@@ -38,7 +36,7 @@ bool	set_env_var(t_minishell *m, char **var, char *target)
 	{
 		if (ft_strncmp(env->target, target, target_len) == 0)
 		{
-			*var = ft_strdup(env->value);
+			ft_strlcpy(*var, env->value, ft_strlen(env->value) + 1);
 			if (var == NULL)
 			{
 				ft_putendl_fd("minishell : malloc error", 2);
@@ -53,10 +51,15 @@ bool	set_env_var(t_minishell *m, char **var, char *target)
 
 void	set_minishell_paths(t_minishell *m)
 {
-	if (set_env_var(m, &(m->current_path), "PWD=") == 0)
+	char	*current_path;
+	char	*old_pwd;
+
+	current_path = m->current_path;
+	old_pwd = m->old_pwd;
+	if (set_env_var(m, &current_path, "PWD=") == 0)
 		set_current_path_with_cwd(m);
-	if (set_env_var(m, &(m->old_pwd), "OLDPWD=") == 0)
-		m->old_pwd = ft_strdup(m->current_path);
+	if (set_env_var(m, &old_pwd, "OLDPWD=") == 0)
+		ft_strlcpy(m->old_pwd, m->current_path, ft_strlen(m->current_path) + 1);
 }
 /*
 bool	set_env_var(t_minishell *m, char *var, char *target)

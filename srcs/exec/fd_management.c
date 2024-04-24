@@ -6,13 +6,13 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 15:48:47 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:40:09 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
+int	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 {
 	if (in_files_list->e_type == DELIMITER)
 		m->fd_in = open(HERE_DOC_TMP_FILE, O_RDONLY);
@@ -30,10 +30,12 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		m->process_list->dev_null = 1;
 		m->fd_in = open("/dev/null", O_RDONLY);
 		if (m->fd_in < 0)
+		{
 			ft_putendl_fd("No /dev/null/ found", 2);
-		//	exit_msg_pipex(NULL, "No /dev/null/ found", -1);
-		//	A CHANGER, pas d'exit du minishell
+			return (1);
+		}
 	}
+	return (0);
 }
 /*
 		mbernard@z1r9p2:/usr$ cd cdvwev
@@ -42,7 +44,7 @@ void	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		1
 */
 
-void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
+int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 {
 	if (pl->out_files_token->e_type == OUT_FILE)
 		m->fd_out = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -51,7 +53,11 @@ void	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 	else
 		m->fd_out = STDOUT_FILENO;
 	if (m->fd_out < 0)
-		print_name_and_exit_perror(m, out, 1);
+	{
+		print_name_and_give_status(m, out, 1);
+		return (1);
+	}
+	return (0);
 }
 
 int	dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
@@ -89,4 +95,14 @@ void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 		}
 		close(*out);
 	}
+}
+
+void	close_and_redirect_pipe_to_stdin(t_minishell *m)
+{
+	if (m->pipe_fd[WRITE_END] >= 0)
+		close(m->pipe_fd[WRITE_END]);
+	if (m->fd_in >= 0)
+		close(m->fd_in);
+	m->fd_in = m->pipe_fd[READ_END];
+	m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
 }

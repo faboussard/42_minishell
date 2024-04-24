@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 07:59:11 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:01:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ typedef struct s_minishell
 	int							fd_out;
 	int							history_count;
 	char						*user_input;
-	char						*target_path;
-	char						*current_path;
-	char						*old_pwd;
+	char						target_path[PATH_MAX];
+	char						current_path[PATH_MAX];
+	char						old_pwd[PATH_MAX];
 	char						*paths;
 	char						**envp_table;
 	t_token_list				*list_tokens;
@@ -97,9 +97,7 @@ typedef struct s_process_list
 
 /********************************** INIT MINISHELL ***************************/
 
-void							ft_init_minishell(t_minishell *minishell,
-									int ac, char **av);
-bool							is_interactive(t_minishell *minishell, int ac);
+bool							is_interactive(t_minishell *minishell, int argc, char **argv);
 
 /*********************************** CREATE CHAINS ***************************/
 
@@ -110,12 +108,12 @@ void							create_envp_hashmap(t_minishell *minishell,
 
 /********************************** CREATE TABLES ***************************/
 
-void							execute_cmds(t_minishell *minishell,
-									size_t nb_cmds);
+void execute_cmds(t_minishell *minishell,
+                  size_t nb_cmds);
 
 //// expand heredoc ///
 
-void							handle_expand(t_minishell *m, char *input);
+void handle_expand(t_minishell *m, char *input);
 
 int	set_or_get_last_status(int status, int flag);
 

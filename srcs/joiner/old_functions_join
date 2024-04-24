@@ -1,0 +1,311 @@
+//void join_dollar_and_after_double_quote(t_token_list **list)
+//{
+//	t_token_list *current = *list;
+//
+//	while (current != NULL && current->next != NULL)
+//	{
+//		if (current->e_operator == DOLLAR && current->next->e_operator == DOUBLE_QUOTE)
+//		{
+//			t_token_list *to_remove = current;
+//			current = current->next->next;
+//			remove_node(list, to_remove);
+//			continue;
+//		}
+//		current = current->next;
+//	}
+//}
+
+
+//void delete_dollar_before_join(t_token_list **list)
+//{
+//	t_token_list *cpy;
+//
+//	cpy = *list;
+//	while (*list != NULL && (*list)->next != NULL)
+//	{
+//		if ((*list)->e_operator == DOUBLE_QUOTE && (*list)->next->e_operator == DOLLAR)
+//			del_next_token(list);
+////		if ((*list)->e_operator == DOLLAR && (*list)->next->e_operator == DOUBLE_QUOTE)
+////			remove_node(list, (*list));
+//		(*list) = (*list)->next;
+//	}
+//	*list = cpy;
+//}
+
+
+void join_single_quote_and_dollar(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		if ((*list)->e_operator == SINGLE_QUOTE && (*list)->next->e_operator == DOLLAR)
+		{
+			(*list) = (*list)->next;
+			if ((*list)->next)
+				join_tokens(minishell, list);
+			if ((*list) == NULL)
+				return ;
+		}
+		(*list) = (*list)->next;
+	}
+	*list = cpy;
+}
+
+void rename_dollar_token_between_dquote(t_token_list **list)
+{
+	t_token_list *iterator = *list;
+	t_token_list *iterator_prev;
+
+
+	iterator_prev = NULL;
+	while (iterator != NULL && iterator->next != NULL)
+	{
+		if (iterator_prev && (iterator_prev->e_operator == DOUBLE_QUOTE || iterator_prev->e_operator == SINGLE_QUOTE) && iterator->e_operator == DOLLAR
+			&& (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE))
+		{
+			iterator->e_operator = NO_OPERATOR;
+			iterator->e_type = COMMAND;
+		}
+		else
+		{
+			iterator_prev = iterator;
+			iterator = iterator->next;
+		}
+	}
+}
+
+// void join_if_between_quotes(t_token_list **list) {
+// 	t_token_list *current = *list;
+// 	t_token_list *previous_node = NULL;
+
+// 	while (current != NULL && current->next != NULL && current->next->next != NULL) {
+// 		if (current->e_operator == DOUBLE_QUOTE && current->next->e_operator != DOUBLE_QUOTE && current->next->next->e_operator == DOUBLE_QUOTE)
+// 		{
+// 			if (previous_node)
+// 			{
+// 				previous_node->next = current->next;
+// 				free_token(current);
+// 				current->next = current->next->next->next;
+// 				free_token(current->next );
+// 			} else
+// 			{
+// 				*list = current->next;
+// 				free_token(current);
+// 				(*list)->next = current->next->next;
+// 				free_token(current->next);
+// 				current = *list;
+// 			}
+// 		} else
+// 		{
+// 			previous_node = current;
+// 			current = current->next;
+// 		}
+// 	}
+// }
+
+
+
+
+void supress_double_quotes(t_token_list **list)
+{
+	t_token_list *current = *list;
+	t_token_list *prev = NULL;
+
+	while (current != NULL && current->next != NULL)
+	{
+		if (current->e_operator == SINGLE_QUOTE && current->next->e_operator == SINGLE_QUOTE)
+		{
+			t_token_list *temp = current->next;
+			if (prev == NULL)
+			{
+				*list = temp->next; // Mise à jour du pointeur de début de liste si nécessaire
+			}
+			else
+			{
+				prev->next = temp->next; // Relier le nœud précédent au nœud suivant
+			}
+			free(temp); // Suppression du deuxième nœud
+			free(current); // Suppression du premier nœud
+			current = prev->next; // Avancer le pointeur actuel vers le prochain nœud après la suppression
+		}
+		else
+		{
+			prev = current;
+			current = current->next;
+		}
+	}
+}
+
+void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *current = *list;
+	while (current != NULL)
+	{
+		if (current->e_operator == DOUBLE_QUOTE || current->e_operator == SINGLE_QUOTE)
+			change_iterator_name_to_empty_string(minishell, list);
+		current = current->next;
+	}
+}
+
+void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *cpy;
+	t_token_list *mutex;
+	int count_quotes;
+
+	cpy = *list;
+	while (*list != NULL && (*list)->next != NULL)
+	{
+		while ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
+			*list = (*list)->next;
+		mutex = *list;
+		while ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
+		{
+			count_quotes = 0;
+			while ((*list) && ((*list)->e_operator == DOUBLE_QUOTE || (*list)->e_operator == SINGLE_QUOTE))
+			{
+				count_quotes++;
+				*list = (*list)->next;
+				if (*list == NULL)
+				{
+					*list = mutex;
+					while ((*list)->next)
+					{
+						join_tokens(minishell, list);
+						change_iterator_name_to_empty_string(minishell, list);
+						*list = (*list)->next;
+					}
+				}
+			}
+			if ((*list) && ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list))) && count_quotes != 0)
+			{
+				*list = mutex;
+				while ((*list)->next && (*list)->next->e_operator != IS_SPACE && !is_redirect_token_or_pipe((*list)->next))
+				{
+					if ((*list)->e_operator == IS_SPACE || is_redirect_token_or_pipe((*list)))
+						*list = (*list)->next;
+					else
+						join_tokens(minishell, list);
+				}
+			}
+			else if ((*list))
+				*list = (*list)->next;
+		}
+		if (*list != NULL)
+			*list = (*list)->next;
+	}
+	*list = cpy;
+}
+
+// void check_sequence_dollar_followed_by_quotes(char *user_input)
+//{
+//	size_t	i;
+//	i = 0;
+//
+//	while (user_input[i + 1] != '\0')
+//	{
+//		if (user_input[i] == '$' && user_input[i + 1] == '\"')
+//		{
+//			ft_memcpy(&user_input[i], &user_input[i + 1], ft_strlen(user_input
+//					- 1));
+//		}
+//		i++;
+//	}
+//}
+
+// void remove_single_quotes(t_minishell *minishell, t_token_list **list)
+//{
+//	t_token_list *cpy;
+//
+//	cpy = (*list);
+//	while ((*list)->next != NULL)
+//	{
+//		if ((*list)->next->e_operator == SINGLE_QUOTE
+//			&& (*list)->e_operator == DOUBLE_QUOTE)
+//			(*list) = (*list)->next;
+//		if ((*list)->next->next != NULL &&
+//			(((*list)->next->e_operator == SINGLE_QUOTE
+//					&& (*list)->next->next->e_operator != DOUBLE_QUOTE) ||
+//				((*list)->next->e_operator == DOUBLE_QUOTE
+//					&& (*list)->e_operator != SINGLE_QUOTE) ||
+//				((*list)->next->e_operator == SINGLE_QUOTE
+//					&& (*list)->next->next == NULL)))
+//			del_next_token(&minishell->list_tokens);
+//		else
+//			(*list) = (*list)->next;
+//	}
+//	*list = cpy;
+//}
+
+
+int count_if_only_quotes_in_all_list(t_minishell *minishell, t_token_list **list)
+{
+	int size_list;
+	int count_double_quote;
+	int count_single_quote;
+
+	size_list = ft_lstsize_token(*list);
+	count_double_quote = count_token_by_operator(minishell, DOUBLE_QUOTE);
+	count_single_quote = count_token_by_operator(minishell, SINGLE_QUOTE);
+	if (count_double_quote == size_list || count_single_quote == size_list)
+		return 1;
+	else
+		return 0;
+}
+
+
+// int is_only_squote(char *str)
+//{
+//	int i;
+//	int count;
+//
+//	i = 0;
+//	count = 0;
+//	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+//	{
+//		i++;
+//		while (str[i])
+//		{
+//			if (str[i] == '\'')
+//				count++;
+//			i++; // Incrémenter i à chaque itération
+//		}
+//		if (count == ft_strlen(str) - 2)
+// Vérifier si count est égal à la longueur de la chaîne - 2
+//			return (1);
+//	}
+//	return (0);
+//}
+
+// int is_only_dquote(char *str)
+//{
+//	int i;
+//
+//	i = 0;
+//	if (str[0] == '\"' && str[ft_strlen(str) - 1] == '\"')
+//	{
+//		while (*str)
+//		{
+//			if (str[i] == '\'')
+//				i++;
+//		}
+//		if (i == ft_strlen(str) - 1)
+//			return (1);
+//	}
+//	return (0);
+//}
+
+
+//void replace_tokens_with_only_quotes_by_null(t_minishell *minishell, t_token_list **list)
+//{
+//	t_token_list *cpy;
+//	t_token_list *mutex;
+//
+//	cpy = *list;
+//	while (*list != NULL && (*list)->next != NULL)
+//	{
+//		if (iterator_is_only_quotes(*list))
+//	}
+//}

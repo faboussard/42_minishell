@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 12:05:37 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:58:32 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,20 @@ int	is_root_directory(t_minishell *m)
 
 int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
-	free(env->value);
+	size_t	curpath_len;
+	size_t	cwd_len;
+
+	curpath_len = ft_strlen(m->current_path) + 1;
+	cwd_len = ft_strlen(cwd) + 1;
+	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
+	ft_strlcpy(m->current_path, cwd, cwd_len);
+	free_safely_str(env->value);
 	env->value = ft_strdup(cwd);
-	if (m->current_path != NULL)
-		free(m->current_path);
-	m->current_path = ft_strdup(cwd);
-	if (env->value == NULL || m->current_path == NULL)
+	if (env->value == NULL)
 	{
 		ft_putendl_fd("Malloc error", 2);
 		return (ENOMEM);
 	}
-	dprintf(2, "env->value is %s\n", env->value);
-	dprintf(2, "m->current_path is %s\n", m->current_path);
 	return (0);
 }
 
@@ -67,11 +69,12 @@ int	change_env_variable(t_minishell *m, char *var)
 	var_len = ft_strlen(var);
 	while (env && env->target)
 	{
-		if (strncmp(env->target, var, var_len) == 0)
+		if (ft_strncmp(env->target, var, var_len) == 0)
 		{
 			if (getcwd(cwd, sizeof(cwd)) == NULL)
 			{
-				perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+				perror("cd: error retrieving current directory: \
+				getcwd: cannot access parent directories");
 				return (-1);
 			}
 			return (fill_env_value_and_current_path(m, env, cwd));
@@ -82,10 +85,10 @@ int	change_env_variable(t_minishell *m, char *var)
 }
 // void	replace_old_path(t_minishell *m)
 // {
-// 	if (m->old_path)
-// 		free(m->old_path);
+// 	free_safely_str(m->old_path);
 // 	m->old_path = ft_strdup(m->current_path);
 // }
+
 static int	go_into_directory(t_minishell *m, char *dir)
 {
 	char	cwd[PATH_MAX];
@@ -95,22 +98,11 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (-1);
 	}
-	free_safely_str(m->target_path);
-	m->target_path = ft_realpath(m, dir);
-	if (m->target_path != NULL)
+	ft_realpath(m, dir);
+	if (chdir(m->target_path) != 0)
 	{
-		if (chdir(m->target_path) != 0)
-		{
-			dprintf(2, "Ewww ! I can't go there you freak !%s\n",
-				m->target_path);
-			print_cmd_perror("cd", m->target_path, errno);
-			return (1);
-		}
-	}
-	else if (chdir(dir) != 0)
-	{
-		dprintf(2, "Ewww ! I can't go there you freak !%s\n", dir);
-		print_cmd_perror("cd", dir, errno);
+		dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
+		print_cmd_perror("cd", m->target_path, errno);
 		return (1);
 	}
 	change_env_variable(m, "PWD=");
@@ -118,13 +110,15 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	return (0);
 }
 
-static int	get_home(t_minishell *m)
+static int	get_home(t_minishell *m, t_token_list *command)
 {
 	char	*home_dir;
 	char	*new_path;
 	size_t	home_dir_len;
 	int		return_value;
 
+	(void)command;
+	// if (command->next && ft_strncmp(command->next->name, "~", 2) == 0)
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
 	{
@@ -175,11 +169,14 @@ int	ft_cd(t_minishell *minishell, t_token_list *command)
 	char		*dir;
 	struct stat	st;
 
-	if (too_many_args(command))
-		return (1);
+	dprintf(2, "m->current_path IS %s\n", minishell->current_path);
+	//if (too_many_args(command))
+	//	return (1);
 	if (should_go_home(command) == 1)
-		return (get_home(minishell));
+		return (get_home(minishell, command));
 	dir = command->next->name;
+	if (ft_strncmp(dir, "-", 2) == 0)
+		return (go_into_directory(minishell, minishell->old_pwd));
 	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
 	{
 		print_cmd_perror("cd", dir, errno);

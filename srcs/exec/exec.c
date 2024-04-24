@@ -6,36 +6,53 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/18 15:48:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:54:30 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtins.h"
 #include "exec.h"
 
-bool	is_a_silent_builtin(char *cmd)
+/*
+ * Check if the command is a builtin and execute it
+ * IMPORTANT !!!
+ * Problem: m->list_tokens is not a good parameter, should be process_list
+ * The list_tokens never changes, while process_list is iterated over
+ */
+int	is_a_builtin(t_minishell *m, char *cmd)
 {
-	if (ft_strncmp(cmd, "cd", 3) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "export", 7) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "unset", 6) == 0)
-		return (1);
-	return (0);
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		m->status = ft_echo(m->list_tokens);
+	else if (ft_strncmp(cmd, "cd", 3) == 0)
+		m->status = ft_cd(m, m->list_tokens);
+	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+		m->status = ft_pwd(m);
+	else if (ft_strncmp(cmd, "exit", 5) == 0)
+		m->status = ft_exit_builtin(m, m->list_tokens);
+	// else if (ft_strncmp(cmd, "env", 4) == 0)
+	//     m->status = ft_env(m, m->list_tokens);
+	// else if (ft_strncmp(cmd, "unset", 6) == 0)
+	//     m->status = ft_unset(m);
+	// else if (ft_strncmp(cmd, "exit", 5) == 0)
+	//     m->status = ft_exit_builtin(m, m->list_tokens);
+	else
+		return (0);
+	set_or_get_last_status(m->status, 0);
+	return (1);
 }
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	if (is_a_silent_builtin(pl->cmd_table[0]))
-		exit(0);
 	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	execve(pl->good_path, pl->cmd_table, m->envp_table);
+	if (!(is_a_builtin(m, pl->cmd_table[0])))
+		execve(pl->good_path, pl->cmd_table, m->envp_table);
 	if (access(pl->good_path, F_OK) == 0)
 		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 	else
 		exit_command_not_found(m, pl->cmd_table[0]);
 }
 
-void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
+int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
 	enum e_token_type	infile_token;
 	enum e_token_type	outfile_token;
@@ -46,26 +63,25 @@ void	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 		here_doc(m, pl->in_files_token->name);
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
-		open_fd_infile(m, pl->in_files_token);
+		if (open_fd_infile(m, pl->in_files_token))
+			return (1);
 		m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 		close(m->fd_in);
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
-		open_fd_outfile(m, pl, pl->out_files_token->name);
+		if (open_fd_outfile(m, pl, pl->out_files_token->name))
+			return (1);
 		m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
 		close(m->fd_out);
 	}
+	return (0);
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
-	enum e_token_type	infile_token;
-	enum e_token_type	outfile_token;
-
-	infile_token = pl->in_files_token->e_type;
-	outfile_token = pl->out_files_token->e_type;
-	handle_infile_outfile(m, pl);
+	if (handle_infile_outfile(m, pl))
+		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 		my_execve(m, pl);
@@ -73,7 +89,6 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
-		//m->status = set_or_get_last_status(m->status, 0);
 		close_fds(m->fd_in, m->fd_out);
 	}
 }

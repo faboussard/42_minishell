@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 12:18:55 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/22 08:04:23 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		ft_export(t_minishell *minishell);
 int		ft_unset(t_minishell *minishell);
 
 //-------------------------------BUILTINS UTILS-------------------------------//
-char	*ft_realpath(t_minishell *m, char *cmd);
+void	ft_realpath(t_minishell *m, char *cmd);
 bool	contains_only_charset(const char *str, const char *charset);
 
 #endif // BUILTINS_H

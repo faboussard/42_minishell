@@ -10,6 +10,20 @@ bash: syntax error: unexpected end of file
 exit
 
 
+A variable may be assigned to by a statement of the form
+
+name=[value]
+If value is not given, the variable is assigned the null string.  !!!!!!!!!
+All values undergo tilde expansion,
+ parameter and variable expansion, command substitution, arithmetic expansion, and quote removal (see Shell Parameter Expansion).
+
+ relire les signaux code et doc de shell
+////////////////////////////////////////////////////////////
+revoir avec melodie
+09:54:02 juba@juba-desktop minishell ±|parsing ✗|→ minishell -c "echo "" "" "" test "
+minishell: command not found
+
+/////////////////////////////////////////////////////////
 
 
 
@@ -140,14 +154,13 @@ $$$$juba
 ========> cas particulier ont traite ou pas ?
 ////////////////////////////////////////////////////////////////////
 
--c " g\"$'USER'\" "
-faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
+faboussa@z1r12p5:~/minishell$ echo g"$'USER'" /// KO - le premier ' disparait
 g$'USER'
-faboussa@z2r7p8:~$ echo $dgsdg$USER
+faboussa@z2r7p8:~$ echo $dgsdg$USER // KO - dollar en trop
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
-faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP ?
+faboussa@z1r12p5:~/minishell$ echo  "g''"
 g''
 faboussa@z1r12p5:~/minishell$  echo  "g"''""
 g
@@ -163,9 +176,9 @@ g
 
 04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'""
 ""
-
-04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'""
+faboussa@z1r11p5:~$ echo ""'""'""
 ""
+
 
 
 -----> reagit si on entre un seul tilde
