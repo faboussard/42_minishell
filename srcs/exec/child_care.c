@@ -44,7 +44,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		{
 			m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-			close_pipes(m->pipe_fd);pwd
+			close_pipes(m->pipe_fd);
 //			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
 //					&& !pl->cmd_table[1]))
 //			here_cat(m);
