@@ -30,6 +30,7 @@ int define_token(t_token_list *new_token, char *string)
 	if (new_token->name == NULL)
 		return (0);
 	new_token->next = NULL;
+	new_token->is_quoted_delimiter = 0;
 	if (get_operator_token(new_token, string) == FALSE)
 		define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, new_token);
 	return (1);

@@ -30,7 +30,7 @@ enum						e_token_type
 	DELIMITER = 5,
 	APPEND_FILE = 6,
 	OPERATOR = 7,
-	SUBSHELL = 8,
+	TO_DELETE = 8
 };
 
 enum						e_token_operators
@@ -67,6 +67,7 @@ typedef struct s_token
 	enum e_token_type		e_type;
 	enum e_token_builtin	e_builtin;
 	enum e_token_operators	e_operator;
+	bool					is_quoted_delimiter;
 	struct s_token			*next;
 }							t_token_list;
 
