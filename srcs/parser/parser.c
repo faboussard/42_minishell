@@ -15,16 +15,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-// ETAPES
-// 1. TOUT TOKENIZER	: CHAQUE TOKEN EST UN OPERATEUR(ESPACE GUILLEMT PIPE AUTRE) OU UN MOT. les dollqrs et quillemets sont separes des mots.
-// 2. EXPAND ( SI TOKEN DOLLAR : ON ANALYSE LE TOKEN SUIVANT). donc si guillements : expansion non faite
-// 3. JOIN CE QUIL Y A ENTRE QUOTES SANS LES QUOTES
-// 4. ENLEVER LES TOKEN SINGLESQUOTES S ILS NE SONT PAS PRECEDES OU SUIVIS DE TOKEN DQUOTES
-// JOINDRE LES TOKEN SINGLE QUOTES RESTQNTES A LEUR MOTS
-// 3. ENLEVER LES TOKENS DQUOTES
-// 4. ENLEVER LES TOKENS ESPACES
-// ATTENTION : regarder si = ou digits ( variables envp valable !)
-
 static int cmp(int op1, int op2)
 {
 	return (op1 - op2);
