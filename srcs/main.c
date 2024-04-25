@@ -41,7 +41,7 @@ void	minishell_interactive(t_minishell *minishell)
 			ft_init_process_list_and_minishell(minishell,
 				minishell->process_list);
 			if (minishell->total_commands == 1
-				&& minishell->list_tokens->e_builtin != NO_BUILTIN)
+				&& minishell->list_tokens->e_builtin == EXIT)
 				exec_builtin(minishell, minishell->list_tokens);
 			else
 				execute_cmds(minishell, minishell->total_commands);

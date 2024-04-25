@@ -19,7 +19,7 @@
  * Problem: m->list_tokens is not a good parameter, should be process_list
  * The list_tokens never changes, while process_list is iterated over
  */
-int	is_a_builtin(t_minishell *m, char *cmd)
+bool	is_a_builtin(t_minishell *m, char *cmd)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
 		m->status = ft_echo(m->list_tokens);
@@ -43,13 +43,15 @@ int	is_a_builtin(t_minishell *m, char *cmd)
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	//if (!(is_a_builtin(m, pl->cmd_table[0])))
-		execve(pl->good_path, pl->cmd_table, m->envp_table);
-	if (access(pl->good_path, F_OK) == 0)
-		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
-	else
-		exit_command_not_found(m, pl->cmd_table[0]);
+	if (!is_a_builtin(m, pl->cmd_table[0]))
+    {
+        set_good_path_cmd(m, pl, pl->cmd_table[0]);
+        execve(pl->good_path, pl->cmd_table, m->envp_table);
+        if (access(pl->good_path, F_OK) == 0)
+            print_name_and_exit_perror(m, pl->cmd_table[0], 1);
+        else
+            exit_command_not_found(m, pl->cmd_table[0]);
+    }
 }
 
 int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
