@@ -42,8 +42,8 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 # ------------ COMPILATION ------------ #
 
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror
-DEPS_FLAGS		=	-MMD -MP -g3 -fPIE
+CFLAGS			=	-Wall -Wextra -Werror -fPIE
+DEPS_FLAGS		=	-MMD -MP -g3
 
 # -------------  COMMANDS ------------- #
 

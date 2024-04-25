@@ -69,12 +69,12 @@ int	ft_echo(t_token_list *command)
 	flag = check_n_arg(iterator->name);
 	if (flag == 1)
 		iterator = iterator->next;
-	while (iterator)
+	while (iterator && iterator->e_type == ARGUMENT)
 	{
 		if (printf("%s", iterator->name) == -1)
 			return (EXIT_FAILURE);
 		iterator = iterator->next;
-		if (iterator)
+		if (iterator && iterator->e_type == ARGUMENT)
 			printf(" ");
 	}
 	if (flag == 0)
