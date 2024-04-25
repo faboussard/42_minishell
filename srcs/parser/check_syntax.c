@@ -47,7 +47,7 @@ bool check_syntax(t_minishell *minishell)
 	while (current_token != NULL)
 	{
 		next_token = current_token->next;
-		if (is_redirect_token_or_pipe(current_token) && is_redirect_token_or_pipe(next_token))
+		if (is_redirect_token(current_token) && is_redirect_token(next_token))
 		{
 			print_operator_syntax_error(current_token);
 			return (1);
