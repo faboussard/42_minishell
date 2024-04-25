@@ -39,7 +39,8 @@ char	*expand_variables(t_minishell *m, char **split_space)
 	int		i;
 
 	input_after_expand = ft_calloc(1, 1);
-	input_after_expand[0] = '\0';
+	if (input_after_expand == NULL)
+		exit_msg_minishell(m, "Malloc failed at handle expand", 2);
 	count = -1;
 	i = 0;
 	while (split_space[i])
