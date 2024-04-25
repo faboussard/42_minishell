@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "error.h"
 #include "minishell.h"
 #include "signals.h"
 #include "utils.h"
@@ -43,10 +42,9 @@ void	sigint_handler(int signo)
 	rl_redisplay();
 }
 
-void sigquit_handler(int signo) {
-	// Gestionnaire de signal pour Ctrl+\ (backslash)
+void sigquit_handler(int signo)
+{
 	(void)signo;
-	// Ne rien faire
 }
 
 void	set_signals_interactive()
@@ -70,11 +68,7 @@ void	set_signals_interactive()
 	}
 	signal(SIGTSTP, SIG_IGN);
 }
-// interet de SIGUIT (ctrl + \ ) si on lignore ??
-/*In interactive mode:
-◦ ctrl-C displays a new prompt on a new line.
-◦ ctrl-D exits the shell.
-◦ ctrl-\ does nothing.*/
+
 void	set_signals_noninteractive(void)
 {
 	struct sigaction	action;

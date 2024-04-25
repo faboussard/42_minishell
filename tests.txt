@@ -89,16 +89,6 @@ juba juba= juba=fafsasfaf
 > stop
 $'USER' $"USER"
 
-
-faboussa@z3r8p5:~/minishell$ cat << a""
-> $USER
-> a
-$USER
-faboussa@z3r8p5:~/minishell$ cat << a
-> $USER
-> a
-faboussa
-
 faboussa@z3r8p5:~/minishell$ echo $SHLVL
 5
 
@@ -122,9 +112,8 @@ exit
 ➜  ~ $?
 zsh: command not found: 35
 
+*************************** EXPANSION  ***********************
 
-*************************** quotes ***********************
--c "$USER $USER= $USER=fafsasfaf"
 09:26:25 juba@juba-desktop ~ → echo "$USER $USER= $USER=fafsasfaf"
 juba juba= juba=fafsasfaf
 10:17:04 juba@juba-desktop minishell ±|parsing ✗|→ echo "$"USER"="
@@ -143,25 +132,23 @@ $USER
     $USER: command not found
 05:26:39 juba@juba-desktop minishell ±|parsing ✗|→ echo '$    USER'
 $    USER: command not found
+faboussa@z1r11p5:~/minishell$  echo "    $USER"
+    faboussa
 10:11:58 juba@juba-desktop ~ → echo $""""USER""
 USER
-
-///////////////////////////////////////////////////////////////
-~/tommini main ❯ echo "$$$$$USER"
-$$$$juba
-06:02:51 juba@juba-desktop minishell ±|parsing ✗|→ echo "$$$$$USER"
-220050220050juba
-========> cas particulier ont traite ou pas ?
-////////////////////////////////////////////////////////////////////
-
--c " g\"$'USER'\" "
+faboussa@z1r11p5:~/minishell$  echo "$1234USER"
+234USER
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
 faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
-faboussa@z1r12p5:~/minishell$ echo  "g''" //// KO UN ESPQCE EN TROP ?
+
+
+*************************** QUOTES  ***********************
+
+faboussa@z1r12p5:~/minishell$ echo  "g''"
 g''
 faboussa@z1r12p5:~/minishell$  echo  "g"''""
 g
@@ -177,12 +164,8 @@ g
 
 04:40:23 juba@juba-desktop minishell ±|parsing ✗|→ echo '""'""
 ""
-
-04:10:09 juba@juba-desktop minishell ±|parsing ✗|→ echo """"'""'""
+faboussa@z1r11p5:~$ echo ""'""'""
 ""
-
-
------> reagit si on entre un seul tilde
 
 ****************** redirections -*******************
 

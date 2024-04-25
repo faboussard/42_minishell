@@ -14,35 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-int is_special_char(char c)
-{
-	if (c == '$' || c == '`' || c == '\\' || c == '=')
-		return (1);
-	return (0);
-}
-
-int check_special_char_after_expand(char *string, char *string2)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = ft_strlen(string2);
-	while (string[i] && string[i] != is_special_char(string2[j - 1]))
-		i++;
-	if (string[i] == string2[j])
-		return (1);
-	return (0);
-}
-
-char *expand_sign(char *string, char *temp)
-{
-	while (*string && *string != '=')
-		string++;
-	string = ft_strjoin(temp, string);
-	return (string);
-}
-
 //void ignore_next_char(char *str, char c)
 //{
 //	char *char_to_ignore;
@@ -57,44 +28,38 @@ char *expand_sign(char *string, char *temp)
 //	}
 //}
 
-void ignore_dollar_string(char **string, t_minishell *minishell)
-{
-	char *new_string;
-	size_t len;
-
-	if (*string != NULL)
-	{
-		len = strlen(*string);
-		new_string = malloc(len); // La longueur est len - 1
-		if (new_string == NULL)
-			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
-		ft_memmove(new_string, *string + 1, len - 1); // Utilisation de len - 1 pour la longueur
-		free(*string);
-		*string = new_string;
-	}
-}
-
+//void ignore_dollar_string(char **string, t_minishell *minishell)
+//{
+//	char *new_string;
+//	size_t len;
+//
+//	if (*string != NULL)
+//	{
+//		len = strlen(*string);
+//		new_string = malloc(len); // La longueur est len - 1
+//		if (new_string == NULL)
+//			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
+//		ft_memmove(new_string, *string + 1, len - 1); // Utilisation de len - 1 pour la longueur
+//		free(*string);
+//		*string = new_string;
+//	}
+//}
 
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
-	char *temp;
 
 	while (iterator != NULL)
 	{
 		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
 		{
-			temp = ft_strdup(iterator->value);
-			if (temp == NULL)
-				exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			if (check_special_char_after_expand(string, iterator->target))
-				string = expand_sign(string, temp);
+				string = expand_sign(string, iterator->value);
 			else
-				string = ft_strdup(temp);
-			if (temp)
 			{
-				free(temp);
-				temp = NULL;
+				string = ft_strdup(iterator->value);
+				if (string == NULL)
+					exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
 			}
 			return (string);
 		}
@@ -107,132 +72,73 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 char *expand_sigil(char *string, t_minishell *minishell)
 {
 	char *final_string;
-	char *temp;
 
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	temp = ft_calloc(1, ft_strlen(string) + 1);
-	if (ft_isdigit(string[i]))
-	{
-		i++;
-		while (string[i])
-		{
-			temp[j] = string[i];
-			i++;
-			j++;
-		}
-		final_string = ft_strdup(temp);
-	} else
+	if (ft_isdigit(*string))
+		final_string = ft_strdup(string + 1);
+	else
 		final_string = identify_envp_string(string, minishell);
-	free(temp);
 	return (final_string);
 }
 
-void handle_delimitor(t_token_list *iterator)
+void update_quote_counts(t_token_list *token, int *single_quote_count, int *double_quote_count)
 {
-	iterator = iterator->next;
-	while (iterator && iterator->e_operator == IS_SPACE)
-		iterator = iterator->next;
-	while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
-	{
-		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-		{
-			iterator = iterator->next;
-			while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
-				   iterator->e_operator != SINGLE_QUOTE)
-				iterator = iterator->next;
-		}
-		iterator = iterator->next;
-	}
+	if (token->e_operator == SINGLE_QUOTE)
+		(*single_quote_count)++;
+	else if (token->e_operator == DOUBLE_QUOTE)
+		(*double_quote_count)++;
 }
 
-
-void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
+void process_dollar_token(t_minishell *minishell, t_token_list **list, int single_quote_count)
 {
-	join_tokens(minishell, &iterator);
-	free(iterator->name);
-	iterator->name = ft_itoa(minishell->status);
-	if (iterator->name == NULL)
-		exit_msg(minishell, "Malloc failed at expander", -1);
-}
+	char *expanded_string;
 
-void add_quote_count(t_token_list *iterator, int *s_count, int *d_count)
-{
-	if (iterator->e_operator == DOUBLE_QUOTE)
-		(*d_count)++;
-	if (iterator->e_operator == SINGLE_QUOTE)
-		(*s_count)++;
-}
-
-void handle_quotes_before_expansion(t_token_list *iterator, t_minishell *minishell, int s_count, int d_count)
-{
-	if (iterator->next->e_operator == SINGLE_QUOTE)
+	if (ft_strncmp((*list)->next->name, "?", 2) == 0)
+		change_name_to_status(minishell, *list);
+	else
 	{
-		if (s_count % 2 != 0 && s_count != 0)
+		if (single_quote_count % 2 != 0)
+			(*list) = (*list)->next;
+		else
 		{
-			t_token_list *to_remove = iterator;
-			iterator = iterator->next;
-			remove_node(&minishell->list_tokens, to_remove);
-		}
-	}
-	else if (iterator->next->e_operator == DOUBLE_QUOTE)
-	{
-		if (d_count % 2 != 0 && d_count != 0)
-		{
-			t_token_list *to_remove = iterator;
-			iterator = iterator->next;
-			remove_node(&minishell->list_tokens, to_remove);
+			expanded_string = expand_sigil((*list)->next->name, minishell);
+			if (expanded_string != (*list)->next->name)
+			{
+				join_tokens(minishell, list);
+				change_iterator_name_to_empty_string(minishell, list, expanded_string);
+				free(expanded_string);
+				return;
+			}
+			else
+				remove_node(list, (*list)->next);
 		}
 	}
 }
 
 void expander(t_minishell *minishell)
 {
-
 	t_token_list *iterator;
-	iterator = minishell->list_tokens;
-	int d_count;
-	int s_count;
+	int single_quote_count;
+	int double_quote_count;
 
-	s_count = 0;
-	d_count = 0;
+	single_quote_count = 0;
+	double_quote_count = 0;
+	iterator = minishell->list_tokens;
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
 			handle_delimitor(iterator);
-		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-			add_quote_count(iterator, &s_count, &d_count);
+		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+			update_quote_counts(iterator, &single_quote_count, &double_quote_count);
 		else if (iterator->e_operator == DOLLAR)
 		{
-			if (ft_strncmp(iterator->next->name, "?", 2) == 0)
-				change_name_to_status(minishell, iterator);
-			else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-			{
-				add_quote_count(iterator->next, &s_count, &d_count);
-				handle_quotes_before_expansion(iterator, minishell, s_count, d_count);
-			}
-			else if (s_count % 2 == 0)
-			{
-				char *string = expand_sigil(iterator->next->name, minishell);
-				if (string != iterator->next->name)
-				{
-					t_token_list *to_remove = iterator;
-					iterator = iterator->next;
-					remove_node(&minishell->list_tokens, to_remove);
-					free(iterator->name);
-					iterator->name = ft_strdup(string);
-					free(string);
-					continue;
-				}
-				else
-					del_next_token(&iterator);
-			}
+			if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
+				update_quote_counts(iterator->next, &single_quote_count, &double_quote_count);
+			process_dollar_token(minishell, &iterator, single_quote_count);
 		}
 		iterator = iterator->next;
 	}
 }
+
+
 
 
