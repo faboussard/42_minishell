@@ -104,7 +104,7 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 	{
 		if (single_quote_count % 2 != 0 && double_quote_count % 2 == 0)
 			return ;
-		if (!ft_isalpha((*list)->next->name[0]))
+		if (!ft_isalnum((*list)->next->name[0]))
 			(*list)->e_operator = 0; // to keep le dollar
 		else
 		{
