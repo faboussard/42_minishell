@@ -35,3 +35,33 @@ void	free_safely_str(char *str_to_free)
 		str_to_free = NULL;
 	}
 }
+
+void	ft_free_all_tab(char **tab)
+{
+	int	i;
+
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+void	ft_free_tab_from_i(void **tab, int j)
+{
+	int	i;
+
+	if (tab == NULL)
+		return ;
+	i = 0;
+	while (i < j)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}

@@ -71,7 +71,7 @@ int	change_env_variable(t_minishell *m, char *var)
 	var_len = ft_strlen(var);
 	while (env && env->target)
 	{
-		if (strncmp(env->target, var, var_len) == 0)
+		if (ft_strncmp(env->target, var, var_len) == 0)
 		{
 			if (getcwd(cwd, sizeof(cwd)) == NULL)
 			{

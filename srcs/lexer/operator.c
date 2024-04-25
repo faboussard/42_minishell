@@ -20,7 +20,7 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 	int i = 0;
 	size_t len;
 
-	len = ft_strlen(string);
+	len = ft_strlen(string) + 1;
 	while (i < 13)
 	{
 		if (operator[i] != NULL && !ft_strncmp(string, operator[i], len))
@@ -33,7 +33,6 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 	}
 	return (false);
 }
-
 
 bool get_operator_token(t_token_list *new_token, const char *string)
 {
@@ -52,7 +51,6 @@ bool get_operator_token(t_token_list *new_token, const char *string)
 	};
 	return (define_operator_token(new_token, string, operator));
 }
-
 
 bool	is_redirect_token(t_token_list *token)
 {
