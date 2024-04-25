@@ -33,29 +33,16 @@ void create_token(t_minishell *minishell, char *string)
 	add_token_to_list(&minishell->list_tokens, new_token);
 }
 
-static char *add_until_char(char *temp,char *string, int *i)
-{
-	int		j;
-
-	j = 0;
-	while (string[*i] && !char_is_operator(string[*i]))
-		temp[j++] = string[(*i)++];
-	if (j != 0)
-		(*i)--;
-	return (temp);
-}
-
 static void create_words(t_minishell *minishell, char *string, int *i, char **temp)
 {
-	int j;
-
-	j = (*i);
-	while (string[j] && !char_is_operator(string[j]))
-		j++;
-	(*temp) = add_until_char((*temp), string, i);
-	create_token(minishell, (*temp));
-	(*i)++;
+	int j = 0;
+	while (string[*i] && (ft_isalnum(string[*i]) || string[*i] == '_')) {
+		(*temp)[j++] = string[(*i)++];
+	}
+	(*temp)[j] = '\0'; // Ajout du caractère de fin de chaîne
+	create_token(minishell, *temp);
 }
+
 
 void transform_to_token(t_minishell *minishell, char *string)
 {
@@ -70,7 +57,7 @@ void transform_to_token(t_minishell *minishell, char *string)
 		temp = ft_calloc(1, len);
 		if (temp == NULL)
 			exit_msg(minishell, "Malloc failed at transform_to_token", 2);
-		if (char_is_operator(string[i]))
+		if ((ft_isspace(string[i]) || !ft_isalnum(string[i])) && string[i] != '_')
 		{
 			temp[0] = string[i];
 			create_token(minishell, temp);

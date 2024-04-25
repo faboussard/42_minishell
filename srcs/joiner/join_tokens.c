@@ -101,7 +101,10 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 			if (is_redirect_token_or_pipe((*list)->next) || is_redirect_token_or_pipe(*list))
 				*list = (*list)->next;
 			else if ((*list)->e_operator != IS_SPACE)
+			{
 				join_tokens(minishell, list);
+				continue ;
+			}
 			if ( (*list)->next == NULL)
 				break;
 		}
