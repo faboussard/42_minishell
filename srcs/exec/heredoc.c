@@ -140,13 +140,14 @@ static void	writing_in_heredoc(t_minishell *m, char *limiter, int stdin_fd)
 	}
 }
 
-void	here_doc(t_minishell *m, char *limiter, int stdin_fd, int fd_to_use)
+void	here_doc(t_minishell *m, char *limiter, int stdin_fd, int *fd_to_use)
 {
     int here_doc_pid;
 
-    close_fds(fd_to_use, -1);
-    fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_APPEND, 0666);
-	if (fd_to_use < 0)
+    check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
+    close_fds(*fd_to_use, -1);
+    *fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC , 0666);
+	if (*fd_to_use < 0)
 	{
 		perror("No /tmp/ directory found");
 		return ;
@@ -158,7 +159,7 @@ void	here_doc(t_minishell *m, char *limiter, int stdin_fd, int fd_to_use)
 	else
 	{
 		waitpid(here_doc_pid, &(m->status), 0); // && errno != 10);
-		close(fd_to_use);
+		close(*fd_to_use);
 	}
 }
 /*

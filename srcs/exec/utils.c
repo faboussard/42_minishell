@@ -47,7 +47,6 @@ void	ft_init_process_list_and_minishell(t_minishell *m, t_process_list *pl)
 	pl->paths = NULL;
 	pl->good_path = NULL;
 	pl->tab_paths = NULL;
-    check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 }
 
 void	ft_free_pl_paths(t_minishell *minishell)

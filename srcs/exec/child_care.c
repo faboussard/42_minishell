@@ -124,7 +124,7 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list, int stdin_o
 	if (safe_pipe(m) == 0)
 		return ;
     if (pl->in_files_token->e_type== DELIMITER)
-		here_doc(m, pl->in_files_token->name, stdin_orig, m->fd_in);
+		here_doc(m, pl->in_files_token->name, stdin_orig, &(m->fd_in));
 	if (open_fd_infile(m, pl->in_files_token))
 		return ;
 	first_child(m, pl);
@@ -135,12 +135,12 @@ void	exec_several_cmds(t_minishell *m, t_process_list *process_list, int stdin_o
 		if (safe_pipe(m) == 0)
 			return ;
         if (pl->in_files_token->e_type== DELIMITER)
-            here_doc(m, pl->in_files_token->name, stdin_orig, m->tmp_in);
+            here_doc(m, pl->in_files_token->name, stdin_orig, &(m->tmp_in));
 		middle_child(m, pl);
 		pl = pl->next;
 	}
     if (pl->in_files_token->e_type== DELIMITER)
-        here_doc(m, pl->in_files_token->name, stdin_orig, m->tmp_in);
+        here_doc(m, pl->in_files_token->name, stdin_orig, &(m->tmp_in));
     open_fd_outfile(m, pl, pl->out_files_token->name);
 	if (safe_pipe(m) == 0)
 		return ;
