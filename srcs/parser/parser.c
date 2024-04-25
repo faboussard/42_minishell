@@ -93,14 +93,14 @@ int parse_input(t_minishell *minishell)
 		return (1);
 	expander(minishell);
 	token_rework(minishell);
-	if (minishell->list_tokens == NULL)
-		return (1);
-	token_requalification(minishell->list_tokens);
 	if (check_syntax(minishell) == 1)
 	{
 		minishell->status = set_or_get_last_status(2, 0);
 		return (1);
 	}
+	if (minishell->list_tokens == NULL)
+		return (1);
+	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);
 	return (0);
