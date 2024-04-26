@@ -104,5 +104,8 @@ void	close_and_redirect_pipe_to_stdin(t_minishell *m)
 	if (m->fd_in >= 0)
 		close(m->fd_in);
 	m->fd_in = m->pipe_fd[READ_END];
-	m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
+	if (m->fd_out != STDOUT_FILENO)
+		close(m->fd_out);
+	else
+		m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
 }

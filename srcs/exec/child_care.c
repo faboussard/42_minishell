@@ -43,7 +43,13 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		if (m->pid1 == 0)
 		{
 			m_safe_dup2(m, m->fd_in, STDIN_FILENO);
-			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+			if (m->fd_out != STDOUT_FILENO)
+			{
+				m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
+				close(m->fd_out);
+			}
+			else
+				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
             my_execve(m, pl);
 		}
@@ -63,11 +69,6 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 		{
 			close_pipes(m->pipe_fd);
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
-			if (m->fd_out != STDOUT_FILENO)
-			{
-				m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
-				close(m->fd_out);
-			}
 			my_execve(m, pl);
 		}
 		else
@@ -172,4 +173,3 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, i
 	wait_children_and_give_exit_status(m);
 	close_fds(m->fd_in, m->fd_out);
 }
-
