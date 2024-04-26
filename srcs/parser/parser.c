@@ -77,13 +77,13 @@ void token_rework(t_minishell *minishell)
 int parse_input(t_minishell *minishell)
 {
 	char *string;
-	string = minishell->user_input;
 
-	transform_to_token(minishell, string);
+	string = minishell->user_input;
+	transform_to_token(minishell, string, &minishell->list_tokens);
 	define_heredoc_and_append(minishell, &minishell->list_tokens);
 	if (check_quotes(minishell))
 		return (1);
-	expander(minishell);
+	expander(minishell, &minishell->list_tokens);
 	token_rework(minishell);
 	if (check_syntax(minishell) == 1)
 	{

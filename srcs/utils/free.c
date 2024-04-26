@@ -60,6 +60,7 @@ void	ft_lstclear_token(t_token_list **lst)
 		current = next;
 	}
 	*lst = NULL;
+	lst = NULL;
 }
 
 void	ft_free_process_list(t_process_list **process_list)

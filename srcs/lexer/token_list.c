@@ -32,6 +32,8 @@ int	ft_lstsize_token(t_token_list *lst)
 
 t_token_list	*ft_lstlast_token(t_token_list *lst)
 {
+	if (lst == NULL)
+		return (NULL);
 	while (lst != NULL)
 	{
 		if (lst->next == NULL)

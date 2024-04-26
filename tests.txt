@@ -27,7 +27,7 @@ minishell: command not found
 
 
 
-************* HEREDOCS *************************
+****************************************** HEREDOC **********************************
 
 faboussa@z1r9p4:~/minishell$ << EOF cat << stop cat << lol cat  > r
 wevwv
@@ -51,9 +51,8 @@ heredoc> EOF
 faboussa
 ➜  ~
 
-****************************************** HEREDOC **********************************
 faboussa@z2r8p4:~$ cat << stop
-> $USER$USER
+> $USER$USER   ///// KO MANQUE DEUXIEME FABOUSSA
 > EOF
 faboussafaboussa
 faboussa@z2r8p4:~$
@@ -68,15 +67,15 @@ faboussa@z2r8p4:~$ cat << stop
 > $USER=
 > stop
 faboussa=
-10:13:52 juba@juba-desktop ~ → cat << stop ////////////////////////////////////// KO output vide
+10:13:52 juba@juba-desktop ~ → cat << stop
 > $'USER'
 > stop
 $'USER'
-10:14:08 juba@juba-desktop ~ → cat << stop
+10:14:08 juba@juba-desktop ~ → cat << stop  //////////////////////// KO
 > b$blab$USER$bl
 > stop
 bjuba
-11:23:54 juba@juba-desktop ~ → cat << stop //////////////////////// KO manque les espaces
+11:23:54 juba@juba-desktop ~ → cat << stop
 > $USER $USER= $USER=fafsasfaf
 > stop
 juba juba= juba=fafsasfaf
@@ -84,7 +83,7 @@ juba juba= juba=fafsasfaf
 > "$USER" '$USER='
 > stop
 "juba" 'juba='
-11:57:47 juba@juba-desktop ~ → cat << stop  ==== condition de garder le dollar si suivi de guillemets ////////////////////////////////////// KO output vide
+11:57:47 juba@juba-desktop ~ → cat << stop
 > $'USER' $"USER"
 > stop
 $'USER' $"USER"
@@ -140,10 +139,10 @@ faboussa@z1r11p5:~/minishell$  echo "$1234USER"
 234USER
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
-faboussa@z1r11p5:~/tommini$  echo "'$HO''ME'"  ////////////////// KO
+faboussa@z1r11p5:~/tommini$  echo "'$HO''ME'"
 '''ME'
 
-faboussa@z1r11p5:~/minishell$ echo $=HOME    //////////////////////KO SEGFAULT
+faboussa@z1r11p5:~/minishell$ echo $=HOME
 $=HOME
 
 faboussa@z2r7p8:~$ echo $dgsdg$USER
