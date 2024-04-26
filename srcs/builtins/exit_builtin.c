@@ -98,7 +98,6 @@ int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 	printf("exit\n");
 	if (!command->next)
 	{
-		// dprintf(2, "Hello you <3\n");
 		restore_terminal(minishell);
 		exit(0);
 	}
