@@ -73,9 +73,8 @@ typedef struct s_token
 
 /********************* tokenization.c *********************/
 
-void				transform_to_token(t_minishell *minishell,
-						char *string);
-void create_token(t_minishell *minishell, char *string);
+void transform_to_token(t_minishell *minishell, char *string, t_token_list **list);
+void create_token(t_minishell *minishell, char *string, t_token_list **list);
 void				define_token_types(enum e_token_type type,
 						enum e_token_builtin builtin,
 						enum e_token_operators operator,

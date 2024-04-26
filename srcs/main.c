@@ -52,15 +52,18 @@ void	minishell_interactive(t_minishell *minishell)
 		free(minishell->user_input);
 		ft_free_process_list(&(minishell->process_list));
 		ft_lstclear_token(&minishell->list_tokens);
+		if (minishell->envp_table)
+			ft_free_all_tab(minishell->envp_table);
 	}
 }
 
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	//	char *input = "\"$USER\" '$USER='";
-	//	printf("input : %s\n",input);
-	//	handle_expand(minishell, input);
-	//	return ;
+//		char *input = "\"$USER\" '$USER='";
+//	char *input2 = "\n";
+//		printf("input : %s\n",input2);
+//		handle_expand(minishell, input2);
+//		return ;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed at minishell_non_interactive", 2);
@@ -171,12 +174,8 @@ int	main(int ac, char **av, char **envp)
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
-	{
-		//		format_input(&minishell, av + 2);
-		// attention si format input fail, faire un exit msg
 		minishell_non_interactive(&minishell, av[2]);
-	}
-	// ft_print_minishell(&minishell);
+//	 ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
 }

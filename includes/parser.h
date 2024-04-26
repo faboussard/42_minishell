@@ -26,10 +26,10 @@ void join_tokens(t_minishell *minishell, t_token_list **list);
 void join_between_quotes(t_minishell *minishell, t_token_list **list);
 void join_between_spaces(t_minishell *minishell, t_token_list **list);
 void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op);
-
+char *join_all(t_minishell *minishell, t_token_list **list);
 /************************* join_tokens_utils.c **************************/
 
-void change_iterator_name_to_empty_string(t_minishell *minishell, t_token_list **list, char *new_name);
+void change_token_name(t_minishell *minishell, t_token_list **list, char *new_name);
 int check_if_more_tokens(t_token_list **list, enum e_token_operators op);
 
 /************************* token_requlif.c **************************/
@@ -45,6 +45,8 @@ void	arg_to_command(t_token_list *list_tokens);
 int parse_input(t_minishell *minishell);
 void	token_requalification(t_token_list *list_tokens);
 void	*ft_free_all_alloc(char **strs_array, size_t start);
+void token_rework(t_minishell *minishell);
+int cmp(int op1, int op2);
 
 /**************************** parse tokens **************************/
 
@@ -63,7 +65,7 @@ bool			is_redirect_token(t_token_list *token);
 t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 
 /********************* expansion_utils.c ****************************/
-void expander(t_minishell *minishell);
+void expander(t_minishell *minishell, t_token_list **list);
 void handle_delimitor(t_token_list *iterator);
 char *expand_sigil(char *string, t_minishell *minishell);
 char *expand_sign(char *string, char *temp);

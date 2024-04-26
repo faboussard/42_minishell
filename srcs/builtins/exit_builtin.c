@@ -98,7 +98,7 @@ int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 	printf("exit\n");
 	if (!command->next)
 	{
-		restore_terminal(minishell);
+		free_minishell(minishell);
 		exit(0);
 	}
 	/*
@@ -121,9 +121,10 @@ int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 		{
 			printf("minishell: exit: %s: numeric argument required",
 				command->next->name);
-			restore_terminal(minishell);
+			free_minishell(minishell);
 			exit(2);
 		}
+		free_minishell(minishell);
 		exit(exit_code % 256);
 	}
 }
