@@ -112,7 +112,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->process_list);
 	else
-		exec_several_cmds(m, m->process_list, stdin_orig, stdout_orig);
+		exec_several_cmds(m, m->process_list, stdin_orig);
 	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);

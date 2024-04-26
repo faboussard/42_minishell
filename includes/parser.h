@@ -66,7 +66,7 @@ t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 
 /********************* expansion_utils.c ****************************/
 void expander(t_minishell *minishell, t_token_list **list);
-void handle_delimitor(t_token_list *iterator);
+void handle_delimitor(t_token_list **iterator);
 char *expand_sigil(char *string, t_minishell *minishell);
 char *expand_sign(char *string, char *temp);
 

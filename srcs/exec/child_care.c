@@ -167,7 +167,7 @@ void handle_out(t_minishell *m, t_process_list *pl, int stdout_orig, int *fd_out
     return (0);
 }*/
 
-void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, int stdout_orig)
+void exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig)
 {
 	size_t			i;
 	t_process_list	*pl;
