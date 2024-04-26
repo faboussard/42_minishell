@@ -75,9 +75,7 @@ bool	is_redirect_token_or_pipe(t_token_list *token)
 
 bool char_is_operator(char c)
 {
-	if (c == '|' || c == '>' || c == '<' || c == '$' || c == '\"' || c == '\'' || c == ' ')
-		return true;
-	return false;
+	return (c == '|' || c == '>' || c == '<' || c == '$' || c == '\"' || c == '\'' || c == ' ');
 }
 
 

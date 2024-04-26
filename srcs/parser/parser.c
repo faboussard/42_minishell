@@ -15,16 +15,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-// ETAPES
-// 1. TOUT TOKENIZER	: CHAQUE TOKEN EST UN OPERATEUR(ESPACE GUILLEMT PIPE AUTRE) OU UN MOT. les dollqrs et quillemets sont separes des mots.
-// 2. EXPAND ( SI TOKEN DOLLAR : ON ANALYSE LE TOKEN SUIVANT). donc si guillements : expansion non faite
-// 3. JOIN CE QUIL Y A ENTRE QUOTES SANS LES QUOTES
-// 4. ENLEVER LES TOKEN SINGLESQUOTES S ILS NE SONT PAS PRECEDES OU SUIVIS DE TOKEN DQUOTES
-// JOINDRE LES TOKEN SINGLE QUOTES RESTQNTES A LEUR MOTS
-// 3. ENLEVER LES TOKENS DQUOTES
-// 4. ENLEVER LES TOKENS ESPACES
-// ATTENTION : regarder si = ou digits ( variables envp valable !)
-
 static int cmp(int op1, int op2)
 {
 	return (op1 - op2);
@@ -73,15 +63,16 @@ void token_rework(t_minishell *minishell)
 {
 	if (minishell->list_tokens == NULL)
 		return ;
+	ft_list_remove_if_same_type(&minishell->list_tokens, (void *) TO_DELETE, cmp);
 	join_between_quotes(minishell, &minishell->list_tokens);
 	supress_two_consecutive_empty_names(minishell, &minishell->list_tokens);
 	remove_empty_in_words(&minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
-	ft_list_remove_if(&minishell->list_tokens, (void *) DOLLAR, cmp);
+	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) SINGLE_QUOTE, cmp);
+	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
+	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
 	define_heredoc_and_append(minishell, &minishell->list_tokens);
-	ft_list_remove_if(&minishell->list_tokens, (void *) IS_SPACE, cmp);
+	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 }
 
 int parse_input(t_minishell *minishell)
