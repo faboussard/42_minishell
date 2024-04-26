@@ -15,7 +15,7 @@
 #include "utils.h"
 #include <stdlib.h>
 
-static int cmp(int op1, int op2)
+int cmp(int op1, int op2)
 {
 	return (op1 - op2);
 }
