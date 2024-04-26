@@ -111,7 +111,7 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	m->status = WEXITSTATUS(status);
 }
 
-void handle_in(t_minishell *m, t_process_list *pl, int stdin_orig, int *fd_in)
+/*void handle_in(t_minishell *m, t_process_list *pl, int stdin_orig, int *fd_in)
 {
     enum e_token_type	infile_token;
 
@@ -139,9 +139,9 @@ void handle_out(t_minishell *m, t_process_list *pl, int stdout_orig, int *fd_out
         m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
         close(m->fd_out);
     }
-}
+}*/
 
-int	handle_in_and_out(t_minishell *m, t_process_list *pl, int stdin_orig, int *fd_in)
+/*int	handle_in_and_out(t_minishell *m, t_process_list *pl, int stdin_orig, int *fd_in)
 {
     enum e_token_type	infile_token;
     enum e_token_type	outfile_token;
@@ -165,7 +165,7 @@ int	handle_in_and_out(t_minishell *m, t_process_list *pl, int stdin_orig, int *f
         close(m->fd_out);
     }
     return (0);
-}
+}*/
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, int stdout_orig)
 {
@@ -175,8 +175,9 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, i
 	pl = p_list;
 	if (safe_pipe(m) == 0)
 		return ;
-    handle_in(m, pl, stdin_orig, &(m->fd_in));
-    handle_out(m, pl, stdout_orig, &(m->fd_out));
+    (void)stdout_orig;
+//    handle_in(m, pl, stdin_orig, &(m->fd_in));
+ //   handle_out(m, pl, stdout_orig, &(m->fd_out));
    // if (pl->in_files_token->e_type== DELIMITER)
 	//	here_doc(m, pl->in_files_token->name, stdin_orig, &(m->fd_in));
 	//if (open_fd_infile(m, pl->in_files_token))
