@@ -45,11 +45,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 			m_safe_dup2(m, m->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
-//			if (!pl->cmd_table[0] || (!ft_strncmp(pl->cmd_table[0], "cat", 4)
-//					&& !pl->cmd_table[1]))
-//			here_cat(m);
-//           else
-			    my_execve(m, pl);
+            my_execve(m, pl);
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m);
@@ -115,18 +111,77 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	m->status = WEXITSTATUS(status);
 }
 
-void	exec_several_cmds(t_minishell *m, t_process_list *process_list, int stdin_orig)
+/*void handle_in(t_minishell *m, t_process_list *pl, int stdin_orig, int *fd_in)
+{
+    enum e_token_type	infile_token;
+
+    infile_token = pl->in_files_token->e_type;
+    if (infile_token == DELIMITER)
+        here_doc(m, pl->in_files_token->name, stdin_orig, fd_in);
+    if (infile_token == IN_FILE || infile_token == DELIMITER)
+    {
+        if (open_fd_infile(m, pl->in_files_token))
+            return ;
+        m_safe_dup2(m, *fd_in, STDIN_FILENO);
+        close(m->fd_in);
+    }
+}
+
+void handle_out(t_minishell *m, t_process_list *pl, int stdout_orig, int *fd_out)
+{
+    enum e_token_type	outfile_token;
+
+    outfile_token = pl->out_files_token->e_type;
+    if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+    {
+        if (open_fd_outfile(m, pl, pl->out_files_token->name))
+            return ;
+        m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
+        close(m->fd_out);
+    }
+}*/
+
+/*int	handle_in_and_out(t_minishell *m, t_process_list *pl, int stdin_orig, int *fd_in)
+{
+    enum e_token_type	infile_token;
+    enum e_token_type	outfile_token;
+
+    infile_token = pl->in_files_token->e_type;
+    outfile_token = pl->out_files_token->e_type;
+    if (infile_token == DELIMITER)
+        here_doc(m, pl->in_files_token->name, STDIN_FILENO, fd_in);
+    if (infile_token == IN_FILE || infile_token == DELIMITER)
+    {
+        if (open_fd_infile(m, pl->in_files_token))
+            return (1);
+        m_safe_dup2(m, *fd_in, STDIN_FILENO);
+        close(m->fd_in);
+    }
+    if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+    {
+        if (open_fd_outfile(m, pl, pl->out_files_token->name))
+            return (1);
+        m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
+        close(m->fd_out);
+    }
+    return (0);
+}*/
+
+void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, int stdout_orig)
 {
 	size_t			i;
 	t_process_list	*pl;
 
-	pl = process_list;
+	pl = p_list;
 	if (safe_pipe(m) == 0)
 		return ;
-    if (pl->in_files_token->e_type== DELIMITER)
-		here_doc(m, pl->in_files_token->name, stdin_orig, &(m->fd_in));
-	if (open_fd_infile(m, pl->in_files_token))
-		return ;
+    (void)stdout_orig;
+//    handle_in(m, pl, stdin_orig, &(m->fd_in));
+ //   handle_out(m, pl, stdout_orig, &(m->fd_out));
+   // if (pl->in_files_token->e_type== DELIMITER)
+	//	here_doc(m, pl->in_files_token->name, stdin_orig, &(m->fd_in));
+	//if (open_fd_infile(m, pl->in_files_token))
+	//	return ;
 	first_child(m, pl);
 	pl = pl->next;
 	i = 1;

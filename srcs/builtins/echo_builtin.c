@@ -47,37 +47,27 @@ int	check_n_arg(char *arg)
 // The return status is 0 unless a write error occurs.
 // If -n is specified, the trailing newline is suppressed.
 
-/*
-int	return_code;
-return_code = printf("\n");
-if (return_code == -1)
-*/
-
-int	ft_echo(t_token_list *command)
+int	ft_echo(char **cmd_table)
 {
-	t_token_list	*iterator;
 	bool			flag;
+    size_t i;
 
-	iterator = command;
-	if (iterator->next == NULL)
+    i = 1;
+    flag = 0;
+    while (cmd_table[i] && check_n_arg(cmd_table[i]))
+    {
+        flag = 1;
+        i++;
+    }
+	while (cmd_table[i])
 	{
-		if (printf("\n") == -1)
+		if (printf("%s", cmd_table[i]) == -1)
 			return (EXIT_FAILURE);
-		return (EXIT_SUCCESS);
+		i++;
+		if (cmd_table[i] && printf(" ") == -1)
+            return (EXIT_FAILURE);
 	}
-	iterator = iterator->next;
-	flag = check_n_arg(iterator->name);
-	if (flag == 1)
-		iterator = iterator->next;
-	while (iterator)
-	{
-		if (printf("%s", iterator->name) == -1)
-			return (EXIT_FAILURE);
-		iterator = iterator->next;
-		if (iterator)
-			printf(" ");
-	}
-	if (flag == 0)
-		printf("\n");
+	if (flag == 0 && printf("\n") == -1)
+        return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

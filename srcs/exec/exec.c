@@ -19,10 +19,10 @@
  * Problem: m->list_tokens is not a good parameter, should be process_list
  * The list_tokens never changes, while process_list is iterated over
  */
-int	is_a_builtin(t_minishell *m, char *cmd)
+bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
-		m->status = ft_echo(m->list_tokens);
+		m->status = ft_echo(cmd_table);
 	else if (ft_strncmp(cmd, "cd", 3) == 0)
 		m->status = ft_cd(m, m->list_tokens);
 	else if (ft_strncmp(cmd, "pwd", 4) == 0)
@@ -43,13 +43,16 @@ int	is_a_builtin(t_minishell *m, char *cmd)
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	set_good_path_cmd(m, pl, pl->cmd_table[0]);
-	//if (!(is_a_builtin(m, pl->cmd_table[0])))
-		execve(pl->good_path, pl->cmd_table, m->envp_table);
-	if (access(pl->good_path, F_OK) == 0)
-		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
-	else
-		exit_command_not_found(m, pl->cmd_table[0]);
+	if (!is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+    {
+        set_good_path_cmd(m, pl, pl->cmd_table[0]);
+        execve(pl->good_path, pl->cmd_table, m->envp_table);
+        if (access(pl->good_path, F_OK) == 0)
+            print_name_and_exit_perror(m, pl->cmd_table[0], 1);
+        else
+            exit_command_not_found(m, pl->cmd_table[0]);
+    }
+    exit(m->status);
 }
 
 int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
@@ -109,7 +112,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->process_list);
 	else
-		exec_several_cmds(m, m->process_list, stdin_orig);
+		exec_several_cmds(m, m->process_list, stdin_orig, stdout_orig);
 	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);
