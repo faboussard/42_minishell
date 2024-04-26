@@ -71,7 +71,6 @@ void token_rework(t_minishell *minishell)
 	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) DOUBLE_QUOTE, cmp);
 	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) DOLLAR, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
-	define_heredoc_and_append(minishell, &minishell->list_tokens);
 	ft_list_remove_if_same_op(&minishell->list_tokens, (void *) IS_SPACE, cmp);
 }
 
@@ -79,7 +78,9 @@ int parse_input(t_minishell *minishell)
 {
 	char *string;
 	string = minishell->user_input;
+
 	transform_to_token(minishell, string);
+	define_heredoc_and_append(minishell, &minishell->list_tokens);
 	if (check_quotes(minishell))
 		return (1);
 	expander(minishell);
