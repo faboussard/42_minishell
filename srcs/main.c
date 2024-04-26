@@ -42,7 +42,7 @@ void	minishell_interactive(t_minishell *minishell)
 				minishell->process_list);
 			if (minishell->total_commands == 1
 				&& minishell->list_tokens->e_builtin == EXIT)
-				exec_builtin(minishell, minishell->list_tokens);
+                minishell->status = ft_exit_builtin(minishell, minishell->list_tokens);
 			else
 				execute_cmds(minishell, minishell->total_commands);
 		}
@@ -69,11 +69,11 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	{
 		if (minishell->process_list == NULL)
 			return ;
-		if (minishell->total_commands == 1
-			&& minishell->list_tokens->e_builtin != NO_BUILTIN)
-			exec_builtin(minishell, minishell->list_tokens);
-		else
-			execute_cmds(minishell, minishell->total_commands);
+//		if (minishell->total_commands == 1
+//			&& minishell->list_tokens->e_builtin != NO_BUILTIN)
+//			exec_builtin(minishell, minishell->list_tokens);
+//		else
+        execute_cmds(minishell, minishell->total_commands);
 	}
 }
 
