@@ -33,12 +33,12 @@ void handle_delimitor(t_token_list *iterator)
 	{
 		while (iterator && (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE))
 		{
-			iterator->is_quoted_delimiter = 1;
+			iterator->is_quoted_delimiter = true;
 			iterator = iterator->next;
-			while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
+			while (iterator && iterator->e_operator != DOUBLE_QUOTE &&
 				   iterator->e_operator != SINGLE_QUOTE)
 			{
-				iterator->is_quoted_delimiter = 1;
+				iterator->is_quoted_delimiter = true;
 				iterator = iterator->next;
 			}
 		}
