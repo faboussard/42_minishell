@@ -33,7 +33,7 @@
 //    }
 //}
 
-//close(m->fd_in); qui etait dans first child degage car cat | cat
+//close(m->fd_in); qui était dans first child dégage car cat | cat
 
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
@@ -59,6 +59,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 	else
 		close_and_redirect_pipe_to_stdin(m);
 }
+/* ??? */
 
 static void	last_child(t_minishell *m, t_process_list *pl)
 {
