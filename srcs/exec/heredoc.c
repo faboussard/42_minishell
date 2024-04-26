@@ -114,34 +114,33 @@ bool is_quoted_variable(char *string)
 	return (0);
 }
 
-static void	writing_in_heredoc(t_minishell *m, char *limiter, int stdin_fd)
+static void	writing_in_heredoc(t_minishell *m, t_token_list *limiter, int stdin_fd)
 {
 	size_t	limiter_len;
 	size_t	input_len;
 	char	*input;
 
-	limiter_len = ft_strlen(limiter);
+	limiter_len = ft_strlen(limiter->name);
 	while (1)
 	{
 		input = get_next_line(stdin_fd);
 		input_len = ft_strlen(input) - 1;
-		if (input_len == limiter_len && !ft_strncmp(input, limiter,
+		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
 		{
 			free(input);
 			close(m->fd_in);
 			exit(0);
 		}
-//		if (limiter->e_type_limiter == 1)
-//			ft_putendl_fd(input, m->fd_in);
-//		else
-// PAS DEXPANSION SI DOUBLE QUOTE < LE FAIRE OU PAS
-		handle_expand(m, input);
+		if (limiter->is_quoted_delimiter == 1)
+			ft_putendl_fd(input, m->fd_in);
+		else
+			handle_expand(m, input);
 		free(input);
 	}
 }
 
-void	here_doc(t_minishell *m, char *limiter, int stdin_fd, int *fd_to_use)
+void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd, int *fd_to_use)
 {
     int here_doc_pid;
 

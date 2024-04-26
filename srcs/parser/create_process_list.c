@@ -35,6 +35,7 @@ void create_in_files_token(t_process_list *new_process_list, t_minishell *minish
 			if (new_process_list->in_files_token->name == NULL)
 				exit_msg(minishell, "Memory allocation failed at create_in_files_token", 2);
 			new_process_list->in_files_token->e_type = iterator->e_type;
+			new_process_list->in_files_token->is_quoted_delimiter = iterator->is_quoted_delimiter;
 			new_process_list->in_files_token->next = NULL;
 		}
 		iterator = next;
