@@ -22,6 +22,7 @@ char *parse_input_for_heredoc(t_minishell *minishell, char *original_input)
 	heredoc_token_list = NULL;
 	transform_to_token(minishell, original_input, &heredoc_token_list);
 	expander(minishell, &heredoc_token_list);
+	ft_list_remove_if_same_type(&heredoc_token_list, (void *) TO_DELETE, cmp);
 	input_after_expand = join_all(minishell, &heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
 	return (input_after_expand);
