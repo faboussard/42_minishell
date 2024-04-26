@@ -17,7 +17,9 @@
 # include "minishell.h"
 
 /*************************token_list_utils**************************/
-void	ft_list_remove_if(t_token_list **begin_list, void *data_ref, int (*cmp)());
+
+void ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref, int (*cmp)());
+void ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref, int (*cmp)());
 
 /************************* join_tokens.c **************************/
 void join_tokens(t_minishell *minishell, t_token_list **list);
