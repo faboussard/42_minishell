@@ -153,7 +153,6 @@ void	here_doc(t_minishell *m, char *limiter, int stdin_fd, int *fd_to_use)
 		perror("No /tmp/ directory found");
 		return ;
 	}
-	// A CHANGER, pas d'exit du minishell
     here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
 		writing_in_heredoc(m, limiter, stdin_fd);
