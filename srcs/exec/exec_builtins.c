@@ -20,10 +20,10 @@ void	restore_terminal(t_minishell *minishell)
 	free_minishell(minishell);
 }
 
-void	exec_builtin(t_minishell *minishell, t_token_list *command)
+void	exec_builtin(t_minishell *minishell, t_token_list *command, char **cmd_table)
 {
 	if (command->e_builtin == ECHO)
-		minishell->status = ft_echo(command);
+        minishell->status = ft_echo(cmd_table);
 	if (command->e_builtin == CD)
 		minishell->status = ft_cd(minishell, command);
 	if (command->e_builtin == PWD)

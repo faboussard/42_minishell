@@ -19,7 +19,7 @@
 
 //---------------------------- EXEC BUILTINS --------------------------//
 
-void	exec_builtin(t_minishell *minishell, t_token_list *command);
+void	exec_builtin(t_minishell *minishell, t_token_list *command, char **cmd_table);
 //----------------------------------BUILTINS----------------------------------//
 int		ft_exit_builtin(t_minishell *minishell, t_token_list *command);
 int		ft_env(t_minishell *minishell);
