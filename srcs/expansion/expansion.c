@@ -96,7 +96,7 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
-			handle_delimitor(iterator);
+			handle_delimitor(&iterator);
 		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 			update_quote_counts(iterator, single_quote_count, double_quote_count);
 		else if (iterator->e_operator == DOLLAR)
@@ -112,7 +112,10 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 				update_quote_counts(iterator->next, single_quote_count, double_quote_count);
 			process_dollar_token(minishell, &iterator, *single_quote_count, *double_quote_count);
 		}
-		iterator = iterator->next;
+		if (iterator)
+			iterator = iterator->next;
+		else
+			break ;
 	}
 }
 
