@@ -180,8 +180,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, i
  //   handle_out(m, pl, stdout_orig, &(m->fd_out));
    // if (pl->in_files_token->e_type== DELIMITER)
 	//	here_doc(m, pl->in_files_token->name, stdin_orig, &(m->fd_in));
-	//if (open_fd_infile(m, pl->in_files_token))
-	//	return ;
+	if (open_fd_infile(m, pl->in_files_token))
+		return ;
 	first_child(m, pl);
 	pl = pl->next;
 	i = 1;
