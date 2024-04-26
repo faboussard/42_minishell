@@ -174,7 +174,7 @@ void join_quotes_between_spaces(t_minishell *minishell, t_token_list **list)
 					while ((*list)->next)
 					{
 						join_tokens(minishell, list);
-						change_iterator_name_to_empty_string(minishell, list);
+						change_token_name(minishell, list);
 						*list = (*list)->next;
 					}
 				}
