@@ -60,42 +60,40 @@ bool	str_is_num(char *str)
 	int	x;
 
 	x = 0;
-	if (ft_strlen(str) == 1 && (str[x] < 0 || str[x] > 9))
-		return (0);
 	while (str[x])
 	{
 		if (ft_isalpha(str[x]))
-			return (0);
+			return (1);
 		x++;
 	}
-	return (1);
+	return (0);
 }
 
 int	ft_exit_builtin(t_minishell *minishell, char **cmd_table)
 {
 	int		exit_code;
-	bool	error;
+	bool	is_alpha;
 
-	error = false;
+	is_alpha = false;
 	printf("exit\n");
 	if (!cmd_table[1])
 	{
 		free_minishell(minishell);
 		exit(0);
 	}
-	exit_code = ft_atoi_long(cmd_table[1], &error);
+	exit_code = ft_atoi_long(cmd_table[1], &is_alpha);
 	if (!str_is_num(cmd_table[1]))
-		error = true;
-	if (cmd_table[2] && !error)
+		is_alpha = true;
+	if (cmd_table[2] && !is_alpha)
 	{
 		print_error("minishell: exit: too many arguments");
 		return (1);
 	}
 	else
 	{
-		if (error)
+		if (is_alpha)
 		{
-			printf("minishell: exit: %s: numeric argument required",
+			printf("minishell: exit: %s: numeric argument required\n",
 				   cmd_table[1]);
 			free_minishell(minishell);
 			exit(2);
