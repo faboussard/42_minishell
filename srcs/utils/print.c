@@ -45,7 +45,6 @@ void	print_array(char **array)
 {
 	int	i;
 
-	printf("----------------------- ARRAY      -----------------------\n");
 	if (array == NULL)
 	{
 		printf("no array to print\n");
@@ -84,17 +83,10 @@ void	print_list_envp(t_minishell *minishell)
 {
 	t_envp_list	*current;
 
-	if (minishell->list_envp == NULL)
-	{
-		printf("no list to print\n");
-		return ;
-	}
-	printf("-----------------------  ENVP LIST -----------------------\n");
 	current = minishell->list_envp;
 	while (current != NULL)
 	{
-		printf("Target: %s, Value: %s\n", current->target, current->value);
+		printf("%s%s\n", current->target, current->value);
 		current = current->next;
 	}
-	printf("\n");
 }
