@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
 #include "parser.h"
 
 void join_tokens(t_minishell *minishell, t_token_list **list)

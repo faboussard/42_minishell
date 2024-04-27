@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
 #include "parser.h"
 
 int	ft_lstsize_token(t_token_list *lst)

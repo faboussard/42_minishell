@@ -12,14 +12,11 @@
 
 #include "builtins.h"
 #include "exec.h"
-#include "lexer.h"
 #include "minishell.h"
 #include "parser.h"
 #include "signals.h"
 #include "utils.h"
 #include <readline/history.h>
-
-#define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
 void	minishell_interactive(t_minishell *minishell)
 {
@@ -43,7 +40,7 @@ void	minishell_interactive(t_minishell *minishell)
 			if (minishell->total_commands == 1
 				&& minishell->list_tokens->e_builtin == EXIT)
 			{
-				minishell->status = ft_exit_builtin(minishell, minishell->process_list->cmd_table);
+				minishell->status = ft_exit(minishell, minishell->process_list->cmd_table);
 				set_or_get_last_status(minishell->status, 0);
 			}
 			else

@@ -42,10 +42,10 @@ void	sigint_handler(int signo)
 	rl_redisplay();
 }
 
-void sigquit_handler(int signo)
-{
-	(void)signo;
-}
+//void sigquit_handler(int signo)
+//{
+//	(void)signo;
+//}
 
 void	set_signals_interactive()
 {

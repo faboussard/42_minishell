@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer.h"
 #include "utils.h"
 #include "parser.h"
-#include <stdlib.h>
-
 
 void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator,
 						t_token_list *token)

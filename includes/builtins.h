@@ -21,15 +21,15 @@
 
 void	exec_builtin(t_minishell *minishell, t_token_list *command, char **cmd_table);
 //----------------------------------BUILTINS----------------------------------//
-int		ft_exit_builtin(t_minishell *minishell, char **cmd_table);
-int		ft_env(t_minishell *minishell, char **cmd_table);
+int		ft_exit(t_minishell *minishell, char **cmd_table);
+int		ft_env(t_minishell *minishell, char **args);
 int		ft_setenv(t_minishell *minishell);
 int		ft_unsetenv(t_minishell *minishell);
 int		ft_cd(t_minishell *minishell, t_token_list *list );
 int		ft_echo(char **cmd_table);
 int		ft_pwd(t_minishell *minishell);
 int		ft_export(t_minishell *minishell);
-int		ft_unset(t_minishell *minishell);
+int ft_unset(t_minishell *minishell, char **args);
 
 //-------------------------------BUILTINS UTILS-------------------------------//
 void	ft_realpath(t_minishell *m, char *cmd);

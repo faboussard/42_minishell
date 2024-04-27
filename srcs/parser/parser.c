@@ -12,7 +12,6 @@
 
 #include "lexer.h"
 #include "parser.h"
-#include "utils.h"
 #include <stdlib.h>
 
 int cmp(int op1, int op2)

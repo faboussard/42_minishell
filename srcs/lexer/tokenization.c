@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
 
 void create_token(t_minishell *minishell, char *string, t_token_list **list)
 {
