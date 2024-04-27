@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                               :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,14 +11,12 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include <readline/history.h>
 
-int ft_env(t_minishell *minishell, char **arg)
+int ft_env(t_minishell *minishell, char **args)
 {
-	if (arg && arg[1])
+	if (args && args[1])
 		print_error("minishell: exit: too many arguments");
 	if (!minishell->list_envp)
 		return (EXIT_FAILURE);

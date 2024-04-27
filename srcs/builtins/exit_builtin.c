@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include <readline/history.h>
 
 static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
 {
@@ -69,13 +67,14 @@ bool	str_is_num(char *str)
 	return (0);
 }
 
-int	ft_exit_builtin(t_minishell *minishell, char **cmd_table)
+int	ft_exit(t_minishell *minishell, char **cmd_table)
 {
 	int		exit_code;
 	bool	is_alpha;
 
 	is_alpha = false;
-	printf("exit\n");
+	if (minishell->interactive)
+		ft_putendl_fd("exit", 2);
 	if (!cmd_table[1])
 	{
 		free_minishell(minishell);
@@ -93,8 +92,7 @@ int	ft_exit_builtin(t_minishell *minishell, char **cmd_table)
 	{
 		if (is_alpha)
 		{
-			printf("minishell: exit: %s: numeric argument required\n",
-				   cmd_table[1]);
+			print_cmd_perror_no_strerror( cmd_table[1], "exit: numeric argument required\n");
 			free_minishell(minishell);
 			exit(2);
 		}

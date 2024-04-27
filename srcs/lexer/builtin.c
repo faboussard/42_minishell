@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "minishell.h"
-#include "utils.h"
 #include <stdbool.h>
+#include "lexer.h"
 
 bool	define_builtin_token(t_token_list *new_token, const char *string,
 		const char *builtins[8])

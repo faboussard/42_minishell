@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "utils.h"
 #include <stdbool.h>
-
+#include "lexer.h"
 
 bool define_operator_token(t_token_list *new_token, const char *string, const char *operator[13])
 {

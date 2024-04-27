@@ -15,7 +15,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-
 bool print_quote_syntax_error(enum e_token_operators operator)
 {
 	if (operator == SINGLE_QUOTE)
