@@ -41,8 +41,11 @@ void	minishell_interactive(t_minishell *minishell)
 			ft_init_process_list_and_minishell(minishell,
 				minishell->process_list);
 			if (minishell->total_commands == 1
-				&& minishell->list_tokens->e_builtin == EXIT)
-                minishell->status = ft_exit_builtin(minishell, minishell->list_tokens);
+				&& minishell->list_tokens->e_builtin == EXIT) // on garde le traitement dun exit ici ??
+			{
+				minishell->status = ft_exit_builtin(minishell, minishell->process_list->cmd_table);
+				set_or_get_last_status(minishell->status, 0);
+			}
 			else
 				execute_cmds(minishell, minishell->total_commands);
 		}

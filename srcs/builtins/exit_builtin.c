@@ -89,14 +89,14 @@ bool	str_is_num(char *str)
 	return (1);
 }
 */
-int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
+int	ft_exit_builtin(t_minishell *minishell, char **cmd_table)
 {
 	int		exit_code;
 	bool	error;
 
 	error = false;
 	printf("exit\n");
-	if (!command->next)
+	if (!cmd_table[1])
 	{
 		free_minishell(minishell);
 		exit(0);
@@ -105,12 +105,12 @@ int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 	➜  42_minishell.c git:(builtins) ✗ bash -c "exit 123avd"
 	bash: line 0: exit: 123avd: numeric argument required
 	*/
-	exit_code = ft_atoi_long(command->next->name, &error);
+	exit_code = ft_atoi_long(cmd_table[1], &error);
 	//	if (exit_code == 0 && !str_is_num(command->next->name))
 	//		dprintf(2, "line 0: exit: 123avd: numeric argument required",
 	//			command->next->name);
 	// je vais le recoder // Melo
-	if (command->next->next && !error)
+	if (cmd_table[2] && !error)
 	{
 		print_error("minishell: exit: too many arguments");
 		return (1);
@@ -120,7 +120,7 @@ int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
 		if (error)
 		{
 			printf("minishell: exit: %s: numeric argument required",
-				command->next->name);
+				   cmd_table[1]);
 			free_minishell(minishell);
 			exit(2);
 		}
