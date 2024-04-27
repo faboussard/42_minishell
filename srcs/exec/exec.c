@@ -28,13 +28,13 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 	else if (ft_strncmp(cmd, "pwd", 4) == 0)
 		m->status = ft_pwd(m);
 	else if (ft_strncmp(cmd, "exit", 5) == 0)
-		m->status = ft_exit_builtin(m, m->list_tokens);
-	// else if (ft_strncmp(cmd, "env", 4) == 0)
-	//     m->status = ft_env(m, m->list_tokens);
+		m->status = ft_exit_builtin(m, cmd_table);
+//	 else if (ft_strncmp(cmd, "env", 4) == 0)
+//	     m->status = ft_env(m, m->list_tokens);
 	// else if (ft_strncmp(cmd, "unset", 6) == 0)
 	//     m->status = ft_unset(m);
-	// else if (ft_strncmp(cmd, "exit", 5) == 0)
-	//     m->status = ft_exit_builtin(m, m->list_tokens);
+	// else if (ft_strncmp(cmd, "export", 5) == 0)
+	//     m->status = ft_export_builtin(m, m->list_tokens);
 	else
 		return (0);
 	set_or_get_last_status(m->status, 0);
