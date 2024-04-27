@@ -41,7 +41,7 @@ void	minishell_interactive(t_minishell *minishell)
 			ft_init_process_list_and_minishell(minishell,
 				minishell->process_list);
 			if (minishell->total_commands == 1
-				&& minishell->list_tokens->e_builtin == EXIT) // on garde le traitement dun exit ici ??
+				&& minishell->list_tokens->e_builtin == EXIT)
 			{
 				minishell->status = ft_exit_builtin(minishell, minishell->process_list->cmd_table);
 				set_or_get_last_status(minishell->status, 0);
@@ -62,11 +62,6 @@ void	minishell_interactive(t_minishell *minishell)
 
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-//		char *input = "\"$USER\" '$USER='";
-//	char *input2 = "\n";
-//		printf("input : %s\n",input2);
-//		handle_expand(minishell, input2);
-//		return ;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed at minishell_non_interactive", 2);
@@ -75,10 +70,6 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	{
 		if (minishell->process_list == NULL)
 			return ;
-//		if (minishell->total_commands == 1
-//			&& minishell->list_tokens->e_builtin != NO_BUILTIN)
-//			exec_builtin(minishell, minishell->list_tokens);
-//		else
         execute_cmds(minishell, minishell->total_commands);
 	}
 }
