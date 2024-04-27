@@ -14,7 +14,7 @@ LIST_SRCS		=  main signal \
 				env_variables/env_variables env_variables/env_utils \
 				parser/parser parser/create_process_list parser/process_list parser/check_syntax parser/print_error_syntax\
 				parser/token_requalif parser/token_requalif_utils parser/check_quotes parser/create_tables_in_process_list\
-				builtins/exit_builtin builtins/cd_builtin builtins/ft_realpath builtins/pwd_builtin builtins/builtins_utils builtins/echo_builtin \
+				builtins/unset_builtin builtins/export_builtin builtins/env_builtin builtins/exit_builtin builtins/cd_builtin builtins/ft_realpath builtins/pwd_builtin builtins/builtins_utils builtins/echo_builtin \
 				expansion/expansion expansion/expansion_utils expansion/add_after_special_char\
 				utils/free utils/free_utils utils/print utils/error \
 				exec/exec exec/errors exec/errors_exit	exec/paths	exec/fd_management \

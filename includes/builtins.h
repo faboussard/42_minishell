@@ -22,7 +22,7 @@
 void	exec_builtin(t_minishell *minishell, t_token_list *command, char **cmd_table);
 //----------------------------------BUILTINS----------------------------------//
 int		ft_exit_builtin(t_minishell *minishell, char **cmd_table);
-int		ft_env(t_minishell *minishell);
+int		ft_env(t_minishell *minishell, char **cmd_table);
 int		ft_setenv(t_minishell *minishell);
 int		ft_unsetenv(t_minishell *minishell);
 int		ft_cd(t_minishell *minishell, t_token_list *list );
