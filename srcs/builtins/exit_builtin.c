@@ -57,14 +57,14 @@ static int	ft_atoi_long(const char *str, bool *error)
 
 bool	str_is_num(char *str)
 {
-	int	x;
+	int	i;
 
-	x = 0;
-	while (str[x])
+	i = 0;
+	while (str[i])
 	{
-		if (ft_isalpha(str[x]))
+		if (ft_isalpha(str[i]))
 			return (1);
-		x++;
+		i++;
 	}
 	return (0);
 }
@@ -82,7 +82,7 @@ int	ft_exit_builtin(t_minishell *minishell, char **cmd_table)
 		exit(0);
 	}
 	exit_code = ft_atoi_long(cmd_table[1], &is_alpha);
-	if (!str_is_num(cmd_table[1]))
+	if (str_is_num(cmd_table[1]))
 		is_alpha = true;
 	if (cmd_table[2] && !is_alpha)
 	{
