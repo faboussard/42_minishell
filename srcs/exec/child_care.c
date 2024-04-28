@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 14:41:52 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/28 15:56:41 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	handle_in(t_minishell *m, t_process_list *pl, int std_in, int *fd_in)
 
 	infile_token = pl->in_files_token->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token->name, std_in, fd_in);
+		here_doc(m, pl->in_files_token, std_in, fd_in);
 	if (open_fd_infile(m, pl->in_files_token))
 		return ;
 }
