@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 14:44:31 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/28 14:57:29 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 	if (ft_strncmp(cmd, "echo", 5) == 0)
 		m->status = ft_echo(cmd_table);
 	else if (ft_strncmp(cmd, "cd", 3) == 0)
-		m->status = ft_cd(m, m->list_tokens);
+		m->status = ft_cd(m, cmd_table);
 	else if (ft_strncmp(cmd, "pwd", 4) == 0)
 		m->status = ft_pwd(m);
 	else if (ft_strncmp(cmd, "exit", 5) == 0)
