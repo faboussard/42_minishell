@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/23 08:54:30 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/28 14:44:31 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,15 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	if (!is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
-    {
-        set_good_path_cmd(m, pl, pl->cmd_table[0]);
-        execve(pl->good_path, pl->cmd_table, m->envp_table);
-        if (access(pl->good_path, F_OK) == 0)
-            print_name_and_exit_perror(m, pl->cmd_table[0], 1);
-        else
-            exit_command_not_found(m, pl->cmd_table[0]);
-    }
-    exit(m->status);
+	{
+		set_good_path_cmd(m, pl, pl->cmd_table[0]);
+		execve(pl->good_path, pl->cmd_table, m->envp_table);
+		if (access(pl->good_path, F_OK) == 0)
+			print_name_and_exit_perror(m, pl->cmd_table[0], 1);
+		else
+			exit_command_not_found(m, pl->cmd_table[0]);
+	}
+	exit(m->status);
 }
 
 int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
@@ -100,11 +100,12 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
 	int	stdin_orig;
 	int	stdout_orig;
+
 	stdin_orig = 0;
 	stdout_orig = 0;
-	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
-		return ;
 	if (nb_cmds < 1)
+		return ;
+	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
 		return ;
 	set_paths(m, m->envp_table);
 	if (m->paths == NULL)

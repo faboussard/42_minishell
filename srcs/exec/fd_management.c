@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/20 13:40:09 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/28 14:46:50 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 		*out = dup(STDOUT_FILENO);
 	if (*in == -1 || *out == -1)
 	{
+		if (*in >= 0)
+			close(*in);
 		ft_putendl_fd("minishell : dup error", 2);
 		m->status = 1;
 		return (1);
