@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/22 10:58:32 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/28 15:15:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,15 +112,13 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	return (0);
 }
 
-static int	get_home(t_minishell *m, t_token_list *command)
+static int	get_home(t_minishell *m)
 {
 	char	*home_dir;
 	char	*new_path;
 	size_t	home_dir_len;
 	int		return_value;
 
-	(void)command;
-	// if (command->next && ft_strncmp(command->next->name, "~", 2) == 0)
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
 	{
@@ -141,42 +139,38 @@ static int	get_home(t_minishell *m, t_token_list *command)
 	return (return_value);
 }
 
-bool	should_go_home(t_token_list *command)
+bool	should_go_home(char **cmd_table)
 {
-	if (command->next == NULL)
+	if (cmd_table[1] == NULL)
 		return (1);
-	if (ft_strncmp(command->next->name, "~", 2) == 0)
+	if (ft_strncmp(cmd_table[1], "~", 2) == 0)
 		return (1);
-	if (ft_strncmp(command->next->name, "~/", 3) == 0)
+	if (ft_strncmp(cmd_table[1], "~/", 3) == 0)
 		return (1);
 	return (0);
 }
 
-bool	too_many_args(t_token_list *command)
+bool	too_many_args(char **cmd_table)
 {
-	if (command->next != NULL && command->next->next != NULL)
+	if (cmd_table[1] != NULL && cmd_table[2] != NULL)
 	{
-		if (command->next->next->e_type != ARGUMENT
-			&& command->next->next->next == NULL)
-			return (0);
-		else
-			ft_putendl_fd("minishell: cd: too many arguments", 2);
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (1);
 	}
 	return (0);
 }
 
-int	ft_cd(t_minishell *minishell, t_token_list *command)
+int	ft_cd(t_minishell *minishell, char **cmd_table)
 {
 	char		*dir;
 	struct stat	st;
 
-	dprintf(2, "m->current_path IS %s\n", minishell->current_path);
-	//if (too_many_args(command))
-	//	return (1);
-	if (should_go_home(command) == 1)
-		return (get_home(minishell, command));
-	dir = command->next->name;
+	// dprintf(2, "m->current_path IS %s\n", minishell->current_path);
+	if (too_many_args(cmd_table))
+		return (1);
+	if (should_go_home(cmd_table))
+		return (get_home(minishell));
+	dir = cmd_table[2];
 	if (ft_strncmp(dir, "-", 2) == 0)
 		return (go_into_directory(minishell, minishell->old_pwd));
 	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
