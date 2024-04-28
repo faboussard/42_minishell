@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 15:58:22 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/28 16:01:41 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_free_pl_paths(t_minishell *minishell);
 void	check_and_delete_if_tmp_file_exists(char *tmp_file);
 //--------------------------- CHILD CARE ------------------------------//
 // void exec_several_cmds(t_minishell *m, t_process_list *p_list,
-//	int stdin_orig);
+//  	int stdin_orig);
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list,
 			int stdin_orig, int stdout_orig);
 //--------------------------- EXEC ------------------------------------//
