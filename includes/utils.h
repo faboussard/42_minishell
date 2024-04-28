@@ -53,6 +53,7 @@ void			free_safely_str(char *str_to_free);
 void			print_error(const char *error);
 bool print_operator_syntax_error(t_token_list *token);
 void			print_cmd_perror(char *cmd, char *name, int err);
+void	print_cmd_perror_no_strerror(char *cmd, char *name);
 
 /******************** TOKEN LIST *****************/
 int				ft_lstsize_token(t_token_list *lst);

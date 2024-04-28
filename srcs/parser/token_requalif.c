@@ -12,9 +12,6 @@
 
 #include "lexer.h"
 #include "parser.h"
-#include "utils.h"
-#include <stdlib.h>
-
 
 void	token_requalification(t_token_list *list_tokens)
 {

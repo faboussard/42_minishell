@@ -14,134 +14,62 @@
 #include "parser.h"
 #include "utils.h"
 
-void	handle_expand(t_minishell *m, char *input)
+char *parse_input_for_heredoc(t_minishell *minishell, char *original_input)
 {
-	char	**split_space;
-	char	*input_after_expand;
+	char *input_after_expand;
+	t_token_list *heredoc_token_list;
 
-	split_space = ft_split(input, ' ');
-	if (split_space == NULL)
-		exit_msg_minishell(m, "Fatal : malloc failed at handle expand", 2);
-	input_after_expand = expand_variables(m, split_space);
-	if (input_after_expand != NULL)
-		ft_putstr_fd(input_after_expand, m->fd_in);
-	else
-		ft_putstr_fd(input, m->fd_in);
-	free_safely_str(input_after_expand);
-	if (split_space != NULL)
-		ft_free_tab(split_space);
-}
-
-char	*expand_variables(t_minishell *m, char **split_space)
-{
-	char	*input_after_expand;
-	int		count;
-	int		i;
-
-	input_after_expand = ft_calloc(1, 1);
-	if (input_after_expand == NULL)
-		exit_msg_minishell(m, "Malloc failed at handle expand", 2);
-	count = -1;
-	i = 0;
-	while (split_space[i])
-	{
-		if (is_quoted_variable(split_space[i]))
-			handle_quoted_variable(m, &input_after_expand, split_space[i]);
-		else
-			handle_regular_variable(m, &input_after_expand, split_space[i],
-				&count, &i);
-		i++;
-	}
+	heredoc_token_list = NULL;
+	transform_to_token(minishell, original_input, &heredoc_token_list);
+	expander(minishell, &heredoc_token_list);
+	ft_list_remove_if_same_type(&heredoc_token_list, (void *) TO_DELETE, cmp);
+	input_after_expand = join_all(minishell, &heredoc_token_list);
+	ft_lstclear_token(&heredoc_token_list);
 	return (input_after_expand);
 }
 
-void	handle_quoted_variable(t_minishell *m, char **input_after_expand,
-		char *variable)
+void	handle_expand(t_minishell *m, char *input)
 {
-	char	*expanded;
-	expanded = expand_sigil(variable, m);
-	if (expanded != variable)
-		*input_after_expand = ft_strjoin(*input_after_expand, expanded);
-}
+	char	*input_after_expand;
 
-void	handle_regular_variable(t_minishell *m, char **input_after_expand,
-		char *variable, int *count, int *i)
-{
-	char	*temp;
-	char	**split_dollar;
-	int		j;
-
-	j = 0;
-	temp = get_non_variable_part(m, variable);
-	if (temp != NULL)
+	input_after_expand = parse_input_for_heredoc(m, input);
+	if (input_after_expand != NULL)
 	{
-		(*count)++;
-		if (*count != 0 && *count >= *i)
-			*input_after_expand = ft_strjoin(*input_after_expand, " ");
-		*input_after_expand = ft_strjoin(*input_after_expand, temp);
-		free(temp);
+		ft_putstr_fd(input_after_expand, m->fd_in);
+		free_safely_str(input_after_expand);
 	}
-	split_dollar = ft_split(variable, '$');
-	if (split_dollar == NULL)
-		exit_msg_minishell(m, "Malloc failed at handle expand", -1);
-	while (split_dollar[j])
-		handle_quoted_variable(m, input_after_expand, split_dollar[j++]);
-	ft_free_tab(split_dollar);
+	else
+		ft_putstr_fd(input, m->fd_in);;
 }
 
-char	*get_non_variable_part(t_minishell *m, char *string)
-{
-	int		i;
-	char	*temp;
 
-	i = 0;
-	while (string[i] && string[i] != '$')
-		i++;
-	if (i != 0)
-	{
-		temp = ft_substr(string, 0, i);
-		if (temp == NULL)
-			exit_msg_minishell(m, "Malloc failed at handle expand", -1);
-		return (temp);
-	}
-	return (NULL);
-}
-
-bool is_quoted_variable(char *string)
-{
-	if (string[0] == '$' && (string[1] == '\'' || string[1] == '\"'))
-		return (1);
-	return (0);
-}
-
-static void	writing_in_heredoc(t_minishell *m, char *limiter, int stdin_fd)
+static void	writing_in_heredoc(t_minishell *m, t_token_list *limiter, int stdin_fd)
 {
 	size_t	limiter_len;
 	size_t	input_len;
 	char	*input;
 
-	limiter_len = ft_strlen(limiter);
+	limiter_len = ft_strlen(limiter->name);
 	while (1)
 	{
 		input = get_next_line(stdin_fd);
 		input_len = ft_strlen(input) - 1;
-		if (input_len == limiter_len && !ft_strncmp(input, limiter,
+		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
 		{
-			free(input);
+			free_safely_str(input);
 			close(m->fd_in);
 			exit(0);
 		}
-//		if (limiter->e_type_limiter == 1)
-//			ft_putendl_fd(input, m->fd_in);
-//		else
-// PAS DEXPANSION SI DOUBLE QUOTE < LE FAIRE OU PAS
-		handle_expand(m, input);
-		free(input);
+		if (limiter->is_quoted_delimiter == 1)
+			ft_putstr_fd(input, m->fd_in);
+		else
+			handle_expand(m, input);
+		free_safely_str(input);
 	}
 }
 
-void	here_doc(t_minishell *m, char *limiter, int stdin_fd, int *fd_to_use)
+void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd, int *fd_to_use)
 {
     int here_doc_pid;
 

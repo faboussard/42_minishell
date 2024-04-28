@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "utils.h"
 #include "parser.h"
 
 int is_special_char(char c)

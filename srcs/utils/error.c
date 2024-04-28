@@ -37,3 +37,11 @@ void	print_cmd_perror(char *cmd, char *name, int err)
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(strerror(err), 2);
 }
+
+void	print_cmd_perror_no_strerror(char *cmd, char *name)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(name, 2);
+}

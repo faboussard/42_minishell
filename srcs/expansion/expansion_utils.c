@@ -24,29 +24,37 @@ char *expand_sign(char *string, char *temp)
 	return (string);
 }
 
-void handle_delimitor(t_token_list *iterator)
+void treat_in_delimitor(t_token_list **iterator)
 {
-	iterator = iterator->next;
-	while (iterator && iterator->e_operator == IS_SPACE)
-		iterator = iterator->next;
-	while (iterator && iterator->next && iterator->e_operator != IS_SPACE)
+	if ((*iterator)->e_operator == DOLLAR)
+		(*iterator)->e_operator = 0;
+	(*iterator)->is_quoted_delimiter = true;
+	(*iterator) = (*iterator)->next;
+}
+
+
+void handle_delimitor(t_token_list **iterator)
+{
+	*iterator = (*iterator)->next;
+	while ((*iterator) && (*iterator)->e_operator == IS_SPACE)
+		(*iterator) = (*iterator)->next;
+	while ((*iterator) && (*iterator)->next && (*iterator)->e_operator != IS_SPACE)
 	{
-		while (iterator && (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE))
+		if ((*iterator)->e_operator == DOLLAR)
+			(*iterator)->e_operator = 0;
+		while ((*iterator) && ((*iterator)->e_operator == DOUBLE_QUOTE || (*iterator)->e_operator == SINGLE_QUOTE))
 		{
-			iterator->is_quoted_delimiter = 1;
-			iterator = iterator->next;
-			while (iterator && iterator->next && iterator->e_operator != DOUBLE_QUOTE &&
-				   iterator->e_operator != SINGLE_QUOTE)
+			(*iterator)->is_quoted_delimiter = true;
+			(*iterator) = (*iterator)->next;
+			while ((*iterator) && (*iterator)->e_operator != DOUBLE_QUOTE &&
+					(*iterator)->e_operator != SINGLE_QUOTE)
 			{
-				iterator->is_quoted_delimiter = 1;
-				iterator = iterator->next;
+				(*iterator)->is_quoted_delimiter = true;
+				(*iterator) = (*iterator)->next;
 			}
 		}
-		if (iterator)
-		{
-			iterator->is_quoted_delimiter = 1;
-			iterator = iterator->next;
-		}
+		if ((*iterator))
+			treat_in_delimitor(iterator);
 	}
 }
 
