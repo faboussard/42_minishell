@@ -11,29 +11,16 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include <readline/history.h>
 
-// The exit utility shall cause the shell to exit from its current
-// execution environment with the exit status specified by the
-// unsigned decimal integer n.  If the current execution environment
-//       is a subshell environment, the shell shall exit from the subshell
-//       environment with the specified exit status and continue in the
-// environment from which that subshell environment was invoked;
-// otherwise, the shell utility shall terminate with the specified
-// exit status. If n is specified, but its value is not between 0
-// and 255 inclusively, the exit status is undefined.
-//
-// A trap on EXIT shall be executed before the shell terminates,
-// except when the exit utility is invoked in that trap itself, in
-//       which case the shell shall exit immediately.
-//
-// FAIRE EXIT QUAND ON FAIT CONTRLOLE D AUSSI ( pour linstant seul un
-//	% apparait)
-
-static bool	check_out_of_range(int neg, unsigned long long num, bool *error);
+static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
+{
+	if ((neg == 1 && num > LONG_MAX) || (neg == -1 && num >
+													  -(unsigned long)LONG_MIN))
+		*error = true;
+	return (*error);
+}
 
 static int	ft_atoi_long(const char *str, bool *error)
 {
@@ -65,65 +52,51 @@ static int	ft_atoi_long(const char *str, bool *error)
 	return (num * neg);
 }
 
-static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
-{
-	if ((neg == 1 && num > LONG_MAX) || (neg == -1 && num >
-			-(unsigned long)LONG_MIN))
-		*error = true;
-	return (*error);
-}
-/*
+
 bool	str_is_num(char *str)
 {
-	int	x;
+	int	i;
 
-	x = 0;
-	if (ft_strlen(str) == 1 && (str[x] < 0 || str[x] > 9))
-		return (0);
-	while (str[x])
+	i = 0;
+	while (str[i])
 	{
-		if (ft_isalpha(str))
-			return (0);
-		x++;
+		if (ft_isalpha(str[i]))
+			return (1);
+		i++;
 	}
-	return (1);
+	return (0);
 }
-*/
-int	ft_exit_builtin(t_minishell *minishell, t_token_list *command)
+
+int	ft_exit(t_minishell *minishell, char **cmd_table)
 {
 	int		exit_code;
-	bool	error;
+	bool	is_alpha;
 
-	error = false;
-	printf("exit\n");
-	if (!command->next)
+	is_alpha = false;
+	if (minishell->interactive)
+		ft_putendl_fd("exit", 2);
+	if (!cmd_table[1])
 	{
-		restore_terminal(minishell);
+		free_minishell(minishell);
 		exit(0);
 	}
-	/*
-	➜  42_minishell.c git:(builtins) ✗ bash -c "exit 123avd"
-	bash: line 0: exit: 123avd: numeric argument required
-	*/
-	exit_code = ft_atoi_long(command->next->name, &error);
-	//	if (exit_code == 0 && !str_is_num(command->next->name))
-	//		dprintf(2, "line 0: exit: 123avd: numeric argument required",
-	//			command->next->name);
-	// je vais le recoder // Melo
-	if (command->next->next && !error)
+	exit_code = ft_atoi_long(cmd_table[1], &is_alpha);
+	if (str_is_num(cmd_table[1]))
+		is_alpha = true;
+	if (cmd_table[2] && !is_alpha)
 	{
 		print_error("minishell: exit: too many arguments");
 		return (1);
 	}
 	else
 	{
-		if (error)
+		if (is_alpha)
 		{
-			printf("minishell: exit: %s: numeric argument required",
-				command->next->name);
-			restore_terminal(minishell);
+			print_cmd_perror_no_strerror( cmd_table[1], "exit: numeric argument required\n");
+			free_minishell(minishell);
 			exit(2);
 		}
+		free_minishell(minishell);
 		exit(exit_code % 256);
 	}
 }

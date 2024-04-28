@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "parser.h"
-#include "utils.h"
 
 size_t	count_letters_until_pipe(t_token_list *head)
 {

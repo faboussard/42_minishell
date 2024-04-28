@@ -35,6 +35,7 @@ void create_in_files_token(t_process_list *new_process_list, t_minishell *minish
 			if (new_process_list->in_files_token->name == NULL)
 				exit_msg(minishell, "Memory allocation failed at create_in_files_token", 2);
 			new_process_list->in_files_token->e_type = iterator->e_type;
+			new_process_list->in_files_token->is_quoted_delimiter = iterator->is_quoted_delimiter;
 			new_process_list->in_files_token->next = NULL;
 		}
 		iterator = next;
@@ -70,10 +71,10 @@ void create_out_files_token(t_process_list *new_process_list, t_minishell *minis
 
 t_process_list *create_process_list_node(t_process_list *new_process_list, t_minishell *minishell)
 {
-	size_t nbr_cmds_letters_int_pipe;
+	size_t nbr_cmds_letters_in_pipe;
 
-	nbr_cmds_letters_int_pipe = count_letters_until_pipe(minishell->list_tokens);
-	create_cmd_table_array(new_process_list, nbr_cmds_letters_int_pipe, minishell);
+	nbr_cmds_letters_in_pipe = count_letters_until_pipe(minishell->list_tokens);
+	create_cmd_table_array(new_process_list, nbr_cmds_letters_in_pipe, minishell);
 	create_in_files_token(new_process_list, minishell);
 	create_out_files_token(new_process_list, minishell);
 	return (new_process_list);

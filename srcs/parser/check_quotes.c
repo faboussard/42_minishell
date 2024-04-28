@@ -12,9 +12,7 @@
 
 #include "lexer.h"
 #include "parser.h"
-#include "utils.h"
 #include <stdlib.h>
-
 
 void check_open_quote(bool *open_quote, int *opened_quote_type, t_token_list **iterator)
 {

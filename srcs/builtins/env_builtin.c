@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 11:06:17 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "parser.h"
+#include "builtins.h"
+#include "minishell.h"
+#include "utils.h"
 
-void	token_requalification(t_token_list *list_tokens)
+int ft_env(t_minishell *minishell, char **args)
 {
-	if (list_tokens)
-	{
-		to_infile_or_outfile(list_tokens);
-		arg_to_command(list_tokens);
-		define_builtins(list_tokens);
-		define_operators(list_tokens);
-	}
+	if (args && args[1])
+		print_error("minishell: exit: too many arguments");
+	if (!minishell->list_envp)
+		return (EXIT_FAILURE);
+	print_list_envp(minishell);
+	return (EXIT_SUCCESS);
 }

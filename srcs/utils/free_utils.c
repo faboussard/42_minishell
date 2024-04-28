@@ -50,18 +50,3 @@ void	ft_free_all_tab(char **tab)
 	}
 	free(tab);
 }
-
-void	ft_free_tab_from_i(void **tab, int j)
-{
-	int	i;
-
-	if (tab == NULL)
-		return ;
-	i = 0;
-	while (i < j)
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}

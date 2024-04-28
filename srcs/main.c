@@ -12,14 +12,11 @@
 
 #include "builtins.h"
 #include "exec.h"
-#include "lexer.h"
 #include "minishell.h"
 #include "parser.h"
 #include "signals.h"
 #include "utils.h"
 #include <readline/history.h>
-
-#define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 
 void	minishell_interactive(t_minishell *minishell)
 {
@@ -42,7 +39,10 @@ void	minishell_interactive(t_minishell *minishell)
 				minishell->process_list);
 			if (minishell->total_commands == 1
 				&& minishell->list_tokens->e_builtin == EXIT)
-                minishell->status = ft_exit_builtin(minishell, minishell->list_tokens);
+			{
+				minishell->status = ft_exit(minishell, minishell->process_list->cmd_table);
+				set_or_get_last_status(minishell->status, 0);
+			}
 			else
 				execute_cmds(minishell, minishell->total_commands);
 		}
@@ -52,15 +52,13 @@ void	minishell_interactive(t_minishell *minishell)
 		free(minishell->user_input);
 		ft_free_process_list(&(minishell->process_list));
 		ft_lstclear_token(&minishell->list_tokens);
+		if (minishell->envp_table)
+			ft_free_all_tab(minishell->envp_table);
 	}
 }
 
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	//	char *input = "\"$USER\" '$USER='";
-	//	printf("input : %s\n",input);
-	//	handle_expand(minishell, input);
-	//	return ;
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell, "Fatal : malloc failed at minishell_non_interactive", 2);
@@ -69,10 +67,6 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	{
 		if (minishell->process_list == NULL)
 			return ;
-//		if (minishell->total_commands == 1
-//			&& minishell->list_tokens->e_builtin != NO_BUILTIN)
-//			exec_builtin(minishell, minishell->list_tokens);
-//		else
         execute_cmds(minishell, minishell->total_commands);
 	}
 }
@@ -171,12 +165,8 @@ int	main(int ac, char **av, char **envp)
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
-	{
-		//		format_input(&minishell, av + 2);
-		// attention si format input fail, faire un exit msg
 		minishell_non_interactive(&minishell, av[2]);
-	}
-	// ft_print_minishell(&minishell);
+//	 ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
 }

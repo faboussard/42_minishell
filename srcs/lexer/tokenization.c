@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
 
-void create_token(t_minishell *minishell, char *string)
+void create_token(t_minishell *minishell, char *string, t_token_list **list)
 {
 	t_token_list *new_token;
 
@@ -30,21 +30,19 @@ void create_token(t_minishell *minishell, char *string)
 		free(new_token);
 		exit_msg(minishell, "Malloc failed at create_token", 2);
 	}
-	add_token_to_list(&minishell->list_tokens, new_token);
+	add_token_to_list(list, new_token);
 }
 
-static void create_words(t_minishell *minishell, char *string, int *i, char **temp)
+static void create_words(char *string, int *i, char **temp)
 {
 	int j = 0;
-	while (string[*i] && (ft_isalnum(string[*i]) || string[*i] == '_')) {
+	while (string[*i] && (ft_isalnum(string[*i]) || string[*i] == '_'))
 		(*temp)[j++] = string[(*i)++];
-	}
-	(*temp)[j] = '\0'; // Ajout du caractère de fin de chaîne
-	create_token(minishell, *temp);
+	(*temp)[j] = '\0';
 }
 
 
-void transform_to_token(t_minishell *minishell, char *string)
+void transform_to_token(t_minishell *minishell, char *string, t_token_list **list)
 {
 	int i;
 	char *temp;
@@ -60,11 +58,14 @@ void transform_to_token(t_minishell *minishell, char *string)
 		if ((ft_isspace(string[i]) || !ft_isalnum(string[i])) && string[i] != '_')
 		{
 			temp[0] = string[i];
-			create_token(minishell, temp);
+			create_token(minishell, temp, list);
 			i++;
 		}
 		else if (string[i])
-			create_words(minishell, string, &i, &temp);
+		{
+			create_words(string, &i, &temp);
+			create_token(minishell, temp, list);
+		}
 		free_safely_str(temp);
 	}
 }

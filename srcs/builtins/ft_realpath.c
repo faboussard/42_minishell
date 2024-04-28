@@ -12,7 +12,6 @@
 
 #include "builtins.h"
 #include "exec.h"
-#include "utils.h"
 
 int	count_up_moves(char *cmd)
 {

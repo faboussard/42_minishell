@@ -14,44 +14,13 @@
 #include "utils.h"
 #include "parser.h"
 
-//void ignore_next_char(char *str, char c)
-//{
-//	char *char_to_ignore;
-//	size_t len;
-//
-//	char_to_ignore = strchr(str, c);
-//	if (char_to_ignore != NULL)
-//	{
-//		len = strlen(char_to_ignore);
-//		ft_memmove(char_to_ignore, char_to_ignore + 1, len);
-//		char_to_ignore[len - 1] = '\0';
-//	}
-//}
-
-//void ignore_dollar_string(char **string, t_minishell *minishell)
-//{
-//	char *new_string;
-//	size_t len;
-//
-//	if (*string != NULL)
-//	{
-//		len = strlen(*string);
-//		new_string = malloc(len); // La longueur est len - 1
-//		if (new_string == NULL)
-//			exit_msg(minishell, "Malloc failed at ignore_dollar", -1);
-//		ft_memmove(new_string, *string + 1, len - 1); // Utilisation de len - 1 pour la longueur
-//		free(*string);
-//		*string = new_string;
-//	}
-//}
-
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
 
 	while (iterator != NULL)
 	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(string) - 1) == 0)
+		if (ft_strncmp(string, iterator->target, ft_strlen(string)) == 0)
 		{
 			if (check_special_char_after_expand(string, iterator->target))
 				string = expand_sign(string, iterator->value);
@@ -112,7 +81,7 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 			if (expanded_string != (*list)->next->name)
 			{
 				join_tokens(minishell, list);
-				change_iterator_name_to_empty_string(minishell, list, expanded_string);
+				change_token_name(minishell, list, expanded_string);
 				free(expanded_string);
 				return;
 			}
@@ -127,7 +96,7 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
-			handle_delimitor(iterator);
+			handle_delimitor(&iterator);
 		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 			update_quote_counts(iterator, single_quote_count, double_quote_count);
 		else if (iterator->e_operator == DOLLAR)
@@ -143,11 +112,14 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 				update_quote_counts(iterator->next, single_quote_count, double_quote_count);
 			process_dollar_token(minishell, &iterator, *single_quote_count, *double_quote_count);
 		}
-		iterator = iterator->next;
+		if (iterator)
+			iterator = iterator->next;
+		else
+			break ;
 	}
 }
 
-void expander(t_minishell *minishell)
+void expander(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *iterator;
 	int single_quote_count;
@@ -155,7 +127,7 @@ void expander(t_minishell *minishell)
 
 	single_quote_count = 0;
 	double_quote_count = 0;
-	iterator = minishell->list_tokens;
+	iterator = *list;
 	expand_tokens(minishell, iterator, &single_quote_count, &double_quote_count);
 }
 

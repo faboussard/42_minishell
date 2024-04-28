@@ -28,13 +28,13 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 	else if (ft_strncmp(cmd, "pwd", 4) == 0)
 		m->status = ft_pwd(m);
 	else if (ft_strncmp(cmd, "exit", 5) == 0)
-		m->status = ft_exit_builtin(m, m->list_tokens);
-	// else if (ft_strncmp(cmd, "env", 4) == 0)
-	//     m->status = ft_env(m, m->list_tokens);
-	// else if (ft_strncmp(cmd, "unset", 6) == 0)
-	//     m->status = ft_unset(m);
-	// else if (ft_strncmp(cmd, "exit", 5) == 0)
-	//     m->status = ft_exit_builtin(m, m->list_tokens);
+		m->status = ft_exit(m, cmd_table);
+	else if (ft_strncmp(cmd, "env", 4) == 0)
+		m->status = ft_env(m, cmd_table);
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
+		m->status = ft_unset(m, cmd_table);
+	// else if (ft_strncmp(cmd, "export", 5) == 0)
+	//     m->status = ft_export(m, m->list_tokens);
 	else
 		return (0);
 	set_or_get_last_status(m->status, 0);
@@ -63,7 +63,7 @@ int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	infile_token = pl->in_files_token->e_type;
 	outfile_token = pl->out_files_token->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->fd_in));
+		here_doc(m, pl->in_files_token, STDIN_FILENO, &(m->fd_in));
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
 		if (open_fd_infile(m, pl->in_files_token))
@@ -112,7 +112,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->process_list);
 	else
-		exec_several_cmds(m, m->process_list, stdin_orig, stdout_orig);
+		exec_several_cmds(m, m->process_list, stdin_orig);
 	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);

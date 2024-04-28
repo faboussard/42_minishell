@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer.h"
 #include "utils.h"
-#include <stdlib.h>
 #include "parser.h"
-
 
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
@@ -70,7 +69,7 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 		if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && quote_type == (int)(*list)->next->e_operator)
 		{
 			join_tokens(minishell, list);
-			change_iterator_name_to_empty_string(minishell, list, "\0");
+			change_token_name(minishell, list, "\0");
 			continue ;
 		}
 		else if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && check_if_more_tokens(list, quote_type))
@@ -112,3 +111,39 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 	}
 	*list = cpy;
 }
+
+void join_token_name(t_minishell *minishell, char *temp, t_token_list **iterator, char **new_table)
+{
+	temp = ft_strjoin((*new_table), (*iterator)->name);
+	if (temp == NULL)
+		exit_msg(minishell, "Memory allocation failed at tokenization", 2);
+	free_safely_str((*new_table));
+	(*new_table) = temp;
+	(*iterator) = (*iterator)->next;
+}
+
+char *join_all(t_minishell *minishell, t_token_list **list)
+{
+	t_token_list *iterator;
+	char *new_table;
+	char *temp;
+	size_t total_length;
+
+	temp = NULL;
+	new_table = NULL;
+	total_length = 0;
+	iterator = *list;
+	while (iterator)
+	{
+		total_length += strlen(iterator->name);
+		iterator = iterator->next;
+	}
+	new_table = ft_calloc(total_length + 1, sizeof(char));
+	if (new_table == NULL)
+		exit_msg(minishell, "Memory allocation failed for command table array", 2);
+	iterator = *list;
+	while (iterator)
+		join_token_name(minishell, temp, &iterator, &new_table);
+	return (new_table);
+}
+
