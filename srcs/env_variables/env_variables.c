@@ -16,6 +16,14 @@
 #include "minishell.h"
 #include "parser.h"
 
+void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
+{
+	if (new_envp == NULL)
+		return;
+	new_envp->next = *list_envp;
+	*list_envp = new_envp;
+}
+
 
 static int add_new_envp(t_envp_list **list_envp, char *target, char *content)
 {
