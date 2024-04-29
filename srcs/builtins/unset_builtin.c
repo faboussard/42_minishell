@@ -35,7 +35,6 @@ bool	is_valid_env_var_key(char *var)
 int	ft_unset(t_minishell *minishell, char **args)
 {
 	int	i;
-	int var_index;
 	int	ret;
 
 	i = 1;
@@ -47,13 +46,7 @@ int	ft_unset(t_minishell *minishell, char **args)
 			ret = EXIT_FAILURE;
 		}
 		else
-		{
-			var_index = get_env_var_index(minishell, minishell->envp_table, args[i]);
-			printf("unset: %s\n", args[i]);
-			printf("%d\n", var_index);
-			if (var_index != -1)
-				remove_env_var(minishell, var_index);
-		}
+			remove_env_var(minishell, &minishell->list_envp, args[i]);
 		i++;
 	}
 	return (ret);

@@ -23,10 +23,10 @@ int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
 	while (cpy != NULL)
 	{
 		if (cpy->e_operator == op)
-			return 1;
+			return (1);
 		cpy = cpy->next;
 	}
-	return 0;
+	return (0);
 }
 
 
