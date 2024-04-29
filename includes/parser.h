@@ -65,9 +65,9 @@ bool			is_redirect_token(t_token_list *token);
 t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 t_envp_list *create_new_envp(char *target, char *content);
 void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp);
-int	get_env_var_index(t_minishell *minishell, char **env, char *var);
-char	*get_env_var_value(char **env, char *var);
-bool	remove_env_var(t_minishell *minishell, int idx);
+void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var);
+void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove);
+void	free_envp(t_envp_list *envp);
 
 /********************* expansion_utils.c ****************************/
 void expander(t_minishell *minishell, t_token_list **list);

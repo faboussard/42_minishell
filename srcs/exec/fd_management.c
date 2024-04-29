@@ -27,7 +27,7 @@ int	open_fd_infile(t_minishell *m, t_token_list *in_files_list)
 		else
 			print_name(m, in_files_list->name);
 		m->status = 1;
-		m->process_list->dev_null = 1;
+		m->pl->dev_null = 1;
 		m->fd_in = open("/dev/null", O_RDONLY);
 		if (m->fd_in < 0)
 		{
@@ -62,9 +62,9 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 
 int	dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 {
-	if (m->process_list->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
+	if (m->pl->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
 		*in = dup(STDIN_FILENO);
-	if (m->process_list->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
+	if (m->pl->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
 		*out = dup(STDOUT_FILENO);
 	if (*in == -1 || *out == -1)
 	{
@@ -79,7 +79,7 @@ int	dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 
 void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 {
-	if (m->process_list->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
+	if (m->pl->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
 	{
 		if (dup2(*in, STDIN_FILENO) == -1)
 		{
@@ -88,7 +88,7 @@ void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
 		}
 		close(*in);
 	}
-	if (m->process_list->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
+	if (m->pl->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
 	{
 		if (dup2(*out, STDOUT_FILENO) == -1)
 		{

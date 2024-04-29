@@ -73,7 +73,7 @@ typedef struct s_minishell
 	char						**envp_table;
 	t_token_list				*list_tokens;
 	t_envp_list					*list_envp;
-	t_process_list				*process_list;
+	t_process_list				*pl;
 	size_t						total_commands;
 	size_t						total_size_envp;
 }								t_minishell;

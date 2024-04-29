@@ -92,8 +92,8 @@ void	free_minishell(t_minishell *minishell)
 		ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)
 		ft_free_all_tab(minishell->envp_table);
-	if (minishell->process_list)
-		ft_free_process_list(&minishell->process_list);
+	if (minishell->pl)
+		ft_free_process_list(&minishell->pl);
 	if (minishell->list_tokens)
 		ft_lstclear_token(&minishell->list_tokens);
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);

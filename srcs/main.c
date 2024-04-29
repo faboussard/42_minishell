@@ -18,42 +18,51 @@
 #include "utils.h"
 #include <readline/history.h>
 
-void	minishell_interactive(t_minishell *minishell)
+bool is_one_arg_builtin(t_minishell *m)
+{
+	if (m->list_tokens->e_builtin == EXIT)
+		return (1);
+	if (m->list_tokens->e_builtin == ENV)
+		return (1);
+	if (m->list_tokens->e_builtin == UNSET)
+		return (1);
+	if (m->list_tokens->e_builtin == CD)
+		return (1);
+	if (m->list_tokens->e_builtin == EXPORT)
+		return (1);
+	return (0);
+}
+void	minishell_interactive(t_minishell *m)
 {
 	while (1)
 	{
 		set_signals_interactive();
-		minishell->user_input = readline(PROMPT);
-		if (minishell->user_input == NULL)
+		m->user_input = readline(PROMPT);
+		if (m->user_input == NULL)
 			break ;
-		if (minishell->user_input[0] == 0)
+		if (m->user_input[0] == 0)
 			continue ;
 		set_signals_noninteractive();
-		add_history(minishell->user_input);
-		minishell->status = set_or_get_last_status(-1, -1);
-		if (parse_input(minishell) == 0)
+		add_history(m->user_input);
+		m->status = set_or_get_last_status(-1, -1);
+		if (parse_input(m) == 0)
 		{
-			if (minishell->process_list == NULL)
+			if (m->pl == NULL)
 				continue ;
-			ft_init_process_list_and_minishell(minishell,
-				minishell->process_list);
-			if (minishell->total_commands == 1
-				&& minishell->list_tokens->e_builtin == EXIT)
-			{
-				minishell->status = ft_exit(minishell, minishell->process_list->cmd_table);
-				set_or_get_last_status(minishell->status, 0);
-			}
+			ft_init_pl(m, m->pl);
+			if (m->total_commands == 1 && is_one_arg_builtin(m))
+				is_a_builtin(m, m->pl->cmd_table[0], m->pl->cmd_table);
 			else
-				execute_cmds(minishell, minishell->total_commands);
+				execute_cmds(m, m->total_commands);
 		}
-		minishell->total_commands = 1;
+		m->total_commands = 1;
 		// CAPITAL ! L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE REMET
 		// PAS A 1 ENTRE DEUX PROMPTS !
-		free(minishell->user_input);
-		ft_free_process_list(&(minishell->process_list));
-		ft_lstclear_token(&minishell->list_tokens);
-		if (minishell->envp_table)
-			ft_free_all_tab(minishell->envp_table);
+		free(m->user_input);
+		ft_free_process_list(&(m->pl));
+		ft_lstclear_token(&m->list_tokens);
+		if (m->envp_table)
+			ft_free_all_tab(m->envp_table);
 	}
 }
 
@@ -65,7 +74,7 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	set_signals_noninteractive();
 	if (parse_input(minishell) == 0)
 	{
-		if (minishell->process_list == NULL)
+		if (minishell->pl == NULL)
 			return ;
         execute_cmds(minishell, minishell->total_commands);
 	}
@@ -80,7 +89,7 @@ void	ft_print_minishell(t_minishell *minishell)
 	// DELETE
 	printf("************ process list (cmd table ,in out files,limiters : ********* \n");
 	// DELETE
-	print_process_list(minishell->process_list);
+	print_process_list(minishell->pl);
 	printf("********************** print env_table**********************\n\n");
 	print_array(minishell->envp_table);
 }
@@ -151,6 +160,20 @@ void	format_input(t_minishell *minishell, char **av)
 		exit_msg(minishell, "Malloc failed at format_input", -1);
 }
 
+//void create_3_env_variables(t_minishell *minishell)
+//{
+//	export
+//	PWD=/home/faboussa
+//	SHLVL=1
+//	_=/usr/bin/env
+//
+
+//declare -x OLDPWD
+//declare -x PWD="/home/faboussa"
+//declare -x SHLVL="1"
+
+//}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
@@ -159,14 +182,14 @@ int	main(int ac, char **av, char **envp)
 	minishell.total_commands = 1;
 	if (envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
-	if (minishell.list_envp == NULL)
-		exit_msg(&minishell, "Fatal : malloc failed at main", 2);
+//	if (minishell.list_envp == NULL)
+//		create_3_env_variables(&minishell);
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-	ft_print_minishell(&minishell);
+//	ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
 }

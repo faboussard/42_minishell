@@ -24,7 +24,6 @@ void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
 	*list_envp = new_envp;
 }
 
-
 static int add_new_envp(t_envp_list **list_envp, char *target, char *content)
 {
     t_envp_list *new_envp;
@@ -47,13 +46,13 @@ int get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *mini
         i++;
     target = ft_substr(*envp, 0, i + 1);
     if (target == NULL)
-        exit_msg(minishell, "Malloc failed at parsing environment variables", 2);
+        exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
     if ((*envp)[i] == '=')
     {
         i++;
         content = ft_substr(*envp, i, ft_strlen(*envp) - i);
         if (content == NULL)
-			exit_msg(minishell, "Malloc failed at parsing environment variables", 2);
+			exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
         if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
             return (0);
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
