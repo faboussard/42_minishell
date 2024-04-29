@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 15:56:41 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:57:45 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,7 @@ void	handle_in(t_minishell *m, t_process_list *pl, int std_in, int *fd_in)
 		return ;
 }
 
-void	exec_several_cmds(t_minishell *m, t_process_list *p_list,
-		int stdin_orig, int stdout_orig)
+void	exec_several_cmds(t_minishell *m, t_process_list *p_list, int stdin_orig, int stdout_orig)
 {
 	size_t			i;
 	t_process_list	*pl;
