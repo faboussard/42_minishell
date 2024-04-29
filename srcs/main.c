@@ -166,7 +166,7 @@ int	main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-//	 ft_print_minishell(&minishell);
+	ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
 }
