@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 14:57:29 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:58:16 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->process_list);
 	else
-		exec_several_cmds(m, m->process_list, stdin_orig);
+		exec_several_cmds(m, m->process_list, stdin_orig, stdout_orig);
 	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);
