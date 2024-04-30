@@ -18,7 +18,6 @@
 #include "utils.h"
 #include <readline/history.h>
 
-
 bool is_one_arg_builtin(t_minishell *m)
 {
 	if (m->list_tokens->e_builtin == EXIT)
@@ -65,20 +64,6 @@ void	minishell_interactive(t_minishell *m)
 		ft_lstclear_token(&m->list_tokens);
 		if (m->envp_table)
 			ft_free_all_tab(m->envp_table);
-	}
-}
-
-void	minishell_non_interactive(t_minishell *minishell, char *data_input)
-{
-	minishell->user_input = ft_strdup(data_input);
-	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Fatal : malloc failed at minishell_non_interactive", 2);
-	set_signals_noninteractive();
-	if (parse_input(minishell) == 0)
-	{
-		if (minishell->pl == NULL)
-			return ;
-		execute_cmds(minishell, minishell->total_commands);
 	}
 }
 
@@ -176,22 +161,36 @@ void	format_input(t_minishell *m, char **av)
 		exit_msg(m, "Malloc failed at format_input", -1);
 }
 
+//void create_3_env_variables(t_minishell *minishell)
+//{
+//	export
+//	PWD=/home/faboussa
+//	SHLVL=1
+//	_=/usr/bin/env
+//
+
+//declare -x OLDPWD
+//declare -x PWD="/home/faboussa"
+//declare -x SHLVL="1"
+
+//}
+
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell	m;
+	t_minishell	minishell;
 
-	ft_bzero(&m, (sizeof(t_minishell)));
-	m.total_commands = 1;
+	ft_bzero(&minishell, (sizeof(t_minishell)));
+	minishell.total_commands = 1;
 	if (envp)
-		m.list_envp = create_envp_list(envp, &m);
-	if (m.list_envp == NULL)
-		exit_msg(&m, "Fatal : malloc failed at main", 2);
-	set_minishell_paths(&m);
-	if (is_interactive(&m, ac, av) == true)
-		minishell_interactive(&m);
+		minishell.list_envp = create_envp_list(envp, &minishell);
+//	if (minishell.list_envp == NULL)
+//		create_3_env_variables(&minishell);
+	set_minishell_paths(&minishell);
+	if (is_interactive(&minishell, ac, av) == true)
+		minishell_interactive(&minishell);
 	else
-		minishell_non_interactive(&m, av[2]);
-	ft_print_minishell(&m);
-	free_minishell(&m);
-	return (m.status);
+		minishell_non_interactive(&minishell, av[2]);
+//	ft_print_minishell(&minishell);
+	free_minishell(&minishell);
+	return (minishell.status);
 }

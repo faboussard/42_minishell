@@ -17,7 +17,10 @@
 int ft_env(t_minishell *minishell, char **args)
 {
 	if (args && args[1])
-		print_error("minishell: exit: too many arguments");
+	{
+		print_error("exit env builtins: too many arguments");
+		return (EXIT_FAILURE);
+	}
 	if (!minishell->list_envp)
 		return (EXIT_FAILURE);
 	print_list_envp(minishell);
