@@ -63,20 +63,20 @@ int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	infile_token = pl->in_files_token->e_type;
 	outfile_token = pl->out_files_token->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, STDIN_FILENO, &(m->fd_in));
+		here_doc(m, pl->in_files_token, STDIN_FILENO, &(pl->fd_in));
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
-		if (open_fd_infile(m, pl->in_files_token))
+		if (open_fd_infile(m, pl))
 			return (1);
-		m_safe_dup2(m, m->fd_in, STDIN_FILENO);
-		close(m->fd_in);
+		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
+		close(pl->fd_in);
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
 		if (open_fd_outfile(m, pl, pl->out_files_token->name))
 			return (1);
-		m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
-		close(m->fd_out);
+		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+		close(pl->fd_out);
 	}
 	return (0);
 }
@@ -92,7 +92,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
-		close_fds(m->fd_in, m->fd_out);
+		close_fds(pl->fd_in, pl->fd_out);
 	}
 }
 
