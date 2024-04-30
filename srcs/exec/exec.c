@@ -16,8 +16,8 @@
 /*
  * Check if the command is a builtin and execute it
  * IMPORTANT !!!
- * Problem: m->list_tokens is not a good parameter, should be process_list
- * The list_tokens never changes, while process_list is iterated over
+ * Problem: m->list_tokens is not a good parameter, should be pl
+ * The list_tokens never changes, while pl is iterated over
  */
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
@@ -52,6 +52,7 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		else
 			exit_command_not_found(m, pl->cmd_table[0]);
 	}
+	//print_list_envp(m);
 	exit(m->status);
 }
 
@@ -111,9 +112,9 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (m->paths == NULL)
 		return ;
 	if (nb_cmds == 1)
-		exec_one_cmd(m, m->process_list);
+		exec_one_cmd(m, m->pl);
 	else
-		exec_several_cmds(m, m->process_list, stdin_orig, stdout_orig);
+		exec_several_cmds(m, m->pl, stdin_orig, stdout_orig);
 	m->status = set_or_get_last_status(m->status, 0);
 	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);

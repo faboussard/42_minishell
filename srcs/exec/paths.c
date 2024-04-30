@@ -38,8 +38,8 @@ char	*join_sep(t_minishell *m, char *s1, char *s2, char sep)
 
 static void	deal_with_pathed_cmd(t_minishell *m)
 {
-	m->process_list->good_path = ft_strdup(m->process_list->cmd_table[0]);
-	if (m->process_list->good_path == NULL)
+	m->pl->good_path = ft_strdup(m->pl->cmd_table[0]);
+	if (m->pl->good_path == NULL)
 		malloc_error_with_exit(m);
 }
 

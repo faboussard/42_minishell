@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_list.c                                     :+:      :+:    :+:   */
+/*   pl.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -87,7 +87,7 @@ void create_process_list(t_minishell *minishell)
 		new_process_list = create_process_list_node(new_process_list, minishell);
 		if (new_process_list == NULL)
 			return;
-		add_process_to_list(&minishell->process_list, new_process_list);
+		add_process_to_list(&minishell->pl, new_process_list);
 		while (minishell->list_tokens != NULL && minishell->list_tokens->e_operator != PIPE)
 			minishell->list_tokens = minishell->list_tokens->next;
 		if (minishell->list_tokens != NULL)

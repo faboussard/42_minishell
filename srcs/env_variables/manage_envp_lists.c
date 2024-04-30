@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "parser.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
@@ -22,11 +22,11 @@ t_envp_list *create_new_envp(char *target, char *content)
 
     new_envp = malloc(sizeof(t_envp_list));
     if (new_envp == NULL)
-        return NULL;
+        return (NULL);
     new_envp->target = ft_strdup(target);
     if (new_envp->target == NULL) {
         free(new_envp);
-        return NULL;
+        return (NULL);
     }
     if (content)
 	{
@@ -35,7 +35,7 @@ t_envp_list *create_new_envp(char *target, char *content)
 		{
 			free_safely_str(new_envp->target);
             free(new_envp);
-            return NULL;
+            return (NULL);
         }
         new_envp->value_size = ft_strlen(new_envp->value);
     }
@@ -43,80 +43,57 @@ t_envp_list *create_new_envp(char *target, char *content)
     return (new_envp);
 }
 
-int	get_env_var_index(t_minishell *minishell, char **env, char *var)
+void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var)
 {
-	int		i;
 	char	*tmp;
+	t_envp_list *cpy;
 
+	cpy = *env;
 	tmp = ft_strjoin(var, "=");
 	if (!tmp)
 		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
-	i = 0;
-	while (env[i])
+	while (*env)
 	{
-		if (ft_strncmp(tmp, env[i], ft_strlen(tmp)) == 0)
+		if (ft_strncmp(tmp, (*env)->target, ft_strlen(tmp)) == 0)
 		{
-			free_safely_str(tmp);
-			return (i);
+			remove_node_envp( env,*env);
+			continue ;
 		}
-		i++;
+		else
+			*env = (*env)->next;
 	}
 	free_safely_str(tmp);
-	return (-1);
+	*env = cpy;
 }
 
-char	*get_env_var_value(char **env, char *var)
+void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove)
 {
-	int		i;
-	char	*tmp;
+	t_envp_list *current;
+	t_envp_list *previous_node;
 
-	tmp = ft_strjoin(var, "=");
-	if (!tmp)
-		return (NULL);
-	i = 0;
-	while (env[i])
+	current = *begin_list;
+	previous_node = NULL;
+	while (current != NULL && current != node_to_remove)
 	{
-		if (ft_strncmp(tmp, env[i], ft_strlen(tmp)) == 0)
-		{
-			free_safely_str(tmp);
-			return (ft_strchr(env[i], '=') + 1);
-		}
-		i++;
+		previous_node = current;
+		current = current->next;
 	}
-	free_safely_str(tmp);
-	return (NULL);
-}
-
-int	env_var_count(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env && env[i])
-		i++;
-	return (i);
-}
-
-
-bool	remove_env_var(t_minishell *minishell, int idx)
-{
-	int	i;
-	int	count;
-
-	if (idx > env_var_count(minishell->envp_table))
-		return (false);
-	free_safely_str(minishell->envp_table[idx]);
-	i = idx;
-	count = idx;
-	while (minishell->envp_table[i + 1])
+	if (current == node_to_remove)
 	{
-		minishell->envp_table[i] = ft_strdup(minishell->envp_table[i + 1]);
-		free_safely_str(minishell->envp_table[i + 1]);
-		count++;
-		i++;
+		if (previous_node != NULL)
+			previous_node->next = current->next;
+		else
+			*begin_list = current->next;
+		free_envp(current);
 	}
-//	minishell->envp_table = realloc_env_vars(data, count);
-	if (!minishell->envp_table)
-		return (false);
-	return (true);
+}
+
+void	free_envp(t_envp_list *envp)
+{
+	if (envp != NULL)
+	{
+		free_safely_str(envp->target);
+		free_safely_str(envp->value);
+		free(envp);
+	}
 }
