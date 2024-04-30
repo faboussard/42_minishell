@@ -52,18 +52,17 @@ void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var)
 	tmp = ft_strjoin(var, "=");
 	if (!tmp)
 		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
-	while (*env)
+	while (cpy)
 	{
 		if (ft_strncmp(tmp, (*env)->target, ft_strlen(tmp)) == 0)
 		{
-			remove_node_envp( env,*env);
-			continue ;
+			remove_node_envp( env,cpy);
+			break;
 		}
 		else
-			*env = (*env)->next;
+			cpy = cpy->next;
 	}
 	free_safely_str(tmp);
-	*env = cpy;
 }
 
 void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove)
@@ -95,5 +94,6 @@ void	free_envp(t_envp_list *envp)
 		free_safely_str(envp->target);
 		free_safely_str(envp->value);
 		free(envp);
+		envp = NULL;
 	}
 }

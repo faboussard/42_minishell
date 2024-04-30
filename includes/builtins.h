@@ -31,7 +31,7 @@ int		ft_echo(char **cmd_table);
 int		ft_pwd(t_minishell *minishell);
 int		ft_export(t_minishell *minishell);
 int		ft_unset(t_minishell *minishell, char **args);
-
+int		ft_atoi_long(const char *str, bool *error);
 //-------------------------------BUILTINS UTILS-------------------------------//
 void	ft_realpath(t_minishell *m, char *cmd);
 bool	contains_only_charset(const char *str, const char *charset);

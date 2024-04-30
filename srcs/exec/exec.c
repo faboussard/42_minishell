@@ -52,7 +52,6 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		else
 			exit_command_not_found(m, pl->cmd_table[0]);
 	}
-	//print_list_envp(m);
 	exit(m->status);
 }
 
