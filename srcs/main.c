@@ -182,8 +182,8 @@ int	main(int ac, char **av, char **envp)
 	minishell.total_commands = 1;
 	if (envp)
 		minishell.list_envp = create_envp_list(envp, &minishell);
-//	if (minishell.list_envp == NULL)
-//		create_3_env_variables(&minishell);
+	if (minishell.list_envp == NULL)
+		exit_msg_minishell(&minishell, "Environement variables could not be created", -1);
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);

@@ -15,34 +15,6 @@
 #include "utils.h"
 #include "parser.h"
 
-int	ft_lstsize_token(t_token_list *lst)
-{
-	int	i;
-	int	list_size;
-
-	i = 0;
-	while (lst)
-	{
-		i++;
-		lst = lst->next;
-	}
-	list_size = i;
-	return (list_size);
-}
-
-t_token_list	*ft_lstlast_token(t_token_list *lst)
-{
-	if (lst == NULL)
-		return (NULL);
-	while (lst != NULL)
-	{
-		if (lst->next == NULL)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
-}
-
 void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 {
 	t_token_list	*last;
@@ -70,7 +42,7 @@ void ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref, int (*
 		if ((*cmp)(current->e_operator, data_ref) == 0)
 		{
 			temp = current->next;
-			remove_node(begin_list, current);
+			remove_node_token(begin_list, current);
 			current = temp;
 		}
 		else
@@ -91,7 +63,7 @@ void ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref, int 
 		if ((*cmp)(current->e_type, data_ref) == 0)
 		{
 			temp = current->next;
-			remove_node(begin_list, current);
+			remove_node_token(begin_list, current);
 			current = temp;
 		}
 		else
@@ -100,7 +72,7 @@ void ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref, int 
 }
 
 
-void remove_node(t_token_list **begin_list, t_token_list *node_to_remove)
+void remove_node_token(t_token_list **begin_list, t_token_list *node_to_remove)
 {
 	t_token_list *current;
 	t_token_list *previous_node;

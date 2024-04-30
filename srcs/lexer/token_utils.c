@@ -46,3 +46,30 @@ void del_next_token(t_token_list **token)
 	free_token(t2);
 }
 
+int	ft_lstsize_token(t_token_list *lst)
+{
+	int	i;
+	int	list_size;
+
+	i = 0;
+	while (lst)
+	{
+		i++;
+		lst = lst->next;
+	}
+	list_size = i;
+	return (list_size);
+}
+
+t_token_list	*ft_lstlast_token(t_token_list *lst)
+{
+	if (lst == NULL)
+		return (NULL);
+	while (lst != NULL)
+	{
+		if (lst->next == NULL)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
+}

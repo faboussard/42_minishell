@@ -60,6 +60,8 @@ bool check_consecutive_redirect(t_minishell *minishell)
 
 bool check_syntax(t_minishell *minishell)
 {
+	if (minishell->list_tokens == NULL)
+		return (0);
 	if (minishell->list_tokens->e_operator == PIPE)
 	{
 		print_error("minishell: syntax error near unexpected token `|'");

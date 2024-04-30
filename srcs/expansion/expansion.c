@@ -74,7 +74,7 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 		if (single_quote_count % 2 != 0 && double_quote_count % 2 == 0)
 			return ;
 		if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_')
-			(*list)->e_operator = 0; // to keep le dollar
+			(*list)->e_operator = 0;
 		else
 		{
 			expanded_string = expand_sigil((*list)->next->name, minishell);
@@ -112,10 +112,9 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 				update_quote_counts(iterator->next, single_quote_count, double_quote_count);
 			process_dollar_token(minishell, &iterator, *single_quote_count, *double_quote_count);
 		}
-		if (iterator)
-			iterator = iterator->next;
-		else
+		if (iterator == NULL)
 			break ;
+		iterator = iterator->next;
 	}
 }
 
