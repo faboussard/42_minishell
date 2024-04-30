@@ -18,12 +18,8 @@ All values undergo tilde expansion,
  parameter and variable expansion, command substitution, arithmetic expansion, and quote removal (see Shell Parameter Expansion).
 
  relire les signaux code et doc de shell
-////////////////////////////////////////////////////////////
-revoir avec melodie
-09:54:02 juba@juba-desktop minishell ±|parsing ✗|→ minishell -c "echo "" "" "" test "
-minishell: command not found
 
-/////////////////////////////////////////////////////////
+ REFAIRE MES FONCTIONS JOIN AVEC REMOVE NODE ET UTILISER LE BON POINTEUR DE DEBUT DE LISTE !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
