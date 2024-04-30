@@ -90,7 +90,9 @@ int parse_input(t_minishell *minishell)
 		return (1);
 	}
 	if (minishell->list_tokens == NULL)
+	{
 		return (1);
+	}
 	token_requalification(minishell->list_tokens);
 	create_envp_table(minishell);
 	create_process_list(minishell);

@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:29 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 16:01:41 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:06:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXEC_H
 
 # include "minishell.h"
+# include "utils.h"
 
 # ifndef READ_END
 #  define READ_END 0
@@ -43,7 +44,6 @@ void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl);
 void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd,
 			int *fd_to_use);
 //--------------------------- UTILS -----------------------------------//
-void	ft_free_tab(char **tab);
 void	ft_init_pl(t_minishell *m, t_process_list *pl);
 void	ft_free_pl_paths(t_minishell *minishell);
 void	check_and_delete_if_tmp_file_exists(char *tmp_file);

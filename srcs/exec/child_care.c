@@ -34,12 +34,12 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		if (m->pid1 == 0)
 		{
 			m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-			if (pl->fd_out != STDOUT_FILENO)
-			{
-				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-				close(pl->fd_out);
-			}
-			else
+//			if (pl->fd_out != STDOUT_FILENO)
+//			{
+//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+//				close(pl->fd_out);
+//			}
+//			else
 				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
 			my_execve(m, pl);
@@ -59,13 +59,13 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 		if (m->pid2 == 0)
 		{
 			close_pipes(m->pipe_fd);
-			m_safe_dup2(m, pl->tmp_in, STDIN_FILENO);
+			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			my_execve(m, pl);
 		}
 		else
 		{
 			close_pipes(m->pipe_fd);
-			close(pl->tmp_in);
+			close(m->tmp_in);
 			close_fds(pl->fd_in, pl->fd_out);
 		}
 	}
@@ -75,12 +75,12 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 
 static void	middle_child(t_minishell *m, t_process_list *pl)
 {
-	if (pl->fd_in >= 0 && pl->fd_out > 0 && pl->dev_null == 0)
+	if (pl->fd_in >= 0)// && pl->fd_out > 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
 		{
-			m_safe_dup2(m, pl->tmp_in, STDIN_FILENO);
+			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			if (pl->fd_out != STDOUT_FILENO)
 			{
 				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
@@ -93,19 +93,19 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 		}
 		else
 		{
-			close(m->pipe_fd[WRITE_END]);
-			if (pl->fd_out != STDOUT_FILENO)
-			{
-				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-				close(pl->fd_out);
-				close(m->pipe_fd[READ_END]);
-				fill_fd_with_emptiness(m, pl->tmp_in);
-			}
-			else
+//			close(m->pipe_fd[WRITE_END]);
+//			if (pl->fd_out != STDOUT_FILENO)
+//			{
+//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+//				close(pl->fd_out);
+//				close(m->pipe_fd[READ_END]);
+//				fill_fd_with_emptiness(m, pl->tmp_in);
+//			}
+//			else
 				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 		}
 	}
-	m_safe_dup2(m, m->pipe_fd[READ_END], pl->tmp_in);
+	m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
 	close_pipes(m->pipe_fd); //close(pl->pipe_fd[READ_END]);
 }
 
@@ -149,13 +149,13 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list,
 	i = 1;
 	while (++i < m->total_commands)
 	{
-		handle_in_out(m, pl, stdin_orig, &(pl->tmp_in));
+		handle_in_out(m, pl, stdin_orig, &(m->tmp_in));
 		if (safe_pipe(m) == 0)
 			return ;
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	handle_in_out(m, pl, stdin_orig, &(pl->tmp_in));
+	handle_in_out(m, pl, stdin_orig, &(m->tmp_in));
 	if (safe_pipe(m) == 0)
 		return ;
 	last_child(m, pl);

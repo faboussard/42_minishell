@@ -61,6 +61,7 @@ typedef struct s_minishell
 	pid_t						pid2;
 	int							status;
 	int							pipe_fd[2];
+	int							tmp_in;
 	int							history_count;
 	char						*user_input;
 	char						target_path[PATH_MAX];
@@ -88,7 +89,6 @@ typedef struct s_process_list
 {
 	t_token_list				*in_files_token;
 	t_token_list				*out_files_token;
-	int							tmp_in;
 	int							fd_in;
 	int							fd_out;
 	char						*paths;
