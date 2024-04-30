@@ -14,36 +14,36 @@
 #include "parser.h"
 #include "utils.h"
 
-char *parse_input_for_heredoc(t_minishell *minishell, char *original_input)
+char *parse_input_for_heredoc(t_minishell *m, char *original_input)
 {
 	char *input_after_expand;
 	t_token_list *heredoc_token_list;
 
 	heredoc_token_list = NULL;
-	transform_to_token(minishell, original_input, &heredoc_token_list);
-	expander(minishell, &heredoc_token_list);
+	transform_to_token(m, original_input, &heredoc_token_list);
+	expander(m, &heredoc_token_list);
 	ft_list_remove_if_same_type(&heredoc_token_list, (void *) TO_DELETE, cmp);
-	input_after_expand = join_all(minishell, &heredoc_token_list);
+	input_after_expand = join_all(m, &heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
 	return (input_after_expand);
 }
 
-void	handle_expand(t_minishell *m, char *input)
+void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 {
 	char	*input_after_expand;
 
 	input_after_expand = parse_input_for_heredoc(m, input);
 	if (input_after_expand != NULL)
 	{
-		ft_putstr_fd(input_after_expand, m->fd_in);
+		ft_putstr_fd(input_after_expand, pl->fd_in);
 		free_safely_str(input_after_expand);
 	}
 	else
-		ft_putstr_fd(input, m->fd_in);;
+		ft_putstr_fd(input, pl->fd_in);;
 }
 
 
-static void	writing_in_heredoc(t_minishell *m, t_token_list *limiter, int stdin_fd)
+static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list *limiter, int stdin_fd)
 {
 	size_t	limiter_len;
 	size_t	input_len;
@@ -58,13 +58,13 @@ static void	writing_in_heredoc(t_minishell *m, t_token_list *limiter, int stdin_
 				limiter_len))
 		{
 			free_safely_str(input);
-			close(m->fd_in);
+			close(pl->fd_in);
 			exit(0);
 		}
 		if (limiter->is_quoted_delimiter == 1)
-			ft_putstr_fd(input, m->fd_in);
+			ft_putstr_fd(input, pl->fd_in);
 		else
-			handle_expand(m, input);
+			handle_expand(m, pl, input);
 		free_safely_str(input);
 	}
 }
@@ -83,7 +83,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd, int *fd_to_us
 	}
     here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
-		writing_in_heredoc(m, limiter, stdin_fd);
+		writing_in_heredoc(m, m->pl, limiter, stdin_fd);
 	else
 	{
 		waitpid(here_doc_pid, &(m->status), 0); // && errno != 10);

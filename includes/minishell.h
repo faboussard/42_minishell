@@ -61,9 +61,6 @@ typedef struct s_minishell
 	pid_t						pid2;
 	int							status;
 	int							pipe_fd[2];
-	int							tmp_in;
-	int							fd_in;
-	int							fd_out;
 	int							history_count;
 	char						*user_input;
 	char						target_path[PATH_MAX];
@@ -73,7 +70,7 @@ typedef struct s_minishell
 	char						**envp_table;
 	t_token_list				*list_tokens;
 	t_envp_list					*list_envp;
-	t_process_list				*process_list;
+	t_process_list				*pl;
 	size_t						total_commands;
 	size_t						total_size_envp;
 }								t_minishell;
@@ -91,6 +88,9 @@ typedef struct s_process_list
 {
 	t_token_list				*in_files_token;
 	t_token_list				*out_files_token;
+	int							tmp_in;
+	int							fd_in;
+	int							fd_out;
 	char						*paths;
 	char						*good_path;
 	char						**tab_paths;
@@ -117,7 +117,7 @@ void execute_cmds(t_minishell *minishell,
 
 //// expand heredoc ///
 
-void handle_expand(t_minishell *m, char *input);
+void	handle_expand(t_minishell *m, t_process_list *pl, char *input);
 
 int	set_or_get_last_status(int status, int flag);
 
