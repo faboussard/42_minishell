@@ -86,7 +86,7 @@ bool	is_redirect_token_or_pipe(t_token_list *token);
 
 /********************* token_utils.c *********************/
 void del_next_token(t_token_list **token);
-void remove_node(t_token_list **begin_list, t_token_list *node_to_remove);
+void remove_node_token(t_token_list **begin_list, t_token_list *node_to_remove);
 int define_token(t_token_list *new_token, char *string);
 
 /********************* count_tokens.c *********************/

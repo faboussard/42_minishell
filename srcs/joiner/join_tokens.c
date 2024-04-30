@@ -93,7 +93,7 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		while ((*list)->e_operator == IS_SPACE)
+		while ((*list) && (*list)->e_operator == IS_SPACE)
 			*list = (*list)->next;
 		if ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE)
 		{
@@ -104,9 +104,9 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 				join_tokens(minishell, list);
 				continue ;
 			}
-			if ( (*list)->next == NULL)
-				break;
 		}
+		if ((*list) == NULL)
+			break ;
 		*list = (*list)->next;
 	}
 	*list = cpy;

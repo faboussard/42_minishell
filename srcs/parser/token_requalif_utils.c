@@ -25,7 +25,7 @@ void	arg_to_command(t_token_list *list_tokens)
 		iterator->e_type = COMMAND;
 	else
 	{
-		while (iterator->next != NULL)
+		while (iterator && iterator->next != NULL)
 		{
 			next_token = iterator->next;
 			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR
@@ -107,6 +107,8 @@ void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 			(*list)->e_type = OPERATOR;
 			(*list)->e_operator = APPEND;
 		}
+		if ((*list) == NULL)
+			break ;
 		*list = (*list)->next;
 	}
 	*list = cpy;

@@ -68,6 +68,7 @@ void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp);
 void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var);
 void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove);
 void	free_envp(t_envp_list *envp);
+int	ft_lstsize_envp(t_envp_list *lst);
 
 /********************* expansion_utils.c ****************************/
 void expander(t_minishell *minishell, t_token_list **list);
