@@ -41,8 +41,8 @@ void	ft_init_pl(t_minishell *m, t_process_list *pl)
 {
 	m->status = 0;
 	m->tmp_in = 0;
-	m->fd_in = -1;
-	m->fd_out = -1;
+	pl->fd_in = -1;
+	pl->fd_out = -1;
 	pl->dev_null = 0;
 	pl->paths = NULL;
 	pl->good_path = NULL;

@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/19 10:31:13 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:05:16 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void			print_process_list(t_process_list *process_list);
 
 void			free_token(t_token_list *token);
 void			free_minishell(t_minishell *minishell);
-void			ft_free_all_tab(char **tab);
+void			ft_free_tab(char **tab);
 void			ft_free_tab_from_i(void **tab, int j);
 void			ft_lstclear_envp(t_envp_list **lst);
 void			ft_lstclear_token(t_token_list **lst);
@@ -51,9 +51,9 @@ void			free_safely_str(char *str_to_free);
 
 /******************** ERROR ********************/
 void			print_error(const char *error);
-bool print_operator_syntax_error(t_token_list *token);
+bool			print_operator_syntax_error(t_token_list *token);
 void			print_cmd_perror(char *cmd, char *name, int err);
-void	print_cmd_perror_no_strerror(char *cmd, char *name);
+void			print_cmd_perror_no_strerror(char *cmd, char *name);
 
 /******************** TOKEN LIST *****************/
 int				ft_lstsize_token(t_token_list *lst);
