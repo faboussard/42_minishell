@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/29 13:06:24 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:41:59 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		if (m->pid1 == 0)
 		{
 			m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-//			if (pl->fd_out != STDOUT_FILENO)
-//			{
-//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-//				close(pl->fd_out);
-//			}
-//			else
-				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
 			my_execve(m, pl);
 		}
@@ -75,7 +69,7 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 
 static void	middle_child(t_minishell *m, t_process_list *pl)
 {
-	if (pl->fd_in >= 0)// && pl->fd_out > 0 && pl->dev_null == 0)
+	if (pl->fd_in >= 0) // && pl->fd_out > 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
@@ -93,20 +87,20 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 		}
 		else
 		{
-//			close(m->pipe_fd[WRITE_END]);
-//			if (pl->fd_out != STDOUT_FILENO)
-//			{
-//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-//				close(pl->fd_out);
-//				close(m->pipe_fd[READ_END]);
-//				fill_fd_with_emptiness(m, pl->tmp_in);
-//			}
-//			else
-				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+			//			close(m->pipe_fd[WRITE_END]);
+			//			if (pl->fd_out != STDOUT_FILENO)
+			//			{
+			//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+			//				close(pl->fd_out);
+			//				close(m->pipe_fd[READ_END]);
+			//				fill_fd_with_emptiness(m, pl->tmp_in);
+			//			}
+			//			else
+			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 		}
 	}
 	m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
-	close_pipes(m->pipe_fd); //close(pl->pipe_fd[READ_END]);
+	close_pipes(m->pipe_fd); // close(pl->pipe_fd[READ_END]);
 }
 
 static void	wait_children_and_give_exit_status(t_minishell *m)
