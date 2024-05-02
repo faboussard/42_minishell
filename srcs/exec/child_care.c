@@ -48,8 +48,6 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		{
 			m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-			close(pl->fd_in);
-			close(m->pipe_fd[WRITE_END]);
 			if (pl->fd_out != STDOUT_FILENO)
 			{
 				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
