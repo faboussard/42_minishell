@@ -21,9 +21,10 @@ int ascending(char *a, char *b)
 }
 
 
-t_envp_list *sort_list(t_envp_list **lst, int (*cmp)(char *, char *))
+t_envp_list *sort_envp_list(t_envp_list **lst, int (*cmp)(char *, char *))
 {
-	char *swap;
+	char *swap_target;
+	char *swap_value;
 	t_envp_list	*tmp;
 
 	tmp = *lst;
@@ -31,10 +32,12 @@ t_envp_list *sort_list(t_envp_list **lst, int (*cmp)(char *, char *))
 	{
 		if (((*cmp)((*lst)->target, (*lst)->next->target)) == 0)
 		{
-			swap = (*lst)->target;
+			swap_value = (*lst)->value;
+			swap_target = (*lst)->target;
+			(*lst)->value = (*lst)->next->value;
 			(*lst)->target = (*lst)->next->target;
-			(*lst)->next->target = swap;
-			(*lst) = tmp;
+			(*lst)->next->value = swap_value;
+			(*lst)->next->target = swap_target;
 		}
 		else
 			(*lst) = (*lst)->next;
@@ -49,7 +52,7 @@ void print_env_variables_export(t_minishell *m)
 	char	*equal;
 
 	current = m->list_envp;
-	current = sort_list(&current, ascending);
+	current = sort_envp_list(&current, ascending);
 	while (current != NULL)
 	{
 		equal = ft_strchr(current->target, '=');
