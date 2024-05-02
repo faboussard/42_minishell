@@ -32,7 +32,7 @@ void			print_token_list(t_token_list *list_tokens);
 void			print_array(char **array);
 void			print_list_envp(t_minishell *minishell);
 void			print_process_list(t_process_list *process_list);
-void			print_env_variables_export(t_envp_list **envp);
+void			print_env_variables_export(t_minishell *m);
 
 /******************** FREE ********************/
 

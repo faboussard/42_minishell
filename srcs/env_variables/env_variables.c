@@ -30,9 +30,9 @@ static int add_new_envp(t_envp_list **list_envp, char *target, char *content)
 
     new_envp = create_new_envp(target, content);
     if (new_envp == NULL)
-        return MALLOC_FAILED;
+        return (MALLOC_FAILED);
     add_envp_to_list(list_envp, new_envp);
-    return SUCCESSFULLY_ADDED;
+    return (SUCCESSFULLY_ADDED);
 }
 
 int get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *minishell)
