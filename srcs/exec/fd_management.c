@@ -57,7 +57,7 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 {
-	if (m->pipe_fd[WRITE_END] >= 0)
+	if (m->pipe_fd[WRITE_END] > 0)
 		close(m->pipe_fd[WRITE_END]);
 	if (pl->fd_in >= 3)
 		close(pl->fd_in);
