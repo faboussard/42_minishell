@@ -21,21 +21,22 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
     }
 }
 
-void	ft_free_tab(char **tab)
+void ft_free_tab(char ***tab)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	if (!tab || !*tab)
-		return ;
-	while (tab[i])
+		return;
+	while ((*tab)[i])
 	{
-		free(tab[i]);
+		free((*tab)[i]);
 		i++;
 	}
-	free(tab);
-	tab = NULL;
+	free(*tab);
+	*tab = NULL;
 }
+
 
 void	ft_init_pl(t_minishell *m, t_process_list *pl)
 {
@@ -56,5 +57,5 @@ void	ft_free_pl_paths(t_minishell *minishell)
 	if (minishell->pl->good_path != NULL)
 		free(minishell->pl->good_path);
 	if (minishell->pl->tab_paths != NULL)
-		ft_free_tab(minishell->pl->tab_paths);
+		ft_free_tab(&(minishell->pl->tab_paths));
 }

@@ -84,11 +84,13 @@ int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
-	if (handle_infile_outfile(m, pl))
-		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
+	{
+		if (handle_infile_outfile(m, pl))
+			return ;
 		my_execve(m, pl);
+	}
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
@@ -99,23 +101,23 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
-	int	stdin_orig;
-	int	stdout_orig;
-
-	stdin_orig = 0;
-	stdout_orig = 0;
+//	int	stdin_orig;
+//	int	stdout_orig;
+//
+//	stdin_orig = 0;
+//	stdout_orig = 0;
 	if (nb_cmds < 1)
 		return ;
-	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
-		return ;
+//	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
+//		return ;
 	set_paths(m, m->envp_table);
 	if (m->paths == NULL)
 		return ;
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->pl);
 	else
-		exec_several_cmds(m, m->pl, stdin_orig, stdout_orig);
+		exec_several_cmds(m, m->pl, STDIN_FILENO, STDOUT_FILENO);
 	m->status = set_or_get_last_status(m->status, 0);
-	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
+	//close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);
 }
