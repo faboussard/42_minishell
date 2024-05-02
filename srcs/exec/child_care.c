@@ -120,18 +120,9 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 		}
 		else
 			close_and_redirect_pipe_to_stdin(m, pl);
-//		{
-//			//			close(m->pipe_fd[WRITE_END]);
-//			//			else
-//			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-//		}
 	}
 	else
 		close_and_redirect_pipe_to_stdin(m, pl);
-	/*
-	m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
-	close_pipes(m->pipe_fd); // close(pl->pipe_fd[READ_END]);
-	*/
 }
 
 static void	wait_children_and_give_exit_status(t_minishell *m)
