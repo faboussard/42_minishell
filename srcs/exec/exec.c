@@ -33,8 +33,8 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 		m->status = ft_env(m, cmd_table);
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
 		m->status = ft_unset(m, cmd_table);
-	// else if (ft_strncmp(cmd, "export", 5) == 0)
-	//     m->status = ft_export(m, m->list_tokens);
+	else if (ft_strncmp(cmd, "export", 5) == 0)
+		m->status = ft_export(cmd_table, m->list_envp, NULL);
 	else
 		return (0);
 	set_or_get_last_status(m->status, 0);
