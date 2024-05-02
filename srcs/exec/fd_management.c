@@ -38,12 +38,6 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl)
 	}
 	return (0);
 }
-/*
-		mbernard@z1r9p2:/usr$ cd cdvwev
-		bash: cd: cdvwev: No such file or directory
-		mbernard@z1r9p2:/usr$ echo $?
-		1
-*/
 
 int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 {
@@ -60,45 +54,6 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 	}
 	return (0);
 }
-
-//int	dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
-//{
-//	if (m->pl->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
-//		*in = dup(STDIN_FILENO);
-//	if (m->pl->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
-//		*out = dup(STDOUT_FILENO);
-//	if (*in == -1 || *out == -1)
-//	{
-//		if (*in >= 0)
-//			close(*in);
-//		ft_putendl_fd("minishell : dup error", 2);
-//		m->status = 1;
-//		return (1);
-//	}
-//	return (0);
-//}
-
-//void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds)
-//{
-//	if (m->pl->in_files_token->e_type != NO_TYPE || nb_cmds > 1)
-//	{
-//		if (dup2(*in, STDIN_FILENO) == -1)
-//		{
-//			perror("minishell: dup2");
-//			m->status = 1;
-//		}
-//		close(*in);
-//	}
-//	if (m->pl->out_files_token->e_type != NO_TYPE || nb_cmds > 1)
-//	{
-//		if (dup2(*out, STDOUT_FILENO) == -1)
-//		{
-//			perror("minishell: dup2");
-//			m->status = 1;
-//		}
-//		close(*out);
-//	}
-//}
 
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 {
