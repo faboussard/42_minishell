@@ -86,7 +86,7 @@ int	ft_exit(t_minishell *minishell, char **cmd_table)
 	if (cmd_table[2] && !is_alpha)
 	{
 		if (minishell->envp_table)
-			ft_free_all_tab(minishell->envp_table);
+			ft_free_tab(&(minishell->envp_table));
 		print_error("minishell: exit: too many arguments");
 		minishell->status = set_or_get_last_status(1, 0);
 		return (1);
