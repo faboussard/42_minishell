@@ -79,7 +79,6 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 		m->pid2 = m_safe_fork(m);
 		if (m->pid2 == 0)
 		{
-			dprintf(2, "tmp_in = %d\n", m->tmp_in);
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
 			close(m->tmp_in);
 			if (pl->fd_out != STDOUT_FILENO)
@@ -157,8 +156,6 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 	first_child(m, pl);
 	pl = pl->next;
 	i = 1;
-	dprintf(2, "tmp_in = %d\n", m->tmp_in);
-
 	while (++i < m->total_commands)
 	{
 		if (safe_pipe(m) == 0)
@@ -166,8 +163,6 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	dprintf(2, "tmp_in = %d\n", m->tmp_in);
-
 	last_child(m, pl);
 	wait_children_and_give_exit_status(m);
 	close_fds(pl->fd_in, pl->fd_out);
