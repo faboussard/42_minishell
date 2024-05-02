@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/29 13:01:28 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:33:28 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,11 @@ void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 {
 	if (m->pipe_fd[WRITE_END] >= 0)
 		close(m->pipe_fd[WRITE_END]);
-	if (pl->fd_in >= 0)
+	if (pl->fd_in >= 3)
 		close(pl->fd_in);
-	pl->fd_in = m->pipe_fd[READ_END];
+	//pl->fd_in = m->pipe_fd[READ_END];
+	m->tmp_in = m->pipe_fd[READ_END];
 	if (pl->fd_out != STDOUT_FILENO)
 		close(pl->fd_out);
-	else
-		m_safe_dup2(m, m->pipe_fd[READ_END], STDIN_FILENO);
+		//m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
 }

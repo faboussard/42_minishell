@@ -42,8 +42,7 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 		ft_putstr_fd(input, pl->fd_in);;
 }
 
-
-static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list *limiter, int stdin_fd)
+static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list *limiter)
 {
 	size_t	limiter_len;
 	size_t	input_len;
@@ -52,7 +51,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list 
 	limiter_len = ft_strlen(limiter->name);
 	while (1)
 	{
-		input = get_next_line(stdin_fd);
+		input = get_next_line(STDIN_FILENO);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
@@ -69,7 +68,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list 
 	}
 }
 
-void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd, int *fd_to_use)
+void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use)
 {
     int here_doc_pid;
 
@@ -83,7 +82,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd, int *fd_to_us
 	}
     here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
-		writing_in_heredoc(m, m->pl, limiter, stdin_fd);
+		writing_in_heredoc(m, m->pl, limiter);
 	else
 	{
 		waitpid(here_doc_pid, &(m->status), 0); // && errno != 10);

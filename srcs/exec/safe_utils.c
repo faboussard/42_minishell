@@ -28,7 +28,6 @@ pid_t	m_safe_fork(t_minishell *minishell)
 void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd)
 {
 	int	my_dup;
-
 	my_dup = dup2(old_fd, new_fd);
 	if (my_dup == -1)
 		print_name_and_exit_perror(minishell, "dup2", errno);

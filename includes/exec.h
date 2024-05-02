@@ -41,8 +41,7 @@ int		dup_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds);
 void	close_original_fds(t_minishell *m, int *in, int *out, size_t nb_cmds);
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl);
 //--------------------------- HERE_DOC --------------------------------//
-void	here_doc(t_minishell *m, t_token_list *limiter, int stdin_fd,
-			int *fd_to_use);
+void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use);
 //--------------------------- UTILS -----------------------------------//
 void	ft_init_pl(t_minishell *m, t_process_list *pl);
 void	ft_free_pl_paths(t_minishell *minishell);
@@ -50,8 +49,7 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file);
 //--------------------------- CHILD CARE ------------------------------//
 // void exec_several_cmds(t_minishell *m, t_process_list *p_list,
 //  	int stdin_orig);
-void	exec_several_cmds(t_minishell *m, t_process_list *p_list,
-			int stdin_orig, int stdout_orig);
+void	exec_several_cmds(t_minishell *m, t_process_list *p_list);
 //--------------------------- EXEC ------------------------------------//
 void	my_execve(t_minishell *m, t_process_list *pl);
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table);
