@@ -74,7 +74,7 @@ $(DIR_BUILD):
 	@echo "Création du répertoire $(DIR_BUILD)"
 	@$(MKDIR) $(DIR_BUILD)
 
-$(libft): # FORCE
+$(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
 valgrind:       $(NAME)

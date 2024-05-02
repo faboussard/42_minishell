@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/02 09:38:15 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:38:34 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,21 @@ void	fill_fd_with_emptiness(t_minishell *m, int full_fd)
 	}
 }
 
+void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
+{
+	enum e_token_type	infile_token;
+
+	infile_token = pl->in_files_token->e_type;
+	if (infile_token == DELIMITER)
+		here_doc(m, pl->in_files_token, fd_in);
+	if (open_fd_infile(m, pl))
+		return ;
+	open_fd_outfile(m, pl, pl->out_files_token->name);
+}
+
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
+	handle_in_out(m, pl, &(pl->fd_in));
 	if (pl->fd_in >= 0 && pl->fd_out > 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
@@ -35,6 +48,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		{
 			m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
 			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+			close(pl->fd_in);
 			close(m->pipe_fd[WRITE_END]);
 			if (pl->fd_out != STDOUT_FILENO)
 			{
@@ -53,16 +67,14 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 
 static void	last_child(t_minishell *m, t_process_list *pl)
 {
-	close_pipes(m->pipe_fd);
-	if (pl->fd_in >= 0 && pl->fd_out > 0)
+	handle_in_out(m, pl,&(m->tmp_in));
+	if (m->tmp_in >= 0 && pl->fd_out > 0)
 	{
 		m->pid2 = m_safe_fork(m);
 		if (m->pid2 == 0)
 		{
 			m_safe_dup2(m, m->tmp_in, STDIN_FILENO);
-//			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-//			close(m->pipe_fd[WRITE_END]);
-//			 close(STDOUT_FILENO);
+			close(m->tmp_in);
 			if (pl->fd_out != STDOUT_FILENO)
 			{
 				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
@@ -71,23 +83,23 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 			my_execve(m, pl);
 		}
 		else
-		{
-//			close_pipes(m->pipe_fd);
-			close(m->tmp_in);
-			close_fds(pl->fd_in, pl->fd_out);
-		}
+			close_fds(m->tmp_in, pl->fd_out);
 	}
 	else
 	{
-		// close_pipes(m->pipe_fd);
-		close(m->tmp_in);
+		close_pipes(m->pipe_fd);
+		close_fds(m->tmp_in, pl->fd_out);
 	}
+}
+// Pas de pipes à fermer dans le dernier enfant
+//			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+//			close(m->pipe_fd[WRITE_END]);
 //	else
 //		close_pipes(m->pipe_fd);
-}
 
 static void	middle_child(t_minishell *m, t_process_list *pl)
 {
+	handle_in_out(m, pl, &(m->tmp_in));
 	if (pl->fd_in >= 0) // && pl->fd_out > 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
@@ -133,28 +145,12 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	m->status = WEXITSTATUS(status);
 }
 
-void	handle_in_out(t_minishell *m, t_process_list *pl, int std_in,
-		int *fd_in)
-{
-	enum e_token_type	infile_token;
-
-	infile_token = pl->in_files_token->e_type;
-	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, std_in, fd_in);
-	if (open_fd_infile(m, pl))
-		return ;
-	open_fd_outfile(m, pl, pl->out_files_token->name);
-}
-
-void	exec_several_cmds(t_minishell *m, t_process_list *p_list,
-		int stdin_orig, int stdout_orig)
+void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 {
 	size_t			i;
 	t_process_list	*pl;
 
 	pl = p_list;
-	(void)stdout_orig;
-	handle_in_out(m, pl, stdin_orig, &(pl->fd_in));
 	if (safe_pipe(m) == 0)
 		return ;
 	first_child(m, pl);
@@ -162,22 +158,22 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list,
 	i = 1;
 	while (++i < m->total_commands)
 	{
-		handle_in_out(m, pl, stdin_orig, &(m->tmp_in));
 		if (safe_pipe(m) == 0)
 			return ;
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	handle_in_out(m, pl, stdin_orig, &(m->tmp_in));
-//	if (safe_pipe(m) == 0)
-//		return ;
 	last_child(m, pl);
 	wait_children_and_give_exit_status(m);
 	close_fds(pl->fd_in, pl->fd_out);
 }
+
+//	if (safe_pipe(m) == 0)
+//		return ;
+// --> pas besoin de safe_pipe dans le dernier enfant
 /*
  *         if (pl->in_files_token->e_type== DELIMITER)
-			here_doc(m, pl->in_files_token->name, stdin_orig, &(m->tmp_in));
+			here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->tmp_in));
  * */
 
 /*
@@ -191,7 +187,7 @@ void	handle_out(t_minishell *m, t_process_list *pl, int stdout, int *fd_out)
 		m_safe_dup2(m, *fd_out, stdout);
 }
 if (pl->in_files_token->e_type== DELIMITER)
-		here_doc(m, pl->in_files_token->name, stdin_orig, &(m->fd_in));
+		here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->fd_in));
 	if (open_fd_infile(m, pl->in_files_token))
 		return ;
 */

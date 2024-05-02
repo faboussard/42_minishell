@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/30 18:07:06 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:14:24 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	minishell_interactive(t_minishell *m)
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
 		{
-			dprintf(2, "coucou je sors bisous !\n");
+			//dprintf(2, "coucou je sors bisous !\n");
 			break ;
 		}
 		if (m->user_input[0] == 0)
@@ -195,7 +195,7 @@ int	main(int ac, char **av, char **envp)
 	else
 		minishell_non_interactive(&minishell, av[2]);
 	//	ft_print_minishell(&minishell);
-	dprintf(2, "Au revoir ! status = %d\n", minishell.status);
+	//dprintf(2, "Au revoir ! status = %d\n", minishell.status);
 	free_minishell(&minishell);
 	return (minishell.status);
 }
