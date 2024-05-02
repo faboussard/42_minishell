@@ -42,8 +42,8 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 # ------------ COMPILATION ------------ #
 
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror -fPIE
-DEPS_FLAGS		=	-MMD -MP -g3
+CFLAGS			=	-Wall -Wextra -Werror #-fPIE
+DEPS_FLAGS		=	-MMD -MP
 
 # -------------  COMMANDS ------------- #
 
@@ -62,7 +62,7 @@ $(NAME): $(OBJS) $(libft) Makefile
 # ---------- COMPILED RULES ----------- #
 
 $(DIR_BUILD)%.o: %.c Makefile | $(SUBDIRS)
-	$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 #---------- CREATE REPO OBJS ---------#
 
@@ -74,14 +74,14 @@ $(DIR_BUILD):
 	@echo "Création du répertoire $(DIR_BUILD)"
 	@$(MKDIR) $(DIR_BUILD)
 
-$(libft): FORCE
+$(libft): # FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
 valgrind:       $(NAME)
 		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
-debug: CFLAGS += -g
-debug: all
+debug: clean
+	$(MAKE) CFLAGS="-g -Wall -Wextra -Werror"
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean
@@ -95,3 +95,5 @@ re:				fclean all
 				$(MAKE) -C ./
 
 .PHONY: all clean fclean re FORCE libft
+
+-include $(DEPS)

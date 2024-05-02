@@ -37,7 +37,7 @@ void			print_process_list(t_process_list *process_list);
 
 void			free_token(t_token_list *token);
 void			free_minishell(t_minishell *minishell);
-void			ft_free_tab(char **tab);
+void			ft_free_tab(char ***tab);
 void			ft_free_tab_from_i(void **tab, int j);
 void			ft_lstclear_envp(t_envp_list **lst);
 void			ft_lstclear_token(t_token_list **lst);
