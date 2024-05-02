@@ -16,19 +16,21 @@
 #include "parser.h"
 #include <readline/history.h>
 
-int ft_export(char **args, t_envp_list *env_variables, t_minishell *m)
+int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 {
 	size_t	index;
+	t_envp_list *current;
 
 	index = 1;
+	current = *env_variables;
 	if (args[index] == NULL)
 	{
-		if ((ft_lstsize_envp(env_variables)) <= 0)
+		if ((ft_lstsize_envp(current)) <= 0)
 			return (0);
-		print_env_variables_export(&env_variables);
+		print_env_variables_export(m);
 	}
 	else
-		return (export_variables(args + index, env_variables, m));
+		return (export_variables(args + index, current, m));
 	return (0);
 }
 
