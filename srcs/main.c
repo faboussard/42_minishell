@@ -40,7 +40,10 @@ void	minishell_interactive(t_minishell *m)
 		set_signals_interactive();
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
+		{
+			dprintf(2, "coucou je sors bisous !\n");
 			break ;
+		}
 		if (m->user_input[0] == 0)
 			continue ;
 		set_signals_noninteractive();
@@ -63,7 +66,7 @@ void	minishell_interactive(t_minishell *m)
 		ft_free_process_list(&(m->pl));
 		ft_lstclear_token(&m->list_tokens);
 		if (m->envp_table)
-			ft_free_tab(m->envp_table);
+			ft_free_tab(&(m->envp_table));
 	}
 }
 
@@ -192,6 +195,7 @@ int	main(int ac, char **av, char **envp)
 	else
 		minishell_non_interactive(&minishell, av[2]);
 	//	ft_print_minishell(&minishell);
+	dprintf(2, "Au revoir ! status = %d\n", minishell.status);
 	free_minishell(&minishell);
 	return (minishell.status);
 }

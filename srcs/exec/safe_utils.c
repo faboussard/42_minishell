@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:20:51 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/11 15:05:16 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:40:13 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void	close_pipes(int *pipe_fd)
 
 void	close_fds(int fd_in, int fd_out)
 {
-	if (fd_in >= 0)
+	if (fd_in >= 3)
 		close(fd_in);
-	if (fd_out >= 0)
+	if (fd_out >= 3)
 		close(fd_out);
 }
