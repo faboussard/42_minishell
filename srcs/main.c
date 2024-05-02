@@ -180,10 +180,12 @@ int	main(int ac, char **av, char **envp)
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
-	if (envp)
+	if (envp == NULL)
+		return 1; // creer trops envp
+	else
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
-		exit_msg_minishell(&minishell, "Environement variables could not be created", -1);
+		exit_msg_minishell(&minishell, "Environement variables could not be created", -1); //creer trois envp vides
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
