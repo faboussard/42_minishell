@@ -25,6 +25,13 @@ void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
 		m->status = 1;
 	}
 }
+//			if (pl->fd_out != STDOUT_FILENO)
+//			{
+//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+//				close(pl->fd_out);
+//				close(m->pipe_fd[READ_END]);
+//				fill_fd_with_emptiness(m, pl->tmp_in);
+//			}
 
 void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 {
@@ -47,12 +54,13 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		if (m->pid1 == 0)
 		{
 			m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			if (pl->fd_out != STDOUT_FILENO)
 			{
 				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 				close(pl->fd_out);
 			}
+			else
+				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
 			my_execve(m, pl);
 		}
@@ -111,20 +119,21 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 		}
 		else
 		{
-			//			close(m->pipe_fd[WRITE_END]);
-			//			if (pl->fd_out != STDOUT_FILENO)
-			//			{
-			//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-			//				close(pl->fd_out);
-			//				close(m->pipe_fd[READ_END]);
-			//				fill_fd_with_emptiness(m, pl->tmp_in);
-			//			}
-			//			else
-			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+			close_pipes(m->pipe_fd);
+			close_and_redirect_pipe_to_stdin(m, pl);
 		}
+//		{
+//			//			close(m->pipe_fd[WRITE_END]);
+//			//			else
+//			m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
+//		}
 	}
+	else
+		close_and_redirect_pipe_to_stdin(m, pl);
+	/*
 	m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
 	close_pipes(m->pipe_fd); // close(pl->pipe_fd[READ_END]);
+	*/
 }
 
 static void	wait_children_and_give_exit_status(t_minishell *m)

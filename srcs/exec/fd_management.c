@@ -65,5 +65,5 @@ void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 	m->tmp_in = m->pipe_fd[READ_END];
 	if (pl->fd_out != STDOUT_FILENO)
 		close(pl->fd_out);
-		//m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
+	//m_safe_dup2(m, m->pipe_fd[READ_END], m->tmp_in);
 }
