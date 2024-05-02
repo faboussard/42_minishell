@@ -22,6 +22,7 @@
 void	exec_builtin(t_minishell *minishell, t_token_list *command,
 			char **cmd_table);
 //----------------------------------BUILTINS----------------------------------//
+char	*ft_strdup_exit_if_fail(const char *s, t_minishell *minishell);
 int		ft_exit(t_minishell *minishell, char **cmd_table);
 int		ft_env(t_minishell *minishell, char **args);
 int		ft_setenv(t_minishell *minishell);

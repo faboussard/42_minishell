@@ -38,6 +38,7 @@ t_envp_list *sort_envp_list(t_envp_list **lst, int (*cmp)(char *, char *))
 			(*lst)->target = (*lst)->next->target;
 			(*lst)->next->value = swap_value;
 			(*lst)->next->target = swap_target;
+			(*lst) = tmp;
 		}
 		else
 			(*lst) = (*lst)->next;
@@ -51,13 +52,12 @@ void print_env_variables_export(t_minishell *m)
 	t_envp_list	*current;
 	char	*equal;
 
-	current = m->list_envp;
-	current = sort_envp_list(&current, ascending);
+	current = sort_envp_list(&m->list_envp, ascending);
 	while (current != NULL)
 	{
 		equal = ft_strchr(current->target, '=');
 		if (equal == NULL)
-			printf("declare -x %s\n", current->target - 1);
+			printf("declare -x %s\n", current->target); // ENLEVER LE = EN TROP
 		else
 			printf("declare -x %s\"%s\"\n", current->target, current->value);
 		current = current->next;

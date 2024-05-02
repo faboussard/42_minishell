@@ -60,7 +60,10 @@ void create_envp_table(t_minishell *minishell)
     current = minishell->list_envp;
 	while (current != NULL)
 	{
-		minishell->envp_table[i] = ft_strjoin(current->target, current->value);
+		if (current->value == NULL)
+			minishell->envp_table[i] = ft_strdup(current->target);
+		else
+			minishell->envp_table[i] = ft_strjoin(current->target, current->value);
 		if (minishell->envp_table[i] == NULL)
 			exit_msg(minishell, "Malloc failed at create_envp_table", 2);
         current = current->next;

@@ -54,7 +54,7 @@ void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var)
 		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
 	while (cpy)
 	{
-		if (ft_strncmp(tmp, (*env)->target, ft_strlen(tmp)) == 0)
+		if (ft_strncmp(tmp, cpy->target, ft_strlen(tmp)) == 0 || ft_strncmp(var, cpy->target, ft_strlen(var)) == 0)
 		{
 			remove_node_envp( env,cpy);
 			break;
