@@ -83,7 +83,7 @@ valgrind:       $(NAME)
 		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp -s ./$(NAME)
 
 debug: clean
-	$(MAKE) CFLAGS="-g -Wall -Wextra -Werror"
+	$(MAKE) CFLAGS="-g"
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean

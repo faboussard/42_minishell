@@ -46,7 +46,10 @@ int	ft_unset(t_minishell *minishell, char **args)
 			ret = EXIT_FAILURE;
 		}
 		else
-			remove_env_var(minishell, &minishell->list_envp, args[i]);
+		{
+			if (remove_env_var(&minishell->list_envp, args[i]) == MALLOC_FAILED)
+				exit_msg(minishell, "Malloc failed at ft_unset", 2);
+		}
 		i++;
 	}
 	return (ret);
