@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/22 09:45:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:14:24 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "utils.h"
 #include <readline/history.h>
 
-bool is_one_arg_builtin(t_minishell *m)
+bool	is_one_arg_builtin(t_minishell *m)
 {
 	if (m->list_tokens->e_builtin == EXIT)
 		return (1);
@@ -32,6 +32,7 @@ bool is_one_arg_builtin(t_minishell *m)
 		return (1);
 	return (0);
 }
+
 void	minishell_interactive(t_minishell *m)
 {
 	while (1)
@@ -39,7 +40,10 @@ void	minishell_interactive(t_minishell *m)
 		set_signals_interactive();
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
+		{
+			//dprintf(2, "coucou je sors bisous !\n");
 			break ;
+		}
 		if (m->user_input[0] == 0)
 			continue ;
 		set_signals_noninteractive();
@@ -62,7 +66,7 @@ void	minishell_interactive(t_minishell *m)
 		ft_free_process_list(&(m->pl));
 		ft_lstclear_token(&m->list_tokens);
 		if (m->envp_table)
-			ft_free_all_tab(m->envp_table);
+			ft_free_tab(&(m->envp_table));
 	}
 }
 
@@ -70,13 +74,14 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Fatal : malloc failed at minishell_non_interactive", 2);
+		exit_msg(minishell,
+			"Fatal : malloc failed at minishell_non_interactive", 2);
 	set_signals_noninteractive();
 	if (parse_input(minishell) == 0)
 	{
 		if (minishell->pl == NULL)
 			return ;
-        execute_cmds(minishell, minishell->total_commands);
+		execute_cmds(minishell, minishell->total_commands);
 	}
 }
 
@@ -131,36 +136,36 @@ minishell->user_input = ft_strjoin(minishell->user_input, temp);
 	sans fermer tout le minishell serait bien ici je pense)
 	Et toujours des free_safely_str avant de vérifier le malloc pour ne pas exit/return avant d'avoir free un malloc
 */
-void	format_input(t_minishell *minishell, char **av)
+void	format_input(t_minishell *m, char **av)
 {
 	int		i;
 	char	*temp;
 
-	minishell->user_input = ft_calloc(1, 1);
-	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Malloc failed at format_input", -1);
+	m->user_input = ft_calloc(1, 1);
+	if (m->user_input == NULL)
+		exit_msg(m, "Malloc failed at format_input", -1);
 	i = 0;
 	while (av[i])
 	{
-		temp = ft_strjoin(minishell->user_input, av[i]);
-		free_safely_str(minishell->user_input);
+		temp = ft_strjoin(m->user_input, av[i]);
+		free_safely_str(m->user_input);
 		if (temp != NULL)
-			minishell->user_input = ft_strdup(temp);
+			m->user_input = ft_strdup(temp);
 		free_safely_str(temp);
-		if (minishell->user_input == NULL)
-			exit_msg(minishell, "Malloc failed at format_input", -1);
+		if (m->user_input == NULL)
+			exit_msg(m, "Malloc failed at format_input", -1);
 		i++;
 	}
-	temp = ft_strdup(minishell->user_input);
-	free_safely_str(minishell->user_input);
+	temp = ft_strdup(m->user_input);
+	free_safely_str(m->user_input);
 	if (temp != NULL)
-		minishell->user_input = ft_strtrim(temp, "\"");
+		m->user_input = ft_strtrim(temp, "\"");
 	free_safely_str(temp);
-	if (minishell->user_input == NULL)
-		exit_msg(minishell, "Malloc failed at format_input", -1);
+	if (m->user_input == NULL)
+		exit_msg(m, "Malloc failed at format_input", -1);
 }
 
-//void create_3_env_variables(t_minishell *minishell)
+// void create_3_env_variables(t_minishell *minishell)
 //{
 //	export
 //	PWD=/home/faboussa
@@ -168,9 +173,9 @@ void	format_input(t_minishell *minishell, char **av)
 //	_=/usr/bin/env
 //
 
-//declare -x OLDPWD
-//declare -x PWD="/home/faboussa"
-//declare -x SHLVL="1"
+// declare -x OLDPWD
+// declare -x PWD="/home/faboussa"
+// declare -x SHLVL="1"
 
 //}
 
@@ -191,7 +196,8 @@ int	main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-//	ft_print_minishell(&minishell);
+	//	ft_print_minishell(&minishell);
+	//dprintf(2, "Au revoir ! status = %d\n", minishell.status);
 	free_minishell(&minishell);
 	return (minishell.status);
 }
