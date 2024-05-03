@@ -70,7 +70,7 @@ void remove_and_add_envp(t_minishell *m, char **split)
 	add_new_envp(&m->list_envp, split[0], split[1]);
 }
 
-bool add_var_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
+bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
 {
 	char **split;
 	bool one_key_not_valid_return_1;
