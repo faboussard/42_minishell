@@ -72,8 +72,9 @@ int	ft_lstsize_envp(t_envp_list *lst);
 int create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell);
 char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split);
 int add_new_envp(t_envp_list **list_envp, char *target, char *content);
-bool add_var_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
+bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
 void join_equal_sign(char **split);
+void remove_and_add_envp(t_minishell *m, char **split);
 
 /********************* expansion ****************************/
 

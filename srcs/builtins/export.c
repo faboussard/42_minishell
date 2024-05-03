@@ -23,7 +23,7 @@ int export_variables(char **args, t_envp_list *env_variables, t_minishell *m)
 
 	one_key_not_valid_return_1 = false;
 	index = 0;
-	one_key_not_valid_return_1 = add_var_to_envp_list(args, env_variables, m, index);
+	one_key_not_valid_return_1 = add_var_or_value_to_envp_list(args, env_variables, m, index);
 	if (one_key_not_valid_return_1 == true)
 		return (1);
 	return (0);
@@ -46,6 +46,29 @@ char *join_new_value_env_with_old(t_minishell *minishell, char *const *split, t_
 	return (new_value);
 }
 
+void find_and_join_value(t_minishell *m, char **split, const char *tmp, t_envp_list **cpy)
+{
+	while ((*cpy))
+	{
+		if (ft_strncmp(tmp, (*cpy)->target, ft_strlen(tmp)) == 0)
+		{
+			if (!(*cpy)->value)
+			{
+				(*cpy)->value = ft_strdup(split[1]);
+				if (!(*cpy)->value)
+					exit_msg(m, "Malloc failed at get_env_var_index", 2);
+			}
+			else
+			{
+				split[1] = join_new_value_env_with_old(m, split, cpy);
+				break;
+			}
+		}
+		else
+			(*cpy) = (*cpy)->next;
+	}
+}
+
 char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split)
 {
 	char	*tmp;
@@ -57,28 +80,8 @@ char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split)
 	tmp = ft_strjoin(split[0], "=");
 	if (!tmp)
 		exit_msg(m, "Malloc failed at get_env_var_index", 2);
-	while (cpy)
-	{
-		if (ft_strncmp(tmp, cpy->target, ft_strlen(tmp)) == 0)
-		{
-			if (!cpy->value)
-			{
-				cpy->value = ft_strdup(split[1]);
-				if (!cpy->value)
-					exit_msg(m, "Malloc failed at get_env_var_index", 2);
-			}
-			else
-			{
-				split[1] = join_new_value_env_with_old(m, split, &cpy);
-				break;
-			}
-		}
-		else
-			cpy = cpy->next;
-	}
-	join_equal_sign(split);
-	remove_env_var(m, &m->list_envp, split[0]);
-	add_new_envp(&m->list_envp, split[0], split[1]);
+	find_and_join_value(m, split, tmp, &cpy);
+	remove_and_add_envp(m, split);
 	free_safely_str(tmp);
 	return (NULL);
 }
