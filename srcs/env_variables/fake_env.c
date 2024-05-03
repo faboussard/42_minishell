@@ -16,7 +16,7 @@
 
 void create_(t_minishell *m)
 {
-	m->fake_env->target_ = ft_strdup("_");
+	m->fake_env->target_ = ft_strdup("_=");
 	if (m->fake_env->target_ == NULL)
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", -1);
 	m->fake_env->content_ = ft_strdup("/usr/bin/env");
@@ -26,7 +26,7 @@ void create_(t_minishell *m)
 
 void create_PWD(t_minishell *m)
 {
-	m->fake_env->target_PWD = ft_strdup("PWD");
+	m->fake_env->target_PWD = ft_strdup("PWD=");
 	if (m->fake_env->target_PWD == NULL)
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", -1);
 	m->fake_env->content_PWD = ft_strdup("/home/faboussa");
@@ -37,12 +37,15 @@ void create_PWD(t_minishell *m)
 void create_SHLVL(t_minishell *m)
 {
 	char *temp;
+	char *joined_equal;
 
 	temp = ft_itoa(m->SHLVL);
 	if (temp == NULL)
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", -1);
-	m->fake_env->target_SHLVL = ft_strdup(temp);
-	free(temp);
+	joined_equal = ft_strjoin(temp, "=");
+	free_safely_str(temp);
+	m->fake_env->target_SHLVL = ft_strdup(joined_equal);
+	free(joined_equal);
 	if (m->fake_env->target_SHLVL == NULL)
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", -1);
 	m->fake_env->content_SHLVL = ft_strdup("/usr/bin/echo");
