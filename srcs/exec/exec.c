@@ -48,10 +48,24 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		if (access(pl->good_path, F_OK) == 0)
+		{
+			free(m->paths);
+			free(pl->good_path);
+			ft_free_tab(&(pl->cmd_table));
+			ft_free_tab(&(m->envp_table));
 			print_name_and_exit_perror(m, pl->cmd_table[0], 1);
+		}
 		else
+		{
+			free(m->paths);
+			free(pl->good_path);
+			ft_free_tab(&(pl->cmd_table));
+			ft_free_tab(&(m->envp_table));
 			exit_command_not_found(m, pl->cmd_table[0]);
+		}
 	}
+	free(m->paths);
+	free_minishell(m);
 	exit(m->status);
 }
 
@@ -63,49 +77,44 @@ int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	infile_token = pl->in_files_token->e_type;
 	outfile_token = pl->out_files_token->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, STDIN_FILENO, &(m->fd_in));
+		here_doc(m, pl->in_files_token, &(pl->fd_in));
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
-		if (open_fd_infile(m, pl->in_files_token))
+		if (open_fd_infile(m, pl))
 			return (1);
-		m_safe_dup2(m, m->fd_in, STDIN_FILENO);
-		close(m->fd_in);
+		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
+		close(pl->fd_in);
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
 		if (open_fd_outfile(m, pl, pl->out_files_token->name))
 			return (1);
-		m_safe_dup2(m, m->fd_out, STDOUT_FILENO);
-		close(m->fd_out);
+		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+		close(pl->fd_out);
 	}
 	return (0);
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
-	if (handle_infile_outfile(m, pl))
-		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
+	{
+		if (handle_infile_outfile(m, pl))
+			return ;
 		my_execve(m, pl);
+	}
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
 		m->status = WEXITSTATUS(m->status);
-		close_fds(m->fd_in, m->fd_out);
+		close_fds(pl->fd_in, pl->fd_out);
 	}
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
-	int	stdin_orig;
-	int	stdout_orig;
-
-	stdin_orig = 0;
-	stdout_orig = 0;
 	if (nb_cmds < 1)
-		return ;
-	if (dup_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds))
 		return ;
 	set_paths(m, m->envp_table);
 	if (m->paths == NULL)
@@ -113,8 +122,7 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	if (nb_cmds == 1)
 		exec_one_cmd(m, m->pl);
 	else
-		exec_several_cmds(m, m->pl, stdin_orig, stdout_orig);
+		exec_several_cmds(m, m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
-	close_original_fds(m, &stdin_orig, &stdout_orig, nb_cmds);
 	ft_free_pl_paths(m);
 }

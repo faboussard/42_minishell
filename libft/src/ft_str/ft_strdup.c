@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/21 06:46:09 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/03 10:30:46 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 char	*ft_strdup(const char *s)
 {
-	char	*copy;
+	size_t len;
+	char *copy;
 
-	copy = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	len = ft_strlen(s) + 1;
+	copy = malloc(sizeof(char) * len);
 	if (copy == NULL)
 		return (NULL);
-	ft_memcpy(copy, s, ft_strlen(s) + 1);
+	ft_memcpy(copy, s, len);
 	return (copy);
 }

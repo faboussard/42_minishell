@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 09:43:37 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/19 09:43:37 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:44:15 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
             array[i] = ft_strdup(iterator->name);
             if (array[i] == NULL)
 			{
-				ft_free_all_tab(array);
+				ft_free_tab(&array);
 				return (0);
 			}
             i++;

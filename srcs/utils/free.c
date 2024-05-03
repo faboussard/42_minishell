@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/29 15:25:26 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:08:19 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ void	ft_free_process_list(t_process_list **process_list)
 	{
 		next = current->next;
 		if (current->cmd_table)
-			ft_free_all_tab(current->cmd_table);
+			ft_free_tab(&(current->cmd_table));
 		if (current->in_files_token)
 			ft_lstclear_token(&current->in_files_token);
 		if (current->out_files_token)
 			ft_lstclear_token(&current->out_files_token);
+		close_fds(current->fd_in, current->fd_out);
 		free(current);
 		current = next;
 	}
@@ -87,11 +88,10 @@ void	ft_free_process_list(t_process_list **process_list)
 void	free_minishell(t_minishell *minishell)
 {
 	free_strs(minishell);
-	close_fds(minishell->fd_in, minishell->fd_out);
 	if (minishell->list_envp != NULL)
 		ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)
-		ft_free_all_tab(minishell->envp_table);
+		ft_free_tab(&(minishell->envp_table));
 	if (minishell->pl)
 		ft_free_process_list(&minishell->pl);
 	if (minishell->list_tokens)

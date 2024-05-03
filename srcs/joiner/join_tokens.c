@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/18 10:34:38 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/02 09:50:06 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ char *join_all(t_minishell *minishell, t_token_list **list)
 	iterator = *list;
 	while (iterator)
 	{
-		total_length += strlen(iterator->name);
+		total_length += ft_strlen(iterator->name);
 		iterator = iterator->next;
 	}
 	new_table = ft_calloc(total_length + 1, sizeof(char));
