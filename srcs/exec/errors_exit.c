@@ -16,6 +16,7 @@ void	exit_command_not_found(t_minishell *m, char *name)
 {
 	ft_putstr_fd(name, 2);
 	ft_putstr_fd(": ", 2);
+	free(name);
 	exit_msg_minishell(m, "command not found", 127);
 }
 
@@ -23,12 +24,15 @@ void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
 	(void)m;
 	ft_putendl_fd(msg, 2);
+	free_minishell(m);
 	exit(error_code);
 }
 
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code)
 {
 	print_name(m, name);
+	free(name);
+	free_minishell(m);
 	exit(error_code);
 }
 

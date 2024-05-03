@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/03 08:45:36 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:55:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 
 static void	last_child(t_minishell *m, t_process_list *pl)
 {
-	handle_in_out(m, pl,&(m->tmp_in));
+	handle_in_out(m, pl, &(m->tmp_in));
 	if (m->tmp_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
 	{
 		m->pid2 = m_safe_fork(m);
@@ -116,7 +116,7 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 			else
 				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
-//			close(m->pipe_fd[WRITE_END]); <-- ne change rien si on close les deux ?
+			//			close(m->pipe_fd[WRITE_END]); <-- ne change rien si on close les deux ?
 			my_execve(m, pl);
 		}
 		else

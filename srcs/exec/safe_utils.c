@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:20:51 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/02 09:40:13 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:54:06 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ pid_t	m_safe_fork(t_minishell *minishell)
 void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd)
 {
 	int	my_dup;
+
 	my_dup = dup2(old_fd, new_fd);
 	if (my_dup == -1)
 		print_name_and_exit_perror(minishell, "dup2", errno);
