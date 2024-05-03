@@ -1,28 +1,5 @@
 //********************* TODO ***********************////
 
-10:36:57 juba@juba-desktop tommini ±|main ✗|→ ./minishell
-~/tommini main ❯ h$
-minishell: h$: command not found
-
-faboussa@z3r8p5:~/minishell$ ls |
->
-bash: syntax error: unexpected end of file
-exit
-
-
-A variable may be assigned to by a statement of the form
-
-name=[value]
-If value is not given, the variable is assigned the null string.  !!!!!!!!!
-All values undergo tilde expansion,
- parameter and variable expansion, command substitution, arithmetic expansion, and quote removal (see Shell Parameter Expansion).
-
- relire les signaux code et doc de shell
-
- REFAIRE MES FONCTIONS JOIN AVEC REMOVE NODE ET UTILISER LE BON POINTEUR DE DEBUT DE LISTE !!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
 ****************************************** HEREDOC **********************************
 
 faboussa@z1r9p4:~/minishell$ << EOF cat << stop cat << lol cat  > r
@@ -194,3 +171,15 @@ si heredoc : louvrir + error message sans exit. ne soccupe pas du reste
 faboussa@z1r9p4:~$ << stop >>
 > stop
 bash: syntax error near unexpected token `newline'
+
+********************************** BUILINS ***************************
+
+******** EXPORT *****
+>>>  Minishell>$ export haha+=fgfg
+>>>  Minishell>$ export haha+=ggggggggggggggggggggggggggggggggggg
+>>>  Minishell>$ export a
+>>>  Minishell>$ export b=
+>>>  Minishell>$ export bpds
+>>>  Minishell>$ unset a
+
+bug . a traiter ou pas : si on fait export a apres avoir fait export a= ca le remplacera ce quil ne faut pas
