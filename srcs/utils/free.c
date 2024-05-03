@@ -21,7 +21,7 @@ void	free_token(t_token_list *token)
 {
 	if (token != NULL)
 	{
-		free_safely_str(token->name);
+		free_safely_str(&(token->name));
 		free(token);
 	}
 }
@@ -36,9 +36,9 @@ void	ft_lstclear_envp(t_envp_list **lst)
 	{
 		next = current->next;
 		if (current->target != NULL)
-			free(current->target);
+			free_safely_str(&(current->target));
 		if (current->value != NULL)
-			free(current->value);
+			free_safely_str(&(current->value));
 		free(current);
 		current = next;
 	}
@@ -55,7 +55,7 @@ void	ft_lstclear_token(t_token_list **lst)
 	{
 		next = current->next;
 		if (current->name != NULL)
-			free(current->name);
+			free_safely_str(&(current->name));
 		free(current);
 		current = next;
 	}

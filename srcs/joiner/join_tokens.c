@@ -24,9 +24,9 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	t1 = (*list);
 	t2 = (*list)->next;
 	joined_name = ft_strjoin(t1->name, t2->name);
-	free(t1->name);
+	free_safely_str(&(t1->name));
 	t1->name = ft_strdup(joined_name);
-	free(joined_name);
+	free_safely_str(&joined_name);
 	if (t1->name == NULL)
 		exit_msg(minishell, "Malloc failed at tokenization", 1);
 	del_next_token(&t1);
@@ -117,7 +117,7 @@ void join_token_name(t_minishell *minishell, char *temp, t_token_list **iterator
 	temp = ft_strjoin((*new_table), (*iterator)->name);
 	if (temp == NULL)
 		exit_msg(minishell, "Memory allocation failed at tokenization", 2);
-	free_safely_str((*new_table));
+	free_safely_str(&(*new_table));
 	(*new_table) = temp;
 	(*iterator) = (*iterator)->next;
 }

@@ -20,7 +20,7 @@ void	print_name(t_minishell *m, char *name)
 	if (!thename)
 		exit_msg_minishell(m, "Malloc error", -1);
 	perror(thename);
-	free(thename);
+	free_safely_str(&thename);
 }
 
 void	print_name_and_give_status(t_minishell *m, char *name, int err)

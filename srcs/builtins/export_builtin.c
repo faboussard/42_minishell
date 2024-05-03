@@ -57,9 +57,9 @@ void join_equal_sign(char **split)
 	char *tmp;
 
 	tmp = ft_strdup(split[0]);
-	free(split[0]);
+	free_safely_str(&(split[0]));
 	split[0] = ft_strjoin(tmp, "=");
-	free(tmp);
+	free_safely_str(&tmp);
 }
 
 void remove_and_add_envp(t_minishell *m, char **split)

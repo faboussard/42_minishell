@@ -82,7 +82,7 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 			{
 				join_tokens(minishell, list);
 				change_token_name(minishell, list, expanded_string);
-				free(expanded_string);
+				free_safely_str(&expanded_string);
 				return;
 			}
 			else

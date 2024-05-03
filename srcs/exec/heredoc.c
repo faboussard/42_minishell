@@ -36,7 +36,7 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 	if (input_after_expand != NULL)
 	{
 		ft_putstr_fd(input_after_expand, pl->fd_in);
-		free_safely_str(input_after_expand);
+		free_safely_str(&(input_after_expand));
 	}
 	else
 		ft_putstr_fd(input, pl->fd_in);
@@ -58,7 +58,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
 		{
-			free_safely_str(input);
+			free_safely_str(&(input));
 			close(pl->fd_in);
 			exit(0);
 		}
@@ -66,7 +66,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 			ft_putstr_fd(input, pl->fd_in);
 		else
 			handle_expand(m, pl, input);
-		free_safely_str(input);
+		free_safely_str(&(input));
 	}
 }
 

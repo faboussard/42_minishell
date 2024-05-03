@@ -33,7 +33,7 @@ t_envp_list *create_new_envp(char *target, char *content)
         new_envp->value = ft_strdup(content);
         if (new_envp->value == NULL)
 		{
-			free_safely_str(new_envp->target);
+			free_safely_str(&(new_envp->target));
             free(new_envp);
             return (NULL);
         }
@@ -62,7 +62,7 @@ void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var)
 		else
 			cpy = cpy->next;
 	}
-	free_safely_str(tmp);
+	free_safely_str(&tmp);
 }
 
 void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove)
@@ -91,8 +91,8 @@ void	free_envp(t_envp_list *envp)
 {
 	if (envp != NULL)
 	{
-		free_safely_str(envp->target);
-		free_safely_str(envp->value);
+		free_safely_str(&(envp->target));
+		free_safely_str(&(envp->value));
 		free(envp);
 		envp = NULL;
 	}

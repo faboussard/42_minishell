@@ -51,7 +51,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
 	ft_strlcpy(m->current_path, cwd, cwd_len);
-	free_safely_str(env->value);
+	free_safely_str(&(env->value));
 	env->value = ft_strdup(cwd);
 	if (env->value == NULL)
 	{
@@ -87,7 +87,7 @@ int	change_env_variable(t_minishell *m, char *var)
 }
 // void	replace_old_path(t_minishell *m)
 // {
-// 	free_safely_str(m->old_path);
+// 	free_safely_str(&(m->old_path));
 // 	m->old_path = ft_strdup(m->current_path);
 // }
 
@@ -135,7 +135,7 @@ static int	get_home(t_minishell *m)
 	ft_strlcpy(new_path, home_dir, home_dir_len + 1);
 	new_path[home_dir_len] = '/';
 	return_value = go_into_directory(m, new_path);
-	free(new_path);
+	free_safely_str(&new_path);
 	return (return_value);
 }
 

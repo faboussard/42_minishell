@@ -68,9 +68,9 @@ void get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *min
         if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
 			exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
-		free_safely_str(content);
+		free_safely_str(&content);
 	}
-	free_safely_str(target);
+	free_safely_str(&target);
 }
 
 int create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell)

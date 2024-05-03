@@ -24,15 +24,15 @@ void	close_all_fds(void)
 
 void	free_strs(t_minishell *minishell)
 {
-	free_safely_str(minishell->user_input);
+	free_safely_str(&(minishell->user_input));
 }
 
-void	free_safely_str(char *str_to_free)
+void	free_safely_str(char **str_to_free)
 {
-	if (str_to_free != NULL)
+	if (*str_to_free != NULL)
 	{
-		free(str_to_free);
-		str_to_free = NULL;
+		free(*str_to_free);
+		*str_to_free = NULL;
 	}
 }
 
@@ -45,7 +45,7 @@ void ft_free_tab(char ***tab)
 		return;
 	while ((*tab)[i])
 	{
-		free((*tab)[i]);
+		free_safely_str(&((*tab)[i]));
 		i++;
 	}
 	free(*tab);
