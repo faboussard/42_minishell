@@ -33,35 +33,6 @@ int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 	return (0);
 }
 
-static bool is_valid_key_with_plus(char *key)
-{
-	size_t index;
-
-	index = 0;
-	if (!ft_isalpha(key[index]) && key[index] != '_')
-		return (false);
-	while (key[index] != '\0')
-	{
-		if (key[index] == '+' && key[index + 1] == '\0')
-			return (true);
-		if (!ft_isalnum(key[index]) && key[index] != '_')
-			return (false);
-		index++;
-	}
-	return (true);
-}
-
-
-void join_equal_sign(char **split)
-{
-	char *tmp;
-
-	tmp = ft_strdup(split[0]);
-	free(split[0]);
-	split[0] = ft_strjoin(tmp, "=");
-	free(tmp);
-}
-
 void remove_and_add_envp(t_minishell *m, char **split)
 {
 	char *content;
@@ -89,11 +60,7 @@ void remove_and_add_envp(t_minishell *m, char **split)
 	free(content);
 }
 
-void action_for_no_valid_key(char *arg, bool *check_key)
-{
-	print_cmd_perror_no_strerror(arg, "export: invalid identifier\n");
-	*check_key = true;
-}
+
 
 void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key)
 {
