@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/02 09:38:34 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/03 08:45:36 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 			}
 			else
 				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
-			close(m->pipe_fd[WRITE_END]);
+			close_pipes(m->pipe_fd);
+//			close(m->pipe_fd[WRITE_END]); <-- ne change rien si on close les deux ?
 			my_execve(m, pl);
 		}
 		else
