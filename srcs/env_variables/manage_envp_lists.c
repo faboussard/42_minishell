@@ -70,24 +70,25 @@ t_envp_list *create_new_envp(char *target, char *content)
 
 int remove_env_var(t_envp_list **env, char *var)
 {
-	char	*tmp;
+	char	*target_without_equal_sign;
 	t_envp_list *cpy;
 
 	cpy = *env;
-	tmp = ft_strjoin(var, "=");
-	if (!tmp)
-		return (MALLOC_FAILED);
 	while (cpy)
 	{
-		if (ft_strncmp(tmp, cpy->target, ft_strlen(tmp)) == 0 || ft_strncmp(var, cpy->target, ft_strlen(var)) == 0)
+		target_without_equal_sign = ft_strtrim(cpy->target, "=");
+		if (target_without_equal_sign == NULL)
+			return (MALLOC_FAILED);
+		if (ft_strncmp(var, target_without_equal_sign, ft_strlen(var)) == 0 || ft_strncmp(var, target_without_equal_sign, ft_strlen(var)) == 0)
 		{
 			remove_node_envp( env,cpy);
+			free(target_without_equal_sign);
 			break;
 		}
 		else
 			cpy = cpy->next;
+		free(target_without_equal_sign);
 	}
-	free_safely_str(tmp);
 	return (0);
 }
 
