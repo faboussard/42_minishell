@@ -61,7 +61,7 @@ void	minishell_interactive(t_minishell *m)
 		m->total_commands = 1;
 		// CAPITAL ! L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE REMET
 		// PAS A 1 ENTRE DEUX PROMPTS !
-		free(m->user_input);
+		free_safely_str(&(m->user_input));
 		ft_free_process_list(&(m->pl));
 		ft_lstclear_token(&m->list_tokens);
 		if (m->envp_table)
@@ -147,19 +147,19 @@ void	format_input(t_minishell *m, char **av)
 	while (av[i])
 	{
 		temp = ft_strjoin(m->user_input, av[i]);
-		free_safely_str(m->user_input);
+		free_safely_str(&(m->user_input));
 		if (temp != NULL)
 			m->user_input = ft_strdup(temp);
-		free_safely_str(temp);
+		free_safely_str(&(temp));
 		if (m->user_input == NULL)
 			exit_msg(m, "Malloc failed at format_input", -1);
 		i++;
 	}
 	temp = ft_strdup(m->user_input);
-	free_safely_str(m->user_input);
+	free_safely_str(&(m->user_input));
 	if (temp != NULL)
 		m->user_input = ft_strtrim(temp, "\"");
-	free_safely_str(temp);
+	free_safely_str(&temp);
 	if (m->user_input == NULL)
 		exit_msg(m, "Malloc failed at format_input", -1);
 }

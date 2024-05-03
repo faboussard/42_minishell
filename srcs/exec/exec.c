@@ -49,22 +49,22 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		if (access(pl->good_path, F_OK) == 0)
 		{
-			free(m->paths);
-			free(pl->good_path);
+			free_safely_str(&(m->paths));
+			free_safely_str(&(pl->good_path));
 			ft_free_tab(&(pl->cmd_table));
 			ft_free_tab(&(m->envp_table));
 			print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 		}
 		else
 		{
-			free(m->paths);
-			free(pl->good_path);
+			free_safely_str(&(m->paths));
+			free_safely_str(&(pl->good_path));
 			ft_free_tab(&(pl->cmd_table));
 			ft_free_tab(&(m->envp_table));
 			exit_command_not_found(m, pl->cmd_table[0]);
 		}
 	}
-	free(m->paths);
+	free_safely_str(&(m->paths));
 	free_minishell(m);
 	exit(m->status);
 }

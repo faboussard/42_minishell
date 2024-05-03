@@ -29,7 +29,7 @@ void create_in_files_token(t_process_list *new_process_list, t_minishell *minish
 		if (iterator->e_type == IN_FILE || iterator->e_type == DELIMITER)
 		{
 			if (new_process_list->in_files_token->name)
-				free(new_process_list->in_files_token->name);
+				free_safely_str(&(new_process_list->in_files_token->name));
 			new_process_list->in_files_token->name = NULL;
 			new_process_list->in_files_token->name = ft_strdup(iterator->name);
 			if (new_process_list->in_files_token->name == NULL)
@@ -57,7 +57,7 @@ void create_out_files_token(t_process_list *new_process_list, t_minishell *minis
 		if (iterator->e_type == OUT_FILE || iterator->e_type == APPEND_FILE)
 		{
 			if (new_process_list->out_files_token->name)
-				free(new_process_list->out_files_token->name);
+				free_safely_str(&(new_process_list->out_files_token->name));
 			new_process_list->out_files_token->name = NULL;
 			new_process_list->out_files_token->name = ft_strdup(iterator->name);
 			if (new_process_list->out_files_token->name == NULL)
