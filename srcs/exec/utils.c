@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:29:13 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/02 09:14:24 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:34:55 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,6 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
             perror("");
     }
 }
-
-void ft_free_tab(char ***tab)
-{
-	size_t i;
-
-	i = 0;
-	if (!tab || !*tab)
-		return;
-	while ((*tab)[i])
-	{
-		free((*tab)[i]);
-		i++;
-	}
-	free(*tab);
-	*tab = NULL;
-}
-
 
 void	ft_init_pl(t_minishell *m, t_process_list *pl)
 {
@@ -58,4 +41,27 @@ void	ft_free_pl_paths(t_minishell *minishell)
 		free(minishell->pl->good_path);
 	if (minishell->pl->tab_paths != NULL)
 		ft_free_tab(&(minishell->pl->tab_paths));
+}
+
+char	**ft_tabdup(char **s, size_t len)
+{
+	char	**dest;
+	size_t	i;
+
+	i = 0;
+	dest = ft_calloc(len + 1, sizeof(char *));
+	if (!dest)
+		return (NULL);
+	while (s[i])
+	{
+		dest[i] = ft_strdup(s[i]);
+		if (!dest[i])
+		{
+			ft_free_tab(&dest);
+			return (NULL);
+		}
+		i++;
+	}
+	dest[i] = NULL;
+	return (dest);
 }
