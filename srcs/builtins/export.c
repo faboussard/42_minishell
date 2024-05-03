@@ -16,7 +16,6 @@
 #include "parser.h"
 #include <readline/history.h>
 
-// si on fait env - i puis quon unset tout, prevoir le cas
 int export_variables(char **args, t_envp_list *env_variables, t_minishell *m)
 {
 	size_t index;
@@ -31,7 +30,7 @@ int export_variables(char **args, t_envp_list *env_variables, t_minishell *m)
 		return (0);
 }
 
-char *join_new_value_env_with_old(t_minishell *minishell, char **split, t_envp_list **envp)
+char *join_new_value_env_with_old(t_minishell *m, char **split, t_envp_list **envp)
 {
 	char *tmp;
 	char *new_value;
@@ -40,17 +39,18 @@ char *join_new_value_env_with_old(t_minishell *minishell, char **split, t_envp_l
 	if (!tmp)
 	{
 		ft_free_tab(&split);
-		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
+		exit_msg(m, "Malloc failed at get_env_var_index", 2);
 	}
 	new_value = ft_strjoin(tmp, split[1]);
 	if (!new_value)
 	{
 		ft_free_tab(&split);
-		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
+		exit_msg(m, "Malloc failed at get_env_var_index", 2);
 	}
 	free(tmp);
 	return (new_value);
 }
+
 
 void find_and_join_value(t_minishell *m, char **split, const char *tmp, t_envp_list **cpy)
 {
@@ -71,12 +71,7 @@ void find_and_join_value(t_minishell *m, char **split, const char *tmp, t_envp_l
 				}
 			}
 			else
-			{
-				temp = join_new_value_env_with_old(m, split, cpy);
-				free(split[1]);
-				split[1] = ft_strdup(temp);
-				free(temp);
-			}
+				join_with_old(m, split, cpy, temp);
 			break;
 		}
 		else

@@ -75,6 +75,8 @@ int add_new_envp(t_envp_list **list_envp, char *target, char *content);
 bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
 void join_equal_sign(char **split);
 void remove_and_add_envp(t_minishell *m, char **split);
+void create_3_env_variables(t_minishell *m);
+
 
 /********************* expansion ****************************/
 

@@ -17,26 +17,25 @@
 # include "minishell.h"
 # include "utils.h"
 
-//---------------------------- EXEC BUILTINS --------------------------//
 
-void	exec_builtin(t_minishell *minishell, t_token_list *command,
-			char **cmd_table);
 //----------------------------------BUILTINS----------------------------------//
-char	*ft_strdup_exit_if_fail(const char *s, t_minishell *minishell);
 int		ft_exit(t_minishell *minishell, char **cmd_table);
 int		ft_env(t_minishell *minishell, char **args);
-int		ft_setenv(t_minishell *minishell);
-int		ft_unsetenv(t_minishell *minishell);
 int		ft_cd(t_minishell *minishell, char **cmd_table);
 int		ft_echo(char **cmd_table);
 int		ft_pwd(t_minishell *minishell);
 int ft_export(char **args, t_envp_list **env_variables, t_minishell *m);
 int export_variables(char **args, t_envp_list *env_variables, t_minishell *m);
 int		ft_unset(t_minishell *minishell, char **args);
-int		ft_atoi_long(const char *str, bool *error);
-bool	is_valid_env_var_key(char *var);
+
 //-------------------------------BUILTINS UTILS-------------------------------//
 void	ft_realpath(t_minishell *m, char *cmd);
 bool	contains_only_charset(const char *str, const char *charset);
+int		ft_atoi_long(const char *str, bool *error);
+bool	is_valid_env_var_key(char *var);
+void action_for_no_valid_key(char *arg, bool *check_key);
+bool is_valid_key_with_plus(char *key);
+void join_with_old(t_minishell *m, char **split, t_envp_list **cpy, char *temp);
+char *join_new_value_env_with_old(t_minishell *m, char **split, t_envp_list **envp);
 
 #endif // BUILTINS_H
