@@ -32,6 +32,15 @@ bool	is_one_arg_builtin(t_minishell *m)
 	return (0);
 }
 
+void clear_prompt(t_minishell *m)
+{
+	free(m->user_input);
+	ft_free_process_list(&(m->pl));
+	ft_lstclear_token(&m->list_tokens);
+	if (m->envp_table)
+		ft_free_tab(&(m->envp_table));
+}
+
 void	minishell_interactive(t_minishell *m)
 {
 	while (1)
@@ -57,15 +66,13 @@ void	minishell_interactive(t_minishell *m)
 				is_a_builtin(m, m->pl->cmd_table[0], m->pl->cmd_table);
 			else
 				execute_cmds(m, m->total_commands);
+			if (m->list_envp == NULL) // a la suite de unset si on a supprime toutes les varialbes denv
+				create_3_env_variables(m);
 		}
 		m->total_commands = 1;
 		// CAPITAL ! L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE REMET
 		// PAS A 1 ENTRE DEUX PROMPTS !
-		free(m->user_input);
-		ft_free_process_list(&(m->pl));
-		ft_lstclear_token(&m->list_tokens);
-		if (m->envp_table)
-			ft_free_tab(&(m->envp_table));
+		clear_prompt(m);
 	}
 }
 
@@ -164,20 +171,6 @@ void	format_input(t_minishell *m, char **av)
 		exit_msg(m, "Malloc failed at format_input", -1);
 }
 
-// void create_3_env_variables(t_minishell *minishell)
-//{
-//	export
-//	PWD=/home/faboussa
-//	SHLVL=1
-//	_=/usr/bin/env
-//
-
-// declare -x OLDPWD
-// declare -x PWD="/home/faboussa"
-// declare -x SHLVL="1"
-
-//}
-
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
@@ -185,11 +178,11 @@ int	main(int ac, char **av, char **envp)
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
 	if (envp == NULL)
-		return 1; // creer trops envp
+		minishell.list_envp = create_3_env_variables(&minishell);
 	else
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
-		exit_msg_minishell(&minishell, "Environement variables could not be created", -1); //creer trois envp vides
+		exit_msg_minishell(&minishell, "Environement variables could not be created", -1);
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
