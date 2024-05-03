@@ -78,7 +78,7 @@ $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
 valgrind:       $(NAME)
-		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
+		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp -s ./$(NAME)
 
 debug: clean
 	$(MAKE) CFLAGS="-g -Wall -Wextra -Werror"

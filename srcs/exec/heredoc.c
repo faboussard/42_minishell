@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:20:54 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/23 08:55:57 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:55:27 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 #include "parser.h"
 #include "utils.h"
 
-char *parse_input_for_heredoc(t_minishell *m, char *original_input)
+char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 {
-	char *input_after_expand;
-	t_token_list *heredoc_token_list;
+	char			*input_after_expand;
+	t_token_list	*heredoc_token_list;
 
 	heredoc_token_list = NULL;
 	transform_to_token(m, original_input, &heredoc_token_list);
 	expander(m, &heredoc_token_list);
-	ft_list_remove_if_same_type(&heredoc_token_list, (void *) TO_DELETE, cmp);
+	ft_list_remove_if_same_type(&heredoc_token_list, (void *)TO_DELETE, cmp);
 	input_after_expand = join_all(m, &heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
 	return (input_after_expand);
@@ -39,10 +39,12 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 		free_safely_str(input_after_expand);
 	}
 	else
-		ft_putstr_fd(input, pl->fd_in);;
+		ft_putstr_fd(input, pl->fd_in);
+	;
 }
 
-static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list *limiter)
+static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
+		t_token_list *limiter)
 {
 	size_t	limiter_len;
 	size_t	input_len;
@@ -70,17 +72,17 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl, t_token_list 
 
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use)
 {
-    int here_doc_pid;
+	int	here_doc_pid;
 
-    check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
-    close_fds(*fd_to_use, -1);
-    *fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC , 0666);
+	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
+	close_fds(*fd_to_use, -1);
+	*fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (*fd_to_use < 0)
 	{
 		perror("No /tmp/ directory found");
 		return ;
 	}
-    here_doc_pid = m_safe_fork(m);
+	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
 		writing_in_heredoc(m, m->pl, limiter);
 	else

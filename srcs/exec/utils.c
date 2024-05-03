@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:29:13 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/02 10:34:55 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:54:56 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 {
-    if (access(tmp_file, F_OK) == 0)
-    {
-        if (unlink(tmp_file) == -1)
-            perror("");
-    }
+	if (access(tmp_file, F_OK) == 0)
+	{
+		if (unlink(tmp_file) == -1)
+			perror("");
+	}
 }
 
 void	ft_init_pl(t_minishell *m, t_process_list *pl)

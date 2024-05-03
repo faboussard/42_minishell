@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 09:51:27 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/16 08:54:57 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:54:44 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,29 @@ static void	deal_with_pathed_cmd(t_minishell *m)
 		malloc_error_with_exit(m);
 }
 
+static void	check_path(t_minishell *m, t_process_list *pl, size_t i)
+{
+	char	*cmd_name;
+
+	cmd_name = ft_strdup(pl->cmd_table[0]);
+	if (!(pl->tab_paths[i]) && !ft_strncmp("/usr", m->paths, 2))
+	{
+		ft_free_tab(&(pl->tab_paths));
+		free(pl->good_path);
+		free(m->paths);
+		print_name_and_exit_perror(m, cmd_name, 1);
+	}
+	else if (!(pl->tab_paths[i]))
+	{
+		free(pl->good_path);
+		ft_free_tab(&(pl->tab_paths));
+		free(m->paths);
+		exit_command_not_found(m, cmd_name);
+	}
+	ft_free_tab(&(pl->tab_paths));
+	free(cmd_name);
+}
+
 void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 {
 	size_t	i;
@@ -57,34 +80,18 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 	if (pl->tab_paths == NULL || pl->cmd_table == NULL)
 		malloc_error_with_exit(m);
 	pl->good_path = join_sep(m, pl->tab_paths[0], pl->cmd_table[0], '/');
+	if (pl->good_path == NULL)
+		malloc_error_with_exit(m);
 	i = 0;
 	while (pl->tab_paths[i] && access(pl->good_path, F_OK) != 0)
 	{
 		free(pl->good_path);
 		pl->good_path = join_sep(m, pl->tab_paths[i], pl->cmd_table[0], '/');
+		if (pl->good_path == NULL)
+			malloc_error_with_exit(m);
 		i++;
 	}
-	if (!(pl->tab_paths[i]) && !ft_strncmp("/usr", m->paths, 2))
-		print_name_and_exit_perror(m, pl->cmd_table[0], 1);
-	else if (!(pl->tab_paths[i]))
-		exit_command_not_found(m, pl->cmd_table[0]);
-}
-
-static bool	this_is_path(char *var)
-{
-	if (!var)
-		return (0);
-	if (!var[0] || var[0] != 'P')
-		return (0);
-	if (!var[1] || var[1] != 'A')
-		return (0);
-	if (!var[2] || var[2] != 'T')
-		return (0);
-	if (!var[3] || var[3] != 'H')
-		return (0);
-	if (!var[4] || var[4] != '=')
-		return (0);
-	return (1);
+	check_path(m, pl, i);
 }
 
 void	set_paths(t_minishell *m, char **env)
@@ -94,7 +101,7 @@ void	set_paths(t_minishell *m, char **env)
 	i = 0;
 	while (env && env[i])
 	{
-		if (this_is_path(env[i]))
+		if (ft_strncmp("PATH=", env[i], 5) == 0)
 		{
 			m->paths = ft_strdup(env[i] + 5);
 			if (m->paths == NULL)
