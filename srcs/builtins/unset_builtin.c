@@ -46,7 +46,7 @@ int	ft_unset(t_minishell *minishell, char **args)
 			ret = EXIT_FAILURE;
 		}
 		else
-			remove_env_var(minishell, &minishell->list_envp, args[i], 1);
+			remove_env_var(minishell, &minishell->list_envp, args[i]);
 		i++;
 	}
 	return (ret);

@@ -76,6 +76,7 @@ bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_mi
 	bool one_key_not_valid_return_1;
 	split = NULL;
 
+	one_key_not_valid_return_1 = false;
 	while (args[index] != NULL)
 	{
 		split = ft_split(args[index], '=');
@@ -92,7 +93,7 @@ bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_mi
 			additionnal_env_content(m, &env_variables, split);
 		else
 			remove_and_add_envp(m, split);
-		ft_free_all_tab(split);
+		ft_free_tab(&split);
 		index++;
 	}
 	return (one_key_not_valid_return_1);
