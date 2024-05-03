@@ -18,7 +18,7 @@
 
 int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 {
-	size_t	index;
+	size_t index;
 	t_envp_list *current;
 
 	index = 1;
@@ -28,13 +28,12 @@ int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 		if ((ft_lstsize_envp(current)) <= 0)
 			return (0);
 		print_env_variables_export(m);
-	}
-	else
+	} else
 		return (export_variables(args + index, current, m));
 	return (0);
 }
 
-static	bool	is_valid_key(char *key)
+static bool is_valid_key_with_plus(char *key)
 {
 	size_t	index;
 
@@ -52,6 +51,7 @@ static	bool	is_valid_key(char *key)
 	return (true);
 }
 
+
 void join_equal_sign(char **split)
 {
 	char *tmp;
@@ -66,35 +66,73 @@ void remove_and_add_envp(t_minishell *m, char **split)
 {
 	if (split[1] != NULL)
 		join_equal_sign(split);
-	remove_env_var(m, &m->list_envp, split[0]);
-	add_new_envp(&m->list_envp, split[0], split[1]);
+	if (remove_env_var(&m->list_envp, split[0]) == MALLOC_FAILED)
+		exit_msg(m, "Malloc failed at export_variables", 2);
+	if (add_new_envp(&m->list_envp, split[0], split[1]) == MALLOC_FAILED)
+		exit_msg(m, "Malloc failed at export_variables", 2);
+}
+
+void null_string_if_ends_by_equal_sign(char *const *args, t_minishell *m, size_t index, char **split)
+{
+	if (args[index][ft_strlen(args[index]) - 1] == '=')
+	{
+		if (split[1] == NULL)
+		{
+			split[1] = ft_strdup("");
+			if (split[1] == NULL)
+				exit_msg(m, "Malloc failed at add_var_or_value_to_envp_list", 2);
+		}
+	}
+}
+
+void action_for_no_valid_key(char *arg, bool *check_key)
+{
+	print_cmd_perror_no_strerror(arg, "export: invalid identifier\n");
+	*check_key = true;
+}
+
+void add_if_no_equal_sign(char *arg, t_minishell *m, bool *check_key)
+{
+	if (is_valid_env_var_key(arg) == false)
+	{
+		action_for_no_valid_key(arg, check_key);
+		return ;
+	}
+	if (remove_env_var(&m->list_envp, arg) == MALLOC_FAILED)
+		exit_msg(m, "Malloc failed at export_variables", 2);
+	if (add_new_envp(&m->list_envp, arg, NULL) == MALLOC_FAILED)
+		exit_msg(m, "Malloc failed at export_variables", 2);
 }
 
 bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
 {
 	char **split;
-	bool one_key_not_valid_return_1;
-	split = NULL;
+	bool check_key;
 
-	one_key_not_valid_return_1 = false;
+	split = NULL;
+	check_key = false;
 	while (args[index] != NULL)
 	{
-		split = ft_split(args[index], '=');
-		if (split == NULL)
-			exit_msg(m, "Malloc failed at export_variables", 2);
-		if (is_valid_key(split[0]) == false)
-		{
-			print_cmd_perror_no_strerror(split[0], "export: invalid identifier\n");
-			one_key_not_valid_return_1 = true;
-			index++;
-			continue ;
-		}
-		if (ft_strchr(split[0], '+') != NULL && split[1] != NULL)
-			additionnal_env_content(m, &env_variables, split);
+		if (ft_strchr(args[index], '=') == NULL)
+			add_if_no_equal_sign(args[index], m, &check_key);
 		else
-			remove_and_add_envp(m, split);
-		ft_free_tab(&split);
+		{
+			split = ft_split(args[index], '=');
+			if (split == NULL)
+				exit_msg(m, "Malloc failed at export_variables", 2);
+			if (is_valid_key_with_plus(split[0]) == false)
+				action_for_no_valid_key(split[0], &check_key);
+			else
+			{
+				null_string_if_ends_by_equal_sign(args, m, index, split);
+				if (ft_strchr(split[0], '+') != NULL && split[1] != NULL)
+					additionnal_env_content(m, &env_variables, split);
+				else
+					remove_and_add_envp(m, split);
+			}
+			ft_free_tab(&split);
+		}
 		index++;
 	}
-	return (one_key_not_valid_return_1);
+	return (check_key);
 }

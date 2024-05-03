@@ -51,3 +51,20 @@ void ft_free_tab(char ***tab)
 	free(*tab);
 	*tab = NULL;
 }
+
+
+void ft_free_all_tab(char **tab)
+{
+	size_t i;
+
+	i = 0;
+	if (!tab || !*tab)
+		return;
+	while ((tab)[i])
+	{
+		free((tab)[i]);
+		i++;
+	}
+	free(tab);
+	tab = NULL;
+}
