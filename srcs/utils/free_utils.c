@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:57:05 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/03 10:00:02 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/04 23:54:04 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ void	free_safely_str(char **str_to_free)
 	}
 }
 
-void ft_free_tab(char ***tab)
+void	ft_free_tab(char ***tab)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (!tab || !*tab)
-		return;
+		return ;
 	while ((*tab)[i])
 	{
 		free_safely_str(&((*tab)[i]));
