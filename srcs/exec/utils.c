@@ -33,12 +33,11 @@ void	ft_init_pl(t_minishell *m, t_process_list *pl)
 	pl->tab_paths = NULL;
 }
 
-void	ft_free_pl_paths(t_minishell *minishell)
+void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
 {
-	if (minishell->paths != NULL)
-		free_safely_str(&(minishell->paths));
-	if (minishell->pl->good_path != NULL)
-		free_safely_str(&(minishell->pl->good_path));
-	if (minishell->pl->tab_paths != NULL)
-		ft_free_tab(&(minishell->pl->tab_paths));
+	free_safely_str(&(minishell->paths));
+	free_safely_str(&(pl->good_path));
+	ft_free_tab(&(pl->tab_paths));
+	ft_free_tab(&(pl->cmd_table));
+	ft_free_tab(&(minishell->envp_table));
 }
