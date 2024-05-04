@@ -40,7 +40,7 @@ void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 	infile_token = pl->in_files_token->e_type;
 	if (infile_token == DELIMITER)
 		here_doc(m, pl->in_files_token, fd_in);
-	if (open_fd_infile(m, pl))
+	if (open_fd_infile(m, pl, fd_in))
 		return ;
 	open_fd_outfile(m, pl, pl->out_files_token->name);
 }
