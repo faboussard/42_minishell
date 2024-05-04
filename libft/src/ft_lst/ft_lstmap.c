@@ -14,8 +14,8 @@
 
 t_node	*ft_lstmap(t_node *lst, void *(*f)(void *), void (*del)(void *))
 {
-    t_node	*new_list;
-    t_node	*new_node;
+	t_node	*new_list;
+	t_node	*new_node;
 	void	*content_node;
 
 	new_list = NULL;

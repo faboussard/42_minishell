@@ -19,8 +19,8 @@ long	ft_atol(const char *s)
 
 	result = 0;
 	sign = 1;
-	while (*s == ' ' || *s == '\t' || *s == '\n'
-		|| *s == '\r' || *s == '\f' || *s == '\v')
+	while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r' || *s == '\f'
+		|| *s == '\v')
 		s++;
 	if (*s == '-' || *s == '+')
 	{
