@@ -6,37 +6,43 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/04 22:31:48 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/04 23:17:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
+static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
+{
+	if (pl->in_files_token->e_type == DELIMITER)
+		perror("minishell: heredoc file can't be opened");
+	else
+		print_name(m, pl->in_files_token->name);
+	m->status = 1;
+	pl->dev_null = 1;
+	*fd_to_use = open("/dev/null", O_RDONLY);
+	if (*fd_to_use < 0)
+		ft_putendl_fd("Couldn't open /dev/null/", 2);
+}
+
 int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
 {
+	enum e_token_type	infile_type;
+
+	infile_type = pl->in_files_token->e_type;
 	pl->dev_null = 0;
-	if (pl->in_files_token->e_type == DELIMITER || pl->in_files_token->e_type == IN_FILE)
+	if (infile_type == DELIMITER || infile_type == IN_FILE)
 		close_fds(*fd_to_use, 0);
-	if (pl->in_files_token->e_type == DELIMITER)
+	if (infile_type == DELIMITER)
 		*fd_to_use = open(HERE_DOC_TMP_FILE, O_RDONLY);
-	else if (pl->in_files_token->e_type == IN_FILE)
+	else if (infile_type == IN_FILE)
 		*fd_to_use = open(pl->in_files_token->name, O_RDONLY);
 	else
 		pl->fd_in = STDIN_FILENO;
 	if (*fd_to_use < 0)
 	{
-		if (pl->in_files_token->e_type == DELIMITER)
-			perror("minishell: /tmp/.tmp_heredoc");
-		else
-			print_name(m, pl->in_files_token->name);
-		m->status = 1;
-		pl->dev_null = 1;
-		*fd_to_use = open("/dev/null", O_RDONLY);
-		if (*fd_to_use < 0)
-		{
-			ft_putendl_fd("No /dev/null/ found", 2);
-			return (1);
-		}
+		manage_fd_error(m, pl, fd_to_use);
+		return (1);
 	}
 	return (0);
 }

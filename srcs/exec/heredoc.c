@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:20:54 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/03 17:14:54 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/04 22:44:49 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 	}
 	else
 		ft_putstr_fd(input, pl->fd_in);
-	;
 }
 
 static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
@@ -87,12 +86,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use)
 		writing_in_heredoc(m, m->pl, limiter);
 	else
 	{
-		waitpid(here_doc_pid, &(m->status), 0); // && errno != 10);
+		waitpid(here_doc_pid, &(m->status), 0);
 		close(*fd_to_use);
 	}
 }
-/*
- * Impossible de remplacer m->fd_in par un fd_here_doc local, fait foirer
- * la suite : un << compte wc -l donnera toujours 0 au lieu de compter
- * si on n'utilise pas fd_in
- */

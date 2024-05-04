@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:29:13 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/04 21:49:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/04 22:45:02 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,3 @@ void	ft_free_pl_paths(t_minishell *minishell)
 	if (minishell->pl->tab_paths != NULL)
 		ft_free_tab(&(minishell->pl->tab_paths));
 }
-
