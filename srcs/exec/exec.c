@@ -97,9 +97,10 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
-		if (handle_infile_outfile(m, pl))
-			return ;
-		my_execve(m, pl);
+		if (handle_infile_outfile(m, pl) == 0)
+			my_execve(m, pl);
+		else
+			exit(1);
 	}
 	else
 	{
