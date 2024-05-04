@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:29:13 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/03 11:54:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/04 21:49:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,3 @@ void	ft_free_pl_paths(t_minishell *minishell)
 		ft_free_tab(&(minishell->pl->tab_paths));
 }
 
-char	**ft_tabdup(char **s, size_t len)
-{
-	char	**dest;
-	size_t	i;
-
-	i = 0;
-	dest = ft_calloc(len + 1, sizeof(char *));
-	if (!dest)
-		return (NULL);
-	while (s[i])
-	{
-		dest[i] = ft_strdup(s[i]);
-		if (!dest[i])
-		{
-			ft_free_tab(&dest);
-			return (NULL);
-		}
-		i++;
-	}
-	dest[i] = NULL;
-	return (dest);
-}
