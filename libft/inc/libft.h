@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:26:17 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/13 02:26:17 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/04 23:57:32 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ typedef struct s_node_int
 
 typedef struct s_hashmap_content
 {
-	void					*content;
-	char					*target;
-}	t_hashmap_content;
+	void				*content;
+	char				*target;
+}						t_hashmap_content;
 
 /***************************** ft_is **************************************/
 int						ft_isalpha(int c);
@@ -116,13 +116,12 @@ void					ft_lstdelone(t_node *lst, void (*del)(void *));
 void					ft_lstclear(t_node **lst, void (*del)(void *));
 void					ft_lstiter(t_node *lst, void (*f)(void *));
 t_node					*ft_lstmap(t_node *lst, void *(*f)(void *),
-                                      void (*del)(void *));
+							void (*del)(void *));
 
 /***************************** ft_maths **************************************/
 
 int						ft_abs(int n);
 
-/***************************** ft_hashmap **************************************/
-
+/***************************** ft_hashmap ************************************/
 
 #endif // LIBFT_H
