@@ -46,18 +46,12 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		if (access(pl->good_path, F_OK) == 0)
 		{
-			free_safely_str(&(m->paths));
-			free_safely_str(&(pl->good_path));
-			ft_free_tab(&(pl->cmd_table));
-			ft_free_tab(&(m->envp_table));
+			ft_free_pl_paths(m, pl);
 			print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 		}
 		else
 		{
-			free_safely_str(&(m->paths));
-			free_safely_str(&(pl->good_path));
-			ft_free_tab(&(pl->cmd_table));
-			ft_free_tab(&(m->envp_table));
+			ft_free_pl_paths(m, pl);
 			exit_command_not_found(m, pl->cmd_table[0]);
 		}
 	}
@@ -66,7 +60,7 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	exit(m->status);
 }
 
-int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
+static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
 	enum e_token_type	infile_token;
 	enum e_token_type	outfile_token;
@@ -122,5 +116,5 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
-	ft_free_pl_paths(m);
+	ft_free_pl_paths(m, m->pl);
 }
