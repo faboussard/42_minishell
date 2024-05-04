@@ -40,6 +40,9 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	if (!is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 	{
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
+		close_pipes(m->pipe_fd);
+		close_fds(pl->fd_in, pl->fd_out);
+		close_fds(m->tmp_in, 0);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		if (access(pl->good_path, F_OK) == 0)
 		{
