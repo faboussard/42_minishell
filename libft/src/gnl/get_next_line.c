@@ -68,8 +68,7 @@ char	*fill_line(char *line, char (*stash)[BUFFER_SIZE], int *i, int pos)
 	*i = ft_stash(FIND_INDEX, stash, 0);
 	if (pos == -1)
 	{
-		line = ft_concat(line, *stash + *i, BUFFER_SIZE - *i,
-				LINE_MAX_SIZE);
+		line = ft_concat(line, *stash + *i, BUFFER_SIZE - *i, LINE_MAX_SIZE);
 		if (!line)
 			return (free(line), ft_stash(SET_INDEX, stash, BUFFER_SIZE), NULL);
 		ft_stash(SET_INDEX, stash, BUFFER_SIZE);

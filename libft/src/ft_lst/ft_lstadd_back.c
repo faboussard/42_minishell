@@ -14,7 +14,7 @@
 
 void	ft_lstadd_back(t_node **node, t_node *new)
 {
-    t_node	*last;
+	t_node	*last;
 
 	if (node != NULL)
 	{

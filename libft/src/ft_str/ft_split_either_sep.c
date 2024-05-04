@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 //
-//char **fill_array_with_quotes_management(char *s)
+// char **fill_array_with_quotes_management(char *s)
 //{
 //	size_t	i;
 //	size_t	j;
@@ -22,10 +22,11 @@
 //	if (s == NULL)
 //		return (NULL);
 //	deal_double_double_quotes_or_double_single_quotes(s);
-//	split_size = count_letters_for_quotes(s) + 1 + count_letters_for_space(s) + 1;
+//	split_size = count_letters_for_quotes(s) + 1 + count_letters_for_space(s)
+//		+ 1;
 //	split = ft_calloc(split_size, sizeof(char *));
 //	if (split == NULL)
-//		return NULL;
+//		return (NULL);
 //	i = 0;
 //	j = 0;
 //	while (s[i] != '\0')
@@ -55,7 +56,7 @@
 //			if (split[j] == NULL)
 //			{
 //				ft_free_all_tab(split);
-//				return NULL;
+//				return (NULL);
 //			}
 //			j++;
 //			i += len;
