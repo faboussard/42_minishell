@@ -12,16 +12,16 @@
 
 #include "exec.h"
 
-int	open_fd_infile(t_minishell *m, t_process_list *pl)
+int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
 {
 	pl->dev_null = 0;
 	if (pl->in_files_token->e_type == DELIMITER)
-		pl->fd_in = open(HERE_DOC_TMP_FILE, O_RDONLY);
+		*fd_to_use = open(HERE_DOC_TMP_FILE, O_RDONLY);
 	else if (pl->in_files_token->e_type == IN_FILE)
-		pl->fd_in = open(pl->in_files_token->name, O_RDONLY);
+		*fd_to_use = open(pl->in_files_token->name, O_RDONLY);
 	else
-		pl->fd_in = STDIN_FILENO;
-	if (pl->fd_in < 0)
+		*fd_to_use = STDIN_FILENO;
+	if (*fd_to_use < 0)
 	{
 		if (pl->in_files_token->e_type == DELIMITER)
 			perror("minishell: /tmp/.tmp_heredoc");
@@ -29,8 +29,8 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl)
 			print_name(m, pl->in_files_token->name);
 		m->status = 1;
 		pl->dev_null = 1;
-		pl->fd_in = open("/dev/null", O_RDONLY);
-		if (pl->fd_in < 0)
+		*fd_to_use = open("/dev/null", O_RDONLY);
+		if (*fd_to_use < 0)
 		{
 			ft_putendl_fd("No /dev/null/ found", 2);
 			return (1);

@@ -74,7 +74,7 @@ int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 		here_doc(m, pl->in_files_token, &(pl->fd_in));
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
-		if (open_fd_infile(m, pl))
+		if (open_fd_infile(m, pl, &(pl->fd_in)))
 			return (1);
 		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
 		close(pl->fd_in);

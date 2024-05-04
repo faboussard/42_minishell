@@ -35,7 +35,7 @@ void	set_paths(t_minishell *m, char **env);
 void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd);
 char	*join_sep(t_minishell *m, char *s1, char *s2, char sep);
 //--------------------------- FD MANAGEMENT ---------------------------//
-int		open_fd_infile(t_minishell *m, t_process_list *pl);
+int		open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use);
 int		open_fd_outfile(t_minishell *m, t_process_list *pl, char *out);
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl);
 //--------------------------- HERE_DOC --------------------------------//
