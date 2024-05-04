@@ -63,6 +63,18 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 	return (0);
 }
 
+void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
+{
+	enum e_token_type	infile_token;
+
+	infile_token = pl->in_files_token->e_type;
+	if (infile_token == DELIMITER)
+		here_doc(m, pl->in_files_token, fd_in);
+	if (open_fd_infile(m, pl, fd_in))
+		return ;
+	open_fd_outfile(m, pl, pl->out_files_token->name);
+}
+
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 {
 	if (m->pipe_fd[WRITE_END] > 0)

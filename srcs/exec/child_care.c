@@ -14,17 +14,17 @@
 
 // close(m->fd_in); qui était dans first child dégage car cat | cat
 
-void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
-{
-	if (*sad_fd >= 0)
-		close(*sad_fd);
-	*sad_fd = open("/dev/null", O_RDONLY);
-	if (*sad_fd < 0)
-	{
-		ft_putendl_fd("No /dev/null/ found", 2);
-		m->status = 1;
-	}
-}
+//void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
+//{
+//	if (*sad_fd >= 0)
+//		close(*sad_fd);
+//	*sad_fd = open("/dev/null", O_RDONLY);
+//	if (*sad_fd < 0)
+//	{
+//		ft_putendl_fd("No /dev/null/ found", 2);
+//		m->status = 1;
+//	}
+//}
 //			if (pl->fd_out != STDOUT_FILENO)
 //			{
 //				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
@@ -32,18 +32,6 @@ void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
 //				close(m->pipe_fd[READ_END]);
 //				fill_fd_with_emptiness(m, pl->tmp_in);
 //			}
-
-void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
-{
-	enum e_token_type	infile_token;
-
-	infile_token = pl->in_files_token->e_type;
-	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, fd_in);
-	if (open_fd_infile(m, pl, fd_in))
-		return ;
-	open_fd_outfile(m, pl, pl->out_files_token->name);
-}
 
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
@@ -116,7 +104,6 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 			else
 				m_safe_dup2(m, m->pipe_fd[WRITE_END], STDOUT_FILENO);
 			close_pipes(m->pipe_fd);
-			//			close(m->pipe_fd[WRITE_END]); <-- ne change rien si on close les deux ?
 			my_execve(m, pl);
 		}
 		else
