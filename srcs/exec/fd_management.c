@@ -20,7 +20,7 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
 	else if (pl->in_files_token->e_type == IN_FILE)
 		*fd_to_use = open(pl->in_files_token->name, O_RDONLY);
 	else
-		*fd_to_use = STDIN_FILENO;
+		pl->fd_in = STDIN_FILENO;
 	if (*fd_to_use < 0)
 	{
 		if (pl->in_files_token->e_type == DELIMITER)
