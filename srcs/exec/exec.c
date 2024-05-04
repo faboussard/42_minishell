@@ -6,19 +6,13 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/02 14:44:32 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/04 21:41:15 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "exec.h"
 
-/*
- * Check if the command is a builtin and execute it
- * IMPORTANT !!!
- * Problem: m->list_tokens is not a good parameter, should be pl
- * The list_tokens never changes, while pl is iterated over
- */
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
