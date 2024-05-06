@@ -170,7 +170,7 @@ int	ft_cd(t_minishell *minishell, char **cmd_table)
 		return (1);
 	if (should_go_home(cmd_table))
 		return (get_home(minishell));
-	dir = cmd_table[2];
+	dir = cmd_table[1];
 	if (ft_strncmp(dir, "-", 2) == 0)
 		return (go_into_directory(minishell, minishell->old_pwd));
 	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
