@@ -88,6 +88,8 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
+	if (is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
