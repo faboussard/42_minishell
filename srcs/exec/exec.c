@@ -15,19 +15,19 @@
 
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
-	if (ft_strncmp(cmd, "echo", 5) == 0)
+	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
 		m->status = ft_echo(cmd_table);
-	else if (ft_strncmp(cmd, "cd", 3) == 0)
+	else if (cmd && ft_strncmp(cmd, "cd", 3) == 0)
 		m->status = ft_cd(m, cmd_table);
-	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+	else if (cmd && ft_strncmp(cmd, "pwd", 4) == 0)
 		m->status = ft_pwd(m);
-	else if (ft_strncmp(cmd, "exit", 5) == 0)
+	else if (cmd && ft_strncmp(cmd, "exit", 5) == 0)
 		m->status = ft_exit(m, cmd_table);
-	else if (ft_strncmp(cmd, "env", 4) == 0)
+	else if (cmd && ft_strncmp(cmd, "env", 4) == 0)
 		m->status = ft_env(m, cmd_table);
-	else if (ft_strncmp(cmd, "unset", 6) == 0)
+	else if (cmd && ft_strncmp(cmd, "unset", 6) == 0)
 		m->status = ft_unset(m, cmd_table);
-	else if (ft_strncmp(cmd, "export", 5) == 0)
+	else if (cmd && ft_strncmp(cmd, "export", 5) == 0)
 		m->status = ft_export(cmd_table, &m->list_envp, m);
 	else
 		return (0);
@@ -37,7 +37,7 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	if (!is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+	if (pl->cmd_table[0] && !is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 	{
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		close_pipes(m->pipe_fd);
