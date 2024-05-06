@@ -33,6 +33,7 @@ void			print_array(char **array);
 void			print_list_envp(t_minishell *minishell);
 void			print_process_list(t_process_list *process_list);
 void			print_env_variables_export(t_minishell *m);
+void			ft_print_minishell(t_minishell *minishell);
 
 /******************** FREE ********************/
 

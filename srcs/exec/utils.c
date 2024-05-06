@@ -21,6 +21,14 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 	}
 }
 
+void	init_before_next_prompt(t_minishell *m)
+{
+	m->total_commands = 1;
+	free_safely_str(&(m->user_input));
+	ft_free_process_list(&(m->pl));
+	ft_lstclear_token(&m->list_tokens);
+	ft_free_tab(&(m->envp_table));
+}
 void	ft_init_pl(t_minishell *m, t_process_list *pl)
 {
 	m->status = 0;
