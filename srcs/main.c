@@ -57,6 +57,7 @@ void	minishell_interactive(t_minishell *m)
 		}
 		init_before_next_prompt(m);
 	}
+
 }
 /*	m->total_commands = 1; === CAPITAL !
  * L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE
