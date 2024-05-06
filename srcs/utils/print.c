@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 09:43:37 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:17:57 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:07:34 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,17 @@ void	print_list_envp(t_minishell *minishell)
 		printf("%s%s\n", current->target, current->value);
 		current = current->next;
 	}
+}
+
+void	ft_print_minishell(t_minishell *minishell)
+{
+	printf("************ print list_envp ************\n\n");
+	print_list_envp(minishell);
+	printf("************ print list_tokens ************\n");
+	print_token_list(minishell->list_tokens);
+	printf("************ process list (cmd table ,in out files,limiters\
+			: ********* \n");
+	print_process_list(minishell->pl);
+	printf("********************** print env_table**********************\n\n");
+	print_array(minishell->envp_table);
 }

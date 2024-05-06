@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/02 09:14:24 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/06 09:57:43 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ void	minishell_interactive(t_minishell *m)
 		set_signals_interactive();
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
-		{
-			//dprintf(2, "coucou je sors bisous !\n");
 			break ;
-		}
 		if (m->user_input[0] == 0)
 			continue ;
 		set_signals_noninteractive();
@@ -58,16 +55,17 @@ void	minishell_interactive(t_minishell *m)
 			else
 				execute_cmds(m, m->total_commands);
 		}
-		m->total_commands = 1;
-		// CAPITAL ! L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE REMET
-		// PAS A 1 ENTRE DEUX PROMPTS !
-		free_safely_str(&(m->user_input));
-		ft_free_process_list(&(m->pl));
-		ft_lstclear_token(&m->list_tokens);
-		if (m->envp_table)
-			ft_free_tab(&(m->envp_table));
+		init_before_next_prompt(m);
 	}
 }
+/*	m->total_commands = 1; === CAPITAL !
+ * L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE
+ * REMET PAS A 1 ENTRE DEUX PROMPTS !
+ * if (m->envp_table)
+			ft_free_tab(&(m->envp_table));
+	--> pas besoin de vérifier si m->envp_table est NULL avant de le free car
+	la fonction ft_free_tab le fait déjà
+ */
 
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
@@ -82,20 +80,6 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 			return ;
 		execute_cmds(minishell, minishell->total_commands);
 	}
-}
-
-void	ft_print_minishell(t_minishell *minishell)
-{
-	printf("************ print list_envp ************\n\n");
-	print_list_envp(minishell);
-	printf("************ print list_tokens ************\n");
-	print_token_list(minishell->list_tokens);
-	// DELETE
-	printf("************ process list (cmd table ,in out files,limiters : ********* \n");
-	// DELETE
-	print_process_list(minishell->pl);
-	printf("********************** print env_table**********************\n\n");
-	print_array(minishell->envp_table);
 }
 
 bool	is_interactive(t_minishell *minishell, int argc, char **argv)
@@ -113,10 +97,10 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	else
 	{
 		exit_msg(minishell,
-					"Wrong arguments.\nUsage:\nNon_interactive mode\
+			"Wrong arguments.\nUsage:\nNon_interactive mode\
 						-./ minishell - c \"input line\" \nInteractive mode \
 						-./ minishell ",
-					-1);
+			-1);
 	}
 	return (2);
 }
@@ -133,12 +117,13 @@ minishell->user_input = ft_strjoin(minishell->user_input, temp);
 	Si minishell->user_input est NULL, l'un des deux mallocs a échoué, donc exit
 	(d'ailleurs, plutot juste un message d'erreur + un return
 	sans fermer tout le minishell serait bien ici je pense)
-	Et toujours des free_safely_str avant de vérifier le malloc pour ne pas exit/return avant d'avoir free un malloc
+	Et toujours des free_safely_str avant de vérifier le malloc pour ne
+ 	pas exit/return avant d'avoir free un malloc
 */
-void	format_input(t_minishell *m, char **av)
+/*void	format_input(t_minishell *m, char **av)
 {
-	int		i;
-	char	*temp;
+	int			i;
+	char		*temp;
 
 	m->user_input = ft_calloc(1, 1);
 	if (m->user_input == NULL)
@@ -162,8 +147,7 @@ void	format_input(t_minishell *m, char **av)
 	free_safely_str(&temp);
 	if (m->user_input == NULL)
 		exit_msg(m, "Malloc failed at format_input", -1);
-}
-
+}*/
 // void create_3_env_variables(t_minishell *minishell)
 //{
 //	export
@@ -171,11 +155,9 @@ void	format_input(t_minishell *m, char **av)
 //	SHLVL=1
 //	_=/usr/bin/env
 //
-
 // declare -x OLDPWD
 // declare -x PWD="/home/faboussa"
 // declare -x SHLVL="1"
-
 //}
 
 int	main(int ac, char **av, char **envp)
@@ -185,18 +167,19 @@ int	main(int ac, char **av, char **envp)
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
 	if (envp == NULL)
-		return 1; // creer trops envp
+		return (1); // creer trops envp
 	else
 		minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
-		exit_msg_minishell(&minishell, "Environement variables could not be created", -1); //creer trois envp vides
+		exit_msg_minishell(&minishell,
+			"Environment variables could not be created", -1);
+			// creer trois envp vides
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
 	//	ft_print_minishell(&minishell);
-	//dprintf(2, "Au revoir ! status = %d\n", minishell.status);
 	free_minishell(&minishell);
 	return (minishell.status);
 }
