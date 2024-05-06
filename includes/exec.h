@@ -39,7 +39,7 @@ int		open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use);
 int		open_fd_outfile(t_minishell *m, t_process_list *pl, char *out);
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl);
 //--------------------------- HERE_DOC --------------------------------//
-void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use);
+void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_list *pl);
 //--------------------------- UTILS -----------------------------------//
 void	ft_init_pl(t_minishell *m, t_process_list *pl);
 void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl);

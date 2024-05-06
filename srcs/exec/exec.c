@@ -68,7 +68,7 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	infile_token = pl->in_files_token->e_type;
 	outfile_token = pl->out_files_token->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, &(pl->fd_in));
+		here_doc(m, pl->in_files_token, &(pl->fd_in), pl);
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
 		if (open_fd_infile(m, pl, &(pl->fd_in)))

@@ -43,7 +43,7 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 }
 
 static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
-		t_token_list *limiter)
+		t_token_list *limiter, int *fd_to_use)
 {
 	size_t	limiter_len;
 	size_t	input_len;
@@ -58,23 +58,26 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 				limiter_len))
 		{
 			free_safely_str(&(input));
-			close(pl->fd_in);
+			close_all_fds(m, pl);
+			free_minishell(m);
 			exit(0);
 		}
 		if (limiter->is_quoted_delimiter == 1)
-			ft_putstr_fd(input, pl->fd_in);
+			ft_putstr_fd(input, *fd_to_use);
 		else
 			handle_expand(m, pl, input);
 		free_safely_str(&(input));
 	}
 }
 
-void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use)
+void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_list *pl)
 {
 	int	here_doc_pid;
 
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
-	close_fds(*fd_to_use, -1);
+	close_fds(pl->fd_in, m->tmp_in);
+	close_fds(pl->fd_in, pl->fd_out);
+
 	*fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (*fd_to_use < 0)
 	{
@@ -83,7 +86,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use)
 	}
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
-		writing_in_heredoc(m, m->pl, limiter);
+		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
 	else
 	{
 		waitpid(here_doc_pid, &(m->status), 0);

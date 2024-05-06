@@ -11,16 +11,26 @@
 /* ************************************************************************** */
 
 #include "utils.h"
+#include "exec.h"
 
-void	close_all_fds(void)
+void	close_all_fds(t_minishell *m, t_process_list *pl)
 {
-	if (STDIN_FILENO >= 0)
+	if (pl != NULL)
+		close_fds(pl->fd_in, pl->fd_out);
+	if (m != NULL)
+	{
+		close_fds(m->tmp_in, 0);
+		close_pipes(m->pipe_fd);
+	}
+}
+/*	if (STDIN_FILENO >= 0)
 		close(STDIN_FILENO);
 	if (STDOUT_FILENO >= 0)
 		close(STDOUT_FILENO);
 	if (STDERR_FILENO >= 0)
 		close(STDERR_FILENO);
-}
+	Les entrees sorties standard ne doivent pas etre fermées
+*/
 
 void	free_strs(t_minishell *minishell)
 {
