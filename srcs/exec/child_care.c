@@ -12,26 +12,28 @@
 
 #include "exec.h"
 
-// close(m->fd_in); qui était dans first child dégage car cat | cat
+/*
+close(m->fd_in); qui était dans first child dégage car cat | cat
 
-//void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
-//{
-//	if (*sad_fd >= 0)
-//		close(*sad_fd);
-//	*sad_fd = open("/dev/null", O_RDONLY);
-//	if (*sad_fd < 0)
-//	{
-//		ft_putendl_fd("No /dev/null/ found", 2);
-//		m->status = 1;
-//	}
-//}
-//			if (pl->fd_out != STDOUT_FILENO)
-//			{
-//				m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-//				close(pl->fd_out);
-//				close(m->pipe_fd[READ_END]);
-//				fill_fd_with_emptiness(m, pl->tmp_in);
-//			}
+void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
+{
+	if (*sad_fd >= 0)
+		close(*sad_fd);
+	*sad_fd = open("/dev/null", O_RDONLY);
+	if (*sad_fd < 0)
+	{
+		ft_putendl_fd("No /dev/null/ found", 2);
+		m->status = 1;
+	}
+}
+	if (pl->fd_out != STDOUT_FILENO)
+	{
+		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+		close(pl->fd_out);
+		close(m->pipe_fd[READ_END]);
+		fill_fd_with_emptiness(m, pl->tmp_in);
+	}
+*/
 
 static void	first_child(t_minishell *m, t_process_list *pl)
 {

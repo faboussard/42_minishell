@@ -48,7 +48,7 @@ void			restore_terminal(t_minishell *minishell);
 void			check_and_delete_if_tmp_file_exists(char *tmp_file);
 /*** FREE  UTILS *****/
 void			free_strs(t_minishell *m);
-void			close_all_fds(void);
+void			close_all_fds(t_minishell *m, t_process_list *pl);
 void			free_safely_str(char **str_to_free);
 
 /******************** ERROR ********************/
