@@ -34,12 +34,24 @@ int	set_or_get_last_status(int status, int flag)
 
 void	sigint_handler(int signo)
 {
-	(void)signo;
+	if (WIFEXITED(signo))
+		set_or_get_last_status(WEXITSTATUS(signo) + 128, 0);
+	if (WIFSIGNALED(signo))
+		set_or_get_last_status(WTERMSIG(signo) + 128, 0);
+	if (WIFSTOPPED(signo))
+		set_or_get_last_status(WSTOPSIG(signo) + 128, 0);
+//		set_or_get_last_status(131, 0);
+	dprintf(2, "Quit: 3\n");
 	set_or_get_last_status(130, 0);
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+//	set_or_get_last_status(130, 0);
+//	printf("\n");
+//	rl_on_new_line();
+//	rl_replace_line("", 0);
+//	rl_redisplay();
 }
 
 //void sigquit_handler(int signo)

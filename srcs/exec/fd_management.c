@@ -87,3 +87,52 @@ void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 	if (pl->fd_out != STDOUT_FILENO)
 		close(pl->fd_out);
 }
+
+/*
+Pour rediriger l'extrémité du tube vers `/dev/null` lorsque vous avez un fichier
+ d'entrée dans le pipe suivant, vous pouvez utiliser la fonction `dup2()`. Cette
+ fonction fait en sorte qu'un descripteur de fichier pointe vers le même fichier
+ qu'un autre descripteur de fichier.
+
+Dans votre cas, vous pouvez ouvrir `/dev/null` et utiliser `dup2()` pour faire
+ en sorte que l'extrémité de sortie du tube pointe vers `/dev/null`. Cela
+ signifie que tout ce qui est écrit dans le tube sera envoyé à `/dev/null`, ce
+ qui est équivalent à être supprimé.
+
+Voici un exemple de comment vous pourriez le faire dans votre code :
+
+```c
+int dev_null_fd = open("/dev/null", O_WRONLY);
+if (dev_null_fd < 0) {
+    perror("Couldn't open /dev/null");
+    return;
+}
+
+// Duplique dev_null_fd vers l'extrémité de sortie du tube
+if (dup2(dev_null_fd, m->pipe_fd[WRITE_END]) < 0) {
+    perror("dup2 failed");
+    return;
+}
+
+// Ferme le descripteur de fichier original pour /dev/null
+close(dev_null_fd);
+```
+
+Cela devrait être fait après avoir créé le tube, mais avant d'écrire dans le
+tube.
+Notez que vous devrez également gérer les erreurs pour `open()` et `dup2()`.
+
+ int dev_null_fd;
+
+dev_null_fd = open("/dev/null", O_TRUNC);
+if (dev_null_fd < 0) {
+perror("Couldn't open /dev/null");
+return (1);
+}
+ if (infile_type == DELIMITER || infile_type == IN_FILE)
+ {
+		if (m->total_commands > 1)
+		m_safe_dup2(m, dev_null_fd, m->pipe_fd[WRITE_END]);
+ 	close_fds(*fd_to_use, 0);
+}
+ */
