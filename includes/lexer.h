@@ -6,16 +6,14 @@
 /*   By: faboussa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:26:16 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/09 14:54:34 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/07 08:46:35 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "libft.h"
 # include "minishell.h"
-# include <stdbool.h>
 
 
 typedef struct s_minishell	t_minishell;

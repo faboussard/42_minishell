@@ -6,16 +6,15 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/28 15:14:04 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/07 08:50:20 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "libft.h"
+
 # include "minishell.h"
-# include "utils.h"
 
 //---------------------------- EXEC BUILTINS --------------------------//
 

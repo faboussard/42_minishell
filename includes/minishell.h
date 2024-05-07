@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/20 13:01:49 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/07 08:47:24 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@
 #define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 # endif
 
-# include "lexer.h"
 # include "libft.h"
-# include "minishell.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -43,6 +41,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
+# include "lexer.h"
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
