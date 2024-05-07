@@ -90,6 +90,8 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	if (is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 		return ;
+//	signal(SIGINT, sigint_handler);
+//	signal(SIGQUIT, sigint_handler);
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
@@ -101,7 +103,19 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-		m->status = WEXITSTATUS(m->status);
+		if (WIFSIGNALED(m->status))
+		{
+			dprintf(2, "WIFSIGNALED status: %d\n", WTERMSIG(m->status));
+			m->status = set_or_get_last_status(WTERMSIG(m->status) + 128, 0);
+		}
+		else if (WIFEXITED(m->status))
+		{
+			dprintf(2, "WIFEXITED status: %d\n", WEXITSTATUS(m->status) + 128);
+			m->status = set_or_get_last_status(WEXITSTATUS(m->status) + 128, 0);
+		}
+		if (WIFSTOPPED(m->status))
+			m->status = set_or_get_last_status(WSTOPSIG(m->status) + 128, 0);
+//		m->status = set_or_get_last_status(m->status, 0);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
 }
@@ -117,8 +131,8 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->pl);
 	else
 		exec_several_cmds(m, m->pl);
-	if (WIFEXITED(m->status))
-		m->status = WEXITSTATUS(m->status);
+//	if (WIFEXITED(m->status))
+//		m->status = WEXITSTATUS(m->status);
 	if (WIFSIGNALED(m->status))
 	{
 		if (WTERMSIG(m->status) == 3)
