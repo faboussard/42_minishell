@@ -14,7 +14,7 @@
 # define BUILTINS_H
 
 
-# include "minishell.h"
+# include "utils.h"
 
 
 //----------------------------------BUILTINS----------------------------------//
