@@ -54,7 +54,10 @@ void	minishell_interactive(t_minishell *m)
 				is_a_builtin(m, m->pl->cmd_table[0], m->pl->cmd_table);
 			else
 				execute_cmds(m, m->total_commands);
+			if (m->list_envp == NULL) // a la suite de unset si on a supprime toutes les varialbes denv
+				create_3_env_variables(m);
 		}
+
 		init_before_next_prompt(m);
 	}
 
@@ -150,15 +153,36 @@ minishell->user_input = ft_strjoin(minishell->user_input, temp);
 		exit_msg(m, "Malloc failed at format_input", -1);
 }*/
 // void create_3_env_variables(t_minishell *minishell)
+//void	format_input(t_minishell *m, char **av)
 //{
-//	export
-//	PWD=/home/faboussa
-//	SHLVL=1
-//	_=/usr/bin/env
+//	int		i;
+//	char	*temp;
 //
 // declare -x OLDPWD
 // declare -x PWD="/home/faboussa"
 // declare -x SHLVL="1"
+//	m->user_input = ft_calloc(1, 1);
+//	if (m->user_input == NULL)
+//		exit_msg(m, "Malloc failed at format_input", -1);
+//	i = 0;
+//	while (av[i])
+//	{
+//		temp = ft_strjoin(m->user_input, av[i]);
+//		free_safely_str(m->user_input);
+//		if (temp != NULL)
+//			m->user_input = ft_strdup(temp);
+//		free_safely_str(&temp);
+//		if (m->user_input == NULL)
+//			exit_msg(m, "Malloc failed at format_input", -1);
+//		i++;
+//	}
+//	temp = ft_strdup(m->user_input);
+//	free_safely_str(m->user_input);
+//	if (temp != NULL)
+//		m->user_input = ft_strtrim(temp, "\"");
+//	free_safely_str(&temp);
+//	if (m->user_input == NULL)
+//		exit_msg(m, "Malloc failed at format_input", -1);
 //}
 
 int	main(int ac, char **av, char **envp)
@@ -167,14 +191,12 @@ int	main(int ac, char **av, char **envp)
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
-	if (envp == NULL)
-		return (1); // creer trops envp
-	else
-		minishell.list_envp = create_envp_list(envp, &minishell);
+	//minishell.list_envp = NULL;
+	minishell.list_envp = create_envp_list(envp, &minishell);
 	if (minishell.list_envp == NULL)
-		exit_msg_minishell(&minishell,
-			"Environment variables could not be created", -1);
-			// creer trois envp vides
+		create_3_env_variables(&minishell);
+//	if (minishell.list_envp == NULL)
+//		exit_msg(&minishell, "Malloc failed at main", -1);
 	set_minishell_paths(&minishell);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
@@ -184,3 +206,16 @@ int	main(int ac, char **av, char **envp)
 	free_minishell(&minishell);
 	return (minishell.status);
 }
+/*
+ *
+ * <<<<<<< HEAD
+	if (envp == NULL)
+		return (1); // creer trops envp
+	else
+		minishell.list_envp = create_envp_list(envp, &minishell);
+	if (minishell.list_envp == NULL)
+		exit_msg_minishell(&minishell,
+			"Environment variables could not be created", -1);
+			// creer trois envp vides
+=======
+ */

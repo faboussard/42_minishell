@@ -54,8 +54,7 @@ void	ft_lstclear_token(t_token_list **lst)
 	while (current != NULL)
 	{
 		next = current->next;
-		if (current->name != NULL)
-			free_safely_str(&(current->name));
+		free_safely_str(&current->name);
 		free(current);
 		current = next;
 	}

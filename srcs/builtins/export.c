@@ -16,7 +16,6 @@
 #include "parser.h"
 #include <readline/history.h>
 
-// si on fait env - i puis quon unset tout, prevoir le cas
 int export_variables(char **args, t_envp_list *env_variables, t_minishell *m)
 {
 	size_t index;
@@ -31,25 +30,33 @@ int export_variables(char **args, t_envp_list *env_variables, t_minishell *m)
 		return (0);
 }
 
-char *join_new_value_env_with_old(t_minishell *minishell, char **split, t_envp_list **envp)
+char *join_new_value_env_with_old(t_minishell *m, char **split, t_envp_list **envp)
 {
 	char *tmp;
 	char *new_value;
 
 	tmp = ft_strdup((*envp)->value);
 	if (!tmp)
-		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
+	{
+		ft_free_tab(&split);
+		exit_msg(m, "Malloc failed at get_env_var_index", 2);
+	}
 	new_value = ft_strjoin(tmp, split[1]);
 	if (!new_value)
-		exit_msg(minishell, "Malloc failed at get_env_var_index", 2);
+	{
+		ft_free_tab(&split);
+		exit_msg(m, "Malloc failed at get_env_var_index", 2);
+	}
 	free_safely_str(&tmp);
 	return (new_value);
 }
+
 
 void find_and_join_value(t_minishell *m, char **split, const char *tmp, t_envp_list **cpy)
 {
 	char *temp;
 
+	temp = NULL;
 	while ((*cpy))
 	{
 		if (ft_strncmp(tmp, (*cpy)->target, ft_strlen(tmp)) == 0)
@@ -58,16 +65,14 @@ void find_and_join_value(t_minishell *m, char **split, const char *tmp, t_envp_l
 			{
 				(*cpy)->value = ft_strdup(split[1]);
 				if (!(*cpy)->value)
+				{
+					ft_free_tab(&split);
 					exit_msg(m, "Malloc failed at get_env_var_index", 2);
+				}
 			}
 			else
-			{
-				temp = join_new_value_env_with_old(m, split, cpy);
-				free_safely_str(&(split[1]));
-				split[1] = ft_strdup(temp);
-				free_safely_str(&temp);
-				break;
-			}
+				join_with_old(m, split, cpy, temp);
+			break;
 		}
 		else
 			(*cpy) = (*cpy)->next;
@@ -84,7 +89,10 @@ char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split)
 	split[0][ft_strlen(split[0]) - 1] = '\0';
 	tmp = ft_strjoin(split[0], "=");
 	if (!tmp)
+	{
+		ft_free_tab(&split);
 		exit_msg(m, "Malloc failed at get_env_var_index", 2);
+	}
 	find_and_join_value(m, split, tmp, &cpy);
 	remove_and_add_envp(m, split);
 	free_safely_str(&tmp);

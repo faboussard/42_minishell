@@ -64,7 +64,7 @@ bool			is_redirect_token(t_token_list *token);
 t_envp_list		*create_envp_list(char **envp, t_minishell *minishell);
 t_envp_list *create_new_envp(char *target, char *content);
 void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp);
-void remove_env_var(t_minishell *minishell, t_envp_list **env, char *var);
+int remove_env_var(t_envp_list **env, char *var);
 void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove);
 void	free_envp(t_envp_list *envp);
 int	ft_lstsize_envp(t_envp_list *lst);
@@ -74,6 +74,8 @@ int add_new_envp(t_envp_list **list_envp, char *target, char *content);
 bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
 void join_equal_sign(char **split);
 void remove_and_add_envp(t_minishell *m, char **split);
+void create_3_env_variables(t_minishell *m);
+
 
 /********************* expansion ****************************/
 
