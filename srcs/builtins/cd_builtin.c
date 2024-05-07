@@ -98,7 +98,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
-		return (-1);
+		return (0);
 	}
 	ft_realpath(m, dir);
 	if (chdir(m->target_path) != 0)
