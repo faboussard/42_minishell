@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 15:15:12 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:02:10 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ static int	get_home(t_minishell *m)
 	size_t	home_dir_len;
 	int		return_value;
 
-	home_dir = getenv("HOME");
+	home_dir = getenv("HOME"); // A CHANGER SINON IL PREND CELUI DE BASH
 	if (home_dir == NULL)
 	{
 		ft_putendl_fd("minishell: cd: HOME not set", 2);
