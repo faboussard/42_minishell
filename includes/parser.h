@@ -6,14 +6,13 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/02 18:10:05 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/07 08:50:20 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "libft.h"
 # include "minishell.h"
 
 /*************************token_list_utils**************************/
