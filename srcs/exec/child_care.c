@@ -114,16 +114,41 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 	else
 		close_and_redirect_pipe_to_stdin(m, pl);
 }
-
+#include "signal.h"
 static void	wait_children_and_give_exit_status(t_minishell *m)
 {
 	int	status;
 
 	status = 0;
 	waitpid(m->pid2, &status, 0);
+	if (WIFEXITED(status))
+		m->status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == 3)
+		{
+			m->status = WTERMSIG(status) + 128;
+			set_or_get_last_status(m->status, 0);
+			ft_putendl_fd("^\\Quit (core dumped)", 2);
+		}
+		else
+		{
+			m->status = WTERMSIG(status) + 128;
+			set_or_get_last_status(m->status, 0);
+		}
+	}
+	if (WIFSTOPPED(status))
+		m->status = WSTOPSIG(status) + 128;
 	while (waitpid(-1, NULL, 0) && errno != 10)
 		;
-	m->status = WEXITSTATUS(status);
+	set_or_get_last_status(m->status, 0);
+//
+//	if (signal(SIGQUIT, sigint_handler) == SIG_ERR)
+//	{
+//		m->status = 131;
+//		set_or_get_last_status(131, 0);
+//		ft_putendl_fd("^\\Quit (core dumped)", 2);
+//	}
 }
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
