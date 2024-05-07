@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "parser.h"
 #include "utils.h"
+#include "exec.h"
 
 void	set_current_path_with_cwd(t_minishell *m)
 {

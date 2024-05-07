@@ -52,12 +52,14 @@ typedef struct s_envp			t_envp_list;
 typedef struct s_token			t_token_list;
 typedef struct s_minishell		t_minishell;
 typedef struct s_process_list	t_process_list;
+typedef struct s_fake_env		t_fake_env;
 
 typedef struct s_minishell
 {
 	bool						interactive;
 	pid_t						pid1;
 	pid_t						pid2;
+	int 						SHLVL;
 	int							status;
 	int							pipe_fd[2];
 	int							tmp_in;
@@ -71,6 +73,7 @@ typedef struct s_minishell
 	t_token_list				*list_tokens;
 	t_envp_list					*list_envp;
 	t_process_list				*pl;
+	t_fake_env					*fake_env;
 	size_t						total_commands;
 	size_t						total_size_envp;
 }								t_minishell;
@@ -97,6 +100,16 @@ typedef struct s_process_list
 	bool						dev_null;
 	struct s_process_list		*next;
 }								t_process_list;
+
+typedef struct s_fake_env
+{
+	char *target_;
+	char *target_SHLVL;
+	char *target_PWD;
+	char *content_;
+	char *content_SHLVL;
+	char *content_PWD;
+}								t_fake_env;
 
 /********************************** INIT MINISHELL ***************************/
 

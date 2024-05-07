@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "minishell.h"
 #include "utils.h"
 
 bool str_is_num(char *str)
