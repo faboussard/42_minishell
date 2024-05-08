@@ -17,6 +17,16 @@
 #include "utils.h"
 #include <readline/history.h>
 
+void set_environment(t_minishell *m, char **envp)
+{
+	m->list_envp = NULL;
+	//m->list_envp = create_envp_list(envp, m);
+	if (m->list_envp == NULL)
+		create_3_env_variables(m);
+//	if (minishell.list_envp == NULL)
+//		exit_msg(&minishell, "Malloc failed at main", -1);
+}
+
 bool	is_one_arg_builtin(t_minishell *m)
 {
 	if (m->list_tokens->e_builtin == EXIT)
@@ -50,17 +60,15 @@ void	minishell_interactive(t_minishell *m)
 			if (m->pl == NULL)
 				continue ;
 			ft_init_pl(m, m->pl);
+			if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
+				return ;
 			if (m->total_commands == 1 && is_one_arg_builtin(m))
 				is_a_builtin(m, m->pl->cmd_table[0], m->pl->cmd_table);
 			else
 				execute_cmds(m, m->total_commands);
-			if (m->list_envp == NULL) // a la suite de unset si on a supprime toutes les varialbes denv
-				create_3_env_variables(m);
 		}
-
 		init_before_next_prompt(m);
 	}
-
 }
 /*	m->total_commands = 1; === CAPITAL !
  * L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE
@@ -108,7 +116,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	}
 	return (2);
 }
-// minishell->user_input[0] = '\0'; // inutile : calloc remplit déja avec des \0
+
 /*
 temp = ft_strdup(av[i]);
 minishell->user_input = ft_strjoin(minishell->user_input, temp);
@@ -152,38 +160,6 @@ minishell->user_input = ft_strjoin(minishell->user_input, temp);
 	if (m->user_input == NULL)
 		exit_msg(m, "Malloc failed at format_input", -1);
 }*/
-// void create_3_env_variables(t_minishell *minishell)
-//void	format_input(t_minishell *m, char **av)
-//{
-//	int		i;
-//	char	*temp;
-//
-// declare -x OLDPWD
-// declare -x PWD="/home/faboussa"
-// declare -x SHLVL="1"
-//	m->user_input = ft_calloc(1, 1);
-//	if (m->user_input == NULL)
-//		exit_msg(m, "Malloc failed at format_input", -1);
-//	i = 0;
-//	while (av[i])
-//	{
-//		temp = ft_strjoin(m->user_input, av[i]);
-//		free_safely_str(m->user_input);
-//		if (temp != NULL)
-//			m->user_input = ft_strdup(temp);
-//		free_safely_str(&temp);
-//		if (m->user_input == NULL)
-//			exit_msg(m, "Malloc failed at format_input", -1);
-//		i++;
-//	}
-//	temp = ft_strdup(m->user_input);
-//	free_safely_str(m->user_input);
-//	if (temp != NULL)
-//		m->user_input = ft_strtrim(temp, "\"");
-//	free_safely_str(&temp);
-//	if (m->user_input == NULL)
-//		exit_msg(m, "Malloc failed at format_input", -1);
-//}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -191,13 +167,8 @@ int	main(int ac, char **av, char **envp)
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
-	//minishell.list_envp = NULL;
-	minishell.list_envp = create_envp_list(envp, &minishell);
-	if (minishell.list_envp == NULL)
-		create_3_env_variables(&minishell);
-//	if (minishell.list_envp == NULL)
-//		exit_msg(&minishell, "Malloc failed at main", -1);
 	set_minishell_paths(&minishell);
+	set_environment(&minishell, envp);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else
@@ -206,16 +177,3 @@ int	main(int ac, char **av, char **envp)
 	free_minishell(&minishell);
 	return (minishell.status);
 }
-/*
- *
- * <<<<<<< HEAD
-	if (envp == NULL)
-		return (1); // creer trops envp
-	else
-		minishell.list_envp = create_envp_list(envp, &minishell);
-	if (minishell.list_envp == NULL)
-		exit_msg_minishell(&minishell,
-			"Environment variables could not be created", -1);
-			// creer trois envp vides
-=======
- */
