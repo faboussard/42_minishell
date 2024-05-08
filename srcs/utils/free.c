@@ -14,7 +14,6 @@
 #include "lexer.h"
 #include "minishell.h"
 #include "utils.h"
-#include <readline/history.h>
 #include <stdlib.h>
 
 void	free_token(t_token_list *token)
