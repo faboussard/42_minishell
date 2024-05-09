@@ -56,13 +56,6 @@ void get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *min
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
-	if (ft_strncmp(*envp, "SHELL=", 6) == 0)
-	{
-		if (add_new_envp(list_envp, "SHELL=", "minishell") == MALLOC_FAILED)
-			exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
-		minishell->total_size_envp += 15;
-		return ;
-	}
 	target = ft_substr(*envp, 0, i + 1);
 	if (target == NULL)
 		exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
@@ -80,21 +73,22 @@ void get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *min
 	free_safely_str(&target);
 }
 
-int create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell)
+void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *m)
 {
 	while (*envp && ft_strchr(*envp, '='))
 	{
-		get_target_and_value(envp, list_envp, minishell);
+		get_target_and_value(envp, list_envp, m);
 		envp++;
 	}
-	return (1);
 }
 
 t_envp_list *create_envp_list(char **envp, t_minishell *minishell)
 {
-	t_envp_list *list_envp;
+	t_envp_list	*list_envp;
 
 	list_envp = NULL;
 	create_env_variable(envp, &list_envp, minishell);
+	if (list_envp != NULL)
+		assign_shell_and_shell_level(&list_envp, minishell);
 	return (list_envp);
 }
