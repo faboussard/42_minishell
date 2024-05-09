@@ -20,12 +20,11 @@
 void set_environment(t_minishell *m, char **envp)
 {
 	m->list_envp = NULL;
-	//(void)envp;
 	m->list_envp = create_envp_list(envp, m);
 	if (m->list_envp == NULL)
 		create_3_env_variables(m);
-//	if (minishell.list_envp == NULL)
-//		exit_msg(&minishell, "Malloc failed at main", -1);
+	if (m->list_envp == NULL)
+		exit_msg(m, "Malloc failed at main", -1);
 }
 
 bool	is_one_arg_builtin(t_minishell *m)
