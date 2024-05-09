@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/06 10:10:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:10:21 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "utils.h"
 #include <readline/history.h>
 
-void set_environment(t_minishell *m, char **envp)
+void	set_environment(t_minishell *m, char **envp)
 {
 	m->list_envp = NULL;
 	m->list_envp = create_envp_list(envp, m);
@@ -60,8 +60,8 @@ void	minishell_interactive(t_minishell *m)
 			if (m->pl == NULL)
 				continue ;
 			ft_init_pl(m, m->pl);
-			if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
-				return ;
+			//if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
+			//	return ;
 			if (m->total_commands == 1 && is_one_arg_builtin(m))
 				is_a_builtin(m, m->pl->cmd_table[0], m->pl->cmd_table);
 			else

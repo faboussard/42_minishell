@@ -69,13 +69,14 @@ int remove_env_var(t_envp_list **env, char *var);
 void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove);
 void	free_envp(t_envp_list *envp);
 int	ft_lstsize_envp(t_envp_list *lst);
-int create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell);
+void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell);
 char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split);
 int add_new_envp(t_envp_list **list_envp, char *target, char *content);
 bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
 void join_equal_sign(char **split);
 void remove_and_add_envp(t_minishell *m, char **split);
 void create_3_env_variables(t_minishell *m);
+void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m);
 
 
 /********************* expansion ****************************/
