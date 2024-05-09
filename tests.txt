@@ -1,5 +1,7 @@
 //********************* TODO ***********************////
 
+question. pourquoi trois children ?
+
 ****************************************** HEREDOC **********************************
 
 faboussa@z1r9p4:~/minishell$ << EOF cat << stop cat << lol cat  > r
