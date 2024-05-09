@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/29 11:55:24 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:12:22 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_unset(t_minishell *minishell, char **args)
 			print_cmd_perror_no_strerror(args[i], "unset: invalid parameter name");
 			ret = EXIT_FAILURE;
 		}
-		else
+		else if (ft_strncmp(args[i], "_" , 2) != 0)
 		{
 			if (remove_env_var(&minishell->list_envp, args[i]) == MALLOC_FAILED)
 				exit_msg(minishell, "Malloc failed at ft_unset", 2);
