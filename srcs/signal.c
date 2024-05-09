@@ -6,16 +6,13 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/05 11:17:13 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:12:19 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "signals.h"
 #include "utils.h"
-#include <readline/readline.h>
 #include <signal.h>
-#include <unistd.h>
 
 void	signal_print_newline(int signal)
 {
