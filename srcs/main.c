@@ -20,7 +20,8 @@
 void set_environment(t_minishell *m, char **envp)
 {
 	m->list_envp = NULL;
-	//m->list_envp = create_envp_list(envp, m);
+	//(void)envp;
+	m->list_envp = create_envp_list(envp, m);
 	if (m->list_envp == NULL)
 		create_3_env_variables(m);
 //	if (minishell.list_envp == NULL)
