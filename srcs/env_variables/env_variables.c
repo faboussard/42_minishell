@@ -56,10 +56,17 @@ void get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *min
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
+	if (ft_strncmp(*envp, "SHELL=", 6) == 0)
+	{
+		if (add_new_envp(list_envp, "SHELL=", "minishell") == MALLOC_FAILED)
+			exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
+		minishell->total_size_envp += 15;
+		return ;
+	}
 	target = ft_substr(*envp, 0, i + 1);
 	if (target == NULL)
 		exit_msg(minishell, "Malloc failed at get_target_and_value", 2);
-	if ((*envp)[i] == '=')
+	else if ((*envp)[i] == '=')
 	{
 		i++;
 		content = ft_substr(*envp, i, ft_strlen(*envp) - i);

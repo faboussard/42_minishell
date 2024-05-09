@@ -18,6 +18,7 @@
 void create_3_env_variables(t_minishell *m)
 {
 	char PWD[PATH_MAX];
+
 	if (add_new_envp(&m->list_envp,"_=", "/usr/bin/env"))
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", -1);
 	m->total_size_envp += ft_strlen("_=") + ft_strlen("/usr/bin/env");
