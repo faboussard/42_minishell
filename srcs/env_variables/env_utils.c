@@ -12,7 +12,6 @@
 
 #include "parser.h"
 #include "utils.h"
-#include "exec.h"
 
 void	set_current_path_with_cwd(t_minishell *m)
 {
@@ -38,11 +37,6 @@ bool	set_env_var(t_minishell *m, char **var, char *target)
 		if (ft_strncmp(env->target, target, target_len) == 0)
 		{
 			ft_strlcpy(*var, env->value, ft_strlen(env->value) + 1);
-			if (var == NULL)
-			{
-				ft_putendl_fd("minishell : malloc error", 2);
-				return (0);
-			}
 			return (1);
 		}
 		env = env->next;

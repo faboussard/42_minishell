@@ -3,42 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   env_variables.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.1337.ma>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/02 16:23:50 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/02 16:23:50 by faboussa         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   envp_table.c		                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:03:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "lexer.h"
-#include "utils.h"
 #include "minishell.h"
 #include "parser.h"
+#include "utils.h"
+#include <stdlib.h>
 
-void add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
+void	add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
 {
 	if (new_envp == NULL)
-		return;
+		return ;
 	new_envp->next = *list_envp;
 	*list_envp = new_envp;
 }
 
-int add_new_envp(t_envp_list **list_envp, char *target, char *content)
+int	add_new_envp(t_envp_list **list_envp, char *target, char *content)
 {
-	t_envp_list *new_envp;
+	t_envp_list	*new_envp;
 
 	new_envp = create_new_envp(target, content);
 	if (new_envp == NULL)
@@ -47,11 +35,12 @@ int add_new_envp(t_envp_list **list_envp, char *target, char *content)
 	return (SUCCESSFULLY_ADDED);
 }
 
-void get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *minishell)
+void	get_target_and_value(char **envp, t_envp_list **list_envp,
+		t_minishell *minishell)
 {
-	size_t i;
-	char *content;
-	char *target;
+	size_t	i;
+	char	*content;
+	char	*target;
 
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
@@ -73,7 +62,8 @@ void get_target_and_value(char **envp, t_envp_list **list_envp, t_minishell *min
 	free_safely_str(&target);
 }
 
-void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *m)
+void	create_env_variable(char **envp, t_envp_list **list_envp,
+		t_minishell *m)
 {
 	while (*envp && ft_strchr(*envp, '='))
 	{
@@ -82,7 +72,7 @@ void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *m)
 	}
 }
 
-t_envp_list *create_envp_list(char **envp, t_minishell *minishell)
+t_envp_list	*create_envp_list(char **envp, t_minishell *minishell)
 {
 	t_envp_list	*list_envp;
 

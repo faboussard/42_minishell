@@ -78,7 +78,6 @@ void remove_and_add_envp(t_minishell *m, char **split);
 void create_3_env_variables(t_minishell *m);
 void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m);
 
-
 /********************* expansion ****************************/
 
 void expander(t_minishell *minishell, t_token_list **list);
