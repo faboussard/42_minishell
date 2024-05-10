@@ -93,6 +93,25 @@ size_t	count_future_path_len(char *current_path, int up_moves)
 	return (i);
 }
 
+bool	begins_with_two_pts(char *cmd)
+{
+	size_t	i;
+
+	i = 0;
+	while (cmd[i] && cmd[i + 1])
+	{
+		if (cmd[i] != '.' || cmd[i + 1] != '/')
+			break ;
+		i += 2;
+	}
+	if (cmd[i] && cmd[i + 1] && (!cmd[i + 2] || cmd[i + 2] == '/'))
+	{
+		if (cmd[i] == '.' && cmd[i + 1] == '.')
+			return (1);
+	}
+	return (0);
+}
+
 void	ft_realpath(t_minishell *m, char *cmd)
 {
 	int		up_moves;
@@ -100,7 +119,7 @@ void	ft_realpath(t_minishell *m, char *cmd)
 	size_t	future_path_len;
 
 	if (!cmd || !cmd[0] || !cmd[1] || invalid_num_of_pts(cmd)
-		|| !contains_only_charset(cmd, "./"))
+		|| !begins_with_two_pts(cmd))
 	{
 		ft_strlcpy(m->target_path, cmd, ft_strlen(cmd) + 1);
 		return ;
