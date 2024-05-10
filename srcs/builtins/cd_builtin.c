@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/28 15:15:12 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/10 23:42:41 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,12 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	ft_realpath(m, dir);
 	if (chdir(m->target_path) != 0)
 	{
-		//dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
-		print_cmd_perror("cd", m->target_path, errno);
+		// dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
+		print_cmd_perror("cd", m->target_given, errno);
 		return (1);
 	}
 	change_env_variable(m, "PWD=");
-	//dprintf(2, "m->target_path = %s\n", m->target_path);
+	// dprintf(2, "m->target_path = %s\n", m->target_path);
 	return (0);
 }
 
