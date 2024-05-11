@@ -6,14 +6,15 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/11 00:24:34 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/11 13:41:56 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "exec.h"
 
-/*int	count_up_moves(char *cmd)
+/*
+int	count_up_moves(char *cmd)
 {
 	int		up_moves;
 	size_t	i;
@@ -30,11 +31,11 @@
 	}
 	return (up_moves);
 }
-
+*/
+/*
 int	count_moves_to_root(char *cmd)
 {
 	int		moves;
-	size_t	i;
 	size_t	i;
 
 	moves = 0;
@@ -48,9 +49,13 @@ int	count_moves_to_root(char *cmd)
 		i++;
 	}
 	return (moves);
-}*/
-bool	begins_with_two_pts(char *dir)
+}
+*/
+
+bool	begins_with_two_pts(const char *dir)
 {
+	size_t	i;
+
 	i = 0;
 	while (dir[i] && dir[i + 1])
 	{
@@ -92,8 +97,6 @@ bool	invalid_num_of_pts(char *dir)
 	size_t	i;
 	int		slash_seen;
 	int		total_slash;
-	size_t	i;
-	size_t	path_len;
 
 	i = 0;
 	slash_seen = 0;
@@ -113,9 +116,14 @@ bool	invalid_num_of_pts(char *dir)
 	}
 	i++;
 	return (i);
-}*/
+}
+ */
+
 void	remove_one_dir_from_path(char path[4096])
 {
+	size_t	path_len;
+	size_t	i;
+
 	path_len = ft_strlen(path);
 	if (path_len < 3)
 	{
@@ -137,63 +145,64 @@ void	remove_one_dir_from_path(char path[4096])
 	}
 }
 
-void	normalize_path(char *path)
+bool	next_dir_is_pts(const char *dir)
 {
-	char	*src;
-	char	*dst;
 	size_t	i;
 
-	src = path;
-	dst = path;
 	i = 0;
-	while (src[i])
+	while (dir[i] && dir[i + 1])
 	{
-		if (src[i] == '/')
-		{
-			/* Skip multiple / */
-			while (src[i + 1] && src[i + 1] == '/')
-				i++;
-			/* Skip . */
-			if (src[i + 1) == '.' && (!src[i + 2] || src[i = 2] == '/'))
-			{
-				i += 2;
-				continue ;
-			}
-			/* Skip .. and back up one level */
-			if (src[i = 1] == '.' && src[i + 2] == '.' && (!src[i + 3]
-					|| src [i + 3] == '/'))
-			{
-				i += 3;
-				while (dst > path && *--dst != '/')
-					;
-				continue ;
-			}
-			/* Check for ... and return an error */
-			if (*(src + 1) == '.' && *(src + 2) == '.' && *(src + 3) == '.'
-				&& (*(src + 4) == '/' || *(src + 4) == '\0'))
-			{
-				fprintf(stderr, "Error: Invalid path\n");
-				return ;
-			}
-		}
-		/* Copy next path segment */
-		while (*src && *src != '/')
-			*dst++ = *src++;
+		if (dir[i] == '.' && dir[i + 1] == '.' && (!dir[i + 2] || dir[i + 2] == '/'))
+			return (1);
+		i++;
 	}
-	/* Null terminate the normalized path */
-	*dst = '\0';
+	return (0);
 }
 
-/*void	replace_pts_with_path(t_minishell	*m, char	*dir)
+size_t skip_slash_and_pts(const char *dir, size_t i)
 {
-	size_t	i;
-	size_t	j;
-	size_t	dir_len;
-	size_t	current_path_len;
+	while (dir[i] && dir[i] == '/')
+	{
+		while (dir[i] && dir[i] == '/')
+			i++;
+		if (next_dir_is_pts(dir + i))
+			i+= 2;
+	}
+	return (i);
+}
 
+void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
+{
+	size_t i;
+	size_t j;
+
+	if (!dir || !dir[0])
+		return ;
 	i = 0;
-	j = 0;
-	dir_len = ft_strlen(dir);
+	target[0] = '\0';
+	i = skip_slash_and_pts(dir, i);
+	while (dir[i])
+	{
+		while (dir[i] && dir[i - 1] != '/')
+			i++;
+		// FULL GARBAGE TO THINK ON
+		while (next_dir_is_pts(dir + i))
+		{
+			j = i;
+			while (dir[j] != '/')
+				j--;
+			ft_strlcat(target, dir, j + 1);
+		}
+		i++;
+	}
+}
+/*
+ *	remove_one_dir_from_path(m->target_path);
+ * /../../../
+ * /home/mbernard/42/minishell
+ * 	size_t dir_len;
+	size_t current_path_len;
+	//dir_len = ft_strlen(dir);
 	current_path_len = ft_strlen(m->current_path);
 	ft_strlcat(m->target_path, dir, dir_len + 1);
 	while (dir[i] && dir[i + 1])
@@ -214,7 +223,8 @@ void	normalize_path(char *path)
 	}
 	new_path[current_path_len + j] = '\0';
 	ft_strlcpy(current_path, new_path, ft_strlen(new_path) + 1);
-}*/
+*/
+
 void	ft_realpath(t_minishell *m, char *dir)
 {
 	//	size_t	future_path_len;
@@ -225,7 +235,7 @@ void	ft_realpath(t_minishell *m, char *dir)
 		ft_strlcpy(m->target_path, dir, ft_strlen(dir) + 1);
 		return ;
 	}
-	normalize_path(dir);
+	replace_pts_with_path(m, m->target_path, dir);
 	//	ft_strlcpy(m->target_path, m->current_path, ft_strlen(m->current_path));
 	//	remove_one_dir_from_path(m->target_path);
 	//	if (dir[2] == '/')
