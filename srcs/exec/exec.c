@@ -60,6 +60,22 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	exit(m->status);
 }
 
+static int	check_all_infiles(t_minishell *m, t_process_list *pl, struct s_token *infile)
+{
+	int	fd_in;
+
+	if (infile == NULL)
+		return (0);
+	if (infile->next != NULL)
+	{
+		if (open_fd_infile(m, pl, &fd_in))
+			return (1);
+		close (fd_in);
+	}
+	else
+		return (open_fd_infile(m, pl, &(pl->fd_in)));
+	return (check_all_infiles(m, pl, infile->next));
+}
 static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
 {
 	int	fd_out;
@@ -95,6 +111,8 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
+		if (check_all_infiles(m, pl, pl->in_files_token) == 1)
+			return (1);
 		open_fd_outfile(m, pl, pl->out_files_token->name);
 		create_all_outfiles(m, pl->out_files_token->next);
 //		if (open_fd_outfile(m, pl, pl->out_files_token->name))
