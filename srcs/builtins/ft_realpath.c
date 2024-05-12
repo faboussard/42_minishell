@@ -52,7 +52,7 @@ int	count_moves_to_root(char *cmd)
 }
 */
 
-bool	begins_with_two_pts(const char *dir)
+static bool	begins_with_two_pts(const char *dir)
 {
 	size_t	i;
 
@@ -71,7 +71,7 @@ bool	begins_with_two_pts(const char *dir)
 	return (0);
 }
 
-bool	invalid_num_of_pts(char *dir)
+static bool	invalid_num_of_pts(char *dir)
 {
 	size_t	i;
 
@@ -119,7 +119,7 @@ bool	invalid_num_of_pts(char *dir)
 }
  */
 
-void	remove_one_dir_from_path(char path[4096])
+static void	remove_one_dir_from_path(char path[4096])
 {
 	size_t	path_len;
 	size_t	i;
@@ -145,7 +145,7 @@ void	remove_one_dir_from_path(char path[4096])
 	}
 }
 
-bool	next_dir_is_pts(const char *dir)
+static bool	next_dir_is_pts(const char *dir)
 {
 	if (dir[0] && dir[1])
 	{
@@ -155,24 +155,24 @@ bool	next_dir_is_pts(const char *dir)
 	return (0);
 }
 
-size_t skip_slash_and_pts(const char *dir, size_t i)
+static size_t	skip_slash_and_pts(const char *dir, size_t i)
 {
 	while (dir[i] && dir[i] == '/')
 	{
 		while (dir[i] && dir[i] == '/')
 			i++;
 		if (next_dir_is_pts(dir + i))
-			i+= 2;
+			i += 2;
 	}
 	return (i);
 }
 
 void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 {
-	(void)m;
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
 
+	(void)m;
 	if (!dir || !dir[0])
 		return ;
 	i = 0;
