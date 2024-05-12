@@ -173,6 +173,7 @@ size_t skip_slash_and_pts(const char *dir, size_t i)
 
 void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 {
+	(void)m;
 	size_t i;
 	size_t j;
 
@@ -241,7 +242,7 @@ void	ft_realpath(t_minishell *m, char *dir)
 	//	if (dir[2] == '/')
 	//	{
 	//		future_path_len = ft_strlen(m->target_path) + ft_strlen(&dir[2])
-				+ 1;
+	//			+ 1;
 	//		ft_strlcat(m->target_path, &dir[2], future_path_len);
 	//	}
 }
