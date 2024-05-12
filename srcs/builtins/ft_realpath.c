@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/11 13:41:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/12 20:08:30 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,14 +147,10 @@ void	remove_one_dir_from_path(char path[4096])
 
 bool	next_dir_is_pts(const char *dir)
 {
-	size_t	i;
-
-	i = 0;
-	while (dir[i] && dir[i + 1])
+	if (dir[0] && dir[1])
 	{
-		if (dir[i] == '.' && dir[i + 1] == '.' && (!dir[i + 2] || dir[i + 2] == '/'))
+		if (dir[0] == '.' && dir[1] == '.' && (!dir[2] || dir[2] == '/'))
 			return (1);
-		i++;
 	}
 	return (0);
 }
@@ -184,7 +180,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 	i = skip_slash_and_pts(dir, i);
 	while (dir[i])
 	{
-		while (dir[i] && dir[i - 1] != '/')
+		while (i > 1 && dir[i] && dir[i - 1] != '/')
 			i++;
 		// FULL GARBAGE TO THINK ON
 		while (next_dir_is_pts(dir + i))
@@ -199,6 +195,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 }
 /*
  *	remove_one_dir_from_path(m->target_path);
+ *	/../home/../home/mbernard/42/minishell
  * /../../../
  * /home/mbernard/42/minishell
  * 	size_t dir_len;
