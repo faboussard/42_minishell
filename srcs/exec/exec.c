@@ -60,6 +60,23 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	exit(m->status);
 }
 
+static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
+{
+	int	fd_out;
+
+	if (outfile == NULL)
+		return ;
+	if (outfile->e_type == OUT_FILE)
+	{
+		fd_out = open(outfile->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd_out < 0)
+			print_name_and_give_status(m, outfile->name, 1);
+		else
+			close(fd_out);
+	}
+	create_all_outfiles(m, outfile->next);
+}
+
 static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
 	enum e_token_type	infile_token;
@@ -78,7 +95,10 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
-		if (open_fd_outfile(m, pl, pl->out_files_token->name))
+		open_fd_outfile(m, pl, pl->out_files_token->name);
+		create_all_outfiles(m, pl->out_files_token->next);
+//		if (open_fd_outfile(m, pl, pl->out_files_token->name))
+		if (pl->fd_out < 0)
 			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 		close(pl->fd_out);
