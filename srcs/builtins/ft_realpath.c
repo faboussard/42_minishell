@@ -171,11 +171,13 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 {
 	size_t	i;
 	size_t	j;
+	char	tmp[4096];
 
 	(void)m;
 	if (!dir || !dir[0])
 		return ;
 	i = 0;
+	tmp[0] = '\0';
 	target[0] = '\0';
 	i = skip_slash_and_pts(dir, i);
 	while (dir[i])
@@ -183,12 +185,14 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 		while (i > 1 && dir[i] && dir[i - 1] != '/')
 			i++;
 		// FULL GARBAGE TO THINK ON
-		while (next_dir_is_pts(dir + i))
+		while (dir[i] && next_dir_is_pts(dir + i))
 		{
-			j = i;
+			j = i - 1;
 			while (dir[j] != '/')
 				j--;
-			ft_strlcat(target, dir, j + 1);
+			ft_strlcat(tmp, dir, j + 1);
+			ft_strlcat(target, tmp, j + 1);
+			i += 2;
 		}
 		i++;
 	}
@@ -226,8 +230,13 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 void	ft_realpath(t_minishell *m, char *dir)
 {
 	//	size_t	future_path_len;
-	ft_strlcpy(m->target_given, dir, ft_strlen(dir) + 1);
-	if (!dir || !dir[0] || !dir[1] || invalid_num_of_pts(dir)
+	size_t	dir_len;
+
+	dir_len = ft_strlen(dir);
+	ft_strlcpy(m->target_given, dir, dir_len + 1);
+	if (!dir[0] || !dir[1]
+		|| invalid_num_of_pts(dir)
+		|| dir_len > 4094
 		|| access(m->current_path, X_OK) == 0)
 	{
 		ft_strlcpy(m->target_path, dir, ft_strlen(dir) + 1);

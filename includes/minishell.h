@@ -29,8 +29,12 @@
 #  define PATH_MAX 4096
 # endif
 
+# ifndef ARG_MAX
+#  define ARG_MAX 2097152
+# endif
+
 # ifndef SHLVL
-#   define SHLVL_LIMIT 1000
+#  define SHLVL_LIMIT 1000
 # endif
 
 # ifndef PROMPT
@@ -67,7 +71,7 @@ typedef struct s_minishell
 	int							tmp_in;
 	char						*user_input;
 	char						target_path[PATH_MAX];
-	char						target_given[PATH_MAX];
+	char						target_given[ARG_MAX];
 	char						current_path[PATH_MAX];
 	char						old_pwd[PATH_MAX];
 	char						*paths;
