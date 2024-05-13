@@ -61,18 +61,25 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	return (0);
 }
 
-int	change_env_variable(t_minishell *m, char *var)
+int	change_pwd_variable(t_minishell *m, char *str)
 {
 	t_envp_list	*env;
+//	size_t target_len;
 	char		cwd[PATH_MAX];
-	size_t		var_len;
 
+//	target_len = ft_strlen(m->target_path);
+//	ft_strlcpy(m->current_path, m->target_path, target_len + 1);
 	env = m->list_envp;
-	var_len = ft_strlen(var);
 	while (env && env->target)
 	{
-		if (ft_strncmp(env->target, var, var_len) == 0)
-		{
+		if (ft_strncmp(env->target, "PWD=", 4) == 0)
+			return (fill_env_value_and_current_path(m, env, str));
+		env = env->next;
+	}
+	if (!env)
+	{
+//		if (ft_strncmp(env->target, var, var_len) == 0)
+//		{
 			if (getcwd(cwd, sizeof(cwd)) == NULL)
 			{
 				perror("cd: error retrieving current directory: \
@@ -80,10 +87,10 @@ int	change_env_variable(t_minishell *m, char *var)
 				return (-1);
 			}
 			return (fill_env_value_and_current_path(m, env, cwd));
-		}
-		env = env->next;
+//		}
+//		env = env->next;
 	}
-	return (0);
+	return (1);
 }
 // void	replace_old_path(t_minishell *m)
 // {
@@ -101,13 +108,14 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		return (0);
 	}
 	ft_realpath(m, dir);
+	dprintf(2, "target with pts replaced: %s\n", m->target_path);
 	if (chdir(m->target_path) != 0)
 	{
 		// dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
 		print_cmd_perror("cd", m->target_given, errno);
 		return (1);
 	}
-	change_env_variable(m, "PWD=");
+	change_pwd_variable(m, m->target_path);
 	// dprintf(2, "m->target_path = %s\n", m->target_path);
 	return (0);
 }
