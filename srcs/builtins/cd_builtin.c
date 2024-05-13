@@ -130,7 +130,8 @@ bool	ft_getenv(t_minishell *m, char *var, char *key)
 	{
 		if (ft_strncmp(env->target, key, key_len) == 0)
 		{
-			ft_strlcpy(var, env->value, key_len + 1);
+
+			ft_strlcpy(var, env->value, ft_strlen(env->value) + 1);
 			return (1);
 		}
 		env = env->next;
@@ -140,8 +141,6 @@ bool	ft_getenv(t_minishell *m, char *var, char *key)
 
 static int	get_home(t_minishell *m)
 {
-//	char	home_dir[4096];
-//	char	new_path[4096];
 	size_t	home_dir_len;
 	int		return_value;
 
@@ -151,16 +150,8 @@ static int	get_home(t_minishell *m)
 		return (1);
 	}
 	home_dir_len = ft_strlen(m->target_path);
-/*	new_path = ft_calloc(1, home_dir_len + 2);
-	if (new_path == NULL)
-	{
-		ft_putendl_fd("Malloc error", 2);
-		return (ENOMEM);
-	}*/
 	ft_strlcat(m->target_path, "/", home_dir_len + 1);
-//	new_path[home_dir_len] = '/';
 	return_value = go_into_directory(m, m->target_path);
-//	free_safely_str(&new_path);
 	return (return_value);
 }
 
