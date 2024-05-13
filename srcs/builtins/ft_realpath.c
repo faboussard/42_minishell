@@ -13,7 +13,6 @@
 #include "builtins.h"
 #include "exec.h"
 
-/*
 int	count_up_moves(char *cmd)
 {
 	int		up_moves;
@@ -31,7 +30,7 @@ int	count_up_moves(char *cmd)
 	}
 	return (up_moves);
 }
-*/
+
 size_t	count_moves_to_root(char *cmd)
 {
 	size_t		moves;
@@ -206,7 +205,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 {
 	size_t	i;
 	size_t	j;
-//	size_t up_moves;
+	size_t up_moves;
 	char	tmp[4096];
 
 	if (!dir || !dir[0])
@@ -215,8 +214,12 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 	j = ft_strlen(m->current_path);
 	tmp[0] = '\0';
 	ft_strlcpy(target, m->current_path, j + 1);
-	//if (up_moves >= count_moves_to_root(m->current_path))
-	//	ft_strlcpy(target, "/", 1);
+	up_moves = count_up_moves(dir);
+	if (up_moves >= count_moves_to_root(m->current_path))
+	{
+		ft_strlcpy(target, "/", 2);
+		return ;
+	}
 	if (dir[0] && dir[0]!= '/')
 		target[j++] = '/';
 	while (dir[i]) {
