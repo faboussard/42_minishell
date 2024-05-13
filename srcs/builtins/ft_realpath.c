@@ -303,9 +303,9 @@ void sanitize_path(char path[4096])
 
 	i = 0;
 	j = 0;
-	while (path[i] && path[i + 1])
+	while (path[i])
 	{
-		if (path[i] == '/' && path[i + 1] == '/')
+		if (path[i] == '/' && path[i + 1] && path[i + 1] == '/')
 			i++;
 		else
 			tmp[j] = path[i];
@@ -315,6 +315,7 @@ void sanitize_path(char path[4096])
 	ft_strlcpy(path, tmp, j + 2);
 	dprintf(2, "tmp = %s\n", tmp);
 }
+
 void	ft_realpath(t_minishell *m, char *dir)
 {
 	size_t	dir_len;
@@ -327,6 +328,7 @@ void	ft_realpath(t_minishell *m, char *dir)
 		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir)))
 	//	|| access(m->current_path, X_OK) == 0))
 		{
+//			dprintf(2, "dir = %s\n", dir);
 			curpath_len = ft_strlen(m->current_path);
 			ft_strlcpy(tmp, m->current_path, curpath_len + 1);
 			ft_strlcat(tmp, "/", curpath_len + 2);
