@@ -217,21 +217,21 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 	ft_strlcpy(target, m->current_path, j + 1);
 	//if (up_moves >= count_moves_to_root(m->current_path))
 	//	ft_strlcpy(target, "/", 1);
-	dprintf(2, "target BEFORE pts replaced: %s\n", target);
-		while (dir[i]) {
-			if (next_dir_is_pts(dir + i))
-				go_back_dir(target, &i, &j);
-			if (dir[i] == '/' || dir[i] == '\0')
-				put_final_slash(target, &j);
-			else
-			{
-				target[j] = dir[i];
-				j++;
-			}
-			i++;
+	if (dir[0] && dir[0]!= '/')
+		target[j++] = '/';
+	while (dir[i]) {
+		if (next_dir_is_pts(dir + i))
+			go_back_dir(target, &i, &j);
+		if (dir[i] == '/' || dir[i] == '\0')
+			put_final_slash(target, &j);
+		else
+		{
+			target[j] = dir[i];
+			j++;
 		}
-		target[j] = '\0';
-	dprintf(2, "target with pts replaced: X%sX\n", target);
+		i++;
+	}
+	target[j] = '\0';
 }
 /*
 void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
@@ -295,6 +295,26 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 	ft_strlcpy(current_path, new_path, ft_strlen(new_path) + 1);
 */
 
+void sanitize_path(char path[4096])
+{
+	size_t	i;
+	size_t	j;
+	char tmp[4096];
+
+	i = 0;
+	j = 0;
+	while (path[i] && path[i + 1])
+	{
+		if (path[i] == '/' && path[i + 1] == '/')
+			i++;
+		else
+			tmp[j] = path[i];
+		i++;
+		j++;
+	}
+	ft_strlcpy(path, tmp, j + 2);
+	dprintf(2, "tmp = %s\n", tmp);
+}
 void	ft_realpath(t_minishell *m, char *dir)
 {
 	size_t	dir_len;
@@ -303,20 +323,20 @@ void	ft_realpath(t_minishell *m, char *dir)
 
 	dir_len = ft_strlen(dir);
 	ft_strlcpy(m->target_given, dir, dir_len + 1);
-	if (dir_len <= 4094
-		&& ((ft_strchr(dir, '.') == 0)
-		|| (!dir[0] || !dir[1]
-		|| invalid_num_of_pts(dir))
-		|| access(m->current_path, X_OK) == 0))
+	if ((dir_len <= 4094 && (ft_strchr(dir, '.') == NULL))
+		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir)))
+	//	|| access(m->current_path, X_OK) == 0))
 		{
 			curpath_len = ft_strlen(m->current_path);
 			ft_strlcpy(tmp, m->current_path, curpath_len + 1);
 			ft_strlcat(tmp, "/", curpath_len + 2);
 			ft_strlcat(tmp, dir, curpath_len + 2 + dir_len);
 			ft_strlcpy(m->target_path, tmp, ft_strlen(tmp) + 1);
+			sanitize_path(m->target_path);
 			return ;
 		}
 	replace_pts_with_path(m, m->target_path, dir);
+	sanitize_path(m->target_path);
 }
 /*
 a/b/c/d/e/f/g/h/i

@@ -107,8 +107,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
-	ft_realpath(m, dir);
-	dprintf(2, "target with pts replaced: %s\n", m->target_path);
+	//ft_realpath(m, dir);
 	if (chdir(m->target_path) != 0)
 	{
 		// dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
@@ -120,30 +119,48 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	return (0);
 }
 
+bool	ft_getenv(t_minishell *m, char *var, char *key)
+{
+	t_envp_list *env;
+	size_t	key_len;
+
+	env = m->list_envp;
+	key_len = ft_strlen(key);
+	while (env)
+	{
+		if (ft_strncmp(env->target, key, key_len) == 0)
+		{
+			ft_strlcpy(var, env->value, key_len + 1);
+			return (1);
+		}
+		env = env->next;
+	}
+	return (0);
+}
+
 static int	get_home(t_minishell *m)
 {
-	char	*home_dir;
-	char	*new_path;
+//	char	home_dir[4096];
+//	char	new_path[4096];
 	size_t	home_dir_len;
 	int		return_value;
 
-	home_dir = getenv("HOME");
-	if (home_dir == NULL)
+	if (ft_getenv(m, m->target_path, "HOME=") == 0)
 	{
 		ft_putendl_fd("minishell: cd: HOME not set", 2);
 		return (1);
 	}
-	home_dir_len = ft_strlen(home_dir);
-	new_path = ft_calloc(1, home_dir_len + 2);
+	home_dir_len = ft_strlen(m->target_path);
+/*	new_path = ft_calloc(1, home_dir_len + 2);
 	if (new_path == NULL)
 	{
 		ft_putendl_fd("Malloc error", 2);
 		return (ENOMEM);
-	}
-	ft_strlcpy(new_path, home_dir, home_dir_len + 1);
-	new_path[home_dir_len] = '/';
-	return_value = go_into_directory(m, new_path);
-	free_safely_str(&new_path);
+	}*/
+	ft_strlcat(m->target_path, "/", home_dir_len + 1);
+//	new_path[home_dir_len] = '/';
+	return_value = go_into_directory(m, m->target_path);
+//	free_safely_str(&new_path);
 	return (return_value);
 }
 
@@ -168,33 +185,34 @@ bool	too_many_args(char **cmd_table)
 	return (0);
 }
 
-int	ft_cd(t_minishell *minishell, char **cmd_table)
+int	ft_cd(t_minishell *m, char **cmd_table)
 {
 	char		*dir;
 	struct stat	st;
 
-	// dprintf(2, "m->current_path IS %s\n", minishell->current_path);
+	// dprintf(2, "m->current_path IS %s\n", m->current_path);
 	if (too_many_args(cmd_table))
 		return (1);
 	if (should_go_home(cmd_table))
-		return (get_home(minishell));
+		return (get_home(m));
 	if (contains_only_charset(cmd_table[1], "/"))
-		return (go_into_directory(minishell, "/"));
+		return (go_into_directory(m, "/"));
 	dir = cmd_table[1];
 	if (ft_strncmp(dir, "-", 2) == 0)
-		return (go_into_directory(minishell, minishell->old_pwd));
-	if (ft_strncmp(dir, ".", 1) && stat(dir, &st) == -1)
+		return (go_into_directory(m, m->old_pwd));
+	ft_realpath(m, dir);
+	if (ft_strncmp(m->target_path, ".", 1) && stat(m->target_path, &st) == -1)
 	{
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
 	if (contains_only_charset(dir, "./"))
-		return (go_into_directory(minishell, dir));
+		return (go_into_directory(m, m->target_path));
 	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
 		// if doesn't begin with . and is not dir
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
-		return (go_into_directory(minishell, dir));
+		return (go_into_directory(m, dir));
 	return (0);
 }
 // dprintf(2, "bash: cd: %s: Not a directory\n", dir);

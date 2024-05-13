@@ -20,7 +20,7 @@
 //----------------------------------BUILTINS----------------------------------//
 int		ft_exit(t_minishell *minishell, char **cmd_table);
 int		ft_env(t_minishell *minishell, char **args);
-int		ft_cd(t_minishell *minishell, char **cmd_table);
+int		ft_cd(t_minishell *m, char **cmd_table);
 int		ft_echo(char **cmd_table);
 int		ft_pwd(t_minishell *minishell);
 int ft_export(char **args, t_envp_list **env_variables, t_minishell *m);
