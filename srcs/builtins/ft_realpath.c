@@ -32,10 +32,9 @@ int	count_up_moves(char *cmd)
 	return (up_moves);
 }
 */
-/*
-int	count_moves_to_root(char *cmd)
+size_t	count_moves_to_root(char *cmd)
 {
-	int		moves;
+	size_t		moves;
 	size_t	i;
 
 	moves = 0;
@@ -50,7 +49,63 @@ int	count_moves_to_root(char *cmd)
 	}
 	return (moves);
 }
-*/
+
+/*
+ * size_t	count_future_path_len(char *current_path, int up_moves)
+{
+	size_t	i;
+	int		slash_seen;
+	int		total_slash;
+
+	i = 0;
+	slash_seen = 0;
+	total_slash = 0;
+	while (current_path[i])
+	{
+		if (current_path[i] == '/')
+			total_slash++;
+		i++;
+	}
+	i = 0;
+	while (current_path[i] && slash_seen <= total_slash - up_moves)
+	{
+		if (current_path[i] == '/')
+			slash_seen++;
+		i++;
+	}
+	i++;
+	return (i);
+}
+ */
+
+/*
+ * static void	remove_one_dir_from_path(char path[4096])
+{
+	size_t	path_len;
+	size_t	i;
+
+	path_len = ft_strlen(path);
+	if (path_len < 3)
+	{
+		ft_strlcpy(path, "/", 2);
+		return ;
+	}
+	i = path_len - 2;
+	while (path[i] != '/' && i > 0)
+		i--;
+	if (i == 0 || i > path_len)
+		ft_strlcpy(path, "/", 2);
+	else
+	{
+		while (path[i])
+		{
+			path[i] = '\0';
+			i++;
+		}
+	}
+}
+ *
+ */
 
 static bool	begins_with_two_pts(const char *dir)
 {
@@ -91,60 +146,6 @@ static bool	invalid_num_of_pts(char *dir)
 	return (1);
 }
 
-/*
- * size_t	count_future_path_len(char *current_path, int up_moves)
-{
-	size_t	i;
-	int		slash_seen;
-	int		total_slash;
-
-	i = 0;
-	slash_seen = 0;
-	total_slash = 0;
-	while (current_path[i])
-	{
-		if (current_path[i] == '/')
-			total_slash++;
-		i++;
-	}
-	i = 0;
-	while (current_path[i] && slash_seen <= total_slash - up_moves)
-	{
-		if (current_path[i] == '/')
-			slash_seen++;
-		i++;
-	}
-	i++;
-	return (i);
-}
- */
-
-static void	remove_one_dir_from_path(char path[4096])
-{
-	size_t	path_len;
-	size_t	i;
-
-	path_len = ft_strlen(path);
-	if (path_len < 3)
-	{
-		ft_strlcpy(path, "/", 2);
-		return ;
-	}
-	i = path_len - 2;
-	while (path[i] != '/' && i > 0)
-		i--;
-	if (i == 0 || i > path_len)
-		ft_strlcpy(path, "/", 2);
-	else
-	{
-		while (path[i])
-		{
-			path[i] = '\0';
-			i++;
-		}
-	}
-}
-
 static bool	next_dir_is_pts(const char *dir)
 {
 	if (dir[0] && dir[1])
@@ -155,18 +156,69 @@ static bool	next_dir_is_pts(const char *dir)
 	return (0);
 }
 
-static size_t	skip_slash_and_pts(const char *dir, size_t i)
+static size_t	count_up_moves(const char *dir, size_t i)
 {
+	size_t up_moves;
+
+	up_moves = 0;
+	if (next_dir_is_pts(dir + i))
+	{
+		up_moves++;
+		i += 2;
+	}
 	while (dir[i] && dir[i] == '/')
 	{
 		while (dir[i] && dir[i] == '/')
 			i++;
 		if (next_dir_is_pts(dir + i))
+		{
+			up_moves++;
 			i += 2;
+		}
 	}
-	return (i);
+	return (up_moves);
 }
 
+void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
+{
+	size_t	i;
+	size_t	j;
+	size_t up_moves;
+	char	tmp[4096];
+
+	if (!dir || !dir[0])
+		return ;
+	i = 0;
+	j = ft_strlen(m->current_path);
+	tmp[0] = '\0';
+	up_moves = count_up_moves(dir, i);
+	ft_strlcpy(target, m->current_path, j+ 1);
+	if (up_moves >= count_moves_to_root(m->current_path))
+	{
+		ft_strlcpy(target, "/", 2);
+		return ;
+	}
+	dprintf(2, "target BEFORE pts replaced: %s\n", target);
+	while (dir[i]) {
+		if (next_dir_is_pts(dir + i)) {
+			if (j > 0) {
+				j--;
+				while (j > 0 && target[j-1] != '/')
+					j--;
+			}
+			i += 2;
+		} else if (dir[i] == '/' || dir[i] == '\0') {
+			target[j] = '\0';
+		} else {
+			target[j] = dir[i];
+			j++;
+		}
+		i++;
+	}
+	target[j] = '\0';
+	dprintf(2, "target with pts replaced: %s\n", target);
+}
+/*
 void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 {
 	size_t	i;
@@ -197,6 +249,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 		i++;
 	}
 }
+*/
 /*
  *	remove_one_dir_from_path(m->target_path);
  *	/../home/../home/mbernard/42/minishell
@@ -229,45 +282,21 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 
 void	ft_realpath(t_minishell *m, char *dir)
 {
-	//	size_t	future_path_len;
 	size_t	dir_len;
 
 	dir_len = ft_strlen(dir);
 	ft_strlcpy(m->target_given, dir, dir_len + 1);
-	if (!dir[0] || !dir[1]
-		|| invalid_num_of_pts(dir)
-		|| dir_len > 4094
-		|| access(m->current_path, X_OK) == 0)
-	{
-		ft_strlcpy(m->target_path, dir, ft_strlen(dir) + 1);
-		return ;
-	}
+	if (dir_len <= 4094
+		&& (ft_strchr(dir, '.') == 0
+		|| (!dir[0] || !dir[1]
+		|| invalid_num_of_pts(dir))))
+//		|| access(m->current_path, X_OK) == 0))
+		{
+			ft_strlcpy(m->target_path, dir, ft_strlen(dir) + 1);
+			return ;
+		}
 	replace_pts_with_path(m, m->target_path, dir);
-	//	ft_strlcpy(m->target_path, m->current_path, ft_strlen(m->current_path));
-	//	remove_one_dir_from_path(m->target_path);
-	//	if (dir[2] == '/')
-	//	{
-	//		future_path_len = ft_strlen(m->target_path) + ft_strlen(&dir[2])
-	//			+ 1;
-	//		ft_strlcat(m->target_path, &dir[2], future_path_len);
-	//	}
 }
-/*
- * Si access
-	dprintf(2, "target_path: %s\n", m->target_path);
- *
- * 	//int		up_moves;
-	//int		moves_to_root;
- * up_moves = count_up_moves(cmd);
-moves_to_root = count_moves_to_root(m->current_path);
-if (up_moves >= moves_to_root)
-	ft_strlcpy(m->target_path, "/", 2);
-else
-{
-	future_path_len = count_future_path_len(m->current_path, up_moves);
-	ft_strlcpy(m->target_path, m->current_path, future_path_len);
-}
- */
 /*
 a/b/c/d/e/f/g/h/i
 a/b/c/../c/../../b/
