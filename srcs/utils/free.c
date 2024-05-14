@@ -72,15 +72,15 @@ void	ft_free_process_list(t_process_list **process_list)
 		next = current->next;
 		if (current->cmd_table)
 			ft_free_tab(&(current->cmd_table));
-		if (current->in_files_token)
-			ft_lstclear_token(&current->in_files_token);
-		if (current->out_files_token)
-			ft_lstclear_token(&current->out_files_token);
+		if (current->in_files_list)
+			ft_lstclear_token(&current->in_files_list);
+		if (current->out_files_list)
+			ft_lstclear_token(&current->out_files_list);
 		close_fds(current->fd_in, current->fd_out);
 		free(current);
 		current = next;
 	}
-	*process_list = NULL;
+	process_list = NULL;
 }
 
 void	free_minishell(t_minishell *minishell)

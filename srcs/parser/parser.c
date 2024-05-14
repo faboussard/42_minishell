@@ -78,32 +78,33 @@ void	token_rework(t_minishell *minishell)
 	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)IS_SPACE, cmp);
 }
 
-int	parse_input(t_minishell *minishell)
+int	parse_input(t_minishell *m)
 {
 	char	*string;
 
-	if (minishell->list_envp == NULL)
+	if (m->list_envp == NULL)
 		return (1);
-	string = minishell->user_input;
-	transform_to_token(minishell, string, &minishell->list_tokens);
-	if (minishell->list_tokens == NULL)
+	string = m->user_input;
+	transform_to_token(m, string, &m->list_tokens);
+	if (m->list_tokens == NULL)
 		return (0);
-	define_heredoc_and_append(minishell, &minishell->list_tokens);
-	if (check_quotes(minishell))
+	define_heredoc_and_append(m, &m->list_tokens);
+	if (check_quotes(m))
 		return (1);
-	expander(minishell, &minishell->list_tokens);
-	token_rework(minishell);
-	if (minishell->list_tokens == NULL)
+	expander(m, &m->list_tokens);
+	token_rework(m);
+	if (m->list_tokens == NULL)
 		return (0);
-	if (check_syntax(minishell) == 1)
+	if (check_syntax(m) == 1)
 	{
-		minishell->status = set_or_get_last_status(2, 0);
+		m->status = set_or_get_last_status(2, 0);
 		return (1);
 	}
-	if (minishell->list_tokens == NULL)
+	if (m->list_tokens == NULL)
 		return (1);
-	token_requalification(minishell->list_tokens);
-	create_envp_table(minishell);
-	create_process_list(minishell);
+	token_requalification(m->list_tokens);
+	create_envp_table(m);
+	create_process_list(m, &m->pl);
+	m->total_commands += count_token_by_operator(m, PIPE);
 	return (0);
 }
