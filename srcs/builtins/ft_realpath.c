@@ -193,6 +193,7 @@ void put_final_slash(char *target, size_t *j)
 {
 	size_t i;
 
+	dprintf(2, "target BEFORE final slash = %s\n", target);
 	if (!target[(*j)] || *j == 0 || target[(*j) - 1] != '/')
 	{
 		target[*j] = '/';
@@ -204,7 +205,7 @@ void put_final_slash(char *target, size_t *j)
 		target[i] = '\0';
 		i++;
 	}
-	dprintf(2, "target = %s\n", target);
+	dprintf(2, "target after final slash = %s\n", target);
 //	target[*j] = '/';
 //	++(*j);
 //	target[*j] = '\0';
@@ -228,7 +229,7 @@ void sanitize_path(char path[PATH_MAX])
 		i++;
 		j++;
 	}
-	tmp[j] = '\0';
+	tmp[j] = 0;//'\0';
 	dprintf(2, "tmp = %s\n", tmp);
 	ft_strlcpy(path, tmp, j + 1);
 }
@@ -252,6 +253,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[PATH_MAX], char	*dir)
 		ft_strlcpy(target, "/", 2);
 		return ;
 	}
+	dprintf(2, "CURRENT PATH = %s\n", m->current_path);
 	if (dir[0] && dir[0]!= '/')
 		target[j++] = '/';
 	sanitize_path(target); // J aurais essaye !!!!!
