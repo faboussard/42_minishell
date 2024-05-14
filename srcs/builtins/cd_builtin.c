@@ -59,7 +59,6 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	size_t	curpath_len;
 	size_t	cwd_len;
 
-
 	curpath_len = ft_strlen(m->current_path) + 1;
 	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
@@ -134,6 +133,10 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		print_cmd_perror("cd", m->target_given, errno);
 		return (1);
 	}
+	dprintf(2, "m->target_path = %s\n", m->target_path);
+	dprintf(2, "dir = %s\n", dir);
+	if (ft_strncmp(dir, ".", 2) == 0)
+		return (0);
 	change_pwd_variable(m, m->target_path);
 	return (0);
 }
@@ -198,7 +201,7 @@ bool	too_many_args(char **cmd_table)
 int	ft_cd(t_minishell *m, char **cmd_table)
 {
 	char		*dir;
-	struct stat	st;
+//	struct stat	st;
 
 	// dprintf(2, "m->current_path IS %s\n", m->current_path);
 	if (too_many_args(cmd_table))
@@ -210,20 +213,22 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 	dir = cmd_table[1];
 	if (ft_strncmp(dir, "-", 2) == 0)
 		return (go_into_directory(m, m->old_pwd));
-//	ft_realpath(m, dir);
-//	if (ft_strncmp(m->target_path, ".", 1) && stat(m->target_path, &st) == -1)
-//	{
-//		print_cmd_perror("cd", dir, errno);
-//		return (1);
-//	}
-	dprintf(2, "m->target_path = %s\n", m->target_path);
-//	if (contains_only_charset(dir, "./"))
-//		return (go_into_directory(m, m->target_path));
+	return (go_into_directory(m, dir));
+/*	ft_realpath(m, dir);
+	if (ft_strncmp(m->target_path, ".", 1) && stat(m->target_path, &st) == -1)
+	{
+		print_cmd_perror("cd", dir, errno);
+		return (1);
+	}*/
+//	dprintf(2, "m->target_path = %s\n", m->target_path);
+/*	if (contains_only_charset(dir, "./"))
+		return (go_into_directory(m, m->target_path));
 	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
 		// if doesn't begin with . and is not dir
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
-		return (go_into_directory(m, dir));
+	return (go_into_directory(m, dir));
+ */
 	return (0);
 }
 // dprintf(2, "bash: cd: %s: Not a directory\n", dir);
