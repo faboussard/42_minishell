@@ -20,7 +20,7 @@ void create_in_files_list(t_token_list **in_files_list, t_minishell *minishell)
 	t_token_list 	*next;
 
 	iterator = minishell->list_tokens;
-	*in_files_list == NULL;
+	*in_files_list = NULL;
 	while (iterator != NULL && iterator->e_operator != PIPE)
 	{
 		next = iterator->next;
@@ -42,7 +42,7 @@ void create_out_files_list(t_token_list **out_files_list, t_minishell *minishell
 	t_token_list 	*next;
 
 	iterator = minishell->list_tokens;
-	*out_files_list == NULL;
+	*out_files_list = NULL;
 	while (iterator != NULL && iterator->e_operator != PIPE)
 	{
 		next = iterator->next;
