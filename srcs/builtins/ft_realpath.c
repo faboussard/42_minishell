@@ -205,9 +205,9 @@ void put_final_slash(char *target, size_t *j)
 		target[i] = '\0';
 		i++;
 	}
+	++(*j);
 	dprintf(2, "target after final slash = %s\n", target);
 //	target[*j] = '/';
-	++(*j);
 //	target[*j] = '\0';
 }
 
@@ -283,69 +283,6 @@ void	replace_pts_with_path(t_minishell	*m, char target[PATH_MAX], char	*dir)
 	target[j] = '\0';
 	dprintf(2, "TARGET = %s\n", target);
 }
-/*
-void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
-{
-	size_t	i;
-	size_t	j;
-	char	tmp[4096];
-
-	(void)m;
-	if (!dir || !dir[0])
-		return ;
-	i = 0;
-	tmp[0] = '\0';
-	target[0] = '\0';
-	i = skip_slash_and_pts(dir, i);
-	while (dir[i])
-	{
-		while (i > 1 && dir[i] && dir[i - 1] != '/')
-			i++;
-		// FULL GARBAGE TO THINK ON
-		while (dir[i] && next_dir_is_pts(dir + i))
-		{
-			j = i - 1;
-			while (dir[j] != '/')
-				j--;
-			ft_strlcat(tmp, dir, j + 1);
-			ft_strlcat(target, tmp, j + 1);
-			i += 2;
-		}
-		i++;
-	}
-}
-*/
-/*
- *	remove_one_dir_from_path(m->target_path);
- *	/../home/../home/mbernard/42/minishell
- * /../../../
- * /home/mbernard/42/minishell
- * 	size_t dir_len;
-	size_t current_path_len;
-	//dir_len = ft_strlen(dir);
-	current_path_len = ft_strlen(m->current_path);
-	ft_strlcat(m->target_path, dir, dir_len + 1);
-	while (dir[i] && dir[i + 1])
-	{
-		if (dir[i] == '.' && dir[i + 1] == '/')
-			i += 2;
-		else if (dir[i] == '.' && dir[i + 1] == '.' && dir[i + 2] == '/')
-		{
-			remove_one_dir_from_path(new_path);
-			i += 3;
-		}
-		else
-		{
-			new_path[current_path_len + j] = dir[i];
-			i++;
-			j++;
-		}
-	}
-	new_path[current_path_len + j] = '\0';
-	ft_strlcpy(current_path, new_path, ft_strlen(new_path) + 1);
-*/
-
-
 
 void	ft_realpath(t_minishell *m, char *dir)
 {
