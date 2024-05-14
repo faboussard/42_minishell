@@ -246,7 +246,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[PATH_MAX], char	*dir)
 	size_t	i;
 	size_t	j;
 	size_t up_moves;
-	char	tmp[PATH_MAX];
+//	char	tmp[PATH_MAX];
 	char cp_dir[ARG_MAX];
 
 	if (!dir || !dir[0])
@@ -254,7 +254,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[PATH_MAX], char	*dir)
 	ft_strlcpy(cp_dir, dir, ARG_MAX);
 	i = 0;
 	j = ft_strlen(m->current_path);
-	tmp[0] = '\0';
+//	tmp[0] = '\0';
 	ft_strlcpy(target, m->current_path, j + 1);
 	up_moves = count_up_moves(cp_dir);
 	if (up_moves >= count_moves_to_root(m->current_path))
