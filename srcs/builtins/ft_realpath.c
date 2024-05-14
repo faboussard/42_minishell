@@ -316,7 +316,7 @@ void sanitize_path(char path[PATH_MAX])
 	i = 0;
 	j = 0;
 //	dprintf(2, "tmp = %s\n", path);
-
+	clear_path_char(tmp);
 	while (path[i])
 	{
 		if (path[i] == '/' && path[i + 1] && path[i + 1] == '/')
