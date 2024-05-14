@@ -193,7 +193,7 @@ void put_final_slash(char *target, size_t *j)
 {
 	size_t i;
 
-	if (target[(*j)] && target[(*j) - 1] != '/')
+	if (target[(*j)] && (*j != 0 || target[(*j) - 1] != '/'))
 	{
 		target[*j] = '/';
 		(*j)++;
@@ -209,7 +209,7 @@ void put_final_slash(char *target, size_t *j)
 //	target[*j] = '\0';
 }
 
-void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
+void	replace_pts_with_path(t_minishell	*m, char target[PATH_MAX], char	*dir)
 {
 	size_t	i;
 	size_t	j;
@@ -307,7 +307,7 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 	ft_strlcpy(current_path, new_path, ft_strlen(new_path) + 1);
 */
 
-void sanitize_path(char path[4096])
+void sanitize_path(char path[PATH_MAX])
 {
 	size_t	i;
 	size_t	j;
@@ -315,6 +315,8 @@ void sanitize_path(char path[4096])
 
 	i = 0;
 	j = 0;
+	dprintf(2, "tmp = %s\n", path);
+
 	while (path[i])
 	{
 		if (path[i] == '/' && path[i + 1] && path[i + 1] == '/')
@@ -324,19 +326,20 @@ void sanitize_path(char path[4096])
 		i++;
 		j++;
 	}
-	ft_strlcpy(path, tmp, j + 2);
-	dprintf(2, "tmp = %s\n", tmp);
+	ft_strlcpy(path, tmp, j + 1);
+	dprintf(2, "tmp = %s\n", path);
 }
 
 void	ft_realpath(t_minishell *m, char *dir)
 {
 	size_t	dir_len;
 	size_t	curpath_len;
-	char tmp[4096];
+	char tmp[PATH_MAX];
 
+	clear_path_char(tmp);
 	dir_len = ft_strlen(dir);
 	ft_strlcpy(m->target_given, dir, dir_len + 1);
-	if ((dir_len <= 4094 && (ft_strchr(dir, '.') == NULL))
+	if ((dir_len <= PATH_MAX && (ft_strchr(dir, '.') == NULL))
 		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir)))
 	//	|| access(m->current_path, X_OK) == 0))
 		{
