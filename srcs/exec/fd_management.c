@@ -28,7 +28,7 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
 {
 	enum e_token_type	infile_type;
-
+	
 	infile_type = pl->in_files_list->e_type;
 	pl->dev_null = 0;
 	if (infile_type == DELIMITER || infile_type == IN_FILE)

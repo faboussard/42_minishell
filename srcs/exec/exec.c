@@ -70,10 +70,16 @@ static int	check_all_infiles(t_minishell *m, t_process_list *pl, struct s_token 
 	{
 		if (open_fd_infile(m, pl, &fd_in))
 			return (1);
-		close (fd_in);
+		close(fd_in);
 	}
 	else
-		return (open_fd_infile(m, pl, &(pl->fd_in)));
+	{
+		if (open_fd_infile(m, pl, &(pl->fd_in)))
+			return (1);
+		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
+		close(pl->fd_in);
+	}
+		//return (open_fd_infile(m, pl, &(pl->fd_in)));
 	return (check_all_infiles(m, pl, infile->next));
 }
 static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
@@ -95,27 +101,17 @@ static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
 
 static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
-	enum e_token_type	infile_token;
-	enum e_token_type	outfile_token;
-
-	infile_token = pl->in_files_list->e_type;
-	outfile_token = pl->out_files_list->e_type;
-	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_list, &(pl->fd_in), pl);
-	if (infile_token == IN_FILE || infile_token == DELIMITER)
+	if (pl->in_files_list != NULL)
 	{
-		if (open_fd_infile(m, pl, &(pl->fd_in)))
-			return (1);
-		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-		close(pl->fd_in);
-	}
-	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
-	{
+		if (pl->in_files_list->e_type == DELIMITER)
+			here_doc(m, pl->in_files_list, &(pl->fd_in), pl);
 		if (check_all_infiles(m, pl, pl->in_files_list) == 1)
 			return (1);
+	}
+	if (pl->out_files_list != NULL)
+	{
 		open_fd_outfile(m, pl, pl->out_files_list->name);
 		create_all_outfiles(m, pl->out_files_list->next);
-//		if (open_fd_outfile(m, pl, pl->out_files_list->name))
 		if (pl->fd_out < 0)
 			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
