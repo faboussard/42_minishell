@@ -89,7 +89,7 @@ int define_token(t_token_list *new_token, char *string);
 
 /********************* count_tokens.c *********************/
 
-int count_token_by_operator(t_minishell *minishell, enum e_token_operators operator_type);
+int count_tokens_by_operator(t_minishell *minishell, enum e_token_operators operator_type);
 size_t				count_letters_until_pipe(t_token_list *head);
 void add_quote_count(t_token_list *iterator, int *s_count, int *d_count);
 
