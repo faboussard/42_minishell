@@ -45,12 +45,9 @@ void create_environment_table(t_minishell *m)
 
 int parse_input(t_minishell *m)
 {
-	char *string;
-
 	if (m->list_envp == NULL)
 		return (1);
-	string = m->user_input;
-	if (!tokenize_input(m, string))
+	if (!tokenize_input(m, m->user_input))
 		return (0);
 	if (check_quotes(m))
 		return (1);
