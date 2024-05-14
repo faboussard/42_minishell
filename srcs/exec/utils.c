@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "builtins.h"
 
 void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 {
@@ -24,6 +25,7 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 void	init_before_next_prompt(t_minishell *m)
 {
 	m->total_commands = 1;
+	clear_path_char(m->target_path);
 	free_safely_str(&(m->user_input));
 	ft_free_process_list(&(m->pl));
 	ft_lstclear_token(&m->list_tokens);
