@@ -191,14 +191,22 @@ void	go_back_dir(const char *target, size_t *i, size_t *j)
 
 void put_final_slash(char *target, size_t *j)
 {
+	size_t i;
+
 	if (target[(*j)] && target[(*j) - 1] != '/')
 	{
 		target[*j] = '/';
 		(*j)++;
 	}
+	i = *j;
+	while (target[i])
+	{
+		target[i] = '\0';
+		i++;
+	}
 //	target[*j] = '/';
 //	++(*j);
-	target[*j] = '\0';
+//	target[*j] = '\0';
 }
 
 void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
@@ -222,7 +230,8 @@ void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
 	}
 	if (dir[0] && dir[0]!= '/')
 		target[j++] = '/';
-	while (dir[i]) {
+	while (dir[i])
+	{
 		if (next_dir_is_pts(dir + i))
 			go_back_dir(target, &i, &j);
 		if (dir[i] == '/' || dir[i] == '\0')

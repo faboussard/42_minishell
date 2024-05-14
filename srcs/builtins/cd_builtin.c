@@ -46,10 +46,18 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
 	size_t	curpath_len;
 	size_t	cwd_len;
+	size_t	i;
+
 
 	curpath_len = ft_strlen(m->current_path) + 1;
 	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
+	i = PATH_MAX;
+	while (i > 0)
+	{
+		i--;
+		m->current_path[i] = '\0';
+	}
 	ft_strlcpy(m->current_path, cwd, cwd_len);
 	free_safely_str(&(env->value));
 	env->value = ft_strdup(cwd);
@@ -197,6 +205,7 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 		print_cmd_perror("cd", dir, errno);
 		return (1);
 	}
+	dprintf(2, "m->target_path = %s\n", m->target_path);
 	if (contains_only_charset(dir, "./"))
 		return (go_into_directory(m, m->target_path));
 	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
