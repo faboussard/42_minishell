@@ -14,6 +14,10 @@
 #include "utils.h"
 #include "parser.h"
 
+t_token_list *iterate_until_next_pipe(t_token_list **temp);
+
+t_token_list *go_to_next_pipe(t_token_list **temp);
+
 t_process_list *ft_lstlast_process(t_process_list *lst)
 {
 	while (lst != NULL)
@@ -37,61 +41,38 @@ void add_process_to_list(t_process_list **process_list, t_process_list *new_proc
 	}
 	else
 		*process_list = new_process;
+	new_process->next = NULL;
 }
 
-//
-//void create_in_out_files_token(t_process_list *new_process_list, t_minishell *minishell)
-//{
-//	t_token_list *current;
-//
-//	current = minishell->list_tokens;
-//	new_process_list->in_out_files_tokens = ft_calloc(1, sizeof(t_token_list));
-//	new_process_list->in_out_files_tokens = current;
-//	ft_list_remove_if(new_process_list->in_out_files_tokens);
-//}
-//
-//void ft_list_remove_if(t_token_list *begin_list)
-//{
-//	t_token_list	*cur;
-//
-//	if (begin_list == NULL)
-//		return;
-//	cur = begin_list;
-//	if (begin_list->e_type != APPEND_FILE && begin_list->e_type != IN_FILE && begin_list->e_type
-//	!= OUT_FILE && begin_list->e_type != DELIMITER)
-//	{
-//		begin_list = cur->next;
-//		free(cur);
-//		ft_list_remove_if(begin_list);
-//	}
-//	else
-//	{
-//		cur = begin_list;
-//		ft_list_remove_if(cur->next);
-//	}
-//}
-
-
-void create_process_list(t_minishell *minishell)
+void create_process_list(t_minishell *m, t_process_list **pl)
 {
-	t_process_list	*new_process_list;
 	t_token_list	*temp;
+	t_process_list	*new_pl;
 
-	minishell->total_commands += count_token_by_operator(minishell, PIPE);
-	temp = minishell->list_tokens;
-	while (minishell->list_tokens != NULL)
+	temp = m->list_tokens;
+	while (m->list_tokens != NULL)
 	{
-		new_process_list = ft_calloc(1, sizeof(t_process_list));
-		if (new_process_list == NULL)
-			exit_msg(minishell, "malloc failed at create_process_list", 2);
-		new_process_list = create_process_list_node(new_process_list, minishell);
-		if (new_process_list == NULL)
-			return;
-		add_process_to_list(&minishell->pl, new_process_list);
-		while (minishell->list_tokens != NULL && minishell->list_tokens->e_operator != PIPE)
-			minishell->list_tokens = minishell->list_tokens->next;
-		if (minishell->list_tokens != NULL)
-			minishell->list_tokens = minishell->list_tokens->next;
+		new_pl = ft_calloc(1, sizeof(t_process_list));
+		if (new_pl == NULL)
+			exit_msg(m, "malloc failed at create_process_list", ENOMEM);
+		create_process_list_node(new_pl, m);
+		add_process_to_list(pl, new_pl);
+		m->list_tokens = iterate_until_next_pipe(&m->list_tokens);
+		m->list_tokens = go_to_next_pipe(&m->list_tokens);
 	}
-	minishell->list_tokens = temp;
+	m->list_tokens = temp;
+}
+
+t_token_list *go_to_next_pipe(t_token_list **temp)
+{
+	if (*temp != NULL)
+		*temp = (*temp)->next;
+	return (*temp);
+}
+
+t_token_list *iterate_until_next_pipe(t_token_list **temp)
+{
+	while (*temp != NULL && (*temp)->e_operator != PIPE)
+		*temp = (*temp)->next;
+	return (*temp);
 }

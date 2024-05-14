@@ -98,10 +98,10 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	enum e_token_type	infile_token;
 	enum e_token_type	outfile_token;
 
-	infile_token = pl->in_files_token->e_type;
-	outfile_token = pl->out_files_token->e_type;
+	infile_token = pl->in_files_list->e_type;
+	outfile_token = pl->out_files_list->e_type;
 	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, &(pl->fd_in), pl);
+		here_doc(m, pl->in_files_list, &(pl->fd_in), pl);
 	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
 		if (open_fd_infile(m, pl, &(pl->fd_in)))
@@ -111,11 +111,11 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	}
 	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
-		if (check_all_infiles(m, pl, pl->in_files_token) == 1)
+		if (check_all_infiles(m, pl, pl->in_files_list) == 1)
 			return (1);
-		open_fd_outfile(m, pl, pl->out_files_token->name);
-		create_all_outfiles(m, pl->out_files_token->next);
-//		if (open_fd_outfile(m, pl, pl->out_files_token->name))
+		open_fd_outfile(m, pl, pl->out_files_list->name);
+		create_all_outfiles(m, pl->out_files_list->next);
+//		if (open_fd_outfile(m, pl, pl->out_files_list->name))
 		if (pl->fd_out < 0)
 			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
