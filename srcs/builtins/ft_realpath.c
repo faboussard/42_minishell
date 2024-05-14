@@ -315,7 +315,7 @@ void sanitize_path(char path[PATH_MAX])
 
 	i = 0;
 	j = 0;
-	dprintf(2, "tmp = %s\n", path);
+//	dprintf(2, "tmp = %s\n", path);
 
 	while (path[i])
 	{
@@ -326,6 +326,7 @@ void sanitize_path(char path[PATH_MAX])
 		i++;
 		j++;
 	}
+	tmp[j] = '\0';
 	ft_strlcpy(path, tmp, j + 1);
 	dprintf(2, "tmp = %s\n", path);
 }
@@ -339,6 +340,13 @@ void	ft_realpath(t_minishell *m, char *dir)
 	clear_path_char(tmp);
 	dir_len = ft_strlen(dir);
 	ft_strlcpy(m->target_given, dir, dir_len + 1);
+	if (ft_strncmp(dir, "/", 2) == 0)
+	{
+		ft_strlcpy(m->target_path, dir, 2);
+		return ;
+	}
+	if (dir && dir[0] == '/')
+		return ;
 	if ((dir_len <= PATH_MAX && (ft_strchr(dir, '.') == NULL))
 		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir)))
 	//	|| access(m->current_path, X_OK) == 0))

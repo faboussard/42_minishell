@@ -128,15 +128,13 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
-	//ft_realpath(m, dir);
+	ft_realpath(m, dir);
 	if (chdir(m->target_path) != 0)
 	{
-		// dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
 		print_cmd_perror("cd", m->target_given, errno);
 		return (1);
 	}
 	change_pwd_variable(m, m->target_path);
-	// dprintf(2, "m->target_path = %s\n", m->target_path);
 	return (0);
 }
 
@@ -212,15 +210,15 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 	dir = cmd_table[1];
 	if (ft_strncmp(dir, "-", 2) == 0)
 		return (go_into_directory(m, m->old_pwd));
-	ft_realpath(m, dir);
-	if (ft_strncmp(m->target_path, ".", 1) && stat(m->target_path, &st) == -1)
-	{
-		print_cmd_perror("cd", dir, errno);
-		return (1);
-	}
+//	ft_realpath(m, dir);
+//	if (ft_strncmp(m->target_path, ".", 1) && stat(m->target_path, &st) == -1)
+//	{
+//		print_cmd_perror("cd", dir, errno);
+//		return (1);
+//	}
 	dprintf(2, "m->target_path = %s\n", m->target_path);
-	if (contains_only_charset(dir, "./"))
-		return (go_into_directory(m, m->target_path));
+//	if (contains_only_charset(dir, "./"))
+//		return (go_into_directory(m, m->target_path));
 	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
 		// if doesn't begin with . and is not dir
 		print_cmd_perror("cd", dir, ENOTDIR);
