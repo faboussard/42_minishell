@@ -347,8 +347,9 @@ void	ft_realpath(t_minishell *m, char *dir)
 	}
 	if (dir && dir[0] == '/')
 		return ;
-	if ((dir_len <= PATH_MAX && (ft_strchr(dir, '.') == NULL))
-		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir)))
+	if ((dir_len <= PATH_MAX
+		&& ((ft_strchr(dir, '.') == NULL) || !ft_strncmp(dir, ".", 2))
+		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir))))
 	//	|| access(m->current_path, X_OK) == 0))
 		{
 //			dprintf(2, "dir = %s\n", dir);
