@@ -128,13 +128,12 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		return (0);
 	}
 	ft_realpath(m, dir);
+	dprintf(2, "GO INTO DIR REVEIVES : m->target_path = %s\n", m->target_path);
 	if (chdir(m->target_path) != 0)
 	{
 		print_cmd_perror("cd", m->target_given, errno);
 		return (1);
 	}
-	dprintf(2, "m->target_path = %s\n", m->target_path);
-	dprintf(2, "dir = %s\n", dir);
 	if (ft_strncmp(dir, ".", 2) == 0)
 		return (0);
 	change_pwd_variable(m, m->target_path);
