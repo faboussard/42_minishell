@@ -43,13 +43,13 @@ void	arg_to_command(t_token_list *list_tokens);
 
 /************************** parser  **************************/
 
-int parse_input(t_minishell *minishell);
+int parse_input(t_minishell *m);
 void	token_requalification(t_token_list *list_tokens);
 void	*ft_free_all_alloc(char **strs_array, size_t start);
 void token_rework(t_minishell *minishell);
 int cmp(int op1, int op2);
-void			create_process_list(t_minishell *minishell);
-t_process_list	*create_process_list_node(t_process_list *new_process_list,
+void create_process_list(t_minishell *m, t_process_list **process_list);
+void create_process_list_node(t_process_list **new_process_list,
 					t_minishell *minishell);
 void			create_envp_table(t_minishell *minishell);
 void create_cmd_table_array(t_process_list *new_process_list, size_t size, t_minishell *minishell);
