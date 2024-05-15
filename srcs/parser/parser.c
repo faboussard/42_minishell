@@ -23,19 +23,22 @@ int tokenize_input(t_minishell *m, char *string)
 	return (1);
 }
 
+int requalify_tokens(t_token_list *list_tokens)
+{
+	if (list_tokens == NULL)
+		return (0);
+	to_infile_or_outfile(list_tokens);
+	arg_to_command(list_tokens);
+	define_builtins(list_tokens);
+	define_operators(list_tokens);
+	return (1);
+}
+
+
 int rework_tokens(t_minishell *m)
 {
 	token_rework(m);
 	return (m->list_tokens != NULL);
-}
-
-
-int requalify_tokens(t_minishell *m)
-{
-	if (m->list_tokens == NULL)
-		return (0);
-	token_requalification(m->list_tokens);
-	return (1);
 }
 
 void create_environment_table(t_minishell *m)
@@ -59,7 +62,7 @@ int parse_input(t_minishell *m)
 		m->status = set_or_get_last_status(2, 0);
 		return (1);
 	}
-	if (!requalify_tokens(m))
+	if (!requalify_tokens(m->list_tokens))
 		return (1);
 	create_environment_table(m);
 	create_process_list(m, &m->pl);

@@ -23,7 +23,7 @@ void	set_environment(t_minishell *m, char **envp)
 	if (m->list_envp == NULL)
 		create_3_env_variables(m);
 	if (m->list_envp == NULL)
-		exit_msg(m, "Malloc failed at main", -1);
+		exit_msg(m, "Malloc failed at main", ENOMEM);
 }
 
 bool	is_one_arg_builtin(t_minishell *m)
@@ -76,7 +76,7 @@ void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 	minishell->user_input = ft_strdup(data_input);
 	if (minishell->user_input == NULL)
 		exit_msg(minishell,
-			"Fatal : malloc failed at minishell_non_interactive", 2);
+			"Fatal : malloc failed at minishell_non_interactive", ENOMEM);
 	set_signals_noninteractive();
 	if (parse_input(minishell) == 0)
 	{
