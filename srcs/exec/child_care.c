@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "signals.h"
 
 /*
 close(m->fd_in); qui était dans first child dégage car cat | cat
@@ -120,8 +121,14 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	int	status;
 
 	status = 0;
-	waitpid(m->pid2, &status, 0);
-	while (waitpid(-1, NULL, 0) && errno != 10)
+	if (waitpid(m->pid2, &(m->status), 0) < 0)
+	{
+		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+		m->status = set_or_get_last_status(131, 0);
+		close_fds(m->pl->fd_in, m->pl->fd_in);
+		return ;
+	}
+	while (waitpid(-1, NULL, 0) && errno != 10) // proteger le waitpid ?
 		;
 	m->status = WEXITSTATUS(status);
 }
