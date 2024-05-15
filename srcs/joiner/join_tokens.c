@@ -28,7 +28,7 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	t1->name = ft_strdup(joined_name);
 	free_safely_str(&joined_name);
 	if (t1->name == NULL)
-		exit_msg(minishell, "Malloc failed at tokenization", 1);
+		exit_msg(minishell, "Malloc failed at tokenization", ENOMEM);
 	del_next_token(&t1);
 	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
 }
@@ -116,7 +116,7 @@ void join_token_name(t_minishell *minishell, char *temp, t_token_list **iterator
 {
 	temp = ft_strjoin((*new_table), (*iterator)->name);
 	if (temp == NULL)
-		exit_msg(minishell, "Memory allocation failed at tokenization", 2);
+		exit_msg(minishell, "Memory allocation failed at tokenization", ENOMEM);
 	free_safely_str(&(*new_table));
 	(*new_table) = temp;
 	(*iterator) = (*iterator)->next;
@@ -140,7 +140,7 @@ char *join_all(t_minishell *minishell, t_token_list **list)
 	}
 	new_table = ft_calloc(total_length + 1, sizeof(char));
 	if (new_table == NULL)
-		exit_msg(minishell, "Memory allocation failed for command table array", 2);
+		exit_msg(minishell, "Memory allocation failed for command table array", ENOMEM);
 	iterator = *list;
 	while (iterator)
 		join_token_name(minishell, temp, &iterator, &new_table);

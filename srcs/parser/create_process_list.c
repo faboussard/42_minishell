@@ -14,22 +14,32 @@
 #include "utils.h"
 #include "parser.h"
 
+void define_file_token(t_token_list **in_files_list, t_minishell *minishell, const t_token_list *iterator)
+{
+	t_token_list *new_token;
+
+	new_token = ft_calloc(1, sizeof(t_token_list));
+	if (new_token == NULL)
+		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
+	new_token->name = ft_strdup(iterator->name);
+	new_token->next = NULL;
+	new_token->e_type = iterator->e_type;
+	new_token->e_operator = iterator->e_operator;
+	new_token->is_quoted_delimiter = iterator->is_quoted_delimiter;
+	add_token_to_list(in_files_list, new_token);
+}
+
 void create_in_files_list(t_token_list **in_files_list, t_minishell *minishell)
 {
 	t_token_list	*iterator;
 	t_token_list 	*next;
 
 	iterator = minishell->list_tokens;
-	*in_files_list == NULL;
 	while (iterator != NULL && iterator->e_operator != PIPE)
 	{
 		next = iterator->next;
 		if (iterator->e_type == IN_FILE || iterator->e_type == DELIMITER)
-		{
-			create_token(minishell, iterator->name, in_files_list);
-			(*in_files_list)->e_type = iterator->e_type;
-			(*in_files_list)->is_quoted_delimiter = iterator->is_quoted_delimiter;
-		}
+			define_file_token(in_files_list, minishell, iterator);
 		iterator = next;
 	}
 	if (*in_files_list == NULL)
@@ -42,16 +52,11 @@ void create_out_files_list(t_token_list **out_files_list, t_minishell *minishell
 	t_token_list 	*next;
 
 	iterator = minishell->list_tokens;
-	*out_files_list == NULL;
 	while (iterator != NULL && iterator->e_operator != PIPE)
 	{
 		next = iterator->next;
 		if (iterator->e_type == OUT_FILE || iterator->e_type == APPEND_FILE)
-		{
-			create_token(minishell, iterator->name, out_files_list);
-			(*out_files_list)->e_type = iterator->e_type;
-			(*out_files_list)->is_quoted_delimiter = iterator->is_quoted_delimiter;
-		}
+			define_file_token(out_files_list, minishell, iterator);
 		iterator = next;
 	}
 	if (*out_files_list == NULL)

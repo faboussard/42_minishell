@@ -36,7 +36,7 @@ void change_token_name(t_minishell *minishell, t_token_list **list, char *new_na
 
 	new_list_name = ft_strdup(new_name);
 	if (new_list_name == NULL)
-		exit_msg(minishell, "Malloc failed at join between spaces", 2);
+		exit_msg(minishell, "Malloc failed at join between spaces", ENOMEM);
 	free_safely_str(&((*list)->name));
 	(*list)->name = new_list_name;
 	(*list)->e_type = COMMAND;

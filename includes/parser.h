@@ -44,7 +44,7 @@ void	arg_to_command(t_token_list *list_tokens);
 /************************** parser  **************************/
 
 int parse_input(t_minishell *m);
-void	token_requalification(t_token_list *list_tokens);
+int token_requalification(t_token_list *list_tokens);
 void	*ft_free_all_alloc(char **strs_array, size_t start);
 void token_rework(t_minishell *minishell);
 int cmp(int op1, int op2);
