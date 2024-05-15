@@ -12,6 +12,8 @@
 
 #include "builtins.h"
 #include "exec.h"
+#include "signal.h"
+#include "signals.h"
 
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
@@ -138,7 +140,13 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	}
 	else
 	{
-		waitpid(m->pid2, &(m->status), 0);
+		if (waitpid(m->pid2, &(m->status), 0) < 0)
+		{
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+			m->status = set_or_get_last_status(131, 0);
+			close_fds(pl->fd_in, pl->fd_out);
+			return ;
+		}
 		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
@@ -156,5 +164,4 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
-	ft_free_pl_paths(m, m->pl);
 }

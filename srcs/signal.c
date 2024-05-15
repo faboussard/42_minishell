@@ -32,41 +32,36 @@ int	set_or_get_last_status(int status, int flag)
 void	sigint_handler(int signo)
 {
 	(void)signo;
-	set_or_get_last_status(130, 0);
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	set_or_get_last_status(130, 0);
 }
 
-//void sigquit_handler(int signo)
-//{
-//	(void)signo;
-//}
-
-void	set_signals_interactive()
+int set_signals_interactive()
 {
 	struct sigaction	action;
 
-	action.sa_handler = (__sighandler_t) sigint_handler;
+	action.sa_handler = &sigint_handler;
 	sigemptyset(&action.sa_mask);
-	action.sa_flags = 0;
+	action.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
-		return ;
-
+		return (-1);
 	}
-	action.sa_handler = SIG_IGN; // Ignorer Ctrl
+	action.sa_handler = SIG_IGN;
     if (sigaction(SIGQUIT, &action, NULL) < 0)
 	{
-		perror("sigaction() failed");
-		return ;
+		print_error("sigaction() failed");
+		return (-1);
 	}
 	signal(SIGTSTP, SIG_IGN);
+	return (0);
 }
 
-void	set_signals_noninteractive(void)
+int set_signals_noninteractive(void)
 {
 	struct sigaction	action;
 
@@ -76,12 +71,13 @@ void	set_signals_noninteractive(void)
 	if (sigaction(SIGINT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
-		return ;
+		return (-1);
 	}
 	sigaction(SIGQUIT, &action, NULL);
 	if (sigaction(SIGQUIT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
-		return ;
+		return (-1);
 	}
+	return (0);
 }

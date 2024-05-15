@@ -89,7 +89,8 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_l
 		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
 	else
 	{
-		waitpid(here_doc_pid, &(m->status), 0);
+		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
+			exit_msg(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
 }

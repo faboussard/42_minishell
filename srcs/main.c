@@ -45,13 +45,15 @@ void	minishell_interactive(t_minishell *m)
 {
 	while (1)
 	{
-		set_signals_interactive();
+		if (set_signals_interactive() == -1)
+			m->status = set_or_get_last_status(-1, -1);
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
 			break ;
 		if (m->user_input[0] == 0)
 			continue ;
-		set_signals_noninteractive();
+		if (set_signals_noninteractive() == -1)
+			m->status = set_or_get_last_status(-1, -1);
 		add_history(m->user_input);
 		m->status = set_or_get_last_status(-1, -1);
 		if (parse_input(m) == 0)
@@ -71,18 +73,19 @@ void	minishell_interactive(t_minishell *m)
 //if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
 //	return ;
 // --> La list_envp doit au moins contenir _= /usr/bin/env
-void	minishell_non_interactive(t_minishell *minishell, char *data_input)
+void	minishell_non_interactive(t_minishell *m, char *data_input)
 {
-	minishell->user_input = ft_strdup(data_input);
-	if (minishell->user_input == NULL)
-		exit_msg(minishell,
-			"Fatal : malloc failed at minishell_non_interactive", 2);
-	set_signals_noninteractive();
-	if (parse_input(minishell) == 0)
+	m->user_input = ft_strdup(data_input);
+	if (m->user_input == NULL)
+		exit_msg(m,
+				 "Fatal : malloc failed at minishell_non_interactive", 2);
+	if (set_signals_noninteractive() == -1)
+		m->status = set_or_get_last_status(-1, -1);
+	if (parse_input(m) == 0)
 	{
-		if (minishell->pl == NULL)
+		if (m->pl == NULL)
 			return ;
-		execute_cmds(minishell, minishell->total_commands);
+		execute_cmds(m, m->total_commands);
 	}
 }
 
