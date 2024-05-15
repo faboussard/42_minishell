@@ -125,10 +125,9 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	{
 		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 		m->status = set_or_get_last_status(131, 0);
-		close_fds(m->pl->fd_in, m->pl->fd_in);
 		return ;
 	}
-	while (waitpid(-1, NULL, 0) && errno != 10) // proteger le waitpid ?
+	while (waitpid(-1, NULL, 0) && errno != 10)
 		;
 	m->status = WEXITSTATUS(status);
 }
