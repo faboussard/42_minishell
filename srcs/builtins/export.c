@@ -39,13 +39,13 @@ char *join_new_value_env_with_old(t_minishell *m, char **split, t_envp_list **en
 	if (!tmp)
 	{
 		ft_free_tab(&split);
-		exit_msg(m, "Malloc failed at get_env_var_index", 2);
+		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	}
 	new_value = ft_strjoin(tmp, split[1]);
 	if (!new_value)
 	{
 		ft_free_tab(&split);
-		exit_msg(m, "Malloc failed at get_env_var_index", 2);
+		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	}
 	free_safely_str(&tmp);
 	return (new_value);
@@ -67,7 +67,7 @@ void find_and_join_value(t_minishell *m, char **split, const char *tmp, t_envp_l
 				if (!(*cpy)->value)
 				{
 					ft_free_tab(&split);
-					exit_msg(m, "Malloc failed at get_env_var_index", 2);
+					exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 				}
 			}
 			else
@@ -91,7 +91,7 @@ char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split)
 	if (!tmp)
 	{
 		ft_free_tab(&split);
-		exit_msg(m, "Malloc failed at get_env_var_index", 2);
+		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	}
 	find_and_join_value(m, split, tmp, &cpy);
 	remove_and_add_envp(m, split);

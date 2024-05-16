@@ -22,13 +22,13 @@ void create_token(t_minishell *minishell, char *string, t_token_list **list)
 	if (new_token == NULL)
 	{
 		free_safely_str(&string);
-		exit_msg(minishell, "Malloc failed at create_token", 2);
+		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
 	}
 	if (define_token(new_token, string) == 0)
 	{
 		free_safely_str(&string);
 		free(new_token);
-		exit_msg(minishell, "Malloc failed at create_token", 2);
+		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
 	}
 	add_token_to_list(list, new_token);
 }
@@ -54,7 +54,7 @@ void transform_to_token(t_minishell *minishell, char *string, t_token_list **lis
 	{
 		temp = ft_calloc(1, len);
 		if (temp == NULL)
-			exit_msg(minishell, "Malloc failed at transform_to_token", 2);
+			exit_msg(minishell, "Malloc failed at transform_to_token", ENOMEM);
 		if ((ft_isspace(string[i]) || !ft_isalnum(string[i])) && string[i] != '_')
 		{
 			temp[0] = string[i];

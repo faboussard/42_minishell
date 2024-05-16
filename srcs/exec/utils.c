@@ -25,11 +25,9 @@ void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 void	init_before_next_prompt(t_minishell *m)
 {
 	m->total_commands = 1;
-	clear_path_char(m->target_path);
 	free_safely_str(&(m->user_input));
 	ft_free_process_list(&(m->pl));
 	ft_lstclear_token(&m->list_tokens);
-	ft_free_tab(&(m->envp_table));
 }
 
 void	ft_init_pl(t_minishell *m, t_process_list *pl)
@@ -44,11 +42,23 @@ void	ft_init_pl(t_minishell *m, t_process_list *pl)
 	pl->tab_paths = NULL;
 }
 
+//void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
+//{
+//	free_safely_str(&(minishell->paths));
+//	free_safely_str(&(pl->good_path));
+//	ft_free_tab(&(pl->tab_paths));
+//	ft_free_tab(&(pl->cmd_table));
+//	if (pl->in_files_list)
+//		ft_lstclear_token(&pl->in_files_list);
+//	if (pl->out_files_list)
+//		ft_lstclear_token(&pl->out_files_list);
+//	pl = NULL;
+//}
+
 void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
 {
 	free_safely_str(&(minishell->paths));
 	free_safely_str(&(pl->good_path));
 	ft_free_tab(&(pl->tab_paths));
 	ft_free_tab(&(pl->cmd_table));
-	ft_free_tab(&(minishell->envp_table));
 }

@@ -27,6 +27,7 @@ void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 	}
 	else
 		*list_tokens = new_token;
+	new_token->next = NULL;
 }
 
 void ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref, int (*cmp)())
