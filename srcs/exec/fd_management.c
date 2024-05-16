@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/16 21:19:52 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/16 21:57:14 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 		ft_putendl_fd("Couldn't open /dev/null/", 2);
 }
 
-int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
+int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_use)
 {
 	enum e_token_type	infile_type;
 

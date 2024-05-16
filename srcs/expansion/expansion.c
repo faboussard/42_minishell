@@ -28,7 +28,7 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 			{
 				string = ft_strdup(iterator->value);
 				if (string == NULL)
-					exit_msg(minishell, "Malloc failed at identify_envp_string", -1);
+					exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 			}
 			return (string);
 		}

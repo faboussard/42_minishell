@@ -20,7 +20,7 @@ char *expand_sign(char *string, char *temp)
 		string++;
 	string = ft_strjoin(temp, string);
 	if (string == NULL)
-		exit_msg(NULL, "Malloc failed at expand_sign", 2);
+		exit_msg(NULL, "Malloc failed at expand_sign", ENOMEM);
 	return (string);
 }
 
@@ -65,5 +65,5 @@ void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 	free_safely_str(&(iterator->name));
 	iterator->name = ft_itoa(minishell->status);
 	if (iterator->name == NULL)
-		exit_msg(minishell, "Malloc failed at expander", -1);
+		exit_msg(minishell, "Malloc failed at expander", ENOMEM);
 }

@@ -23,7 +23,7 @@ void	set_environment(t_minishell *m, char **envp)
 	if (m->list_envp == NULL)
 		create_3_env_variables(m);
 	if (m->list_envp == NULL)
-		exit_msg(m, "Malloc failed at main", -1);
+		exit_msg(m, "Malloc failed at main", ENOMEM);
 }
 
 bool	is_one_arg_builtin(t_minishell *m)
@@ -45,15 +45,13 @@ void	minishell_interactive(t_minishell *m)
 {
 	while (1)
 	{
-		if (set_signals_interactive() == -1)
-			m->status = set_or_get_last_status(-1, -1);
+		set_signals_interactive();
+		set_signals_noninteractive();
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
 			break ;
 		if (m->user_input[0] == 0)
 			continue ;
-		if (set_signals_noninteractive() == -1)
-			m->status = set_or_get_last_status(-1, -1);
 		add_history(m->user_input);
 		m->status = set_or_get_last_status(-1, -1);
 		if (parse_input(m) == 0)
@@ -73,19 +71,18 @@ void	minishell_interactive(t_minishell *m)
 //if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
 //	return ;
 // --> La list_envp doit au moins contenir _= /usr/bin/env
-void	minishell_non_interactive(t_minishell *m, char *data_input)
+void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
-	m->user_input = ft_strdup(data_input);
-	if (m->user_input == NULL)
-		exit_msg(m,
-				 "Fatal : malloc failed at minishell_non_interactive", 2);
-	if (set_signals_noninteractive() == -1)
-		m->status = set_or_get_last_status(-1, -1);
-	if (parse_input(m) == 0)
+	minishell->user_input = ft_strdup(data_input);
+	if (minishell->user_input == NULL)
+		exit_msg(minishell,
+			"Fatal : malloc failed at minishell_non_interactive", ENOMEM);
+	set_signals_noninteractive();
+	if (parse_input(minishell) == 0)
 	{
-		if (m->pl == NULL)
+		if (minishell->pl == NULL)
 			return ;
-		execute_cmds(m, m->total_commands);
+		execute_cmds(minishell, minishell->total_commands);
 	}
 }
 
@@ -156,6 +153,7 @@ int	main(int ac, char **av, char **envp)
 	t_minishell	minishell;
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
+	minishell.envp_table = envp;
 	minishell.total_commands = 1;
 	set_minishell_paths(&minishell);
 	set_environment(&minishell, envp);
