@@ -46,12 +46,12 @@ void	minishell_interactive(t_minishell *m)
 	while (1)
 	{
 		set_signals_interactive();
+		set_signals_noninteractive();
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
 			break ;
 		if (m->user_input[0] == 0)
 			continue ;
-		set_signals_noninteractive();
 		add_history(m->user_input);
 		m->status = set_or_get_last_status(-1, -1);
 		if (parse_input(m) == 0)
@@ -153,6 +153,7 @@ int	main(int ac, char **av, char **envp)
 	t_minishell	minishell;
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
+	minishell.envp_table = envp;
 	minishell.total_commands = 1;
 	set_minishell_paths(&minishell);
 	set_environment(&minishell, envp);
