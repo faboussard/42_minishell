@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "signals.h"
 
 /*
 close(m->fd_in); qui était dans first child dégage car cat | cat
@@ -114,41 +115,13 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 	else
 		close_and_redirect_pipe_to_stdin(m, pl);
 }
-#include "signal.h"
+
 static void	wait_children_and_give_exit_status(t_minishell *m)
 {
-	int	status;
-
-	status = 0;
-	waitpid(m->pid2, &status, 0);
-	if (WIFEXITED(status))
-		m->status = WEXITSTATUS(status);
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == 3)
-		{
-			m->status = WTERMSIG(status) + 128;
-			set_or_get_last_status(m->status, 0);
-			ft_putendl_fd("^\\Quit (core dumped)", 2);
-		}
-		else
-		{
-			m->status = WTERMSIG(status) + 128;
-			set_or_get_last_status(m->status, 0);
-		}
-	}
-	if (WIFSTOPPED(status))
-		m->status = WSTOPSIG(status) + 128;
+	waitpid(m->pid2, &(m->status), 0);
 	while (waitpid(-1, NULL, 0) && errno != 10)
 		;
-	set_or_get_last_status(m->status, 0);
-//
-//	if (signal(SIGQUIT, sigint_handler) == SIG_ERR)
-//	{
-//		m->status = 131;
-//		set_or_get_last_status(131, 0);
-//		ft_putendl_fd("^\\Quit (core dumped)", 2);
-//	}
+	manage_interrupted_signal(m);
 }
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
@@ -178,8 +151,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 //		return ;
 // --> pas besoin de safe_pipe dans le dernier enfant
 /*
- *         if (pl->in_files_list->e_type== DELIMITER)
-			here_doc(m, pl->in_files_list->name, STDIN_FILENO, &(m->tmp_in));
+ *         if (pl->in_files_token->e_type== DELIMITER)
+			here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->tmp_in));
  * */
 
 /*
@@ -187,13 +160,13 @@ void	handle_out(t_minishell *m, t_process_list *pl, int stdout, int *fd_out)
 {
 	enum e_token_type	outfile_token;
 
-	outfile_token = pl->out_files_list->e_type;
-	if (open_fd_outfile(m, pl, pl->out_files_list->name))
+	outfile_token = pl->out_files_token->e_type;
+	if (open_fd_outfile(m, pl, pl->out_files_token->name))
 			return ;
 		m_safe_dup2(m, *fd_out, stdout);
 }
-if (pl->in_files_list->e_type== DELIMITER)
-		here_doc(m, pl->in_files_list->name, STDIN_FILENO, &(m->fd_in));
-	if (open_fd_infile(m, pl->in_files_list))
+if (pl->in_files_token->e_type== DELIMITER)
+		here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->fd_in));
+	if (open_fd_infile(m, pl->in_files_token))
 		return ;
 */

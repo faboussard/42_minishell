@@ -12,6 +12,8 @@
 
 #include "builtins.h"
 #include "exec.h"
+#include "signal.h"
+#include "signals.h"
 
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
@@ -70,16 +72,10 @@ static int	check_all_infiles(t_minishell *m, t_process_list *pl, struct s_token 
 	{
 		if (open_fd_infile(m, pl, &fd_in))
 			return (1);
-		close(fd_in);
+		close (fd_in);
 	}
 	else
-	{
-		if (open_fd_infile(m, pl, &(pl->fd_in)))
-			return (1);
-		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-		close(pl->fd_in);
-	}
-		//return (open_fd_infile(m, pl, &(pl->fd_in)));
+		return (open_fd_infile(m, pl, &(pl->fd_in)));
 	return (check_all_infiles(m, pl, infile->next));
 }
 static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
@@ -101,17 +97,27 @@ static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
 
 static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
-	if (pl->in_files_list != NULL)
+	enum e_token_type	infile_token;
+	enum e_token_type	outfile_token;
+
+	infile_token = pl->in_files_token->e_type;
+	outfile_token = pl->out_files_token->e_type;
+	if (infile_token == DELIMITER)
+		here_doc(m, pl->in_files_token, &(pl->fd_in), pl);
+	if (infile_token == IN_FILE || infile_token == DELIMITER)
 	{
-		if (pl->in_files_list->e_type == DELIMITER)
-			here_doc(m, pl->in_files_list, &(pl->fd_in), pl);
-		if (check_all_infiles(m, pl, pl->in_files_list) == 1)
+		if (open_fd_infile(m, pl, &(pl->fd_in)))
 			return (1);
+		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
+		close(pl->fd_in);
 	}
-	if (pl->out_files_list != NULL)
+	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
 	{
-		open_fd_outfile(m, pl, pl->out_files_list->name);
-		create_all_outfiles(m, pl->out_files_list->next);
+		if (check_all_infiles(m, pl, pl->in_files_token) == 1)
+			return (1);
+		open_fd_outfile(m, pl, pl->out_files_token->name);
+		create_all_outfiles(m, pl->out_files_token->next);
+//		if (open_fd_outfile(m, pl, pl->out_files_token->name))
 		if (pl->fd_out < 0)
 			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
@@ -120,12 +126,21 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	return (0);
 }
 
+void manage_interrupted_signal(t_minishell *m)
+{
+	if (WIFSIGNALED(m->status))
+		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
+	else if (WIFEXITED(m->status))
+		m->status = WEXITSTATUS(m->status);
+	else
+		m->status = set_or_get_last_status(m->status, 0);
+}
+
+
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	if (is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 		return ;
-//	signal(SIGINT, sigint_handler);
-//	signal(SIGQUIT, sigint_handler);
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
@@ -137,25 +152,14 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-		if (WIFSIGNALED(m->status))
-		{
-			dprintf(2, "WIFSIGNALED status: %d\n", WTERMSIG(m->status));
-			m->status = set_or_get_last_status(WTERMSIG(m->status) + 128, 0);
-		}
-		else if (WIFEXITED(m->status))
-		{
-			dprintf(2, "WIFEXITED status: %d\n", WEXITSTATUS(m->status) + 128);
-			m->status = set_or_get_last_status(WEXITSTATUS(m->status) + 128, 0);
-		}
-		if (WIFSTOPPED(m->status))
-			m->status = set_or_get_last_status(WSTOPSIG(m->status) + 128, 0);
-//		m->status = set_or_get_last_status(m->status, 0);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
+	manage_interrupted_signal(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
+	signal_interrupt();
 	if (nb_cmds < 1)
 		return ;
 	set_paths(m, m->envp_table);
@@ -165,22 +169,5 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->pl);
 	else
 		exec_several_cmds(m, m->pl);
-//	if (WIFEXITED(m->status))
-//		m->status = WEXITSTATUS(m->status);
-	if (WIFSIGNALED(m->status))
-	{
-		if (WTERMSIG(m->status) == 3)
-		{
-			m->status = WTERMSIG(m->status) + 128;
-			set_or_get_last_status(m->status, 0);
-			ft_putendl_fd("^\\Quit (core dumped)", 2);
-		}
-		else
-		{
-			m->status = WTERMSIG(m->status) + 128;
-			set_or_get_last_status(m->status, 0);
-		}
-	}
 	m->status = set_or_get_last_status(m->status, 0);
-	ft_free_pl_paths(m, m->pl);
 }
