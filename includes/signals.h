@@ -18,6 +18,7 @@
 int set_signals_interactive();
 void	signal_print_newline(int signal);
 int set_signals_noninteractive(void);
-int manage_signals_in_execution();
+void manage_interrupted_signal(t_minishell *m);
+int signal_interrupt();
 
 #endif // SIGNALS_H
