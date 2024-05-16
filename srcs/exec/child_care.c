@@ -118,18 +118,10 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 
 static void	wait_children_and_give_exit_status(t_minishell *m)
 {
-	int	status;
-
-	status = 0;
-	if (waitpid(m->pid2, &(m->status), 0) < 0)
-	{
-		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-		m->status = set_or_get_last_status(131, 0);
-		return ;
-	}
+	waitpid(m->pid2, &(m->status), 0);
 	while (waitpid(-1, NULL, 0) && errno != 10)
 		;
-	m->status = WEXITSTATUS(status);
+	manage_interrupted_signal(m);
 }
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
