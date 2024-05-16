@@ -18,7 +18,7 @@ void	print_name(t_minishell *m, char *name)
 
 	thename = ft_strjoin("minishell: ", name);
 	if (!thename)
-		exit_msg_minishell(m, "Malloc error", -1);
+		exit_msg_minishell(m, "Malloc error", ENOMEM);
 	perror(thename);
 	free_safely_str(&thename);
 }
@@ -31,6 +31,6 @@ void	print_name_and_give_status(t_minishell *m, char *name, int err)
 
 void	malloc_error_no_exit(t_minishell *m)
 {
-	ft_putstr_fd("Malloc error", 2);
+	ft_putstr_fd("Malloc error", ENOMEM);
 	m->status = -1;
 }

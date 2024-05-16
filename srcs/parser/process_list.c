@@ -14,9 +14,19 @@
 #include "utils.h"
 #include "parser.h"
 
-t_token_list *iterate_until_next_pipe(t_token_list **temp);
 
-t_token_list *go_to_next_pipe(t_token_list **temp);
+void go_to_next_pipe(t_token_list **list)
+{
+	if (*list != NULL)
+		*list = (*list)->next;
+}
+
+void iterate_until_next_pipe(t_token_list **list)
+{
+	while (*list != NULL && (*list)->e_operator != PIPE)
+		*list = (*list)->next;
+}
+
 
 t_process_list *ft_lstlast_process(t_process_list *lst)
 {
@@ -57,22 +67,8 @@ void create_process_list(t_minishell *m, t_process_list **pl)
 			exit_msg(m, "malloc failed at create_process_list", ENOMEM);
 		create_process_list_node(new_pl, m);
 		add_process_to_list(pl, new_pl);
-		m->list_tokens = iterate_until_next_pipe(&m->list_tokens);
-		m->list_tokens = go_to_next_pipe(&m->list_tokens);
+		iterate_until_next_pipe(&m->list_tokens);
+		go_to_next_pipe(&m->list_tokens);
 	}
 	m->list_tokens = temp;
-}
-
-t_token_list *go_to_next_pipe(t_token_list **temp)
-{
-	if (*temp != NULL)
-		*temp = (*temp)->next;
-	return (*temp);
-}
-
-t_token_list *iterate_until_next_pipe(t_token_list **temp)
-{
-	while (*temp != NULL && (*temp)->e_operator != PIPE)
-		*temp = (*temp)->next;
-	return (*temp);
 }
