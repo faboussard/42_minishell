@@ -27,59 +27,54 @@ void	free_token(t_token_list *token)
 
 void	ft_lstclear_envp(t_envp_list **lst)
 {
-	t_envp_list	*current;
 	t_envp_list	*next;
 
-	current = *lst;
-	while (current != NULL)
+	while ((*lst) != NULL)
 	{
-		next = current->next;
-		if (current->target != NULL)
-			free_safely_str(&(current->target));
-		if (current->value != NULL)
-			free_safely_str(&(current->value));
-		free(current);
-		current = next;
+		next = (*lst)->next;
+		if ((*lst)->target != NULL)
+			free_safely_str(&((*lst)->target));
+		if ((*lst)->value != NULL)
+			free_safely_str(&((*lst)->value));
+		free((*lst));
+		(*lst) = next;
 	}
 	*lst = NULL;
 }
 
 void	ft_lstclear_token(t_token_list **lst)
 {
-	t_token_list	*current;
 	t_token_list	*next;
 
-	current = *lst;
-	while (current != NULL)
+	while (*lst != NULL)
 	{
-		next = current->next;
-		free_safely_str(&current->name);
-		free(current);
-		current = next;
+		next = (*lst)->next;
+		free_safely_str(&(*lst)->name);
+		free((*lst));
+		(*lst) = next;
 	}
 	*lst = NULL;
 }
 
 void	ft_free_process_list(t_process_list **process_list)
 {
-	t_process_list	*current;
 	t_process_list	*next;
 
 	if (*process_list == NULL)
 		return ;
-	current = *process_list;
-	while (current != NULL)
+	while (*process_list != NULL)
 	{
-		next = current->next;
-		if (current->cmd_table)
-			ft_free_tab(&(current->cmd_table));
-		if (current->in_files_list)
-			ft_lstclear_token(&current->in_files_list);
-		if (current->out_files_list)
-			ft_lstclear_token(&current->out_files_list);
-		close_fds(current->fd_in, current->fd_out);
-		free(current);
-		current = next;
+		next = (*process_list)->next;
+		if ((*process_list)->cmd_table)
+			ft_free_tab(&((*process_list)->cmd_table));
+		if ((*process_list)->in_files_list)
+			ft_lstclear_token(&(*process_list)->in_files_list);
+		if ((*process_list)->out_files_list)
+			ft_lstclear_token(&(*process_list)->out_files_list);
+		close_fds((*process_list)->fd_in, (*process_list)->fd_out);
+		free((*process_list));
+		(*process_list) = NULL;
+		*process_list = next;
 	}
 	process_list = NULL;
 }
