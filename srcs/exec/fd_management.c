@@ -78,7 +78,7 @@ void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 		if (open_fd_infile(m, pl, pl->in_files_list->name, fd_in))
 			return;
 	}
-	open_fd_outfile(m, pl, pl->out_files_list->name);
+	//open_fd_outfile(m, pl, pl->out_files_list->name);
 }
 
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)

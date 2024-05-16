@@ -58,7 +58,6 @@ void	ft_lstclear_token(t_token_list **lst)
 		current = next;
 	}
 	*lst = NULL;
-	lst = NULL;
 }
 
 void	ft_free_process_list(t_process_list **process_list)
@@ -66,6 +65,8 @@ void	ft_free_process_list(t_process_list **process_list)
 	t_process_list	*current;
 	t_process_list	*next;
 
+	if (*process_list == NULL)
+		return ;
 	current = *process_list;
 	while (current != NULL)
 	{
@@ -88,8 +89,6 @@ void	free_minishell(t_minishell *minishell)
 	free_strs(minishell);
 	if (minishell->list_envp != NULL)
 		ft_lstclear_envp(&minishell->list_envp);
-	if (minishell->envp_table)
-		ft_free_tab(&(minishell->envp_table));
 	if (minishell->pl)
 		ft_free_process_list(&minishell->pl);
 	if (minishell->list_tokens)

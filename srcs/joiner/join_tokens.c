@@ -24,8 +24,12 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 	t1 = (*list);
 	t2 = (*list)->next;
 	joined_name = ft_strjoin(t1->name, t2->name);
+	if (joined_name == NULL)
+		exit_msg(minishell, "Malloc failed at tokenization", ENOMEM);
 	free_safely_str(&(t1->name));
 	t1->name = ft_strdup(joined_name);
+	if (t1->name == NULL)
+		exit_msg(minishell, "Malloc failed at tokenization", ENOMEM);
 	free_safely_str(&joined_name);
 	if (t1->name == NULL)
 		exit_msg(minishell, "Malloc failed at tokenization", ENOMEM);

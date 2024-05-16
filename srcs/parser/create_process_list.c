@@ -22,6 +22,8 @@ void define_file_token(t_token_list **in_files_list, t_minishell *minishell, con
 	if (new_token == NULL)
 		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
 	new_token->name = ft_strdup(iterator->name);
+	if (new_token->name == NULL)
+		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
 	new_token->next = NULL;
 	new_token->e_type = iterator->e_type;
 	new_token->e_operator = iterator->e_operator;
@@ -42,8 +44,6 @@ void create_in_files_list(t_token_list **in_files_list, t_minishell *minishell)
 			define_file_token(in_files_list, minishell, iterator);
 		iterator = next;
 	}
-	if (*in_files_list == NULL)
-		in_files_list = NULL;
 }
 
 void create_out_files_list(t_token_list **out_files_list, t_minishell *minishell)
@@ -59,8 +59,6 @@ void create_out_files_list(t_token_list **out_files_list, t_minishell *minishell
 			define_file_token(out_files_list, minishell, iterator);
 		iterator = next;
 	}
-	if (*out_files_list == NULL)
-		out_files_list = NULL;
 }
 
 void create_process_list_node(t_process_list *new_pl, t_minishell *m)
@@ -69,7 +67,7 @@ void create_process_list_node(t_process_list *new_pl, t_minishell *m)
 
 	nbr_cmds_letters_in_pipe = count_letters_until_pipe(m->list_tokens);
 	create_cmd_table_array(new_pl, nbr_cmds_letters_in_pipe, m);
-	create_in_files_list(&((new_pl)->in_files_list), m);
-	create_out_files_list(&((new_pl)->out_files_list), m);
+	create_in_files_list(&(new_pl->in_files_list), m);
+	create_out_files_list(&(new_pl->out_files_list), m);
 }
 
