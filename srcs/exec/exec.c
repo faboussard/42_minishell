@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/06 16:26:44 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/16 21:17:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,17 @@
 #include "signal.h"
 #include "signals.h"
 
+static int	check_all_infiles(t_minishell *m, t_process_list *pl);
+
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
+//	if (m->pl->out_files_list != NULL)
+//	{
+//		m_safe_dup2(m, m->pl->fd_out, STDOUT_FILENO);
+//		close(m->pl->fd_out);
+//	}
+	if (!cmd || !cmd_table)
+		return (0);
 	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
 		m->status = ft_echo(cmd_table);
 	else if (cmd && ft_strncmp(cmd, "cd", 3) == 0)
@@ -62,71 +71,77 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	exit(m->status);
 }
 
-static int	check_all_infiles(t_minishell *m, t_process_list *pl, struct s_token *infile)
+static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 {
-	int	fd_in;
+	t_process_list	*tmp;
+	int				fd_in;
 
-	if (infile == NULL)
+	if (pl->in_files_list == NULL)
 		return (0);
-	if (infile->next != NULL)
+	tmp = pl;
+	while (tmp->in_files_list && tmp->in_files_list->next)
 	{
-		if (open_fd_infile(m, pl, &fd_in))
+		if (tmp->in_files_list->e_type == DELIMITER)
+			here_doc(m, tmp->in_files_list, &fd_in, tmp);
+		if (open_fd_infile(m, tmp, &fd_in) == 0)
+			close(fd_in);
+		tmp->in_files_list = tmp->in_files_list->next;
+	}
+	if (tmp->in_files_list)
+	{
+		if (tmp->in_files_list->e_type == DELIMITER)
+			here_doc(m, tmp->in_files_list, &(pl->fd_in), tmp);
+		if (open_fd_infile(m, tmp, &(pl->fd_in)))
 			return (1);
-		close (fd_in);
 	}
-	else
-		return (open_fd_infile(m, pl, &(pl->fd_in)));
-	return (check_all_infiles(m, pl, infile->next));
+	return (0);
 }
-static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
-{
-	int	fd_out;
 
-	if (outfile == NULL)
-		return ;
-	if (outfile->e_type == OUT_FILE)
+static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
+{
+	t_process_list	*tmp;
+	int				fd_out;
+
+	if (pl->out_files_list == NULL)
+		return (0);
+	tmp = pl;
+	while (tmp->out_files_list && tmp->out_files_list->next)
 	{
-		fd_out = open(outfile->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		fd_out = open(tmp->out_files_list->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out < 0)
-			print_name_and_give_status(m, outfile->name, 1);
-		else
-			close(fd_out);
+		{
+			print_name_and_give_status(m, tmp->out_files_list->name, 1);
+			return (1);
+		}
+		close(fd_out);
+		tmp->out_files_list = tmp->out_files_list->next;
 	}
-	create_all_outfiles(m, outfile->next);
+	if (tmp->out_files_list)
+	{
+		if (open_fd_infile(m, tmp, &(pl->fd_in)) == 1)
+			return (1);
+//		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+//		close(pl->fd_out);
+	}
+	return (0);
 }
 
 static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
-	enum e_token_type	infile_token;
-	enum e_token_type	outfile_token;
-
-	infile_token = pl->in_files_token->e_type;
-	outfile_token = pl->out_files_token->e_type;
-	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, &(pl->fd_in), pl);
-	if (infile_token == IN_FILE || infile_token == DELIMITER)
+	if (pl->in_files_list != NULL)
 	{
-		if (open_fd_infile(m, pl, &(pl->fd_in)))
-			return (1);
 		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
 		close(pl->fd_in);
 	}
-	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+	if (pl->out_files_list != NULL)
 	{
-		if (check_all_infiles(m, pl, pl->in_files_token) == 1)
-			return (1);
-		open_fd_outfile(m, pl, pl->out_files_token->name);
-		create_all_outfiles(m, pl->out_files_token->next);
-//		if (open_fd_outfile(m, pl, pl->out_files_token->name))
-		if (pl->fd_out < 0)
-			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 		close(pl->fd_out);
 	}
 	return (0);
 }
 
-void manage_interrupted_signal(t_minishell *m)
+void	manage_interrupted_signal(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
 		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
@@ -136,25 +151,28 @@ void manage_interrupted_signal(t_minishell *m)
 		m->status = set_or_get_last_status(m->status, 0);
 }
 
-
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
+	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
+	{
+		m->status = WEXITSTATUS(1);
+		return ;
+	}
 	if (is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
-		if (handle_infile_outfile(m, pl) == 0)
-			my_execve(m, pl);
-		else
-			exit(1);
+		handle_infile_outfile(m, pl);
+		my_execve(m, pl);
 	}
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
+		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	manage_interrupted_signal(m);
+//	manage_interrupted_signal(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
@@ -169,5 +187,20 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->pl);
 	else
 		exec_several_cmds(m, m->pl);
+	manage_interrupted_signal(m);
 	m->status = set_or_get_last_status(m->status, 0);
+	ft_free_pl_paths(m, m->pl);
 }
+//void	execute_cmds(t_minishell *m, size_t nb_cmds)
+//{
+//	if (nb_cmds < 1)
+//		return ;
+//	set_paths(m, m->envp_table);
+//	if (m->paths == NULL)
+//		return ;
+//	if (nb_cmds == 1)
+//		exec_one_cmd(m, m->pl);
+//	else
+//		exec_several_cmds(m, m->pl);
+//	m->status = set_or_get_last_status(m->status, 0);
+//}
