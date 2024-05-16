@@ -11,8 +11,9 @@ LIST_SRCS		=  main signal \
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens \
 				lexer/token_list lexer/token_utils \
 				joiner/join_tokens joiner/join_tokens_utils \
-				env_variables/env_variables env_variables/env_utils env_variables/envp_list_utils env_variables/manage_envp_lists\
-				parser/parser parser/create_process_list parser/process_list parser/check_syntax parser/print_error_syntax\
+				env_variables/env_variables env_variables/env_utils env_variables/envp_list_utils\
+				env_variables/manage_envp_lists env_variables/fake_env env_variables/shell_level\
+				parser/parser parser/parser_utils parser/create_process_list parser/process_list parser/check_syntax parser/print_error_syntax\
 				parser/token_requalif parser/token_requalif_utils parser/check_quotes parser/create_tables_in_process_list\
 				builtins/unset_builtin builtins/export_builtin builtins/env_builtin builtins/exit_builtin builtins/exit_builtin2\
 				builtins/cd_builtin builtins/ft_realpath builtins/pwd_builtin builtins/builtins_utils builtins/echo_builtin\
@@ -83,7 +84,7 @@ valgrind:       $(NAME)
 		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
 debug: clean
-	$(MAKE) CFLAGS="-g -Wall -Wextra -Werror"
+	$(MAKE) CFLAGS="-g"
 
 clean:
 				$(MAKE) -C $(DIR_LIBFT) clean

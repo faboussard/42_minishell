@@ -28,15 +28,15 @@ void	print_process_list(t_process_list *process_list)
 		printf("----------------------- CMD TABLE -----------------------\n");
 		print_array(current->cmd_table);
 		printf("-----------------------  IN FILES -----------------------\n");
-		if (current->in_files_token == NULL)
-			printf("no in_files_token\n");
+		if (current->in_files_list == NULL)
+			printf("no in_files_list\n");
 		else
-			print_token_list(current->in_files_token);
+			print_token_list(current->in_files_list);
 		printf("-----------------------  OUTFILES  -----------------------\n");
-		if (current->out_files_token == NULL)
-			printf("no out_files_token\n");
+		if (current->out_files_list == NULL)
+			printf("no out_files_list\n");
 		else
-			print_token_list(current->out_files_token);
+			print_token_list(current->out_files_list);
 		current = current->next;
 	}
 }
