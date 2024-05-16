@@ -6,15 +6,22 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/06 16:26:44 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:23:42 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "exec.h"
 
+static int	check_all_infiles(t_minishell *m, t_process_list *pl);
+
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
+//	if (m->pl->out_files_list != NULL)
+//	{
+//		m_safe_dup2(m, m->pl->fd_out, STDOUT_FILENO);
+//		close(m->pl->fd_out);
+//	}
 	if (!cmd || !cmd_table)
 		return (0);
 	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
@@ -62,60 +69,70 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	exit(m->status);
 }
 
-static int	check_all_infiles(t_minishell *m, t_process_list *pl, struct s_token *infile)
+static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 {
+	t_process_list *tmp;
 	int	fd_in;
 
-	if (infile == NULL)
+	if (pl->in_files_list == NULL)
 		return (0);
-	if (infile->next != NULL)
+	tmp = pl;
+	while (tmp->in_files_list && tmp->in_files_list->next)
 	{
-		if (open_fd_infile(m, pl, &fd_in))
-			return (1);
-		close(fd_in);
+		if (tmp->in_files_list->e_type == DELIMITER)
+			here_doc(m, tmp->in_files_list, &fd_in, tmp);
+		if (open_fd_infile(m, tmp, tmp->in_files_list->name, &fd_in) == 0)
+			close(fd_in);
+		tmp->in_files_list = tmp->in_files_list->next;
 	}
-	else
+	if (tmp->in_files_list)
 	{
-		if (open_fd_infile(m, pl, &(pl->fd_in)))
+		if (tmp->in_files_list->e_type == DELIMITER)
+			here_doc(m, tmp->in_files_list, &(pl->fd_in), tmp);
+		if (open_fd_infile(m, tmp, tmp->in_files_list->name, &(pl->fd_in)))
 			return (1);
-		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-		close(pl->fd_in);
 	}
-	//return (open_fd_infile(m, pl, &(pl->fd_in)));
-	return (check_all_infiles(m, pl, infile->next));
+	return (0);
 }
-static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
+
+static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
 {
+	t_process_list *tmp;
 	int	fd_out;
 
-	if (outfile == NULL)
-		return ;
-	if (outfile->e_type == OUT_FILE)
+	if (pl->out_files_list == NULL)
+		return (0);
+	tmp = pl;
+	while (tmp->out_files_list && tmp->out_files_list->next)
 	{
-		fd_out = open(outfile->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		fd_out = open(tmp->out_files_list->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out < 0)
-			print_name_and_give_status(m, outfile->name, 1);
-		else
-			close(fd_out);
+		{
+			print_name_and_give_status(m, tmp->out_files_list->name, 1);
+			return (1);
+		}
+		close(fd_out);
+		tmp->out_files_list = tmp->out_files_list->next;
 	}
-	create_all_outfiles(m, outfile->next);
+	if (tmp->out_files_list)
+	{
+		if (open_fd_outfile(m, tmp, tmp->out_files_list->name) == 1)
+			return (1);
+//		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
+//		close(pl->fd_out);
+	}
+	return (0);
 }
 
 static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 {
 	if (pl->in_files_list != NULL)
 	{
-		if (pl->in_files_list->e_type == DELIMITER)
-			here_doc(m, pl->in_files_list, &(pl->fd_in), pl);
-		if (check_all_infiles(m, pl, pl->in_files_list) == 1)
-			return (1);
+		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
+		close(pl->fd_in);
 	}
 	if (pl->out_files_list != NULL)
 	{
-		open_fd_outfile(m, pl, pl->out_files_list->name);
-		create_all_outfiles(m, pl->out_files_list->next);
-		if (pl->fd_out < 0)
-			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 		close(pl->fd_out);
 	}
@@ -124,15 +141,18 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
+	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
+	{
+		m->status = WEXITSTATUS(1);
+		return ;
+	}
 	if (is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
-		if (handle_infile_outfile(m, pl) == 0)
-			my_execve(m, pl);
-		else
-			exit(1);
+		handle_infile_outfile(m, pl);
+		my_execve(m, pl);
 	}
 	else
 	{
