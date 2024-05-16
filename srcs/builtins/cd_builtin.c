@@ -42,7 +42,7 @@ int	is_root_directory(t_minishell *m)
 // 	return (0);
 // }
 
-/*void clear_path_char(char str[PATH_MAX])
+void clear_path_char(char str[PATH_MAX])
 {
 	size_t	i;
 
@@ -52,7 +52,7 @@ int	is_root_directory(t_minishell *m)
 		i--;
 		str[i] = '\0';
 	}
-}*/
+}
 
 int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
@@ -62,7 +62,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	curpath_len = ft_strlen(m->current_path) + 1;
 	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
-//	clear_path_char(m->current_path);
+	clear_path_char(m->current_path);
 	ft_strlcpy(m->current_path, cwd, cwd_len);
 	dprintf(2, "BEFORE m->current_path = %s\n", m->current_path);
 	if (m->current_path[cwd_len - 2] && m->current_path[cwd_len - 2] == '/')
@@ -122,32 +122,24 @@ int	change_pwd_variable(t_minishell *m, char *str)
 static int	go_into_directory(t_minishell *m, char *dir)
 {
 	char	cwd[PATH_MAX];
-	char	*target_path;
 
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
-	target_path = NULL; //ft_realpath(m, dir);
-	if (target_path == NULL)
+	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", m->target_path);
+
+	ft_realpath(m, dir);
+	dprintf(2, "GO INTO DIR REVEIVES : m->target_path = %s\n", m->target_path);
+	if (chdir(m->target_path) != 0)
 	{
-		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
-		return (ENOMEM);
-	}
-	if (chdir(target_path) != 0)
-	{
-		print_cmd_perror("cd", dir, errno);
-		free_safely_str(&target_path);
+		print_cmd_perror("cd", m->target_given, errno);
 		return (1);
 	}
 	if (ft_strncmp(dir, ".", 2) == 0)
-	{
-		free_safely_str(&target_path);
 		return (0);
-	}
-	change_pwd_variable(m, target_path);
-	free_safely_str(&target_path);
+	change_pwd_variable(m, m->target_path);
 	return (0);
 }
 
