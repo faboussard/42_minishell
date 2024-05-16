@@ -25,7 +25,7 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 		ft_putendl_fd("Couldn't open /dev/null/", 2);
 }
 
-int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
+int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_use)
 {
 	enum e_token_type	infile_type;
 
@@ -33,12 +33,11 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, int *fd_to_use)
 	if (pl->in_files_list != NULL)
 	{
 		infile_type = pl->in_files_list->e_type;
-		if (infile_type == DELIMITER || infile_type == IN_FILE)
-			close_fds(*fd_to_use, 0);
+		close_fds(*fd_to_use, 0);
 		if (infile_type == DELIMITER)
 			*fd_to_use = open(HERE_DOC_TMP_FILE, O_RDONLY);
 		else if (infile_type == IN_FILE)
-			*fd_to_use = open(pl->in_files_list->name, O_RDONLY);
+			*fd_to_use = open(name, O_RDONLY);
 	}
 	else
 		pl->fd_in = STDIN_FILENO;
@@ -75,9 +74,10 @@ void	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 	{
 		if (pl->in_files_list->e_type == DELIMITER)
 			here_doc(m, pl->in_files_list, fd_in, pl);
+		// À REVOIR POUR BIEN DONNER LE BON NOM
+		if (open_fd_infile(m, pl, pl->in_files_list->name, fd_in))
+			return;
 	}
-	if (open_fd_infile(m, pl, fd_in))
-		return ;
 	open_fd_outfile(m, pl, pl->out_files_list->name);
 }
 
