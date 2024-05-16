@@ -178,8 +178,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 //		return ;
 // --> pas besoin de safe_pipe dans le dernier enfant
 /*
- *         if (pl->in_files_token->e_type== DELIMITER)
-			here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->tmp_in));
+ *         if (pl->in_files_list->e_type== DELIMITER)
+			here_doc(m, pl->in_files_list->name, STDIN_FILENO, &(m->tmp_in));
  * */
 
 /*
@@ -187,13 +187,13 @@ void	handle_out(t_minishell *m, t_process_list *pl, int stdout, int *fd_out)
 {
 	enum e_token_type	outfile_token;
 
-	outfile_token = pl->out_files_token->e_type;
-	if (open_fd_outfile(m, pl, pl->out_files_token->name))
+	outfile_token = pl->out_files_list->e_type;
+	if (open_fd_outfile(m, pl, pl->out_files_list->name))
 			return ;
 		m_safe_dup2(m, *fd_out, stdout);
 }
-if (pl->in_files_token->e_type== DELIMITER)
-		here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->fd_in));
-	if (open_fd_infile(m, pl->in_files_token))
+if (pl->in_files_list->e_type== DELIMITER)
+		here_doc(m, pl->in_files_list->name, STDIN_FILENO, &(m->fd_in));
+	if (open_fd_infile(m, pl->in_files_list))
 		return ;
 */

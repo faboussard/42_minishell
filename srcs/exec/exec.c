@@ -60,25 +60,59 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	exit(m->status);
 }
 
-static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
+static int	check_all_infiles(t_minishell *m, t_process_list *pl, struct s_token *infile)
 {
-	enum e_token_type	infile_token;
-	enum e_token_type	outfile_token;
+	int	fd_in;
 
-	infile_token = pl->in_files_token->e_type;
-	outfile_token = pl->out_files_token->e_type;
-	if (infile_token == DELIMITER)
-		here_doc(m, pl->in_files_token, &(pl->fd_in), pl);
-	if (infile_token == IN_FILE || infile_token == DELIMITER)
+	if (infile == NULL)
+		return (0);
+	if (infile->next != NULL)
+	{
+		if (open_fd_infile(m, pl, &fd_in))
+			return (1);
+		close(fd_in);
+	}
+	else
 	{
 		if (open_fd_infile(m, pl, &(pl->fd_in)))
 			return (1);
 		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
 		close(pl->fd_in);
 	}
-	if (outfile_token == OUT_FILE || outfile_token == APPEND_FILE)
+		//return (open_fd_infile(m, pl, &(pl->fd_in)));
+	return (check_all_infiles(m, pl, infile->next));
+}
+static void	create_all_outfiles(t_minishell *m, struct s_token *outfile)
+{
+	int	fd_out;
+
+	if (outfile == NULL)
+		return ;
+	if (outfile->e_type == OUT_FILE)
 	{
-		if (open_fd_outfile(m, pl, pl->out_files_token->name))
+		fd_out = open(outfile->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd_out < 0)
+			print_name_and_give_status(m, outfile->name, 1);
+		else
+			close(fd_out);
+	}
+	create_all_outfiles(m, outfile->next);
+}
+
+static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
+{
+	if (pl->in_files_list != NULL)
+	{
+		if (pl->in_files_list->e_type == DELIMITER)
+			here_doc(m, pl->in_files_list, &(pl->fd_in), pl);
+		if (check_all_infiles(m, pl, pl->in_files_list) == 1)
+			return (1);
+	}
+	if (pl->out_files_list != NULL)
+	{
+		open_fd_outfile(m, pl, pl->out_files_list->name);
+		create_all_outfiles(m, pl->out_files_list->next);
+		if (pl->fd_out < 0)
 			return (1);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 		close(pl->fd_out);

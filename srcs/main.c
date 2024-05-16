@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/06 10:10:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:37:03 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 #include "signals.h"
 #include "utils.h"
 #include <readline/history.h>
+
+void	set_environment(t_minishell *m, char **envp)
+{
+	m->list_envp = create_envp_list(envp, m);
+	if (m->list_envp == NULL)
+		create_3_env_variables(m);
+	if (m->list_envp == NULL)
+		exit_msg(m, "Malloc failed at main", -1);
+}
 
 bool	is_one_arg_builtin(t_minishell *m)
 {
@@ -57,17 +66,11 @@ void	minishell_interactive(t_minishell *m)
 		}
 		init_before_next_prompt(m);
 	}
-
 }
-/*	m->total_commands = 1; === CAPITAL !
- * L'ORIGINE DE NOS SEGFAULTS : LE TOTAL_COMMANDS QUI NE SE
- * REMET PAS A 1 ENTRE DEUX PROMPTS !
- * if (m->envp_table)
-			ft_free_tab(&(m->envp_table));
-	--> pas besoin de vérifier si m->envp_table est NULL avant de le free car
-	la fonction ft_free_tab le fait déjà
- */
 
+//if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
+//	return ;
+// --> La list_envp doit au moins contenir _= /usr/bin/env
 void	minishell_non_interactive(t_minishell *minishell, char *data_input)
 {
 	minishell->user_input = ft_strdup(data_input);
@@ -105,12 +108,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	}
 	return (2);
 }
-// minishell->user_input[0] = '\0'; // inutile : calloc remplit déja avec des \0
-/*
-temp = ft_strdup(av[i]);
-minishell->user_input = ft_strjoin(minishell->user_input, temp);
---> leaks assurés ici. Version modifiée ci-dessous dans la fonction non commentée
-*/
+
 // minishell->user_input = ft_strtrim(minishell->user_input, "\"");
 /*
 	Ma gestion des protections malloc est alambiquée mais doit fonctionner :
@@ -120,8 +118,8 @@ minishell->user_input = ft_strjoin(minishell->user_input, temp);
 	sans fermer tout le minishell serait bien ici je pense)
 	Et toujours des free_safely_str avant de vérifier le malloc pour ne
  	pas exit/return avant d'avoir free un malloc
-*/
-/*void	format_input(t_minishell *m, char **av)
+
+ void	format_input(t_minishell *m, char **av)
 {
 	int			i;
 	char		*temp;
@@ -149,17 +147,6 @@ minishell->user_input = ft_strjoin(minishell->user_input, temp);
 	if (m->user_input == NULL)
 		exit_msg(m, "Malloc failed at format_input", -1);
 }*/
-// void create_3_env_variables(t_minishell *minishell)
-//{
-//	export
-//	PWD=/home/faboussa
-//	SHLVL=1
-//	_=/usr/bin/env
-//
-// declare -x OLDPWD
-// declare -x PWD="/home/faboussa"
-// declare -x SHLVL="1"
-//}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -167,15 +154,8 @@ int	main(int ac, char **av, char **envp)
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
-	if (envp == NULL)
-		return (1); // creer trops envp
-	else
-		minishell.list_envp = create_envp_list(envp, &minishell);
-	if (minishell.list_envp == NULL)
-		exit_msg_minishell(&minishell,
-			"Environment variables could not be created", -1);
-			// creer trois envp vides
 	set_minishell_paths(&minishell);
+	set_environment(&minishell, envp);
 	if (is_interactive(&minishell, ac, av) == true)
 		minishell_interactive(&minishell);
 	else

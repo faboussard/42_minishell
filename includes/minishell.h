@@ -29,6 +29,14 @@
 #  define PATH_MAX 4096
 # endif
 
+# ifndef ARG_MAX
+#  define ARG_MAX 2097152
+# endif
+
+# ifndef SHLVL
+#  define SHLVL_LIMIT 1000
+# endif
+
 # ifndef PROMPT
 #define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 # endif
@@ -61,9 +69,9 @@ typedef struct s_minishell
 	int							status;
 	int							pipe_fd[2];
 	int							tmp_in;
-	int							history_count;
 	char						*user_input;
 	char						target_path[PATH_MAX];
+	char						target_given[ARG_MAX];
 	char						current_path[PATH_MAX];
 	char						old_pwd[PATH_MAX];
 	char						*paths;
@@ -86,8 +94,8 @@ typedef struct s_envp
 
 typedef struct s_process_list
 {
-	t_token_list				*in_files_token;
-	t_token_list				*out_files_token;
+	t_token_list				*in_files_list;
+	t_token_list				*out_files_list;
 	int							fd_in;
 	int							fd_out;
 	char						*paths;
@@ -102,22 +110,10 @@ typedef struct s_process_list
 
 bool							is_interactive(t_minishell *minishell, int argc, char **argv);
 
-/*********************************** CREATE CHAINS ***************************/
-
-void							create_token_chain_list(t_minishell *minishell,
-									char *string);
-void							create_envp_hashmap(t_minishell *minishell,
-									char **envp);
-
 /********************************** CREATE TABLES ***************************/
 
 void execute_cmds(t_minishell *minishell,
                   size_t nb_cmds);
-
-//// expand heredoc ///
-
-void	handle_expand(t_minishell *m, t_process_list *pl, char *input);
-
 int	set_or_get_last_status(int status, int flag);
 
 #endif
