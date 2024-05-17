@@ -151,6 +151,49 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	return (0);
 }
 
+const char *signal_names[] = {
+	[SIGHUP] = "SIGHUP",
+	[SIGINT] = "SIGINT",
+	[SIGQUIT] = "SIGQUIT",
+	[SIGILL] = "SIGILL",
+	[SIGABRT] = "SIGABRT",
+	[SIGFPE] = "SIGFPE",
+	[SIGKILL] = "SIGKILL",
+	[SIGSEGV] = "SIGSEGV",
+	[SIGPIPE] = "SIGPIPE",
+	[SIGALRM] = "SIGALRM",
+	[SIGTERM] = "SIGTERM",
+	// Ajoutez d'autres signaux si nécessaire
+};
+
+//void manage_interrupted_signal(t_minishell *m)
+//{
+////	dprintf(2, "[SIGHUP] = %d\n", SIGHUP);
+////	dprintf(2, "[SIGINT] = %d\n", SIGINT);
+////	dprintf(2, "[SIGQUIT] = %d\n", SIGQUIT);
+////	dprintf(2, "[SIGILL] = %d\n", SIGILL);
+////	dprintf(2, "[SIGABRT] = %d\n", SIGABRT);
+////	dprintf(2, "[SIGFPE] = %d\n", SIGFPE);
+////	dprintf(2, "[SIGKILL] = %d\n", SIGKILL);
+////	dprintf(2, "[SIGSEGV] = %d\n", SIGSEGV);
+////	dprintf(2, "[SIGPIPE] = %d\n", SIGPIPE);
+////	dprintf(2, "[SIGALRM] = %d\n", SIGALRM);
+////	dprintf(2, "[SIGTERM] = %d\n", SIGTERM);
+//
+//	if (WIFEXITED(m->status)) {
+//		m->status = WEXITSTATUS(m->status);
+//	} else
+//	if (WIFSIGNALED(m->status)) {
+//		int signal_number = WTERMSIG(m->status);
+//		printf("Signal capté : %s\n", signal_names[signal_number]);
+//		m->status = set_or_get_last_status(128 + signal_number, 0);
+//	} else if (WIFEXITED(m->status)) {
+//		m->status = WEXITSTATUS(m->status);
+//	} else {
+//		m->status = set_or_get_last_status(m->status, 0);
+//	}
+//}
+
 void	manage_interrupted_signal(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
@@ -159,6 +202,7 @@ void	manage_interrupted_signal(t_minishell *m)
 		m->status = WEXITSTATUS(m->status);
 	else
 		m->status = set_or_get_last_status(m->status, 0);
+
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
@@ -179,9 +223,15 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-		m->status = WEXITSTATUS(m->status);
+//		if (WIFSIGNALED(m->status))
+//			m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
+//		else if (WIFEXITED(m->status))
+//			m->status = WEXITSTATUS(m->status);
+		//if (WIFEXITED(m->status))
+////		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
+	manage_interrupted_signal(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
@@ -197,8 +247,10 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	ft_free_pl_paths(m, m->pl);
+//	set_or_get_last_status(WIFEXITED(m->status), 0);
+	//m->status = WEXITSTATUS(m->status);
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
-	manage_interrupted_signal(m);
+	m->status = set_or_get_last_status(m->status, 0);
 }
 //void	execute_cmds(t_minishell *m, size_t nb_cmds)
 //{

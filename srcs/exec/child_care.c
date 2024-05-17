@@ -89,6 +89,8 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 		close_pipes(m->pipe_fd);
 		close_fds(m->tmp_in, pl->fd_out);
 	}
+	manage_interrupted_signal(m);
+
 }
 
 static void	middle_child(t_minishell *m, t_process_list *pl)
