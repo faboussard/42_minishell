@@ -54,6 +54,8 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		close_pipes(m->pipe_fd);
 		close_fds(pl->fd_in, pl->fd_out);
 		close_fds(m->tmp_in, 0);
+		if (ft_strncmp(pl->cmd_table[0], "./minishell", 12) == 0)
+			increment_shell_level(&(m->list_envp), m);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		if (access(pl->good_path, F_OK) == 0)
 		{
@@ -186,8 +188,9 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->pl);
 	else
 		exec_several_cmds(m, m->pl);
-	manage_interrupted_signal(m);
 	ft_free_pl_paths(m, m->pl);
+	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
+	manage_interrupted_signal(m);
 }
 //void	execute_cmds(t_minishell *m, size_t nb_cmds)
 //{
