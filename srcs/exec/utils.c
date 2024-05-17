@@ -48,4 +48,5 @@ void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
 	free_safely_str(&(pl->good_path));
 	ft_free_tab(&(pl->tab_paths));
 	ft_free_tab(&(pl->cmd_table));
+	ft_free_tab(&(minishell->envp_table));
 }
