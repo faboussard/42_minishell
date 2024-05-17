@@ -93,7 +93,6 @@ int	main(int ac, char **av, char **envp)
 	t_minishell	minishell;
 
 	ft_bzero(&minishell, (sizeof(t_minishell)));
-	minishell.envp_table = envp;
 	minishell.total_commands = 1;
 	set_minishell_paths(&minishell);
 	set_environment(&minishell, envp);

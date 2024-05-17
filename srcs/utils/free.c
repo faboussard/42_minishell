@@ -84,6 +84,8 @@ void	free_minishell(t_minishell *minishell)
 	free_strs(minishell);
 	if (minishell->list_envp != NULL)
 		ft_lstclear_envp(&minishell->list_envp);
+	if (minishell->envp_table)
+		ft_free_tab(&(minishell->envp_table));
 	if (minishell->pl)
 		ft_free_process_list(&minishell->pl);
 	if (minishell->list_tokens)
