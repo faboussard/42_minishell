@@ -24,6 +24,8 @@ void	increment_shell_level(t_envp_list **env_vars, t_minishell *m)
 	if (env)
 	{
 		new_level = ft_itoa(ft_atoi(env->value) + 1);
+		dprintf(2, "ACTUAL SHELL LEVEL=%s\n", env->value);
+		dprintf(2, "NEW SHELL LEVEL =%s\n", new_level);
 		if (new_level == NULL)
 			exit_msg(m, "Malloc failed at increment_shell_level", ENOMEM);
 		free_safely_str(&env->value);
