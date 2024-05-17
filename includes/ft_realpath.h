@@ -15,14 +15,14 @@
 #include "builtins.h"
 #include "exec.h"
 
-typedef struct s_nodes_list
+typedef struct s_dir_list
 {
 	char	*subdir;
-	struct s_nodes_list	*next;
-	struct s_nodes_list	*prev;
-}						t_nodes_list;
+	struct s_dir_list	*next;
+	struct s_dir_list	*prev;
+}						t_dir_list;
 
-void	ft_free_list(t_nodes_list *list);
-t_nodes_list 	*ft_split_list(char const *s, char c);
+void	ft_free_list(t_dir_list *list);
+t_dir_list 	*ft_split_list(char const *s, char c);
 
 #endif //FT_REALPATH_H

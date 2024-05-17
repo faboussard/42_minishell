@@ -36,10 +36,12 @@ static int	ft_len_list(char const *s, char c)
 	return (len_list);
 }
 
-void	ft_free_list(t_nodes_list *list)
+void	ft_free_list(t_dir_list *list)
 {
-	t_nodes_list	*tmp;
+	t_dir_list	*tmp;
 
+	if (!list)
+		return ;
 	while (list)
 	{
 		tmp = list;
@@ -47,6 +49,7 @@ void	ft_free_list(t_nodes_list *list)
 		free(tmp->subdir);
 		free(tmp);
 	}
+	list = NULL;
 }
 
 static char	*ft_write_word(char *s, char c, int *cursor)
@@ -64,16 +67,16 @@ static char	*ft_write_word(char *s, char c, int *cursor)
 	return (word);
 }
 
-t_nodes_list 	*ft_split_list(char const *s, char c)
+t_dir_list 	*ft_split_list(char const *s, char c)
 {
-	t_nodes_list	*list;
-	t_nodes_list 	*tmp;
+	t_dir_list	*list;
+	t_dir_list 	*tmp;
 	int		len_list;
 	int		i;
 	int		cursor;
 
 	len_list = ft_len_list(s, c);
-	list = (t_nodes_list *)malloc(sizeof(t_nodes_list *) * (len_list + 1));
+	list = (t_dir_list *)malloc(sizeof(t_dir_list) * (len_list + 1));
 	if (!list)
 		return (NULL);
 	i = 0;
