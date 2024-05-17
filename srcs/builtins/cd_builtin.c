@@ -42,7 +42,7 @@ int	is_root_directory(t_minishell *m)
 // 	return (0);
 // }
 
-void clear_path_char(char str[PATH_MAX])
+/*void clear_path_char(char str[PATH_MAX])
 {
 	size_t	i;
 
@@ -52,7 +52,7 @@ void clear_path_char(char str[PATH_MAX])
 		i--;
 		str[i] = '\0';
 	}
-}
+}*/
 
 int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 {
@@ -62,7 +62,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	curpath_len = ft_strlen(m->current_path) + 1;
 	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
-	clear_path_char(m->current_path);
+//	clear_path_char(m->current_path);
 	ft_strlcpy(m->current_path, cwd, cwd_len);
 	dprintf(2, "BEFORE m->current_path = %s\n", m->current_path);
 	if (m->current_path[cwd_len - 2] && m->current_path[cwd_len - 2] == '/')
@@ -122,28 +122,39 @@ int	change_pwd_variable(t_minishell *m, char *str)
 static int	go_into_directory(t_minishell *m, char *dir)
 {
 	char	cwd[PATH_MAX];
+	char	*target_path;
 
+	target_path = NULL;
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
-	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", m->target_path);
-
-	ft_realpath(m, dir);
-	dprintf(2, "GO INTO DIR REVEIVES : m->target_path = %s\n", m->target_path);
-	if (chdir(m->target_path) != 0)
+	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", target_path);
+	target_path = NULL;// ft_realpath(m, dir);
+	if (target_path == NULL)
 	{
-		print_cmd_perror("cd", m->target_given, errno);
+		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
+		return (ENOMEM);
+	}
+	dprintf(2, "GO INTO DIR RECEIVES : m->target_path = %s\n", target_path);
+	if (chdir(target_path) != 0)
+	{
+		print_cmd_perror("cd", dir, errno);
+		free_safely_str(&target_path);
 		return (1);
 	}
 	if (ft_strncmp(dir, ".", 2) == 0)
+	{
+		free_safely_str(&target_path);
 		return (0);
-	change_pwd_variable(m, m->target_path);
+	}
+	change_pwd_variable(m, target_path);
+	free_safely_str(&target_path);
 	return (0);
 }
 
-bool	ft_getenv(t_minishell *m, char *var, char *key)
+bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key)
 {
 	t_envp_list *env;
 	size_t	key_len;
@@ -155,7 +166,7 @@ bool	ft_getenv(t_minishell *m, char *var, char *key)
 		if (ft_strncmp(env->target, key, key_len) == 0)
 		{
 
-			ft_strlcpy(var, env->value, ft_strlen(env->value) + 1);
+			ft_strlcpy(dest, env->value, ft_strlen(env->value) + 1);
 			return (1);
 		}
 		env = env->next;
@@ -167,15 +178,17 @@ static int	get_home(t_minishell *m)
 {
 	size_t	home_dir_len;
 	int		return_value;
+	char dir_cpy[PATH_MAX];
 
-	if (ft_getenv(m, m->target_path, "HOME=") == 0)
+	dir_cpy[0] = '\0';
+	if (ft_getenv(m, dir_cpy, "HOME=") == 0)
 	{
 		ft_putendl_fd("minishell: cd: HOME not set", 2);
 		return (1);
 	}
-	home_dir_len = ft_strlen(m->target_path);
-	ft_strlcat(m->target_path, "/", home_dir_len + 1);
-	return_value = go_into_directory(m, m->target_path);
+	home_dir_len = ft_strlen(dir_cpy);
+	ft_strlcat(dir_cpy, "/", home_dir_len + 1);
+	return_value = go_into_directory(m, dir_cpy);
 	return (return_value);
 }
 

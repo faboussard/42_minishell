@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 11:01:00 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/16 14:23:42 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/16 21:17:12 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 
 static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 {
-	t_process_list *tmp;
-	int	fd_in;
+	t_process_list	*tmp;
+	int				fd_in;
 
 	if (pl->in_files_list == NULL)
 		return (0);
@@ -99,8 +99,8 @@ static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 
 static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
 {
-	t_process_list *tmp;
-	int	fd_out;
+	t_process_list	*tmp;
+	int				fd_out;
 
 	if (pl->out_files_list == NULL)
 		return (0);
@@ -141,7 +141,7 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	return (0);
 }
 
-void manage_interrupted_signal(t_minishell *m)
+void	manage_interrupted_signal(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
 		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
@@ -150,7 +150,6 @@ void manage_interrupted_signal(t_minishell *m)
 	else
 		m->status = set_or_get_last_status(m->status, 0);
 }
-
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
@@ -170,9 +169,10 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
+		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	manage_interrupted_signal(m);
+//	manage_interrupted_signal(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
@@ -187,5 +187,20 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->pl);
 	else
 		exec_several_cmds(m, m->pl);
+	manage_interrupted_signal(m);
 	m->status = set_or_get_last_status(m->status, 0);
+	ft_free_pl_paths(m, m->pl);
 }
+//void	execute_cmds(t_minishell *m, size_t nb_cmds)
+//{
+//	if (nb_cmds < 1)
+//		return ;
+//	set_paths(m, m->envp_table);
+//	if (m->paths == NULL)
+//		return ;
+//	if (nb_cmds == 1)
+//		exec_one_cmd(m, m->pl);
+//	else
+//		exec_several_cmds(m, m->pl);
+//	m->status = set_or_get_last_status(m->status, 0);
+//}

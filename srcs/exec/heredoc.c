@@ -75,7 +75,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_l
 	int	here_doc_pid;
 
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
-	close_fds(pl->fd_in, m->tmp_in);
+	close_fds(*fd_to_use, m->tmp_in);
 	close_fds(pl->fd_in, pl->fd_out);
 
 	*fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0666);
