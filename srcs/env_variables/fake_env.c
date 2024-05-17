@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 14:26:23 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/09 22:09:43 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:24:46 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ void	create_3_env_variables(t_minishell *m)
 
 	if (add_new_envp(&m->list_envp, "_=", "/usr/bin/env"))
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", ENOMEM);
-	m->total_size_envp += ft_strlen("_=") + ft_strlen("/usr/bin/env");
 	if (add_new_envp(&m->list_envp, "SHLVL=", "1"))
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", ENOMEM);
-	m->total_size_envp += ft_strlen("SHLVL") + ft_strlen("1");
 	if (getcwd(pwd, sizeof(pwd)) == NULL)
 	{
 		perror("minishell: getcwd");
@@ -31,5 +29,4 @@ void	create_3_env_variables(t_minishell *m)
 	}
 	if (add_new_envp(&m->list_envp, "PWD=", pwd))
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", ENOMEM);
-	m->total_size_envp += ft_strlen("PWD=") + ft_strlen(pwd);
 }

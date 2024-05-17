@@ -88,7 +88,6 @@ void	free_minishell(t_minishell *minishell)
 		ft_free_process_list(&minishell->pl);
 	if (minishell->list_tokens)
 		ft_lstclear_token(&minishell->list_tokens);
-	//check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	rl_clear_history();
 	close_all_fds(minishell, minishell->pl);
 }
