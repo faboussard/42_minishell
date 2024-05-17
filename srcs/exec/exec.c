@@ -151,49 +151,6 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	return (0);
 }
 
-const char *signal_names[] = {
-	[SIGHUP] = "SIGHUP",
-	[SIGINT] = "SIGINT",
-	[SIGQUIT] = "SIGQUIT",
-	[SIGILL] = "SIGILL",
-	[SIGABRT] = "SIGABRT",
-	[SIGFPE] = "SIGFPE",
-	[SIGKILL] = "SIGKILL",
-	[SIGSEGV] = "SIGSEGV",
-	[SIGPIPE] = "SIGPIPE",
-	[SIGALRM] = "SIGALRM",
-	[SIGTERM] = "SIGTERM",
-	// Ajoutez d'autres signaux si nécessaire
-};
-
-//void manage_interrupted_signal(t_minishell *m)
-//{
-////	dprintf(2, "[SIGHUP] = %d\n", SIGHUP);
-////	dprintf(2, "[SIGINT] = %d\n", SIGINT);
-////	dprintf(2, "[SIGQUIT] = %d\n", SIGQUIT);
-////	dprintf(2, "[SIGILL] = %d\n", SIGILL);
-////	dprintf(2, "[SIGABRT] = %d\n", SIGABRT);
-////	dprintf(2, "[SIGFPE] = %d\n", SIGFPE);
-////	dprintf(2, "[SIGKILL] = %d\n", SIGKILL);
-////	dprintf(2, "[SIGSEGV] = %d\n", SIGSEGV);
-////	dprintf(2, "[SIGPIPE] = %d\n", SIGPIPE);
-////	dprintf(2, "[SIGALRM] = %d\n", SIGALRM);
-////	dprintf(2, "[SIGTERM] = %d\n", SIGTERM);
-//
-//	if (WIFEXITED(m->status)) {
-//		m->status = WEXITSTATUS(m->status);
-//	} else
-//	if (WIFSIGNALED(m->status)) {
-//		int signal_number = WTERMSIG(m->status);
-//		printf("Signal capté : %s\n", signal_names[signal_number]);
-//		m->status = set_or_get_last_status(128 + signal_number, 0);
-//	} else if (WIFEXITED(m->status)) {
-//		m->status = WEXITSTATUS(m->status);
-//	} else {
-//		m->status = set_or_get_last_status(m->status, 0);
-//	}
-//}
-
 void	manage_interrupted_signal(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
