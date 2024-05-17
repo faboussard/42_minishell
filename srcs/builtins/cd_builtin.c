@@ -42,23 +42,36 @@ int	is_root_directory(t_minishell *m)
 // 	return (0);
 // }
 
-int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
+/*void clear_path_char(char str[PATH_MAX])
 {
-	size_t	curpath_len;
-	size_t	cwd_len;
 	size_t	i;
 
-
-	curpath_len = ft_strlen(m->current_path) + 1;
-	cwd_len = ft_strlen(cwd) + 1;
-	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
 	i = PATH_MAX;
 	while (i > 0)
 	{
 		i--;
-		m->current_path[i] = '\0';
+		str[i] = '\0';
 	}
+}*/
+
+int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
+{
+	size_t	curpath_len;
+	size_t	cwd_len;
+
+	curpath_len = ft_strlen(m->current_path) + 1;
+	cwd_len = ft_strlen(cwd) + 1;
+	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
+//	clear_path_char(m->current_path);
 	ft_strlcpy(m->current_path, cwd, cwd_len);
+	dprintf(2, "BEFORE m->current_path = %s\n", m->current_path);
+	if (m->current_path[cwd_len - 2] && m->current_path[cwd_len - 2] == '/')
+	{
+		m->current_path[cwd_len - 2] = '\0';
+		cwd[cwd_len - 2] = '\0';
+	}
+	dprintf(2, "m->old_pwd = %s\n", m->old_pwd);
+	dprintf(2, "m->current_path = %s\n", m->current_path);
 	free_safely_str(&(env->value));
 	env->value = ft_strdup(cwd);
 	if (env->value == NULL)
@@ -109,21 +122,34 @@ int	change_pwd_variable(t_minishell *m, char *str)
 static int	go_into_directory(t_minishell *m, char *dir)
 {
 	char	cwd[PATH_MAX];
+	char	*target_path;
 
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
-	//ft_realpath(m, dir);
-	if (chdir(m->target_path) != 0)
+	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", target_path);
+	target_path = ft_realpath(m, dir);
+	if (target_path == NULL)
 	{
-		// dprintf(2, "Ew ! I can't go there you freak !%s\n", m->target_path);
-		print_cmd_perror("cd", m->target_given, errno);
+		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
+		return (ENOMEM);
+	}
+	dprintf(2, "GO INTO DIR RECEIVES : m->target_path = %s\n", target_path);
+	if (chdir(target_path) != 0)
+	{
+		print_cmd_perror("cd", dir, errno);
+		free_safely_str(&target_path);
 		return (1);
 	}
-	change_pwd_variable(m, m->target_path);
-	// dprintf(2, "m->target_path = %s\n", m->target_path);
+	if (ft_strncmp(dir, ".", 2) == 0)
+	{
+		free_safely_str(&target_path);
+		return (0);
+	}
+	change_pwd_variable(m, target_path);
+	free_safely_str(&target_path);
 	return (0);
 }
 
@@ -187,7 +213,7 @@ bool	too_many_args(char **cmd_table)
 int	ft_cd(t_minishell *m, char **cmd_table)
 {
 	char		*dir;
-	struct stat	st;
+//	struct stat	st;
 
 	// dprintf(2, "m->current_path IS %s\n", m->current_path);
 	if (too_many_args(cmd_table))
@@ -199,20 +225,22 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 	dir = cmd_table[1];
 	if (ft_strncmp(dir, "-", 2) == 0)
 		return (go_into_directory(m, m->old_pwd));
-	ft_realpath(m, dir);
+	return (go_into_directory(m, dir));
+/*	ft_realpath(m, dir);
 	if (ft_strncmp(m->target_path, ".", 1) && stat(m->target_path, &st) == -1)
 	{
 		print_cmd_perror("cd", dir, errno);
 		return (1);
-	}
-	dprintf(2, "m->target_path = %s\n", m->target_path);
-	if (contains_only_charset(dir, "./"))
+	}*/
+//	dprintf(2, "m->target_path = %s\n", m->target_path);
+/*	if (contains_only_charset(dir, "./"))
 		return (go_into_directory(m, m->target_path));
 	if (ft_strncmp(dir, ".", 1) && !(S_ISDIR(st.st_mode)))
 		// if doesn't begin with . and is not dir
 		print_cmd_perror("cd", dir, ENOTDIR);
 	else
-		return (go_into_directory(m, dir));
+	return (go_into_directory(m, dir));
+ */
 	return (0);
 }
 // dprintf(2, "bash: cd: %s: Not a directory\n", dir);

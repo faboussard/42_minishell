@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "builtins.h"
 
 void	check_and_delete_if_tmp_file_exists(char *tmp_file)
 {
