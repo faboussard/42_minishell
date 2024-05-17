@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:34:09 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/09 22:16:26 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:24:46 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ void	increment_shell_level(t_envp_list **env_vars, t_minishell *m)
 		env = env->next;
 	if (env)
 	{
-		m->total_size_envp -= ft_strlen(env->value);
 		new_level = ft_itoa(ft_atoi(env->value) + 1);
 		if (new_level == NULL)
 			exit_msg(m, "Malloc failed at increment_shell_level", ENOMEM);
 		free_safely_str(&env->value);
 		env->value = new_level;
-		m->total_size_envp += ft_strlen(new_level);
 	}
 }
 
@@ -42,6 +40,7 @@ void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m)
 	{
 		if (ft_strncmp(env->target, "SHELL=", 6) == 0)
 		{
+			dprintf(2, "SHELL=%s\n", env->value);
 			if (ft_strncmp(env->value, "minishell", 9) != 0)
 			{
 				free_safely_str(&env->value);
@@ -56,5 +55,4 @@ void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m)
 		}
 		env = env->next;
 	}
-	increment_shell_level(env_vars, m);
 }
