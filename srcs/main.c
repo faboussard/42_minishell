@@ -29,13 +29,13 @@ void	minishell_interactive(t_minishell *m)
 	{
 		if (set_signals_interactive() == -1)
 			m->status = set_or_get_last_status(-1, -1);
-		if (set_signals_noninteractive() == -1)
-			m->status = set_or_get_last_status(-1, -1);
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
 			break ;
 		if (m->user_input[0] == 0)
 			continue ;
+		if (set_signals_noninteractive() == -1)
+			m->status = set_or_get_last_status(-1, -1);
 		add_history(m->user_input);
 		m->status = set_or_get_last_status(-1, -1);
 		if (parse_input(m) == 0)

@@ -19,6 +19,7 @@
 
 void ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref, int (*cmp)());
 void ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref, int (*cmp)());
+int	ft_lstsize_token(t_token_list *lst);
 
 /************************* join_tokens.c **************************/
 
@@ -32,6 +33,7 @@ char *join_all(t_minishell *minishell, t_token_list **list);
 
 void change_token_name(t_minishell *minishell, t_token_list **list, char *new_name);
 int check_if_more_tokens(t_token_list **list, enum e_token_operators op);
+void join_token_name(t_minishell *minishell, char *temp, t_token_list **iterator, char **new_table);
 
 /************************* token_requlif.c **************************/
 
@@ -44,14 +46,12 @@ void	arg_to_command(t_token_list *list_tokens);
 /************************** parser  **************************/
 
 int parse_input(t_minishell *m);
-int token_requalification(t_token_list *list_tokens);
 void	*ft_free_all_alloc(char **strs_array, size_t start);
 void token_rework(t_minishell *minishell);
 int cmp(int op1, int op2);
 void create_process_list(t_minishell *m, t_process_list **process_list);
 void create_process_list_node(t_process_list *new_pl,
 					t_minishell *m);
-void			create_envp_table(t_minishell *minishell);
 void create_cmd_table_array(t_process_list *new_process_list, size_t size, t_minishell *minishell);
 void	handle_expand(t_minishell *m, t_process_list *pl, char *input);
 void add_process_to_list(t_process_list **process_list, t_process_list *new_process);
