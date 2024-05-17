@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "parser.h"
+#include "utils.h"
 #include <stdlib.h>
 
 int tokenize_input(t_minishell *m, char *string)
@@ -23,7 +24,31 @@ int tokenize_input(t_minishell *m, char *string)
 	return (1);
 }
 
-int requalify_tokens(t_token_list *list_tokens)
+
+void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
+{
+	t_token_list	*iterator;
+	char *new_list_name;
+
+	iterator = list_tokens;
+	if (ft_strncmp(iterator->name, "\0", 1) == 0)
+		change_token_name(m, &list_tokens, "''");
+	while (iterator && iterator->next != NULL)
+	{
+		if (iterator->e_type != COMMAND && !is_redirect_token(iterator) && ft_strncmp(iterator->next->name, "\0", 1) == 0)
+		{
+			iterator = iterator->next;
+			new_list_name = ft_strdup("''");
+			if (new_list_name == NULL)
+				exit_msg(m, "Malloc failed at join between spaces", ENOMEM);
+			free_safely_str(&(iterator->name));
+			iterator->name = new_list_name;
+		}
+		iterator = iterator->next;
+	}
+}
+
+int requalify_tokens(t_token_list *list_tokens, t_minishell *m)
 {
 	if (list_tokens == NULL)
 		return (0);
@@ -31,6 +56,7 @@ int requalify_tokens(t_token_list *list_tokens)
 	arg_to_command(list_tokens);
 	define_builtins(list_tokens);
 	define_operators(list_tokens);
+	redefine_empty_command(m, list_tokens);
 	return (1);
 }
 
@@ -57,7 +83,7 @@ int parse_input(t_minishell *m)
 		m->status = set_or_get_last_status(2, 0);
 		return (1);
 	}
-	if (!requalify_tokens(m->list_tokens))
+	if (!requalify_tokens(m->list_tokens, m))
 		return (1);
 	create_process_list(m, &m->pl);
 	m->total_commands += count_tokens_by_operator(m, PIPE);

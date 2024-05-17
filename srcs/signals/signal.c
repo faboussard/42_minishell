@@ -57,6 +57,7 @@ int set_signals_interactive()
 		print_error("sigaction() failed");
 		return (-1);
 	}
+	signal(SIGTSTP, SIG_IGN);
 	return (0);
 }
 

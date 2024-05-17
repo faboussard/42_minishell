@@ -42,19 +42,6 @@ void	ft_init_pl(t_minishell *m, t_process_list *pl)
 	pl->tab_paths = NULL;
 }
 
-//void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
-//{
-//	free_safely_str(&(minishell->paths));
-//	free_safely_str(&(pl->good_path));
-//	ft_free_tab(&(pl->tab_paths));
-//	ft_free_tab(&(pl->cmd_table));
-//	if (pl->in_files_list)
-//		ft_lstclear_token(&pl->in_files_list);
-//	if (pl->out_files_list)
-//		ft_lstclear_token(&pl->out_files_list);
-//	pl = NULL;
-//}
-
 void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
 {
 	free_safely_str(&(minishell->paths));

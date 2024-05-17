@@ -252,16 +252,3 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	m->status = set_or_get_last_status(m->status, 0);
 }
-//void	execute_cmds(t_minishell *m, size_t nb_cmds)
-//{
-//	if (nb_cmds < 1)
-//		return ;
-//	set_paths(m, m->envp_table);
-//	if (m->paths == NULL)
-//		return ;
-//	if (nb_cmds == 1)
-//		exec_one_cmd(m, m->pl);
-//	else
-//		exec_several_cmds(m, m->pl);
-//	m->status = set_or_get_last_status(m->status, 0);
-//}
