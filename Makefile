@@ -7,7 +7,8 @@ vpath %c srcs lexer joiner env_variables parser expansion utils exec builtins
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main signal \
+LIST_SRCS		=  main\
+                signals/signal signals/signal_interrupt\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens \
 				lexer/token_list lexer/token_utils \
 				joiner/join_tokens joiner/join_tokens_utils \
@@ -29,7 +30,7 @@ LIST_HEADERS	= utils lexer minishell parser signals exec builtins
 
 DIR_BUILD		=	.build/
 SUBDIRS := .build/lexer .build/env_variables .build/parser .build/expansion \
-			.build/joiner .build/utils .build/exec .build/builtins
+			.build/joiner .build/utils .build/exec .build/builtins .build/signals
 DIR_HEADERS		=	includes/
 DIR_LIBFT		=	libft/
 HEADER_LIBFT    =   libft/inc/

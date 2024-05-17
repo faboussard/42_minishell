@@ -12,6 +12,8 @@
 
 #include "builtins.h"
 #include "exec.h"
+#include "signal.h"
+#include "signals.h"
 
 static int	check_all_infiles(t_minishell *m, t_process_list *pl);
 
@@ -139,6 +141,17 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	return (0);
 }
 
+void manage_interrupted_signal(t_minishell *m)
+{
+	if (WIFSIGNALED(m->status))
+		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
+	else if (WIFEXITED(m->status))
+		m->status = WEXITSTATUS(m->status);
+	else
+		m->status = set_or_get_last_status(m->status, 0);
+}
+
+
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
@@ -157,13 +170,14 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
+	manage_interrupted_signal(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
+	signal_interrupt();
 	if (nb_cmds < 1)
 		return ;
 	set_paths(m, m->envp_table);
@@ -174,5 +188,4 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
-	ft_free_pl_paths(m, m->pl);
 }
