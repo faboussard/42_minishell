@@ -38,8 +38,9 @@ void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
 
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
-	handle_in_out(m, pl, &(pl->fd_in));
-	if (pl->fd_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
+//	handle_in_out(m, pl, &(pl->fd_in));
+//	if (pl->fd_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
+	if (handle_in_out(m, pl, &(pl->fd_in)) == 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
@@ -64,8 +65,9 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 
 static void	last_child(t_minishell *m, t_process_list *pl)
 {
-	handle_in_out(m, pl, &(m->tmp_in));
-	if (m->tmp_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
+//	handle_in_out(m, pl, &(m->tmp_in));
+//	if (m->tmp_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
+	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
 		m->pid2 = m_safe_fork(m);
 		if (m->pid2 == 0)
@@ -91,8 +93,9 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 
 static void	middle_child(t_minishell *m, t_process_list *pl)
 {
-	handle_in_out(m, pl, &(m->tmp_in));
-	if (pl->fd_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
+//	handle_in_out(m, pl, &(m->tmp_in));
+//	if (pl->fd_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
+	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
