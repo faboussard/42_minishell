@@ -1,0 +1,54 @@
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                                                            //
+//               COMMENTAIRES EXTRAITS ET GARDÉS DES FICHIERS                 //
+//                                                                            //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////// MAIN.C //////////////////////////////////////
+
+//if (m->list_envp == NULL) // check on unset tout avec pipe et sans pipe
+//	return ;
+// --> La list_envp doit au moins contenir _= /usr/bin/env
+
+// minishell->user_input = ft_strtrim(minishell->user_input, "\"");
+/*
+	Ma gestion des protections malloc est alambiquée mais doit fonctionner :
+	Si temp N'est PAS NULL, alors on alloue minishell->user_input.
+	Si minishell->user_input est NULL, l'un des deux mallocs a échoué, donc exit
+	(d'ailleurs, plutôt juste un message d'erreur + un return
+	sans fermer tout le minishell serait bien ici je pense)
+	Et toujours des free_safely_str avant de vérifier le malloc pour ne
+ 	pas exit/return avant d'avoir free un malloc
+
+ void	format_input(t_minishell *m, char **av)
+{
+	int			i;
+	char		*temp;
+
+	m->user_input = ft_calloc(1, 1);
+	if (m->user_input == NULL)
+		exit_msg(m, "Malloc failed at format_input", -1);
+	i = 0;
+	while (av[i])
+	{
+		temp = ft_strjoin(m->user_input, av[i]);
+		free_safely_str(&(m->user_input));
+		if (temp != NULL)
+			m->user_input = ft_strdup(temp);
+		free_safely_str(&(temp));
+		if (m->user_input == NULL)
+			exit_msg(m, "Malloc failed at format_input", -1);
+		i++;
+	}
+	temp = ft_strdup(m->user_input);
+	free_safely_str(&(m->user_input));
+	if (temp != NULL)
+		m->user_input = ft_strtrim(temp, "\"");
+	free_safely_str(&temp);
+	if (m->user_input == NULL)
+		exit_msg(m, "Malloc failed at format_input", -1);
+}*/
+
+////////////////////////////////// AUTRE.C ////////////////////////////////////
