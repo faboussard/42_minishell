@@ -35,7 +35,7 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 		change_token_name(m, &list_tokens, "''");
 	while (iterator && iterator->next != NULL)
 	{
-		if ((iterator->e_type != COMMAND || !is_redirect_token(iterator)) && ft_strncmp(iterator->next->name, "\0", 1) == 0)
+		if (iterator->e_type != COMMAND && !is_redirect_token(iterator) && ft_strncmp(iterator->next->name, "\0", 1) == 0)
 		{
 			iterator = iterator->next;
 			new_list_name = ft_strdup("''");
