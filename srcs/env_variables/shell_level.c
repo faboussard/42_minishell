@@ -57,4 +57,6 @@ void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m)
 		}
 		env = env->next;
 	}
+	increment_shell_level(env_vars, m);
+	// permet d'incrémenter si SHELL non interactif
 }
