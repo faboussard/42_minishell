@@ -18,5 +18,6 @@ void	signal_print_newline(int signal);
 void	set_signals_noninteractive(void);
 void	ignore_sigquit(void);
 void	signal_reset_prompt(int signo);
+int signal_interrupt();
 
 #endif // SIGNALS_H
