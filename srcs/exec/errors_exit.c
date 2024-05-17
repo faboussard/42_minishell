@@ -14,15 +14,20 @@
 
 void	exit_command_not_found(t_minishell *m, char *name)
 {
-	ft_putstr_fd(name, 2);
-	ft_putstr_fd(": ", 2);
+	char *msg;
+
+	msg = ft_strjoin(name, ": command not found");
+	if (!msg)
+		malloc_error_with_exit(m);
 	free_safely_str(&name);
-	exit_msg_minishell(m, "command not found", 127);
+	ft_putendl_fd(msg, 2);
+	free_safely_str(&msg);
+	free_minishell(m);
+	exit(127);
 }
 
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
-	(void)m;
 	ft_putendl_fd(msg, 2);
 	free_minishell(m);
 	exit(error_code);

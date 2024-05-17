@@ -28,7 +28,7 @@ int export_variables(char **args, t_envp_list *env_variables, t_minishell *m);
 int		ft_unset(t_minishell *minishell, char **args);
 
 //-------------------------------BUILTINS UTILS-------------------------------//
-void	ft_realpath(t_minishell *m, char *dir);
+char	*ft_realpath(t_minishell *m, char *dir);
 bool	contains_only_charset(const char *str, const char *charset);
 int		ft_atoi_long(const char *str, bool *error);
 bool	is_valid_env_var_key(char *var);
@@ -36,6 +36,6 @@ void action_for_no_valid_key(char *arg, bool *check_key);
 bool is_valid_key_with_plus(char *key);
 void join_with_old(t_minishell *m, char **split, t_envp_list **cpy, char *temp);
 char *join_new_value_env_with_old(t_minishell *m, char **split, t_envp_list **envp);
-void	clear_path_char(char str[PATH_MAX]);
+//void	clear_path_char(char str[PATH_MAX]);
 
 #endif // BUILTINS_H
