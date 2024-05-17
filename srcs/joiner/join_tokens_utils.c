@@ -29,7 +29,6 @@ int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
 	return (0);
 }
 
-
 void change_token_name(t_minishell *minishell, t_token_list **list, char *new_name)
 {
 	char *new_list_name;
