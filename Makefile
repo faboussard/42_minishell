@@ -46,11 +46,9 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 # ------------ COMPILATION ------------ #
 
 CC				=	cc
-<<<<<<< HEAD
-CFLAGS			=	-Wall -Wextra -Werror -g3  #-fPIE
-=======
+
 CFLAGS			=	-Wall -Wextra -Werror -g3 # -fsanitize=address #-fPIE
->>>>>>> origin/master
+
 DEPS_FLAGS		=	-MMD -MP
 
 # -------------  COMMANDS ------------- #

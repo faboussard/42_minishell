@@ -45,5 +45,6 @@ int signal_interrupt()
 		print_error("sigaction() failed");
 		return (-1);
 	}
+	sigaction(SIGQUIT, &action, NULL);
 	return (0);
 }
