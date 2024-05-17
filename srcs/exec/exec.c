@@ -12,7 +12,6 @@
 
 #include "builtins.h"
 #include "exec.h"
-#include "signals.h"
 
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
@@ -145,19 +144,8 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	}
 }
 
-void	manage_interrupted_signal(t_minishell *m)
-{
-	if (WIFSIGNALED(m->status))
-		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
-	else if (WIFEXITED(m->status))
-		m->status = WEXITSTATUS(m->status);
-	else
-		m->status = set_or_get_last_status(m->status, 0);
-}
-
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
-	signal_interrupt();
 	if (nb_cmds < 1)
 		return ;
 	set_paths(m, m->envp_table);
@@ -167,7 +155,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_one_cmd(m, m->pl);
 	else
 		exec_several_cmds(m, m->pl);
-//	m->status = set_or_get_last_status(m->status, 0);
+	m->status = set_or_get_last_status(m->status, 0);
 	ft_free_pl_paths(m, m->pl);
-	manage_interrupted_signal(m);
 }

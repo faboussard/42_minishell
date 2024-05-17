@@ -101,13 +101,13 @@ int	change_pwd_variable(t_minishell *m, char *str)
 	{
 //		if (ft_strncmp(env->target, var, var_len) == 0)
 //		{
-			if (getcwd(cwd, sizeof(cwd)) == NULL)
-			{
-				perror("cd: error retrieving current directory: \
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+		{
+			perror("cd: error retrieving current directory: \
 				getcwd: cannot access parent directories");
-				return (-1);
-			}
-			return (fill_env_value_and_current_path(m, env, cwd));
+			return (-1);
+		}
+		return (fill_env_value_and_current_path(m, env, cwd));
 //		}
 //		env = env->next;
 	}
@@ -124,13 +124,14 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	char	cwd[PATH_MAX];
 	char	*target_path;
 
+	target_path = NULL;
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
 	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", target_path);
-	target_path = ft_realpath(m, dir);
+	target_path = NULL;// ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
 		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
@@ -153,7 +154,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	return (0);
 }
 
-bool	ft_getenv(t_minishell *m, char *var, char *key)
+bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key)
 {
 	t_envp_list *env;
 	size_t	key_len;
@@ -165,7 +166,7 @@ bool	ft_getenv(t_minishell *m, char *var, char *key)
 		if (ft_strncmp(env->target, key, key_len) == 0)
 		{
 
-			ft_strlcpy(var, env->value, ft_strlen(env->value) + 1);
+			ft_strlcpy(dest, env->value, ft_strlen(env->value) + 1);
 			return (1);
 		}
 		env = env->next;
@@ -177,15 +178,17 @@ static int	get_home(t_minishell *m)
 {
 	size_t	home_dir_len;
 	int		return_value;
+	char dir_cpy[PATH_MAX];
 
-	if (ft_getenv(m, m->target_path, "HOME=") == 0)
+	dir_cpy[0] = '\0';
+	if (ft_getenv(m, dir_cpy, "HOME=") == 0)
 	{
 		ft_putendl_fd("minishell: cd: HOME not set", 2);
 		return (1);
 	}
-	home_dir_len = ft_strlen(m->target_path);
-	ft_strlcat(m->target_path, "/", home_dir_len + 1);
-	return_value = go_into_directory(m, m->target_path);
+	home_dir_len = ft_strlen(dir_cpy);
+	ft_strlcat(dir_cpy, "/", home_dir_len + 1);
+	return_value = go_into_directory(m, dir_cpy);
 	return (return_value);
 }
 
@@ -215,6 +218,7 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 	char		*dir;
 //	struct stat	st;
 
+	return(0);
 	// dprintf(2, "m->current_path IS %s\n", m->current_path);
 	if (too_many_args(cmd_table))
 		return (1);
