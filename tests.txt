@@ -4,16 +4,6 @@ question. pourquoi trois children ?
 
 ****************************************** HEREDOC **********************************
 
-faboussa@z1r9p4:~/minishell$ << EOF cat << stop cat << lol cat  > r
-wevwv
-EOF
-swv
-stop
-cecw
-lol
-faboussa@z1r9p4:~/minishell$ cat r
-Please ask your administrator.
-
 ➜  ~ cat << EOF
 heredoc> $USER$BLABLA
 heredoc> EOF

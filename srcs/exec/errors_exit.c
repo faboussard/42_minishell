@@ -49,5 +49,5 @@ void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err)
 
 void	malloc_error_with_exit(t_minishell *m)
 {
-	exit_msg_minishell(m, "Malloc error", 1);
+	exit_msg_minishell(m, "Malloc error", ENOMEM);
 }

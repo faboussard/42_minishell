@@ -7,14 +7,15 @@ vpath %c srcs lexer joiner env_variables parser expansion utils exec builtins
 
 # --------------- FILES --------------- #
 
-LIST_SRCS		=  main signal \
+LIST_SRCS		=  main\
+                signals/signal signals/signal_interrupt\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens \
 				lexer/token_list lexer/token_utils \
 				joiner/join_tokens joiner/join_tokens_utils \
 				env_variables/env_variables env_variables/env_utils env_variables/envp_list_utils\
 				env_variables/manage_envp_lists env_variables/fake_env env_variables/shell_level\
-				parser/parser parser/create_process_list parser/process_list parser/check_syntax parser/print_error_syntax\
-				parser/token_requalif parser/token_requalif_utils parser/check_quotes parser/create_tables_in_process_list\
+				parser/parser parser/parser_utils parser/create_process_list parser/process_list parser/check_syntax parser/print_error_syntax\
+				parser/token_requalif_utils parser/check_quotes parser/create_tables_in_process_list\
 				builtins/unset_builtin builtins/export_builtin builtins/env_builtin builtins/exit_builtin builtins/exit_builtin2\
 				builtins/cd_builtin builtins/ft_realpath builtins/ft_split_list builtins/pwd_builtin builtins/builtins_utils builtins/echo_builtin\
 				builtins/export_print builtins/export\
@@ -29,7 +30,7 @@ LIST_HEADERS	= utils lexer minishell parser signals exec builtins ft_realpath
 
 DIR_BUILD		=	.build/
 SUBDIRS := .build/lexer .build/env_variables .build/parser .build/expansion \
-			.build/joiner .build/utils .build/exec .build/builtins
+			.build/joiner .build/utils .build/exec .build/builtins .build/signals
 DIR_HEADERS		=	includes/
 DIR_LIBFT		=	libft/
 HEADER_LIBFT    =   libft/inc/
@@ -45,7 +46,9 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 # ------------ COMPILATION ------------ #
 
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror #-fPIE
+
+CFLAGS			=	-Wall -Wextra -Werror -g3 # -fsanitize=address #-fPIE
+
 DEPS_FLAGS		=	-MMD -MP
 
 # -------------  COMMANDS ------------- #
