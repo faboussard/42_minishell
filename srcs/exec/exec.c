@@ -172,7 +172,6 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	//manage_interrupted_signal(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
