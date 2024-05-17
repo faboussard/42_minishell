@@ -46,7 +46,11 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 # ------------ COMPILATION ------------ #
 
 CC				=	cc
+<<<<<<< Updated upstream
 CFLAGS			=	-Wall -Wextra -Werror -g3 #-fsanitize=address #-fPIE
+=======
+CFLAGS			=	-Wall -Wextra -Werror -g3 # -fsanitize=address #-fPIE
+>>>>>>> Stashed changes
 DEPS_FLAGS		=	-MMD -MP
 
 # -------------  COMMANDS ------------- #

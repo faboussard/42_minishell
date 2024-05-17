@@ -79,7 +79,6 @@ typedef struct s_minishell
 	t_envp_list					*list_envp;
 	t_process_list				*pl;
 	size_t						total_commands;
-	size_t						total_size_envp;
 }								t_minishell;
 
 typedef struct s_envp
