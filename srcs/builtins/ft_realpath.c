@@ -249,6 +249,8 @@ void remove_dirs_from_list(t_nodes_list *list)
 	prev = NULL;
 	while (tmp)
 	{
+		if (next_dir_is_pts(tmp->subdir)) // <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
+			return; //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
 		if (ft_strncmp(tmp->subdir, ".", 2) == 0)
 		{
 			if (prev)
@@ -271,7 +273,7 @@ void remove_dirs_from_list(t_nodes_list *list)
 		}
 		if (ft_strncmp(list->subdir, "..", 3) == 0)
 		{
-			remove_one_dir_from_path(m->current_path);
+			//remove_one_dir_from_path(m->current_path);
 			list = list->next;
 			continue ;
 		}
@@ -373,11 +375,13 @@ char	*ft_realpath(t_minishell *m, char *dir)
 			ft_strlcpy(tmp, m->current_path, curpath_len + 1);
 			ft_strlcat(tmp, "/", curpath_len + 2);
 			ft_strlcat(tmp, dir, curpath_len + 2 + dir_len);
-			ft_strlcpy(target_path, tmp, ft_strlen(tmp) + 1);
-			return ;
+			//ft_strlcpy(target_path, tmp, ft_strlen(tmp) + 1);
+			return (ft_strdup(dir)); //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
 		}
-	replace_pts_with_path(, target_path, dir);
-	dprintf(2, "FINAL TARGET PATH :D\n%s\n", target_path);
+		return (ft_strdup(dir)); //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
+
+	//replace_pts_with_path(, target_path, dir);
+	//dprintf(2, "FINAL TARGET PATH :D\n%s\n", target_path);
 }
 /* OLD REALPATH
  * void	ft_realpath(t_minishell *m, char *dir)

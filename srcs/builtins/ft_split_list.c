@@ -90,6 +90,6 @@ t_nodes_list 	*ft_split_list(char const *s, char c)
 		tmp = tmp->next;
 		i++;
 	}
-	tmp[i] = NULL;
+	tmp->next = NULL;
 	return (list);
 }
