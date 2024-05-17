@@ -199,4 +199,5 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	ft_free_pl_paths(m, m->pl);
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	manage_interrupted_signal(m);
+	m->status = set_or_get_last_status(m->status, 0);
 }

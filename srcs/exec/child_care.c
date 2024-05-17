@@ -124,7 +124,6 @@ static void	wait_children_and_give_exit_status(t_minishell *m)
 	waitpid(m->pid2, &(m->status), 0);
 	while (waitpid(-1, NULL, 0) && errno != 10)
 		;
-//	manage_interrupted_signal(m);
 }
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
