@@ -15,15 +15,27 @@
 #include "signal.h"
 #include "signals.h"
 
+static int	create_all_outfiles(t_minishell *m, t_process_list *pl);
 static int	check_all_infiles(t_minishell *m, t_process_list *pl);
+
+bool	is_one_arg_builtin(t_minishell *m)
+{
+	if (m->total_commands == 1)
+	{
+		if (m->list_tokens->e_builtin == EXIT)
+			return (1);
+		if (m->list_tokens->e_builtin == UNSET)
+			return (1);
+		if (m->list_tokens->e_builtin == CD)
+			return (1);
+		if (m->list_tokens->e_builtin == EXPORT)
+			return (1);
+	}
+	return (0);
+}
 
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
-	if (m->pl->out_files_list != NULL)
-	{
-		m_safe_dup2(m, m->pl->fd_out, STDOUT_FILENO);
-		close(m->pl->fd_out);
-	}
 	if (!cmd || !cmd_table)
 		return (0);
 	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
@@ -120,8 +132,6 @@ static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
 	{
 		if (open_fd_outfile(m, tmp, tmp->out_files_list->name) == 1)
 			return (1);
-//		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-//		close(pl->fd_out);
 	}
 	return (0);
 }
@@ -158,7 +168,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 		m->status = WEXITSTATUS(1);
 		return ;
 	}
-	if (is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+	if (is_one_arg_builtin(m) && is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
