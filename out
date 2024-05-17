@@ -1,0 +1,10 @@
+ignore_leaks.supp
+includes
+info.txt
+libft
+Makefile
+minishell
+out
+srcs
+sujet_correction.pdf
+tests.txt
