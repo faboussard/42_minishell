@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
-#include "exec.h"
+#include "ft_realpath.h"
 
-int	count_up_moves(char *cmd)
+/*int	count_up_moves(char *cmd)
 {
 	int		up_moves;
 	size_t	i;
@@ -29,9 +28,9 @@ int	count_up_moves(char *cmd)
 		i++;
 	}
 	return (up_moves);
-}
+}*/
 
-size_t	count_moves_to_root(char *cmd)
+/*size_t	count_moves_to_root(char *cmd)
 {
 	size_t		moves;
 	size_t	i;
@@ -47,7 +46,7 @@ size_t	count_moves_to_root(char *cmd)
 		i++;
 	}
 	return (moves);
-}
+}*/
 
 /*
  * size_t	count_future_path_len(char *current_path, int up_moves)
@@ -178,7 +177,7 @@ static bool	next_dir_is_pts(const char *dir)
 //	return (up_moves);
 //}
 
-void	go_back_dir(const char *target, size_t *i, size_t *j)
+/*void	go_back_dir(const char *target, size_t *i, size_t *j)
 {
 	if ((*j) > 0)
 	{
@@ -193,121 +192,25 @@ void put_final_slash(char *target, size_t *j)
 {
 	size_t i;
 
-	if (target[(*j)] && target[(*j) - 1] != '/')
+	dprintf(2, "target BEFORE final slash = %s\n", target);
+	if (!target[(*j)] || *j == 0 || target[(*j) - 1] != '/')
 	{
 		target[*j] = '/';
 		(*j)++;
 	}
 	i = *j;
-	while (target[i])
+	while (target[i] && i < PATH_MAX)
 	{
 		target[i] = '\0';
 		i++;
 	}
+	++(*j);
+	dprintf(2, "target after final slash = %s\n", target);
 //	target[*j] = '/';
-//	++(*j);
 //	target[*j] = '\0';
-}
+}*/
 
-void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
-{
-	size_t	i;
-	size_t	j;
-	size_t up_moves;
-	char	tmp[4096];
-
-	if (!dir || !dir[0])
-		return ;
-	i = 0;
-	j = ft_strlen(m->current_path);
-	tmp[0] = '\0';
-	ft_strlcpy(target, m->current_path, j + 1);
-	up_moves = count_up_moves(dir);
-	if (up_moves >= count_moves_to_root(m->current_path))
-	{
-		ft_strlcpy(target, "/", 2);
-		return ;
-	}
-	if (dir[0] && dir[0]!= '/')
-		target[j++] = '/';
-	while (dir[i])
-	{
-		if (next_dir_is_pts(dir + i))
-			go_back_dir(target, &i, &j);
-		if (dir[i] == '/' || dir[i] == '\0')
-			put_final_slash(target, &j);
-		else
-		{
-			target[j] = dir[i];
-			j++;
-		}
-		i++;
-	}
-	target[j] = '\0';
-}
-/*
-void	replace_pts_with_path(t_minishell	*m, char target[4096], char	*dir)
-{
-	size_t	i;
-	size_t	j;
-	char	tmp[4096];
-
-	(void)m;
-	if (!dir || !dir[0])
-		return ;
-	i = 0;
-	tmp[0] = '\0';
-	target[0] = '\0';
-	i = skip_slash_and_pts(dir, i);
-	while (dir[i])
-	{
-		while (i > 1 && dir[i] && dir[i - 1] != '/')
-			i++;
-		// FULL GARBAGE TO THINK ON
-		while (dir[i] && next_dir_is_pts(dir + i))
-		{
-			j = i - 1;
-			while (dir[j] != '/')
-				j--;
-			ft_strlcat(tmp, dir, j + 1);
-			ft_strlcat(target, tmp, j + 1);
-			i += 2;
-		}
-		i++;
-	}
-}
-*/
-/*
- *	remove_one_dir_from_path(m->target_path);
- *	/../home/../home/mbernard/42/minishell
- * /../../../
- * /home/mbernard/42/minishell
- * 	size_t dir_len;
-	size_t current_path_len;
-	//dir_len = ft_strlen(dir);
-	current_path_len = ft_strlen(m->current_path);
-	ft_strlcat(m->target_path, dir, dir_len + 1);
-	while (dir[i] && dir[i + 1])
-	{
-		if (dir[i] == '.' && dir[i + 1] == '/')
-			i += 2;
-		else if (dir[i] == '.' && dir[i + 1] == '.' && dir[i + 2] == '/')
-		{
-			remove_one_dir_from_path(new_path);
-			i += 3;
-		}
-		else
-		{
-			new_path[current_path_len + j] = dir[i];
-			i++;
-			j++;
-		}
-	}
-	new_path[current_path_len + j] = '\0';
-	ft_strlcpy(current_path, new_path, ft_strlen(new_path) + 1);
-*/
-
-void sanitize_path(char path[4096])
+/*void sanitize_path(char path[PATH_MAX], size_t end)
 {
 	size_t	i;
 	size_t	j;
@@ -315,43 +218,201 @@ void sanitize_path(char path[4096])
 
 	i = 0;
 	j = 0;
+//	clear_path_char(tmp);
+	dprintf(2, "tmp = %s\n", tmp);
+	dprintf(2, "path = %s\n", path);
+	ft_memset(path + end, 0, PATH_MAX - end);
+//	path[end] = '\0';
 	while (path[i])
 	{
 		if (path[i] == '/' && path[i + 1] && path[i + 1] == '/')
 			i++;
 		else
+		{
 			tmp[j] = path[i];
-		i++;
-		j++;
+			dprintf(2, "tmp = %s\n", tmp);
+			i++;
+			j++;
+		}
 	}
-	ft_strlcpy(path, tmp, j + 2);
+	tmp[j] = 0;//'\0';
 	dprintf(2, "tmp = %s\n", tmp);
+	ft_strlcpy(path, tmp, j + 1);
+}*/
+
+void remove_dirs_from_list(t_nodes_list *list)
+{
+	t_nodes_list	*tmp;
+	t_nodes_list	*prev;
+
+	tmp = list;
+	prev = NULL;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->subdir, ".", 2) == 0)
+		{
+			if (prev)
+				prev->next = tmp->next;
+			else
+				list = tmp->next;
+			free_safely_str(&tmp->subdir);
+			free(tmp);
+			tmp = list;
+		}
+		else if (ft_strncmp(tmp->subdir, "..", 3) == 0)
+		{
+			if (prev)
+				prev->next = tmp->next;
+			else
+				list = tmp->next;
+			free(tmp->subdir);
+			free(tmp);
+			tmp = prev;
+		}
+		if (ft_strncmp(list->subdir, "..", 3) == 0)
+		{
+			remove_one_dir_from_path(m->current_path);
+			list = list->next;
+			continue ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
 }
 
-void	ft_realpath(t_minishell *m, char *dir)
+char	*join_sep_safely(char *s1, char *s2, char sep, bool free_s1)
+{
+	size_t	total_len;
+	char	*dest;
+	int		x;
+	int		y;
+
+	if (!s1 || !s2)
+		return (NULL);
+	total_len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	dest = (char *)malloc(sizeof(char) * (total_len + 1));
+	if (!dest)
+		return (NULL);
+	x = -1;
+	y = 0;
+	while (s1[++x])
+		dest[x] = (char)s1[x];
+	dest[x++] = sep;
+	while (s2[y])
+		dest[x++] = (char)s2[y++];
+	dest[x] = '\0';
+	if (free_s1)
+		free_safely_str(&s1);
+	return (dest);
+}
+
+t_nodes_list	*prepare_list(t_minishell *m, char *dir)
+{
+	t_nodes_list	*list;
+	char			*dir_cpy;
+
+	dir_cpy = ft_strdup(dir);
+	if (!dir_cpy)
+		return (NULL);
+	if (dir && dir[0] && dir[0] != '/')
+	{
+		free_safely_str(&dir_cpy);
+		dir_cpy = join_sep_safely(m->current_path, dir, '/', 0);
+		if (!dir)
+			return (NULL);
+	}
+	list = ft_split_list(dir, '/');
+	return (list);
+}
+
+char	*replace_pts_with_path(t_minishell	*m, char	*dir)
+{
+	char	*path;
+	t_nodes_list	*list;
+
+	list = prepare_list(m, dir);
+	if (!list)
+		return (NULL);
+	remove_dirs_from_list(list);
+	path = ft_strdup("/");
+	if (!path)
+	{
+		ft_free_list(list);
+		return (NULL);
+	}
+	while (list)
+	{
+		path = join_sep_safely(path, list->subdir, '/', 1);
+		if (!path)
+			break ;
+		list = list->next;
+	}
+	ft_free_list(list);
+	return (path);
+}
+
+char	*ft_realpath(t_minishell *m, char *dir)
 {
 	size_t	dir_len;
 	size_t	curpath_len;
-	char tmp[4096];
+	char tmp[PATH_MAX];
 
 	dir_len = ft_strlen(dir);
-	ft_strlcpy(m->target_given, dir, dir_len + 1);
-	if ((dir_len <= 4094 && (ft_strchr(dir, '.') == NULL))
-		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir)))
+	if (ft_strncmp(dir, "/", 2) == 0)
+		return (ft_strdup(dir));
+	if (dir && dir[0] == '/')
+	{
+		return(replace_pts_with_path(m, dir));
+	}
+	if ((dir_len <= PATH_MAX
+		&& ((ft_strchr(dir, '.') == NULL) || !ft_strncmp(dir, ".", 2))
+		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir))))
 	//	|| access(m->current_path, X_OK) == 0))
 		{
-//			dprintf(2, "dir = %s\n", dir);
 			curpath_len = ft_strlen(m->current_path);
 			ft_strlcpy(tmp, m->current_path, curpath_len + 1);
 			ft_strlcat(tmp, "/", curpath_len + 2);
 			ft_strlcat(tmp, dir, curpath_len + 2 + dir_len);
-			ft_strlcpy(m->target_path, tmp, ft_strlen(tmp) + 1);
-			sanitize_path(m->target_path);
+			ft_strlcpy(target_path, tmp, ft_strlen(tmp) + 1);
 			return ;
 		}
-	replace_pts_with_path(m, m->target_path, dir);
-	sanitize_path(m->target_path);
+	replace_pts_with_path(, target_path, dir);
+	dprintf(2, "FINAL TARGET PATH :D\n%s\n", target_path);
 }
+/* OLD REALPATH
+ * void	ft_realpath(t_minishell *m, char *dir)
+{
+	size_t	dir_len;
+	size_t	curpath_len;
+	char tmp[PATH_MAX];
+
+	clear_path_char(tmp);
+	dir_len = ft_strlen(dir);
+	ft_strlcpy(m->target_given, dir, dir_len + 1);
+	if (ft_strncmp(dir, "/", 2) == 0)
+	{
+		ft_strlcpy(m->target_path, dir, 2);
+		return ;
+	}
+	if (dir && dir[0] == '/')
+		return ;
+	if ((dir_len <= PATH_MAX
+		 && ((ft_strchr(dir, '.') == NULL) || !ft_strncmp(dir, ".", 2))
+		 && (!dir[0] || !dir[1] || invalid_num_of_pts(dir))))
+		//	|| access(m->current_path, X_OK) == 0))
+	{
+		curpath_len = ft_strlen(m->current_path);
+		ft_strlcpy(tmp, m->current_path, curpath_len + 1);
+		ft_strlcat(tmp, "/", curpath_len + 2);
+		ft_strlcat(tmp, dir, curpath_len + 2 + dir_len);
+		ft_strlcpy(m->target_path, tmp, ft_strlen(tmp) + 1);
+		sanitize_path(m->target_path, ft_strlen(m->target_path));
+		return ;
+	}
+	replace_pts_with_path(m, m->target_path, dir);
+	dprintf(2, "I BUG :D\n%s\n", m->target_path);
+	sanitize_path(m->target_path, ft_strlen(m->target_path));
+}*/
 /*
 a/b/c/d/e/f/g/h/i
 a/b/c/../c/../../b/

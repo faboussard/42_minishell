@@ -70,8 +70,7 @@ typedef struct s_minishell
 	int							pipe_fd[2];
 	int							tmp_in;
 	char						*user_input;
-	char						target_path[PATH_MAX];
-	char						target_given[ARG_MAX];
+//	char						target_path[PATH_MAX];
 	char						current_path[PATH_MAX];
 	char						old_pwd[PATH_MAX];
 	char						*paths;
