@@ -240,17 +240,23 @@ void put_final_slash(char *target, size_t *j)
 	ft_strlcpy(path, tmp, j + 1);
 }*/
 
-void remove_dirs_from_list(t_nodes_list *list)
+void remove_dirs_from_list(t_dir_list *list)
 {
-	t_nodes_list	*tmp;
-	t_nodes_list	*prev;
+	t_dir_list	*tmp;
+	t_dir_list	*start;
+	t_dir_list	*prev;
 
 	tmp = list;
+	start = list;
 	prev = NULL;
+	return ;
 	while (tmp)
 	{
-		if (next_dir_is_pts(tmp->subdir)) // <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
-			return; //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
+		if (next_dir_is_pts(tmp->next->subdir))
+		{
+			tmp = start;
+			return;
+		}// <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
 		if (ft_strncmp(tmp->subdir, ".", 2) == 0)
 		{
 			if (prev)
@@ -308,11 +314,12 @@ char	*join_sep_safely(char *s1, char *s2, char sep, bool free_s1)
 	return (dest);
 }
 
-t_nodes_list	*prepare_list(t_minishell *m, char *dir)
+t_dir_list	*prepare_list(t_minishell *m, char *dir)
 {
-	t_nodes_list	*list;
+	t_dir_list	*list;
 	char			*dir_cpy;
 
+	dprintf(2, "dir = %s\n", dir);
 	dir_cpy = ft_strdup(dir);
 	if (!dir_cpy)
 		return (NULL);
@@ -324,13 +331,32 @@ t_nodes_list	*prepare_list(t_minishell *m, char *dir)
 			return (NULL);
 	}
 	list = ft_split_list(dir, '/');
+	if (!list)
+		return (NULL);
+	while (list)
+	{
+		dprintf(2, "list->subdir = %s\n", list->subdir);
+		list = list->next;
+	}
 	return (list);
+//	else
+//	{
+//		target_path = ft_strdup(m->current_path);
+//		if (!target_path)
+//			return (NULL);
+//		target_path = join_sep_safely(target_path, dir, '/', 1);
+//		if (!target_path)
+//			return (NULL);
+//	}
+//	list = ft_split_list(dir, '/');
+//	return (list);
 }
 
-char	*replace_pts_with_path(t_minishell	*m, char	*dir)
+char	*replace_pts_with_path(t_minishell	*m, char *dir)
 {
 	char	*path;
-	t_nodes_list	*list;
+	t_dir_list	*list;
+	t_dir_list *start;
 
 	list = prepare_list(m, dir);
 	if (!list)
@@ -342,11 +368,12 @@ char	*replace_pts_with_path(t_minishell	*m, char	*dir)
 		ft_free_list(list);
 		return (NULL);
 	}
+	start = list;
 	while (list)
 	{
 		path = join_sep_safely(path, list->subdir, '/', 1);
 		if (!path)
-			break ;
+			ft_free_list(start);
 		list = list->next;
 	}
 	ft_free_list(list);
@@ -355,34 +382,30 @@ char	*replace_pts_with_path(t_minishell	*m, char	*dir)
 
 char	*ft_realpath(t_minishell *m, char *dir)
 {
-	size_t	dir_len;
-	size_t	curpath_len;
-	char tmp[PATH_MAX];
-
-	dir_len = ft_strlen(dir);
 	if (ft_strncmp(dir, "/", 2) == 0)
+		return (ft_strdup("/"));
+	if ((dir && dir[0] == '/' && ft_strchr(dir, '.') == NULL)
+		|| invalid_num_of_pts(dir))
 		return (ft_strdup(dir));
-	if (dir && dir[0] == '/')
-	{
-		return(replace_pts_with_path(m, dir));
-	}
-	if ((dir_len <= PATH_MAX
-		&& ((ft_strchr(dir, '.') == NULL) || !ft_strncmp(dir, ".", 2))
-		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir))))
-	//	|| access(m->current_path, X_OK) == 0))
-		{
-			curpath_len = ft_strlen(m->current_path);
-			ft_strlcpy(tmp, m->current_path, curpath_len + 1);
-			ft_strlcat(tmp, "/", curpath_len + 2);
-			ft_strlcat(tmp, dir, curpath_len + 2 + dir_len);
-			//ft_strlcpy(target_path, tmp, ft_strlen(tmp) + 1);
-			return (ft_strdup(dir)); //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
-		}
-		return (ft_strdup(dir)); //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
+	return (replace_pts_with_path(m, dir));
+}
+//	if ((dir_len <= PATH_MAX
+//		&& ((ft_strchr(dir, '.') == NULL) || !ft_strncmp(dir, ".", 2))
+//		&& (!dir[0] || !dir[1] || invalid_num_of_pts(dir))))
+//	//	|| access(m->current_path, X_OK) == 0))
+//		{
+//			curpath_len = ft_strlen(m->current_path);
+//			ft_strlcpy(tmp, m->current_path, curpath_len + 1);
+//			ft_strlcat(tmp, "/", curpath_len + 2);
+//			ft_strlcat(tmp, dir, curpath_len + 2 + dir_len);
+//			//ft_strlcpy(target_path, tmp, ft_strlen(tmp) + 1);
+//			return (ft_strdup(dir)); //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
+//		}
+//		return (ft_strdup(dir)); //  <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
 
 	//replace_pts_with_path(, target_path, dir);
 	//dprintf(2, "FINAL TARGET PATH :D\n%s\n", target_path);
-}
+//}
 /* OLD REALPATH
  * void	ft_realpath(t_minishell *m, char *dir)
 {

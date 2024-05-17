@@ -131,7 +131,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		return (0);
 	}
 	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", target_path);
-	target_path = NULL;// ft_realpath(m, dir);
+	target_path = ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
 		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
@@ -218,7 +218,6 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 	char		*dir;
 //	struct stat	st;
 
-	return(0);
 	// dprintf(2, "m->current_path IS %s\n", m->current_path);
 	if (too_many_args(cmd_table))
 		return (1);
