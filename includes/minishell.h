@@ -93,8 +93,8 @@ typedef struct s_envp
 
 typedef struct s_process_list
 {
-	t_token_list				*in_files_token;
-	t_token_list				*out_files_token;
+	t_token_list				*in_files_list;
+	t_token_list				*out_files_list;
 	int							fd_in;
 	int							fd_out;
 	char						*paths;
