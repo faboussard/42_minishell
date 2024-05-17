@@ -54,8 +54,6 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		close_pipes(m->pipe_fd);
 		close_fds(pl->fd_in, pl->fd_out);
 		close_fds(m->tmp_in, 0);
-		if (ft_strncmp(pl->cmd_table[0], "./minishell", 12) == 0)
-			increment_shell_level(&(m->list_envp), m);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		if (access(pl->good_path, F_OK) == 0)
 		{
