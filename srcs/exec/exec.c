@@ -19,11 +19,11 @@ static int	check_all_infiles(t_minishell *m, t_process_list *pl);
 
 bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
-//	if (m->pl->out_files_list != NULL)
-//	{
-//		m_safe_dup2(m, m->pl->fd_out, STDOUT_FILENO);
-//		close(m->pl->fd_out);
-//	}
+	if (m->pl->out_files_list != NULL)
+	{
+		m_safe_dup2(m, m->pl->fd_out, STDOUT_FILENO);
+		close(m->pl->fd_out);
+	}
 	if (!cmd || !cmd_table)
 		return (0);
 	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
