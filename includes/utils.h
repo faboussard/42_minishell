@@ -65,5 +65,7 @@ void			add_token_to_list(t_token_list **list_tokens,
 void			set_current_path_with_cwd(t_minishell *m);
 bool			set_env_var(t_minishell *m, char **var, char *target);
 void			set_minishell_paths(t_minishell *m);
+void	increment_shell_level(t_envp_list **env_vars, t_minishell *m);
+
 
 #endif // UTILS_H
