@@ -12,9 +12,9 @@
 
 #include "ft_realpath.h"
 
-/*int	count_up_moves(char *cmd)
+size_t	count_up_moves(char *cmd)
 {
-	int		up_moves;
+	size_t		up_moves;
 	size_t	i;
 
 	up_moves = 0;
@@ -28,25 +28,25 @@
 		i++;
 	}
 	return (up_moves);
-}*/
+}
 
-/*size_t	count_moves_to_root(char *cmd)
-{
-	size_t		moves;
-	size_t	i;
-
-	moves = 0;
-	i = 0;
-	if (!cmd)
-		return (0);
-	while (cmd[i])
-	{
-		if (cmd[i] == '/')
-			moves++;
-		i++;
-	}
-	return (moves);
-}*/
+//size_t	count_moves_to_root(char *cmd)
+//{
+//	size_t		moves;
+//	size_t	i;
+//
+//	moves = 0;
+//	i = 0;
+//	if (!cmd)
+//		return (0);
+//	while (cmd[i])
+//	{
+//		if (cmd[i] == '/')
+//			moves++;
+//		i++;
+//	}
+//	return (moves);
+//}
 
 /*
  * size_t	count_future_path_len(char *current_path, int up_moves)
@@ -105,7 +105,7 @@
  *
  */
 
-static bool	begins_with_two_pts(const char *dir)
+/*static bool	begins_with_two_pts(const char *dir)
 {
 	size_t	i;
 
@@ -122,7 +122,7 @@ static bool	begins_with_two_pts(const char *dir)
 			return (1);
 	}
 	return (0);
-}
+}*/
 
 static bool	invalid_num_of_pts(char *dir)
 {
@@ -139,20 +139,20 @@ static bool	invalid_num_of_pts(char *dir)
 			return (1);
 		i++;
 	}
-	if (begins_with_two_pts(dir))
-		return (0);
-	return (1);
+	//if (begins_with_two_pts(dir)) <-- me semble complètement inutile maintenant
+	return (0);
+	//return (1);
 }
 
-static bool	next_dir_is_pts(const char *dir)
-{
-	if (dir[0] && dir[1])
-	{
-		if (dir[0] == '.' && dir[1] == '.' && (!dir[2] || dir[2] == '/'))
-			return (1);
-	}
-	return (0);
-}
+//static bool	next_dir_is_pts(const char *dir)
+//{
+//	if (dir[0] && dir[1])
+//	{
+//		if (dir[0] == '.' && dir[1] == '.' && (!dir[2] || dir[2] == '/'))
+//			return (1);
+//	}
+//	return (0);
+//}
 
 //static size_t	count_up_moves(const char *dir, size_t i)
 //{
@@ -240,51 +240,62 @@ void put_final_slash(char *target, size_t *j)
 	ft_strlcpy(path, tmp, j + 1);
 }*/
 
-void remove_dirs_from_list(t_dir_list *list)
+void	remove_node_from_list(t_dir_list *node)
+{
+	t_dir_list	*prev;
+	t_dir_list	*next;
+
+	if (!node)
+		return ;
+	prev = node->prev;
+	next = node->next;
+	if (prev)
+		prev->next = next;
+	else if (next)
+		next->prev = NULL;
+	if (next)
+		next->prev = prev;
+	else if (prev)
+		prev->next = NULL;
+	free_safely_str(&node->subdir);
+	free(node);
+	node = NULL;
+}
+
+void remove_dirs_from_list(t_dir_list **list)
 {
 	t_dir_list	*tmp;
 	t_dir_list	*start;
-	t_dir_list	*prev;
 
-	tmp = list;
-	start = list;
-	prev = NULL;
-	return ;
+	tmp = *list;
+	printf("tmp->subdir = %s\n", tmp->subdir);
+	while (tmp && ft_strncmp(tmp->subdir, "..", 3) == 0)
+		remove_node_from_list(tmp);
+	start = tmp;
 	while (tmp)
 	{
-		if (next_dir_is_pts(tmp->next->subdir))
+		if (tmp->next && ft_strncmp(tmp->next->subdir, "..", 3) == 0)
 		{
+			remove_node_from_list(tmp->next);
+			remove_node_from_list(tmp);
 			tmp = start;
-			return;
-		}// <-- Non sens mais juste parce que je veux pouvoir compiler pour infile/outfile
-		if (ft_strncmp(tmp->subdir, ".", 2) == 0)
-		{
-			if (prev)
-				prev->next = tmp->next;
-			else
-				list = tmp->next;
-			free_safely_str(&tmp->subdir);
-			free(tmp);
-			tmp = list;
 		}
-		else if (ft_strncmp(tmp->subdir, "..", 3) == 0)
+		else if (ft_strncmp(tmp->subdir, ".", 2) == 0
+			|| ft_strncmp(tmp->subdir, "..", 3) == 0)
 		{
-			if (prev)
-				prev->next = tmp->next;
-			else
-				list = tmp->next;
-			free(tmp->subdir);
-			free(tmp);
-			tmp = prev;
+			remove_node_from_list(tmp);
+			tmp = start;
 		}
-		if (ft_strncmp(list->subdir, "..", 3) == 0)
-		{
-			//remove_one_dir_from_path(m->current_path);
-			list = list->next;
-			continue ;
-		}
-		prev = tmp;
+		printf("tmp->subdir = %s\n", tmp->subdir);
 		tmp = tmp->next;
+	}
+	tmp = NULL;
+	*list = start;
+	// À ENLEVER ÉVIDEMMENT
+	while (start)
+	{
+		printf("start->subdir = %s\n", start->subdir);
+		start = start->next;
 	}
 }
 
@@ -319,7 +330,6 @@ t_dir_list	*prepare_list(t_minishell *m, char *dir)
 	t_dir_list	*list;
 	char			*dir_cpy;
 
-	dprintf(2, "dir = %s\n", dir);
 	dir_cpy = ft_strdup(dir);
 	if (!dir_cpy)
 		return (NULL);
@@ -330,26 +340,8 @@ t_dir_list	*prepare_list(t_minishell *m, char *dir)
 		if (!dir)
 			return (NULL);
 	}
-	list = ft_split_list(dir, '/');
-	if (!list)
-		return (NULL);
-	while (list)
-	{
-		dprintf(2, "list->subdir = %s\n", list->subdir);
-		list = list->next;
-	}
+	list = ft_split_list(dir_cpy, '/');
 	return (list);
-//	else
-//	{
-//		target_path = ft_strdup(m->current_path);
-//		if (!target_path)
-//			return (NULL);
-//		target_path = join_sep_safely(target_path, dir, '/', 1);
-//		if (!target_path)
-//			return (NULL);
-//	}
-//	list = ft_split_list(dir, '/');
-//	return (list);
 }
 
 char	*replace_pts_with_path(t_minishell	*m, char *dir)
@@ -358,11 +350,14 @@ char	*replace_pts_with_path(t_minishell	*m, char *dir)
 	t_dir_list	*list;
 	t_dir_list *start;
 
+	dprintf(2, "REPLACE IS COMING :D\n");
 	list = prepare_list(m, dir);
 	if (!list)
 		return (NULL);
-	remove_dirs_from_list(list);
-	path = ft_strdup("/");
+	remove_dirs_from_list(&list);
+	if (!list)
+		return (ft_strdup("/"));
+	path = ft_calloc(1, 1);
 	if (!path)
 	{
 		ft_free_list(list);
@@ -373,10 +368,14 @@ char	*replace_pts_with_path(t_minishell	*m, char *dir)
 	{
 		path = join_sep_safely(path, list->subdir, '/', 1);
 		if (!path)
+		{
 			ft_free_list(start);
+			return (NULL);
+		}
 		list = list->next;
 	}
 	ft_free_list(list);
+	dprintf(2, "FINAL PATH :D\n%s\n", path);
 	return (path);
 }
 
@@ -387,6 +386,10 @@ char	*ft_realpath(t_minishell *m, char *dir)
 	if ((dir && dir[0] == '/' && ft_strchr(dir, '.') == NULL)
 		|| invalid_num_of_pts(dir))
 		return (ft_strdup(dir));
+	dprintf(2, "DIR = %s\n", dir);
+	if (contains_only_charset(dir, "./") && count_up_moves(m->current_path) < count_up_moves(dir))
+		return (ft_strdup("/")); //<-- à changer, ne fonctionne pas
+	dprintf(2, "REPLACE IS COMING :D\nMoves up == %lu\nTO ROOT == %lu\n", count_up_moves(dir), count_up_moves(m->current_path));
 	return (replace_pts_with_path(m, dir));
 }
 //	if ((dir_len <= PATH_MAX
