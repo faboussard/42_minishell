@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 08:41:56 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/18 14:04:40 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:26:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ void	ft_free_list(t_dir_list *list)
 		tmp = list;
 		list = list->next;
 		free_safely_str(&tmp->subdir);
-		free(tmp);
 		bzero(tmp, sizeof(t_dir_list));
+		free(tmp);
+		tmp = NULL;
 	}
 	list = NULL;
 }
