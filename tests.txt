@@ -1,6 +1,3 @@
-//********************* TODO ***********************////
-
-question. pourquoi trois children ?
 
 ****************************************** HEREDOC **********************************
 
@@ -17,13 +14,11 @@ faboussa
 ➜  ~
 
 faboussa@z2r8p4:~$ cat << stop
-> $USER$USER   ///// KO MANQUE DEUXIEME FABOUSSA
+> $USER$USER
 > EOF
 faboussafaboussa
 faboussa@z2r8p4:~$
-faboussa@z1r8p5:~$ cat << "lala $USER"$USER $USER
-> lala $USER$USER
-cat: faboussa: No such file or directory
+
 faboussa@z2r8p4:~$ cat << stop
 > sdbwrbb$USER
 > EOF
@@ -36,7 +31,7 @@ faboussa=
 > $'USER'
 > stop
 $'USER'
-10:14:08 juba@juba-desktop ~ → cat << stop  //////////////////////// KO
+10:14:08 juba@juba-desktop ~ → cat << stop
 > b$blab$USER$bl
 > stop
 bjuba
@@ -104,7 +99,7 @@ faboussa@z1r11p5:~/minishell$  echo "$1234USER"
 234USER
 faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
 g$'USER'
-faboussa@z1r11p5:~/tommini$  echo "'$HO''ME'"
+faboussa@z1r11p5:~/tommini$  echo "'$HO''ME'" // KO
 '''ME'
 
 faboussa@z1r11p5:~/minishell$ echo $=HOME
@@ -114,6 +109,11 @@ faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
+❯ echo '"$USER"'
+"$USER"
+❯ echo "'$USER'"
+'fanny'
+
 
 
 *************************** QUOTES  ***********************
