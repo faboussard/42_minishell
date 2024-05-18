@@ -55,8 +55,8 @@ int requalify_tokens(t_token_list *list_tokens, t_minishell *m)
 	to_infile_or_outfile(list_tokens);
 	arg_to_command(list_tokens);
 	define_builtins(list_tokens);
-	dollar_to_command(list_tokens);
 	define_operators(list_tokens);
+	dollar_to_command(list_tokens);
 	redefine_empty_command(m, list_tokens);
 	return (1);
 }
