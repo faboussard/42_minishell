@@ -354,24 +354,50 @@ char	*replace_pts_with_path(t_minishell	*m, char *dir)
 	list = prepare_list(m, dir);
 	if (!list)
 		return (NULL);
+	list->prev = (t_dir_list *) malloc(sizeof (t_dir_list));
+	if (list->prev == NULL)
+	{
+		ft_free_list(list);
+		return (NULL);
+	}
+	list->prev->next = list;
+	list = list->prev;
+	list->subdir = ft_strdup("/");
+	if (!list->subdir)
+	{
+		ft_free_list(list);
+		return (NULL);
+	}
+	t_dir_list *print = list;
+	while (print)
+	{
+		dprintf(2, "print->subdir = %s\n", print->subdir);
+		print = print->next;
+	}
 	remove_dirs_from_list(&list);
-	if (!list)
+	if (!list || !list->next)
 		return (ft_strdup("/"));
-	path = ft_calloc(1, 1);
+	path = ft_strdup(list->subdir);
 	if (!path)
 	{
 		ft_free_list(list);
 		return (NULL);
 	}
 	start = list;
+	list = list->next;
 	while (list)
 	{
-		path = join_sep_safely(path, list->subdir, '/', 1);
+		if (ft_strncmp(path, "/", 2) == 0)
+			path = ft_strjoin(path, list->subdir);
+		else
+			path = join_sep_safely(path, list->subdir, '/', 1);
 		if (!path)
 		{
 			ft_free_list(start);
 			return (NULL);
 		}
+		dprintf(2, "THE FUCKING LIST = %s\n", list->subdir);
+		dprintf(2, "THE FUCKING PATH = %s\n", path);
 		list = list->next;
 	}
 	ft_free_list(list);
@@ -387,8 +413,9 @@ char	*ft_realpath(t_minishell *m, char *dir)
 		|| invalid_num_of_pts(dir))
 		return (ft_strdup(dir));
 	dprintf(2, "DIR = %s\n", dir);
-	if (contains_only_charset(dir, "./") && count_up_moves(m->current_path) < count_up_moves(dir))
-		return (ft_strdup("/")); //<-- à changer, ne fonctionne pas
+	if (contains_only_charset(dir, "./")
+		&& count_up_moves(m->current_path) < count_up_moves(dir))
+		return (ft_strdup("/"));
 	dprintf(2, "REPLACE IS COMING :D\nMoves up == %lu\nTO ROOT == %lu\n", count_up_moves(dir), count_up_moves(m->current_path));
 	return (replace_pts_with_path(m, dir));
 }
