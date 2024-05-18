@@ -69,8 +69,8 @@ void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m)
 //	if (env)
 //	{
 //		new_level = ft_itoa(ft_atoi(env->value) + 1);
-//		dprintf(2, "ACTUAL SHELL LEVEL=%s\n", env->value);
-//		dprintf(2, "NEW SHELL LEVEL =%s\n", new_level);
+//		//dprintf(2, "ACTUAL SHELL LEVEL=%s\n", env->value);
+//		//dprintf(2, "NEW SHELL LEVEL =%s\n", new_level);
 //		if (new_level == NULL)
 //			exit_msg(m, "Malloc failed at increment_shell_level", ENOMEM);
 //		free_safely_str(&env->value);
@@ -87,7 +87,7 @@ void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m)
 //	{
 //		if (ft_strncmp(env->target, "SHELL=", 6) == 0)
 //		{
-//			dprintf(2, "SHELL=%s\n", env->value);
+//			//dprintf(2, "SHELL=%s\n", env->value);
 //			if (ft_strncmp(env->value, "minishell", 9) != 0)
 //			{
 //				free_safely_str(&env->value);
