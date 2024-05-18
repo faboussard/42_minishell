@@ -159,7 +159,6 @@ void	manage_interrupted_signal(t_minishell *m)
 		m->status = WEXITSTATUS(m->status);
 	else
 		m->status = set_or_get_last_status(m->status, 0);
-
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
@@ -180,12 +179,6 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-//		if (WIFSIGNALED(m->status))
-//			m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
-//		else if (WIFEXITED(m->status))
-//			m->status = WEXITSTATUS(m->status);
-		//if (WIFEXITED(m->status))
-////		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
 	manage_interrupted_signal(m);

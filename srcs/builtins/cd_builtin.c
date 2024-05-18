@@ -62,14 +62,13 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	curpath_len = ft_strlen(m->current_path) + 1;
 	cwd_len = ft_strlen(cwd) + 1;
 	ft_strlcpy(m->old_pwd, m->current_path, curpath_len);
-//	clear_path_char(m->current_path);
 	ft_strlcpy(m->current_path, cwd, cwd_len);
 	dprintf(2, "BEFORE m->current_path = %s\n", m->current_path);
-	if (m->current_path[cwd_len - 2] && m->current_path[cwd_len - 2] == '/')
-	{
-		m->current_path[cwd_len - 2] = '\0';
-		cwd[cwd_len - 2] = '\0';
-	}
+//	if (m->current_path[cwd_len - 2] && m->current_path[cwd_len - 2] == '/')
+//	{
+//		m->current_path[cwd_len - 2] = '\0';
+//		cwd[cwd_len - 2] = '\0';
+//	}
 	dprintf(2, "m->old_pwd = %s\n", m->old_pwd);
 	dprintf(2, "m->current_path = %s\n", m->current_path);
 	free_safely_str(&(env->value));
@@ -130,7 +129,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
 		return (0);
 	}
-	dprintf(2, "BEFORE REALPATH : m->target_path = %s\n", target_path);
+	dprintf(2, "BEFORE REALPATH :D\n");
 	target_path = ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
