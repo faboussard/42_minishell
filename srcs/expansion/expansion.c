@@ -20,7 +20,7 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 
 	while (iterator != NULL)
 	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(string)) == 0)
+		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
 		{
 			if (check_special_char_after_expand(string, iterator->target))
 				string = expand_sign(string, iterator->value);
@@ -72,12 +72,11 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 	{
 		if (single_quote_count % 2 != 0 && double_quote_count % 2 == 0)
 			return ;
-//		if (single_quote_count % 2 == 0 && double_quote_count % 2 != 0)
-//			return ; //new
 		if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_' && double_quote_count % 2 == 0)
 			(*list)->e_operator = 0;
 		else
 		{
+			define_to_delete_tokens(list);
 			expanded_string = expand_sigil((*list)->next->name, minishell);
 			if (expanded_string != (*list)->next->name)
 			{
@@ -94,7 +93,9 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 
 void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_quote_count, int *double_quote_count)
 {
-	int cheat_number = -1;
+	int cheat_number;
+
+	cheat_number= -1;
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
@@ -103,7 +104,7 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 			update_quote_counts(iterator, single_quote_count, &cheat_number);
 		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 			update_quote_counts(iterator, single_quote_count, double_quote_count);
-		else if (iterator->e_operator == DOLLAR)
+		else if (iterator->e_operator == DOLLAR && iterator->next != NULL)
 		{
 			if (is_redirect_token(iterator->next) && iterator->next->next != NULL &&
 				iterator->next->next->e_operator == IS_SPACE)
