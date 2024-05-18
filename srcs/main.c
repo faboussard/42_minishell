@@ -88,69 +88,69 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	return (2);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	t_minishell	minishell;
-	char	*readline_input;
-	char	**arg_input;
-	int		i;
-
-	if (ac == 3 && ft_strcmp(av[1], "-c") == 0 && av[2])
-	{
-		arg_input = ft_split(av[2], ';');
-		if (!arg_input)
-			return (1);
-		i = 0;
-		while (arg_input[i])
-		{
-			ft_bzero(&minishell, (sizeof(t_minishell)));
-			minishell.total_commands = 1;
-			set_minishell_paths(&minishell);
-			set_environment(&minishell, envp);
-			if (is_interactive(&minishell, ac, av) == true)
-				minishell_interactive(&minishell);
-			else
-				minishell_non_interactive(&minishell, arg_input[i]);
-			// Parse arg_input[i]
-			// Execute arg_input[i]
-			i++;
-		}
-	}
-	else
-	{
-		while (1)
-		{
-			readline_input = readline(PROMPT);
-			ft_bzero(&minishell, (sizeof(t_minishell)));
-			minishell.total_commands = 1;
-			set_minishell_paths(&minishell);
-			set_environment(&minishell, envp);
-			if (is_interactive(&minishell, ac, av) == true)
-				minishell_interactive(&minishell);
-			else
-				minishell_non_interactive(&minishell, readline_input);
-			//Parse readline input
-			//Execute readline input
-		}
-	}
-	// Free data and exit minishell when done
-	free_minishell(&minishell);
-	return (minishell.status);
-}
-
 //int	main(int ac, char **av, char **envp)
 //{
 //	t_minishell	minishell;
+//	char	*readline_input;
+//	char	**arg_input;
+//	int		i;
 //
-//	ft_bzero(&minishell, (sizeof(t_minishell)));
-//	minishell.total_commands = 1;
-//	set_minishell_paths(&minishell);
-//	set_environment(&minishell, envp);
-//	if (is_interactive(&minishell, ac, av) == true)
-//		minishell_interactive(&minishell);
+//	if (ac == 3 && ft_strcmp(av[1], "-c") == 0 && av[2])
+//	{
+//		arg_input = ft_split(av[2], ';');
+//		if (!arg_input)
+//			return (1);
+//		i = 0;
+//		while (arg_input[i])
+//		{
+//			ft_bzero(&minishell, (sizeof(t_minishell)));
+//			minishell.total_commands = 1;
+//			set_minishell_paths(&minishell);
+//			set_environment(&minishell, envp);
+////			if (is_interactive(&minishell, ac, av) == true)
+////				minishell_interactive(&minishell);
+////			else
+//				minishell_non_interactive(&minishell, arg_input[i]);
+//			// Parse arg_input[i]
+//			// Execute arg_input[i]
+//			i++;
+//		}
+//	}
 //	else
-//		minishell_non_interactive(&minishell, av[2]);
-//	//	ft_print_minishell(&minishell);
+//	{
+//		while (1)
+//		{
+//			readline_input = readline(PROMPT);
+//			ft_bzero(&minishell, (sizeof(t_minishell)));
+//			minishell.total_commands = 1;
+//			set_minishell_paths(&minishell);
+//			set_environment(&minishell, envp);
+////			if (is_interactive(&minishell, ac, av) == true)
+////				minishell_interactive(&minishell);
+////			else
+//				minishell_non_interactive(&minishell, readline_input);
+//			//Parse readline input
+//			//Execute readline input
+//		}
+//	}
+//	// Free data and exit minishell when done
 //	free_minishell(&minishell);
 //	return (minishell.status);
 //}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_minishell	minishell;
+
+	ft_bzero(&minishell, (sizeof(t_minishell)));
+	minishell.total_commands = 1;
+	set_minishell_paths(&minishell);
+	set_environment(&minishell, envp);
+	if (is_interactive(&minishell, ac, av) == true)
+		minishell_interactive(&minishell);
+	else
+		minishell_non_interactive(&minishell, av[2]);
+	//	ft_print_minishell(&minishell);
+	free_minishell(&minishell);
+	return (minishell.status);
+}
