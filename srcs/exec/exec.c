@@ -50,14 +50,14 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 		m->status = ft_env(m, cmd_table);
 	else if (cmd && ft_strncmp(cmd, "unset", 6) == 0)
 		m->status = ft_unset(m, cmd_table);
-	else if (cmd && ft_strncmp(cmd, "export", 5) == 0)
+	else if (cmd && ft_strncmp(cmd, "export", 7) == 0)
 		m->status = ft_export(cmd_table, &m->list_envp, m);
 	else
 		return (0);
 	set_or_get_last_status(m->status, 0);
 	return (1);
 }
-
+	
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	if (pl->cmd_table[0] && !is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
@@ -67,15 +67,17 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		close_fds(pl->fd_in, pl->fd_out);
 		close_fds(m->tmp_in, 0);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
-		if (access(pl->good_path, F_OK) == 0)
+		if (access(pl->good_path, F_OK) == 0 || ft_strchr(pl->cmd_table[0], '/'))
 		{
+			print_name(m, pl->cmd_table[0]);
 			ft_free_pl_paths(m, pl);
-			print_name_and_exit_perror(m, pl->cmd_table[0], 1);
+			exit(1);
+			//print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 		}
 		else
 		{
-			ft_free_pl_paths(m, pl);
-			exit_command_not_found(m, pl->cmd_table[0]);
+//			ft_free_pl_paths(m, pl);
+			exit_command_not_found(m, pl->cmd_table[0], pl);
 		}
 	}
 	free_safely_str(&(m->paths));
@@ -151,49 +153,6 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	return (0);
 }
 
-const char *signal_names[] = {
-	[SIGHUP] = "SIGHUP",
-	[SIGINT] = "SIGINT",
-	[SIGQUIT] = "SIGQUIT",
-	[SIGILL] = "SIGILL",
-	[SIGABRT] = "SIGABRT",
-	[SIGFPE] = "SIGFPE",
-	[SIGKILL] = "SIGKILL",
-	[SIGSEGV] = "SIGSEGV",
-	[SIGPIPE] = "SIGPIPE",
-	[SIGALRM] = "SIGALRM",
-	[SIGTERM] = "SIGTERM",
-	// Ajoutez d'autres signaux si nécessaire
-};
-
-//void manage_interrupted_signal(t_minishell *m)
-//{
-////	dprintf(2, "[SIGHUP] = %d\n", SIGHUP);
-////	dprintf(2, "[SIGINT] = %d\n", SIGINT);
-////	dprintf(2, "[SIGQUIT] = %d\n", SIGQUIT);
-////	dprintf(2, "[SIGILL] = %d\n", SIGILL);
-////	dprintf(2, "[SIGABRT] = %d\n", SIGABRT);
-////	dprintf(2, "[SIGFPE] = %d\n", SIGFPE);
-////	dprintf(2, "[SIGKILL] = %d\n", SIGKILL);
-////	dprintf(2, "[SIGSEGV] = %d\n", SIGSEGV);
-////	dprintf(2, "[SIGPIPE] = %d\n", SIGPIPE);
-////	dprintf(2, "[SIGALRM] = %d\n", SIGALRM);
-////	dprintf(2, "[SIGTERM] = %d\n", SIGTERM);
-//
-//	if (WIFEXITED(m->status)) {
-//		m->status = WEXITSTATUS(m->status);
-//	} else
-//	if (WIFSIGNALED(m->status)) {
-//		int signal_number = WTERMSIG(m->status);
-//		printf("Signal capté : %s\n", signal_names[signal_number]);
-//		m->status = set_or_get_last_status(128 + signal_number, 0);
-//	} else if (WIFEXITED(m->status)) {
-//		m->status = WEXITSTATUS(m->status);
-//	} else {
-//		m->status = set_or_get_last_status(m->status, 0);
-//	}
-//}
-
 void	manage_interrupted_signal(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
@@ -202,7 +161,6 @@ void	manage_interrupted_signal(t_minishell *m)
 		m->status = WEXITSTATUS(m->status);
 	else
 		m->status = set_or_get_last_status(m->status, 0);
-
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
@@ -223,12 +181,6 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-//		if (WIFSIGNALED(m->status))
-//			m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
-//		else if (WIFEXITED(m->status))
-//			m->status = WEXITSTATUS(m->status);
-		//if (WIFEXITED(m->status))
-////		m->status = WEXITSTATUS(m->status);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
 	manage_interrupted_signal(m);
