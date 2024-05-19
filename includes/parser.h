@@ -83,7 +83,7 @@ void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m);
 
 /********************* expansion ****************************/
 
-void expander(t_minishell *minishell, t_token_list **list);
+void expander(t_minishell *minishell, t_token_list **list, bool is_here_doc);
 void handle_delimitor(t_token_list **iterator);
 char *expand_sigil(char *string, t_minishell *minishell);
 char *expand_sign(char *string, char *temp);
