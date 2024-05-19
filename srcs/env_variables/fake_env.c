@@ -32,5 +32,4 @@ void	create_3_env_variables(t_minishell *m)
 	if (add_new_envp(&m->list_envp, "PWD=", pwd))
 		exit_msg_minishell(m, "Malloc failed at create_3_env_variables", ENOMEM);
 	m->total_size_envp += ft_strlen("PWD=") + ft_strlen(pwd);
-	m->fake_env = 1;
 }
