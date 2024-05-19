@@ -51,17 +51,20 @@ int join_equal_sign(char *key)
 
 void remove_and_add_envp(t_minishell *m, char *value, char *key)
 {
+	if (join_equal_sign(key) == MALLOC_FAILED)
+		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	if (remove_env_var(&m->list_envp, key) == MALLOC_FAILED)
 		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	if (value[0] == '\0')
 	{
+		key = ft_strtrim(key, "=");
+		if (key == NULL)
+			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	}
 	else
 	{
-		if (join_equal_sign(key) == MALLOC_FAILED)
-			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	}
