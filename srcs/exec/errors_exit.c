@@ -12,16 +12,17 @@
 
 #include "exec.h"
 
-void	exit_command_not_found(t_minishell *m, char *name)
+void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl)
 {
 	char *msg;
 
 	msg = ft_strjoin(name, ": command not found");
 	if (!msg)
 		malloc_error_with_exit(m);
-	free_safely_str(&name);
+//	free_safely_str(&name);
 	ft_putendl_fd(msg, 2);
 	free_safely_str(&msg);
+	ft_free_pl_paths(m, pl);
 	free_minishell(m);
 	exit(127);
 }
