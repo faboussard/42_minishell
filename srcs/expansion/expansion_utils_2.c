@@ -45,12 +45,6 @@ void update_quote_counts(t_token_list *token, int *single_quote_count, int *doub
 		(*double_quote_count)++;
 }
 
-void define_to_delete_tokens(t_token_list *const *list)
-{
-	(*list)->e_type = TO_DELETE;
-	(*list)->next->e_type = TO_DELETE;
-}
-
 void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_string)
 {
 	join_tokens(m, list);
@@ -62,4 +56,24 @@ void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *doub
 {
 	if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
 		update_quote_counts(iterator->next, single_quote_count, double_quote_count);
+}
+
+int s_quote_after_d_quote_and_dollar(t_token_list **list, int single_quote_count, int double_quote_count)
+{
+	t_token_list *iterator;
+
+	iterator = *list;
+	if (iterator == NULL || iterator->next == NULL)
+		return (0);
+	iterator = iterator->next;
+	while (iterator)
+	{
+		while (iterator->e_operator == IS_SPACE)
+			iterator = iterator->next;
+		if (iterator->e_operator == SINGLE_QUOTE && single_quote_count % 2 == 0 && double_quote_count % 2 != 0)
+			return (1);
+		else
+			return (0);
+	}
+	return (0);
 }

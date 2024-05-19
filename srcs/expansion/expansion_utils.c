@@ -32,7 +32,6 @@ void treat_in_delimitor(t_token_list **iterator)
 	(*iterator) = (*iterator)->next;
 }
 
-
 void handle_delimitor(t_token_list **iterator)
 {
 	*iterator = (*iterator)->next;
