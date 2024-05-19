@@ -46,10 +46,10 @@ void exit_no_arg(t_minishell *minishell, char *const *cmd_table)
 	}
 }
 
-int ft_exit(t_minishell *minishell, char **cmd_table)
+int	ft_exit(t_minishell *minishell, char **cmd_table)
 {
-	int exit_code;
-	bool is_alpha;
+	int	exit_code;
+	bool	is_alpha;
 
 	is_alpha = false;
 	if (minishell->interactive)
