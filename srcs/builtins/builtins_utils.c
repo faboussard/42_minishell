@@ -6,13 +6,13 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 08:17:34 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/18 22:56:13 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/19 21:47:55 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-bool contains_only_charset(const char *str, const char *charset)
+bool	contains_only_charset(const char *str, const char *charset)
 {
 	while (*str != '\0')
 	{
@@ -41,10 +41,9 @@ bool	is_valid_key_with_plus(char *key)
 	return (true);
 }
 
-
-bool join_with_old(t_envp_list **list, char *value)
+bool	join_with_old(t_envp_list **list, char *value)
 {
-	char *temp;
+	char	*temp;
 
 	temp = join_new_value_env_with_old(list, value);
 	if (temp == NULL)
@@ -80,17 +79,18 @@ int	get_value_and_target(char *arg, char **value, char **key)
 	return (1);
 }
 
-void free_all(char **value, char **key)
+void	free_all(char **value, char **key)
 {
 	free_safely_str(value);
 	free_safely_str(key);
 }
 
-bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
+bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
+		t_minishell *m, size_t index)
 {
-	bool check_key;
-	char *value;
-	char *key;
+	bool	check_key;
+	char	*value;
+	char	*key;
 
 	check_key = false;
 	while (args[index] != NULL)
@@ -112,4 +112,3 @@ bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_
 	}
 	return (check_key);
 }
-
