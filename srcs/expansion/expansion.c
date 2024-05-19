@@ -128,6 +128,28 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 	}
 }
 
+void expand_for_heredoc(t_minishell *minishell, t_token_list *iterator, int *single_quote_count, int *double_quote_count)
+{
+	while (iterator != NULL && iterator->next != NULL)
+	{
+		if (iterator->e_operator == DOLLAR && iterator->next != NULL)
+		{
+			if (is_redirect_token(iterator->next) && iterator->next->next != NULL &&
+				iterator->next->next->e_operator == IS_SPACE)
+			{
+				iterator->e_operator = 0;
+				iterator = iterator->next;
+				continue;
+			}
+			process_dollar_token(minishell, &iterator, *single_quote_count, *double_quote_count);
+		}
+		if (iterator == NULL)
+			break ;
+		iterator = iterator->next;
+	}
+}
+
+
 void expander(t_minishell *minishell, t_token_list **list, bool is_here_doc)
 {
 	t_token_list *iterator;
