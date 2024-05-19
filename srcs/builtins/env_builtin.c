@@ -16,6 +16,8 @@
 
 int ft_env(t_minishell *minishell, char **args)
 {
+	t_envp_list	*current;
+
 	if (args && args[1])
 	{
 		print_error("env builtins: too many arguments");
@@ -23,6 +25,12 @@ int ft_env(t_minishell *minishell, char **args)
 	}
 	if (!minishell->list_envp)
 		return (EXIT_FAILURE);
-	print_list_envp(minishell);
+	current = minishell->list_envp;
+	while (current != NULL)
+	{
+		if (ft_strchr(current->target, '='))
+			printf("%s%s\n", current->target, current->value);
+		current = current->next;
+	}
 	return (EXIT_SUCCESS);
 }

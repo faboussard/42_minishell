@@ -42,6 +42,7 @@ void	define_operators(t_token_list *list_tokens);
 void	define_builtins(t_token_list *list_tokens);
 void	to_infile_or_outfile(t_token_list *list_tokens);
 void	arg_to_command(t_token_list *list_tokens);
+void	dollar_to_command(t_token_list *list_tokens);
 
 /************************** parser  **************************/
 

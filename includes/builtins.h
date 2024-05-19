@@ -38,5 +38,7 @@ void	action_for_no_valid_key(char *arg, bool *check_key);
 bool	is_valid_key_with_plus(char *key);
 void	join_with_old(t_minishell *m, char **split, t_envp_list **cpy, char *temp);
 char	*join_new_value_env_with_old(t_minishell *m, char **split, t_envp_list **envp);
+void	process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char **split);
+void	process_no_equal_sign(char *arg, t_minishell *m, bool *check_key);
 
 #endif // BUILTINS_H
