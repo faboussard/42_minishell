@@ -93,12 +93,15 @@ static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 	if (pl->in_files_list == NULL)
 		return (0);
 	tmp = pl;
+	fd_in = 0;
 	while (tmp->in_files_list && tmp->in_files_list->next)
 	{
 		if (tmp->in_files_list->e_type == DELIMITER)
 			here_doc(m, tmp->in_files_list, &fd_in, tmp);
 		if (open_fd_infile(m, tmp, tmp->in_files_list->name, &fd_in) == 0)
 			close(fd_in);
+		else
+			return (1);
 		tmp->in_files_list = tmp->in_files_list->next;
 	}
 	if (tmp->in_files_list)
@@ -167,7 +170,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
 	{
-		m->status = WEXITSTATUS(1);
+		m->status = 1;
 		return ;
 	}
 	if (is_one_arg_builtin(m) && is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
