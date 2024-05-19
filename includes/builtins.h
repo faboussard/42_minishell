@@ -31,6 +31,7 @@ int		ft_unset(t_minishell *minishell, char **args);
 //-------------------------------BUILTINS UTILS-------------------------------//
 char	*ft_realpath(t_minishell *m, char *dir);
 bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key);
+bool	should_go_home(char **cmd_table);
 bool	contains_only_charset(const char *str, const char *charset);
 int		ft_atoi_long(const char *str, bool *error);
 bool	is_valid_env_var_key(char *var);

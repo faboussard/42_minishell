@@ -112,8 +112,7 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (1);
 	}
-	if (cmd_table[1] == NULL || ft_strncmp(cmd_table[1], "~", 2) == 0
-		|| ft_strncmp(cmd_table[1], "~/", 3) == 0)
+	if (should_go_home(cmd_table))
 		return (get_home(m));
 	if (contains_only_charset(cmd_table[1], "/"))
 		return (go_into_directory(m, "/"));
