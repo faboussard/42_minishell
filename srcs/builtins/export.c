@@ -86,7 +86,7 @@ char *additionnal_env_content(t_minishell *m, t_envp_list **env, char *key, char
 		free_safely_str(&value);
 		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	}
-	if (!find_and_join_value(tmp, &cpy, NULL))
+	if (!find_and_join_value(tmp, &cpy, value))
 		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	remove_and_add_envp(m, value, key);
 	free_safely_str(&tmp);

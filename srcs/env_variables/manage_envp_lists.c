@@ -94,6 +94,9 @@ int	remove_env_var(t_envp_list **env, char *var)
 	char		*target_without_equal_sign;
 	t_envp_list	*cpy;
 
+	var = ft_strtrim(var, "=");
+	if (var == NULL)
+		return (MALLOC_FAILED);
 	cpy = *env;
 	while (cpy)
 	{
