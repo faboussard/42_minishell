@@ -57,10 +57,10 @@ static void	check_path(t_minishell *m, t_process_list *pl, size_t i)
 	}
 	else if (!(pl->tab_paths[i]))
 	{
-		free_safely_str(&(pl->good_path));
-		ft_free_tab(&(pl->tab_paths));
-		free_safely_str(&(m->paths));
-		exit_command_not_found(m, cmd_name);
+//		free_safely_str(&(pl->good_path));
+//		ft_free_tab(&(pl->tab_paths));
+//		free_safely_str(&(m->paths));
+		exit_command_not_found(m, cmd_name, pl);
 	}
 	ft_free_tab(&(pl->tab_paths));
 	free_safely_str(&cmd_name);
