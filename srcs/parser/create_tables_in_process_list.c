@@ -56,7 +56,7 @@ void create_envp_table(t_minishell *minishell)
 	i = 0;
 	minishell->envp_table = (char **)ft_calloc(minishell->total_size_envp + 1, sizeof(char *));
 	if (minishell->envp_table == NULL)
-		exit_msg(minishell, "Malloc failed at create_envp_table", 2) ;
+		exit_msg(minishell, "Malloc failed at create_envp_table", ENOMEM) ;
 	current = minishell->list_envp;
 	while (current != NULL)
 	{
@@ -65,7 +65,7 @@ void create_envp_table(t_minishell *minishell)
 		else
 			minishell->envp_table[i] = ft_strjoin(current->target, current->value);
 		if (minishell->envp_table[i] == NULL)
-			exit_msg(minishell, "Malloc failed at create_envp_table", 2);
+			exit_msg(minishell, "Malloc failed at create_envp_table", ENOMEM);
 		current = current->next;
 		i++;
 	}

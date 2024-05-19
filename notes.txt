@@ -29,7 +29,7 @@
 
 	m->user_input = ft_calloc(1, 1);
 	if (m->user_input == NULL)
-		exit_msg(m, "Malloc failed at format_input", -1);
+		exit_msg(m, "Malloc failed at format_input", ENOMEM);
 	i = 0;
 	while (av[i])
 	{
@@ -39,7 +39,7 @@
 			m->user_input = ft_strdup(temp);
 		free_safely_str(&(temp));
 		if (m->user_input == NULL)
-			exit_msg(m, "Malloc failed at format_input", -1);
+			exit_msg(m, "Malloc failed at format_input", ENOMEM);
 		i++;
 	}
 	temp = ft_strdup(m->user_input);
@@ -48,7 +48,7 @@
 		m->user_input = ft_strtrim(temp, "\"");
 	free_safely_str(&temp);
 	if (m->user_input == NULL)
-		exit_msg(m, "Malloc failed at format_input", -1);
+		exit_msg(m, "Malloc failed at format_input", ENOMEM);
 }*/
 
 ////////////////////////////////// AUTRE.C ////////////////////////////////////
