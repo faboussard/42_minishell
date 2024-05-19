@@ -14,29 +14,6 @@
 #include "utils.h"
 #include <string.h>
 
-//<<<<<<< HEAD
-//    new_envp = malloc(sizeof(t_envp_list));
-//    if (new_envp == NULL)
-//        return (NULL);
-//    new_envp->target = ft_strdup(target);
-//    if (new_envp->target == NULL) {
-//        free(new_envp);
-//        return (NULL);
-//    }
-//    if (content)
-//	{
-//        new_envp->value = ft_strdup(content);
-//        if (new_envp->value == NULL)
-//		{
-//			free_safely_str(&(new_envp->target));
-//            free(new_envp);
-//            return (NULL);
-//        }
-//        new_envp->value_size = ft_strlen(new_envp->value);
-//    }
-//    new_envp->target_size = ft_strlen(new_envp->target);
-//    return (new_envp);
-//=======
 t_envp_list	*allocate_envp_node(void)
 {
 	t_envp_list	*new_envp;
@@ -94,6 +71,9 @@ int	remove_env_var(t_envp_list **env, char *var)
 	char		*target_without_equal_sign;
 	t_envp_list	*cpy;
 
+	var = ft_strtrim(var, "=");
+	if (var == NULL)
+		return (MALLOC_FAILED);
 	cpy = *env;
 	while (cpy)
 	{

@@ -67,15 +67,17 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		close_fds(pl->fd_in, pl->fd_out);
 		close_fds(m->tmp_in, 0);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
-		if (access(pl->good_path, F_OK) == 0)
+		if (access(pl->good_path, F_OK) == 0 || ft_strchr(pl->cmd_table[0], '/'))
 		{
+			print_name(m, pl->cmd_table[0]);
 			ft_free_pl_paths(m, pl);
-			print_name_and_exit_perror(m, pl->cmd_table[0], 1);
+			exit(1);
+			//print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 		}
 		else
 		{
-			ft_free_pl_paths(m, pl);
-			exit_command_not_found(m, pl->cmd_table[0]);
+//			ft_free_pl_paths(m, pl);
+			exit_command_not_found(m, pl->cmd_table[0], pl);
 		}
 	}
 	free_safely_str(&(m->paths));
