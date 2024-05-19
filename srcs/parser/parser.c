@@ -35,7 +35,13 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 		change_token_name(m, &list_tokens, "''");
 	while (iterator && iterator->next != NULL)
 	{
-		if (iterator->e_type != COMMAND && !is_redirect_token(iterator) && ft_strncmp(iterator->next->name, "\0", 1) == 0)
+		if (iterator->e_type == COMMAND)
+		{
+			iterator = iterator->next;
+			while (iterator && iterator->e_type == ARGUMENT)
+				iterator = iterator->next;
+		}
+		if (iterator && iterator->next && iterator->e_type != COMMAND && !is_redirect_token(iterator) && ft_strncmp(iterator->next->name, "\0", 1) == 0)
 		{
 			iterator = iterator->next;
 			new_list_name = ft_strdup("''");
@@ -44,7 +50,8 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 			free_safely_str(&(iterator->name));
 			iterator->name = new_list_name;
 		}
-		iterator = iterator->next;
+		if (iterator && iterator->next)
+			iterator = iterator->next;
 	}
 }
 
@@ -76,7 +83,7 @@ int parse_input(t_minishell *m)
 		return (0);
 	if (check_quotes(m))
 		return (1);
-	expander(m, &m->list_tokens);
+	expander(m, &m->list_tokens, 0);
 	if (!rework_tokens(m))
 		return (0);
 	if (check_syntax(m) == 1)
