@@ -57,7 +57,7 @@ void print_env_variables_export(t_minishell *m)
 	{
 		equal = ft_strchr(current->target, '=');
 		if (equal == NULL)
-			printf("declare -x %s\n", current->target); // ENLEVER LE = EN TROP
+			printf("declare -x %s\n", current->target);
 		else
 			printf("declare -x %s\"%s\"\n", current->target, current->value);
 		current = current->next;

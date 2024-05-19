@@ -54,7 +54,7 @@ void	minishell_non_interactive(t_minishell *m, char *data_input)
 	m->user_input = ft_strdup(data_input);
 	if (m->user_input == NULL)
 		exit_msg(m,
-				 "Fatal : malloc failed at minishell_non_interactive", 2);
+				 "Fatal : malloc failed at minishell_non_interactive", ENOMEM);
 	if (set_signals_noninteractive() == -1)
 		m->status = set_or_get_last_status(-1, -1);
 	if (parse_input(m) == 0)

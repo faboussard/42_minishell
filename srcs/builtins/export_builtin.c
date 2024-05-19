@@ -33,24 +33,6 @@ int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 	return (0);
 }
 
-/*static	bool	is_valid_key(char *key)
-{
-	size_t	index;
-
-	index = 0;
-	if (!ft_isalpha(key[index]) && key[index] != '_')
-		return (false);
-	while (key[index] != '\0')
-	{
-		if (key[index] == '+' && key[index + 1] == '\0')
-			return (true);
-		if (!ft_isalnum(key[index]) && key[index] != '_')
-			return (false);
-		index++;
-	}
-	return (true);
-}*/
-
 void join_equal_sign(char **split)
 {
 	char *tmp;
@@ -89,7 +71,6 @@ void remove_and_add_envp(t_minishell *m, char **split)
 }
 
 
-
 void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key)
 {
 	if (is_valid_env_var_key(arg) == false)
@@ -103,38 +84,10 @@ void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key)
 		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 }
 
-void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env_variables, char **split)
+void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char **split)
 {
 	if (ft_strchr(split[0], '+') != NULL && split[1] != NULL)
-		additionnal_env_content(m, &env_variables, split);
+		additionnal_env_content(m, &env, split);
 	else
 		remove_and_add_envp(m, split);
-}
-
-
-bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
-{
-	bool check_key;
-	char **split;
-
-	split = NULL;
-	check_key = false;
-	while (args[index] != NULL)
-	{
-		if (ft_strchr(args[index], '=') == NULL)
-			process_no_equal_sign(args[index], m, &check_key);
-		else
-		{
-			split = ft_split(args[index], '=');
-			if (split == NULL)
-				exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-			if (is_valid_key_with_plus(split[0]) == false)
-				action_for_no_valid_key(args[index], &check_key);
-			else
-				process_argument_with_equal_sign(m, env_variables, split);
-			ft_free_tab(&split);
-		}
-		index++;
-	}
-	return (check_key);
 }
