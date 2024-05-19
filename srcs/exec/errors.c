@@ -33,7 +33,8 @@ void print_name_and_msg(t_minishell *m, char *name, char *msg)
 		exit_msg_minishell(m, "Malloc error", ENOMEM);
 	the_msg = ft_strjoin(thename, msg);
 	free_safely_str(&thename);
-	ft_putendl_fd(msg, 2);
+	dprintf(2, "%s\n", the_msg);
+	ft_putendl_fd(the_msg, 2);
 	free_safely_str(&the_msg);
 }
 
