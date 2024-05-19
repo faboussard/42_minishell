@@ -63,7 +63,7 @@ void action_for_no_valid_key(char *arg, bool *check_key)
 }
 
 
-bool get_value_and_target(char *arg, char **value, char **key)
+int get_value_and_target(char *arg, char **value, char **key)
 {
 	int j;
 
@@ -78,6 +78,12 @@ bool get_value_and_target(char *arg, char **value, char **key)
 	if (*value == NULL)
 		return (MALLOC_FAILED);
 	return (1);
+}
+
+void free_all(char **value, char **key)
+{
+	free_safely_str(value);
+	free_safely_str(key);
 }
 
 bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
@@ -95,14 +101,13 @@ bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_
 			action_for_no_valid_key(args[index], &check_key);
 			return (check_key);
 		}
-		if (!get_value_and_target(args[index], &value, &key))
+		if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 		if (is_valid_key_with_plus(key) == false)
 			action_for_no_valid_key(args[index], &check_key);
 		else
 			process_argument_with_equal_sign(m, env_variables, value, key);
-		free_safely_str(&value);
-		free_safely_str(&key);
+		free_all(&value, &key);
 		index++;
 	}
 	return (check_key);
