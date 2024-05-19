@@ -107,12 +107,11 @@ typedef struct s_process_list
 
 /********************************** INIT MINISHELL ***************************/
 
-bool							is_interactive(t_minishell *minishell, int argc, char **argv);
+bool			is_interactive(t_minishell *minishell, int argc, char **argv);
 
 /********************************** CREATE TABLES ***************************/
 
-void execute_cmds(t_minishell *minishell,
-                  size_t nb_cmds);
-int	set_or_get_last_status(int status, int flag);
+void			execute_cmds(t_minishell *minishell, size_t nb_cmds);
+int				set_or_get_last_status(int status, int flag);
 
 #endif

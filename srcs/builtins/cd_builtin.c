@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/18 22:12:53 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/19 14:07:42 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	change_pwd_variable(t_minishell *m, char *str)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
-			perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+			perror(PWD_ER);
 			return (-1);
 		}
 		return (fill_env_value_and_current_path(m, env, cwd));
@@ -64,7 +64,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	target_path = NULL;
 	if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+		perror(PWD_ER);
 		return (0);
 	}
 	target_path = ft_realpath(m, dir);
@@ -82,25 +82,6 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	if (ft_strncmp(dir, ".", 2) != 0)
 		change_pwd_variable(m, target_path);
 	free_safely_str(&target_path);
-	return (0);
-}
-
-bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key)
-{
-	t_envp_list	*env;
-	size_t		key_len;
-
-	env = m->list_envp;
-	key_len = ft_strlen(key);
-	while (env)
-	{
-		if (ft_strncmp(env->target, key, key_len) == 0)
-		{
-			ft_strlcpy(dest, env->value, ft_strlen(env->value) + 1);
-			return (1);
-		}
-		env = env->next;
-	}
 	return (0);
 }
 
@@ -122,17 +103,6 @@ static int	get_home(t_minishell *m)
 	return (return_value);
 }
 
-bool	should_go_home(char **cmd_table)
-{
-	if (cmd_table[1] == NULL)
-		return (1);
-	if (ft_strncmp(cmd_table[1], "~", 2) == 0)
-		return (1);
-	if (ft_strncmp(cmd_table[1], "~/", 3) == 0)
-		return (1);
-	return (0);
-}
-
 int	ft_cd(t_minishell *m, char **cmd_table)
 {
 	char	*dir;
@@ -142,7 +112,8 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (1);
 	}
-	if (should_go_home(cmd_table))
+	if (cmd_table[1] == NULL || ft_strncmp(cmd_table[1], "~", 2) == 0
+		|| ft_strncmp(cmd_table[1], "~/", 3) == 0)
 		return (get_home(m));
 	if (contains_only_charset(cmd_table[1], "/"))
 		return (go_into_directory(m, "/"));
