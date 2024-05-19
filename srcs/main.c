@@ -99,7 +99,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * Le tester de mcombeau fonctionne mieux si on commente le if(is_interactive)
  * et ne laisse que le lancement du non_interactive.
  * */
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 	char	*readline_input;
@@ -157,9 +157,9 @@ int	main(int ac, char **av, char **envp)
 	// Free data and exit minishell when done
 	free_minishell(&minishell);
 	return (minishell.status);
-}
+}*/
 
-/*int	main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 
@@ -174,4 +174,4 @@ int	main(int ac, char **av, char **envp)
 	//	ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
-}*/
+}

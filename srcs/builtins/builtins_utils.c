@@ -6,13 +6,13 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 08:17:34 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/18 22:56:13 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/19 21:47:55 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-bool contains_only_charset(const char *str, const char *charset)
+bool	contains_only_charset(const char *str, const char *charset)
 {
 	while (*str != '\0')
 	{
@@ -41,10 +41,9 @@ bool	is_valid_key_with_plus(char *key)
 	return (true);
 }
 
-
-bool join_with_old(t_envp_list **list, char *value)
+bool	join_with_old(t_envp_list **list, char *value)
 {
-	char *temp;
+	char	*temp;
 
 	temp = join_new_value_env_with_old(list, value);
 	if (temp == NULL)
@@ -63,9 +62,9 @@ void	action_for_no_valid_key(char *arg, bool *check_key)
 	*check_key = true;
 }
 
-bool get_value_and_target(char *arg, char **value, char **key)
+int	get_value_and_target(char *arg, char **value, char **key)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	while (arg[j] != '=')
@@ -80,11 +79,18 @@ bool get_value_and_target(char *arg, char **value, char **key)
 	return (1);
 }
 
-bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
+void	free_all(char **value, char **key)
 {
-	bool check_key;
-	char *value;
-	char *key;
+	free_safely_str(value);
+	free_safely_str(key);
+}
+
+bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
+		t_minishell *m, size_t index)
+{
+	bool	check_key;
+	char	*value;
+	char	*key;
 
 	check_key = false;
 	while (args[index] != NULL)
@@ -95,16 +101,14 @@ bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_
 			action_for_no_valid_key(args[index], &check_key);
 			return (check_key);
 		}
-		if (!get_value_and_target(args[index], &value, &key))
+		if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 		if (is_valid_key_with_plus(key) == false)
 			action_for_no_valid_key(args[index], &check_key);
 		else
 			process_argument_with_equal_sign(m, env_variables, value, key);
-		free_safely_str(&value);
-		free_safely_str(&key);
+		free_all(&value, &key);
 		index++;
 	}
 	return (check_key);
 }
-

@@ -51,7 +51,7 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table);
 int		handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in);
 //--------------------------- ERRORS ------------------------------------//
 void	print_name(t_minishell *m, char *name);
-void	exit_command_not_found(t_minishell *m, char *name);
+void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl);
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code);
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);

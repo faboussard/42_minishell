@@ -76,7 +76,7 @@ void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *mini
 char *additionnal_env_content(t_minishell *m, t_envp_list **env, char *key, char *value);
 int add_new_envp(t_envp_list **list_envp, char *target, char *content);
 bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
-void join_equal_sign(char *key);
+int join_equal_sign(char *key);
 void remove_and_add_envp(t_minishell *m, char *value, char *key);
 void create_3_env_variables(t_minishell *m);
 void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m);
