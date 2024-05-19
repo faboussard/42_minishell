@@ -51,6 +51,8 @@ void	minishell_interactive(t_minishell *m)
 
 void	minishell_non_interactive(t_minishell *m, char *data_input)
 {
+	if (!data_input)
+		exit_msg(m, "bash: -c: option requires an argument", 2);
 	m->user_input = ft_strdup(data_input);
 	if (m->user_input == NULL)
 		exit_msg(m,
@@ -74,6 +76,8 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	}
 	else if (argc > 2 && ft_strncmp(argv[1], "-c", 2) == 0)
 	{
+		if (!argv[2] || ft_strncmp(argv[2], "$@", 3) == 0)
+			exit_msg(minishell, "bash: -c: option requires an argument", 2);
 		minishell->interactive = false;
 		return (false);
 	}
@@ -102,8 +106,18 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	char	**arg_input;
 	int		i;
 
+	if (ac > 2 && !av[2])
+	{
+		ft_putendl_fd("bash: -c: option requires an argument", 2);
+		exit(2);
+	}
 	if (ac == 3 && ft_strcmp(av[1], "-c") == 0 && av[2])
 	{
+		if (!av[2])
+		{
+			ft_putendl_fd("bash: -c: option requires an argument", 2);
+			exit(2);
+		}
 		arg_input = ft_split(av[2], ';');
 		if (!arg_input)
 			return (1);
@@ -144,6 +158,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	free_minishell(&minishell);
 	return (minishell.status);
 }*/
+
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;

@@ -23,25 +23,6 @@ bool	contains_only_charset(const char *str, const char *charset)
 	return (1);
 }
 
-bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key)
-{
-	t_envp_list	*env;
-	size_t		key_len;
-
-	env = m->list_envp;
-	key_len = ft_strlen(key);
-	while (env)
-	{
-		if (ft_strncmp(env->target, key, key_len) == 0)
-		{
-			ft_strlcpy(dest, env->value, ft_strlen(env->value) + 1);
-			return (1);
-		}
-		env = env->next;
-	}
-	return (0);
-}
-
 bool	is_valid_key_with_plus(char *key)
 {
 	size_t	index;
