@@ -34,41 +34,37 @@ int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 	return (0);
 }
 
-void join_equal_sign(char *key)
+int join_equal_sign(char *key)
 {
 	char *tmp;
 
 	tmp = ft_strdup(key);
+	if (!tmp)
+		return (MALLOC_FAILED);
 	free_safely_str(&key);
 	key = ft_strjoin(tmp, "=");
+	if (!key)
+		return (MALLOC_FAILED);
 	free_safely_str(&tmp);
+	return (1);
 }
 
 void remove_and_add_envp(t_minishell *m, char *value, char *key)
 {
-	char *content;
-
-	content = NULL;
-	if (value == NULL)
-	{
-		content = ft_strdup("");
-		if (content == NULL)
-			exit_msg(m, "Malloc failed at add_value_to_envp_list_if_valid", ENOMEM);
-	}
 	if (remove_env_var(&m->list_envp, key) == MALLOC_FAILED)
 		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-	join_equal_sign(key);
-	if (content)
-	{
-		if (add_new_envp(&m->list_envp, key, content) == MALLOC_FAILED)
-			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-	}
-	else
+	if (value[0] == '\0')
 	{
 		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	}
-	free(content);
+	else
+	{
+		if (join_equal_sign(key) == MALLOC_FAILED)
+			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
+			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+	}
 }
 
 void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key)
