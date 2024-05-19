@@ -14,53 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-char *identify_envp_string(char *string, t_minishell *minishell)
-{
-	t_envp_list *iterator = minishell->list_envp;
-
-	while (iterator != NULL)
-	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
-		{
-			if (check_special_char_after_expand(string, iterator->target))
-				string = expand_sign(string, iterator->value);
-			else
-			{
-				string = ft_strdup(iterator->value);
-				if (string == NULL)
-					exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
-			}
-			return (string);
-		}
-		iterator = iterator->next;
-	}
-	return (string);
-}
-
-char *expand_sigil(char *string, t_minishell *minishell)
-{
-	char *final_string;
-
-	if (ft_isdigit(*string))
-		final_string = ft_strdup(string + 1);
-	else
-		final_string = identify_envp_string(string, minishell);
-	return (final_string);
-}
-
-void update_quote_counts(t_token_list *token, int *single_quote_count, int *double_quote_count)
-{
-	if (token->e_operator == SINGLE_QUOTE)
-		(*single_quote_count)++;
-	else if (token->e_operator == DOUBLE_QUOTE)
-		(*double_quote_count)++;
-}
-
-void define_to_delete_tokens(t_token_list *const *list)
-{
-	(*list)->e_type = TO_DELETE;
-	(*list)->next->e_type = TO_DELETE;
-}
 
 void process_dollar_token(t_minishell *minishell, t_token_list **list, int single_quote_count, int double_quote_count)
 {
@@ -80,9 +33,7 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 			expanded_string = expand_sigil((*list)->next->name, minishell);
 			if (expanded_string != (*list)->next->name)
 			{
-				join_tokens(minishell, list);
-				change_token_name(minishell, list, expanded_string);
-				free_safely_str(&expanded_string);
+				change_to_expansion(minishell, list, &expanded_string);
 				return;
 			}
 			else
@@ -91,21 +42,17 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 	}
 }
 
-void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count)
+void handle_dollar(t_minishell *minishell, t_token_list **iterator, int *single_quote_count, int *double_quote_count)
 {
-	if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
-		update_quote_counts(iterator->next, single_quote_count, double_quote_count);
-}
-
-void handle_dollar(t_minishell *minishell, t_token_list **iterator, int *single_quote_count, int *double_quote_count) {
 	if (is_redirect_token((*iterator)->next) && (*iterator)->next->next != NULL &&
 		(*iterator)->next->next->e_operator == IS_SPACE)
 	{
-		(*iterator)->e_operator = 0;
 		*iterator = (*iterator)->next;
 		return;
 	}
-	if ((*iterator)->next->e_operator == SINGLE_QUOTE && (*single_quote_count % 2 == 0)) {
+	if ((*iterator)->next->e_operator == SINGLE_QUOTE && (*single_quote_count % 2 == 0) && (*double_quote_count % 2 == 0))
+	{
+		define_to_delete_tokens(iterator);
 		*iterator = (*iterator)->next;
 		return;
 	}
