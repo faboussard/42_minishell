@@ -32,7 +32,6 @@ void treat_in_delimitor(t_token_list **iterator)
 	(*iterator) = (*iterator)->next;
 }
 
-
 void handle_delimitor(t_token_list **iterator)
 {
 	*iterator = (*iterator)->next;
@@ -58,7 +57,6 @@ void handle_delimitor(t_token_list **iterator)
 	}
 }
 
-
 void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 {
 	join_tokens(minishell, &iterator);
@@ -66,4 +64,15 @@ void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 	iterator->name = ft_itoa(minishell->status);
 	if (iterator->name == NULL)
 		exit_msg(minishell, "Malloc failed at expander", ENOMEM);
+}
+
+char *expand_sigil(char *string, t_minishell *minishell)
+{
+	char *final_string;
+
+	if (ft_isdigit(*string))
+		final_string = ft_strdup(string + 1);
+	else
+		final_string = identify_envp_string(string, minishell);
+	return (final_string);
 }

@@ -51,7 +51,7 @@ t_envp_list	*allocate_envp_node(void)
 	return (new_envp);
 }
 
-bool	initialize_envp_node(t_envp_list *new_envp, char *target, char *content)
+bool	init_envp_node(t_envp_list *new_envp, char *target, char *content)
 {
 	new_envp->target = ft_strdup(target);
 	if (new_envp->target == NULL)
@@ -81,7 +81,7 @@ t_envp_list	*create_new_envp(char *target, char *content)
 	new_envp = allocate_envp_node();
 	if (new_envp == NULL)
 		return (NULL);
-	if (!initialize_envp_node(new_envp, target, content))
+	if (!init_envp_node(new_envp, target, content))
 	{
 		free(new_envp);
 		return (NULL);

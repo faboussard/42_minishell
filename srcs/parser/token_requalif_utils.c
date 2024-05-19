@@ -42,7 +42,7 @@ void	arg_to_command(t_token_list *list_tokens)
 		while (iterator && iterator->next != NULL)
 		{
 			next_token = iterator->next;
-			if (iterator->e_type == COMMAND && next_token->e_type != OPERATOR
+			if (iterator->e_type == COMMAND && !is_redirect_token_or_pipe(iterator->next)
 				&& next_token->e_type != IN_FILE
 				&& next_token->e_type != OUT_FILE)
 				next_token->e_type = ARGUMENT;

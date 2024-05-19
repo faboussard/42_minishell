@@ -58,3 +58,9 @@ t_token_list	*ft_lstlast_token(t_token_list *lst)
 	}
 	return (lst);
 }
+
+void define_to_delete_tokens(t_token_list *const *list)
+{
+	(*list)->e_type = TO_DELETE;
+	(*list)->next->e_type = TO_DELETE;
+}

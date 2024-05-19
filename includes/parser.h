@@ -73,22 +73,28 @@ void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove);
 void	free_envp(t_envp_list *envp);
 int	ft_lstsize_envp(t_envp_list *lst);
 void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell);
-char *additionnal_env_content(t_minishell *m, t_envp_list **env, char **split);
+char *additionnal_env_content(t_minishell *m, t_envp_list **env, char *key, char *value);
 int add_new_envp(t_envp_list **list_envp, char *target, char *content);
-bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
-void join_equal_sign(char **split);
-void remove_and_add_envp(t_minishell *m, char **split);
+bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
+void join_equal_sign(char *key);
+void remove_and_add_envp(t_minishell *m, char *value, char *key);
 void create_3_env_variables(t_minishell *m);
 void	assign_shell_and_shell_level(t_envp_list **env_vars, t_minishell *m);
 
 /********************* expansion ****************************/
 
-void expander(t_minishell *minishell, t_token_list **list);
+void expander(t_minishell *minishell, t_token_list **list, bool is_here_doc);
 void handle_delimitor(t_token_list **iterator);
 char *expand_sigil(char *string, t_minishell *minishell);
 char *expand_sign(char *string, char *temp);
 int check_special_char_after_expand(char *string, char *string2);
 void change_name_to_status(t_minishell *minishell, t_token_list *iterator);
+char *identify_envp_string(char *string, t_minishell *minishell);
+void define_to_delete_tokens(t_token_list *const *list);
+void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_string);
+void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count);
+void update_quote_counts(t_token_list *token, int *single_quote_count, int *double_quote_count);
+int s_quote_after_d_quote_and_dollar(t_token_list **list, int single_quote_count, int double_quote_count);
 
 /********************* check_syntax **************************/
 bool check_quotes(t_minishell *minishell);

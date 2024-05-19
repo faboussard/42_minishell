@@ -28,66 +28,53 @@ int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 		if ((ft_lstsize_envp(current)) <= 0)
 			return (0);
 		print_env_variables_export(m);
-	} else
+	}
+	else
 		return (export_variables(args + index, current, m));
 	return (0);
 }
 
-void join_equal_sign(char **split)
+void join_equal_sign(char *key)
 {
 	char *tmp;
 
-	tmp = ft_strdup(split[0]);
-	free_safely_str(&(split[0]));
-	split[0] = ft_strjoin(tmp, "=");
+	tmp = ft_strdup(key);
+	free_safely_str(&key);
+	key = ft_strjoin(tmp, "=");
 	free_safely_str(&tmp);
 }
 
-void remove_and_add_envp(t_minishell *m, char **split)
+void remove_and_add_envp(t_minishell *m, char *value, char *key)
 {
 	char *content;
 
 	content = NULL;
-	if (split[1] == NULL)
+	if (value == NULL)
 	{
 		content = ft_strdup("");
 		if (content == NULL)
-			exit_msg(m, "Malloc failed at add_var_or_value_to_envp_list", ENOMEM);
+			exit_msg(m, "Malloc failed at add_value_to_envp_list_if_valid", ENOMEM);
 	}
-	if (remove_env_var(&m->list_envp, split[0]) == MALLOC_FAILED)
+	if (remove_env_var(&m->list_envp, key) == MALLOC_FAILED)
 		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-	join_equal_sign(split);
+	join_equal_sign(key);
 	if (content)
 	{
-		if (add_new_envp(&m->list_envp, split[0], content) == MALLOC_FAILED)
+		if (add_new_envp(&m->list_envp, key, content) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	}
 	else
 	{
-		if (add_new_envp(&m->list_envp, split[0], split[1]) == MALLOC_FAILED)
+		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
 			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 	}
 	free(content);
 }
 
-
-void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key)
+void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key)
 {
-	if (is_valid_env_var_key(arg) == false)
-	{
-		action_for_no_valid_key(arg, check_key);
-		return;
-	}
-	if (remove_env_var(&m->list_envp, arg) == MALLOC_FAILED)
-		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-	if (add_new_envp(&m->list_envp, arg, NULL) == MALLOC_FAILED)
-		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-}
-
-void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char **split)
-{
-	if (ft_strchr(split[0], '+') != NULL && split[1] != NULL)
-		additionnal_env_content(m, &env, split);
+	if (ft_strchr(key, '+') != NULL && value != NULL)
+		additionnal_env_content(m, &env, key, value);
 	else
-		remove_and_add_envp(m, split);
+		remove_and_add_envp(m, value, key);
 }

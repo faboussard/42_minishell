@@ -12,7 +12,7 @@
 
 #include "builtins.h"
 
-bool	contains_only_charset(const char *str, const char *charset)
+bool contains_only_charset(const char *str, const char *charset)
 {
 	while (*str != '\0')
 	{
@@ -41,13 +41,20 @@ bool	is_valid_key_with_plus(char *key)
 	return (true);
 }
 
-void	join_with_old(t_minishell *m, char **split, t_envp_list **cpy,
-		char *temp)
+
+bool join_with_old(t_envp_list **list, char *value)
 {
-	temp = join_new_value_env_with_old(m, split, cpy);
-	free(split[1]);
-	split[1] = ft_strdup(temp);
+	char *temp;
+
+	temp = join_new_value_env_with_old(list, value);
+	if (temp == NULL)
+		return (0);
+	free(value);
+	value = ft_strdup(temp);
+	if (value == NULL)
+		return (0);
 	free(temp);
+	return (1);
 }
 
 void	action_for_no_valid_key(char *arg, bool *check_key)
@@ -56,28 +63,46 @@ void	action_for_no_valid_key(char *arg, bool *check_key)
 	*check_key = true;
 }
 
-bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
+bool get_value_and_target(char *arg, char **value, char **key)
+{
+	int j;
+
+	j = 0;
+	while (arg[j] != '=')
+		j++;
+	*key = ft_substr(arg, 0, j);
+	if (*key == NULL)
+		return (MALLOC_FAILED);
+	j++;
+	*value = ft_substr(arg, j, ft_strlen(arg) - j);
+	if (*value == NULL)
+		return (MALLOC_FAILED);
+	return (1);
+}
+
+bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
 {
 	bool check_key;
-	char **split;
+	char *value;
+	char *key;
 
-	split = NULL;
 	check_key = false;
 	while (args[index] != NULL)
 	{
-		if (ft_strchr(args[index], '=') == NULL)
-			process_no_equal_sign(args[index], m, &check_key);
-		else
+		if (ft_strncmp(args[index], "=", 1) == 0)
 		{
-			split = ft_split(args[index], '=');
-			if (split == NULL)
-				exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-			if (is_valid_key_with_plus(split[0]) == false)
-				action_for_no_valid_key(args[index], &check_key);
-			else
-				process_argument_with_equal_sign(m, env_variables, split);
-			ft_free_tab(&split);
+			check_key = true;
+			action_for_no_valid_key(args[index], &check_key);
+			return (check_key);
 		}
+		if (!get_value_and_target(args[index], &value, &key))
+			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+		if (is_valid_key_with_plus(key) == false)
+			action_for_no_valid_key(args[index], &check_key);
+		else
+			process_argument_with_equal_sign(m, env_variables, value, key);
+		free_safely_str(&value);
+		free_safely_str(&key);
 		index++;
 	}
 	return (check_key);
