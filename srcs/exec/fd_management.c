@@ -30,6 +30,7 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_us
 	enum e_token_type	infile_type;
 
 	pl->dev_null = 0;
+
 	if (pl->in_files_list != NULL)
 	{
 		infile_type = pl->in_files_list->e_type;
@@ -38,6 +39,11 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_us
 			*fd_to_use = open(HERE_DOC_TMP_FILE, O_RDONLY);
 		else if (infile_type == IN_FILE)
 			*fd_to_use = open(name, O_RDONLY);
+//		else if (infile_type == FAIL_EXPAND)
+//		{
+//			print_name_and_msg(m, name, ": ambiguous redirect");
+//			return (-1);
+//		}
 	}
 	else
 		pl->fd_in = STDIN_FILENO;
