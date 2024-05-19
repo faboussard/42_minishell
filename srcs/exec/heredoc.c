@@ -21,7 +21,7 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 
 	heredoc_token_list = NULL;
 	transform_to_token(m, original_input, &heredoc_token_list);
-	expander(m, &heredoc_token_list);
+	expander(m, &heredoc_token_list, 1);
 	ft_list_remove_if_same_type(&heredoc_token_list, (void *)TO_DELETE, cmp);
 	input_after_expand = join_all(m, &heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
@@ -72,7 +72,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_list *pl)
 {
-	int	here_doc_pid;
+//	int	here_doc_pid;
 
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	close_fds(*fd_to_use, m->tmp_in);
@@ -84,13 +84,13 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_l
 		perror("No /tmp/ directory found");
 		return ;
 	}
-	here_doc_pid = m_safe_fork(m);
-	if (here_doc_pid == 0)
+//	here_doc_pid = m_safe_fork(m);
+//	if (here_doc_pid == 0)
 		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
-	else
-	{
-		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
-			exit_msg(m, "waitpid error", 1);
-		close(*fd_to_use);
-	}
+//	else
+//	{
+//		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
+//			exit_msg(m, "waitpid error", 1);
+//		close(*fd_to_use);
+//	}
 }

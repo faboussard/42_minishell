@@ -128,7 +128,7 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 	}
 }
 
-void expander(t_minishell *minishell, t_token_list **list)
+void expander(t_minishell *minishell, t_token_list **list, bool is_here_doc)
 {
 	t_token_list *iterator;
 	int single_quote_count;
@@ -137,7 +137,10 @@ void expander(t_minishell *minishell, t_token_list **list)
 	single_quote_count = 0;
 	double_quote_count = 0;
 	iterator = *list;
-	expand_tokens(minishell, iterator, &single_quote_count, &double_quote_count);
+	if (is_here_doc)
+		expand_for_heredoc(minishell, iterator, &single_quote_count, &double_quote_count);
+	else
+		expand_tokens(minishell, iterator, &single_quote_count, &double_quote_count);
 }
 
 

@@ -76,7 +76,7 @@ int parse_input(t_minishell *m)
 		return (0);
 	if (check_quotes(m))
 		return (1);
-	expander(m, &m->list_tokens);
+	expander(m, &m->list_tokens, 0);
 	if (!rework_tokens(m))
 		return (0);
 	if (check_syntax(m) == 1)
