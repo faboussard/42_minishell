@@ -79,6 +79,10 @@ juba juba= juba=fafsasfaf
 $USER=
 05:52:22 juba@juba-desktop minishell ±|parsing ✗|→ echo '$'USER'='
 $USER=
+❯ echo '"$USER"'
+"$USER"
+faboussa@z1r12p5:~/minishell$ echo g"$'USER'"
+g$'USER'
 05:12:04 juba@juba-desktop minishell ±|parsing ✗|→ echo $'USER'
 USER
 05:26:15 juba@juba-desktop minishell ±|parsing ✗|→ echo $"USER"
@@ -97,8 +101,6 @@ faboussa@z1r11p5:~/minishell$  echo "    $USER"
 USER
 faboussa@z1r11p5:~/minishell$  echo "$1234USER"
 234USER
-faboussa@z1r12p5:~/minishell$ echo g"$'USER'"                        // KO
-g$'USER'
 faboussa@z1r11p5:~/tommini$  echo "'$HO''ME'"
 '''ME'
 
@@ -109,8 +111,6 @@ faboussa@z2r7p8:~$ echo $dgsdg$USER
 faboussa
 faboussa@z2r7p8:~$ echo adsdgs$USER
 adsdgsfaboussa
-❯ echo '"$USER"'
-"$USER"
 ❯ echo "'$USER'"
 'fanny'
 
