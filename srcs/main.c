@@ -131,7 +131,7 @@ int	main(int ac, char **av, char **envp)
 //			if (is_interactive(&minishell, ac, av) == true)
 //				minishell_interactive(&minishell);
 //			else
-				minishell_non_interactive(&minishell, arg_input[i]);
+			minishell_non_interactive(&minishell, arg_input[i]);
 			// Parse arg_input[i]
 			// Execute arg_input[i]
 			i++;
@@ -149,7 +149,7 @@ int	main(int ac, char **av, char **envp)
 //			if (is_interactive(&minishell, ac, av) == true)
 //				minishell_interactive(&minishell);
 //			else
-				minishell_non_interactive(&minishell, readline_input);
+			minishell_non_interactive(&minishell, readline_input);
 			//Parse readline input
 			//Execute readline input
 		}
