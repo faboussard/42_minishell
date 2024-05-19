@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 08:41:56 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/16 08:41:56 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:26:47 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,22 @@ static int	ft_len_list(char const *s, char c)
 	return (len_list);
 }
 
-void	ft_free_list(t_nodes_list *list)
+void	ft_free_list(t_dir_list *list)
 {
-	t_nodes_list	*tmp;
+	t_dir_list	*tmp;
 
+	if (!list)
+		return ;
 	while (list)
 	{
 		tmp = list;
 		list = list->next;
-		free(tmp->subdir);
+		free_safely_str(&tmp->subdir);
+		bzero(tmp, sizeof(t_dir_list));
 		free(tmp);
+		tmp = NULL;
 	}
+	list = NULL;
 }
 
 static char	*ft_write_word(char *s, char c, int *cursor)
@@ -64,32 +69,49 @@ static char	*ft_write_word(char *s, char c, int *cursor)
 	return (word);
 }
 
-t_nodes_list 	*ft_split_list(char const *s, char c)
+bool	assign_node(t_dir_list **list, char const *s, char c, int *cursor)
 {
-	t_nodes_list	*list;
-	t_nodes_list 	*tmp;
-	int		len_list;
-	int		i;
-	int		cursor;
+	(*list)->subdir = ft_write_word((char *)s, c, cursor);
+	if (!(*list)->subdir)
+	{
+		ft_free_list(*list);
+		return (1);
+	}
+	(*list)->next = (t_dir_list *)malloc(sizeof(t_dir_list));
+	if (!(*list)->next)
+	{
+		ft_free_list(*list);
+		return (1);
+	}
+	(*list)->next->prev = *list;
+	*list = (*list)->next;
+	return (0);
+}
+
+t_dir_list	*ft_split_list(char const *s, char c)
+{
+	t_dir_list	*list;
+	t_dir_list	*start;
+	int			len_list;
+	int			cursor;
 
 	len_list = ft_len_list(s, c);
-	list = (t_nodes_list *)malloc(sizeof(t_nodes_list *) * (len_list + 1));
+	list = (t_dir_list *)malloc(sizeof(t_dir_list) * (len_list + 1));
 	if (!list)
 		return (NULL);
-	i = 0;
+	ft_bzero(list, sizeof(t_dir_list));
 	cursor = 0;
-	tmp = list;
-	while (i < len_list)
+	start = list;
+	while (len_list-- > 0)
 	{
-		tmp->subdir = ft_write_word((char *)s, c, &cursor);
-		if (!list->subdir)
-		{
-			ft_free_list(list);
+		if (assign_node(&list, s, c, &cursor))
 			return (NULL);
-		}
-		tmp = tmp->next;
-		i++;
 	}
-	tmp->next = NULL;
+	if (list->prev != NULL)
+		list->prev->next = NULL;
+	ft_bzero(list, sizeof(t_dir_list));
+	free(list);
+	list = NULL;
+	list = start;
 	return (list);
 }

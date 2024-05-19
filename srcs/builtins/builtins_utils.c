@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_utils.c                                :+:      :+:    :+:   */
+/*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 08:17:34 by mbernard          #+#    #+#             */
-/*   Updated: 2024/04/19 12:05:30 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/18 22:56:13 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ bool contains_only_charset(const char *str, const char *charset)
 	return (1);
 }
 
-bool is_valid_key_with_plus(char *key)
+bool	is_valid_key_with_plus(char *key)
 {
-	size_t index;
+	size_t	index;
 
 	index = 0;
 	if (!ft_isalpha(key[index]) && key[index] != '_')
@@ -40,6 +40,7 @@ bool is_valid_key_with_plus(char *key)
 	}
 	return (true);
 }
+
 
 bool join_with_old(t_envp_list **list, char *value)
 {
@@ -56,16 +57,15 @@ bool join_with_old(t_envp_list **list, char *value)
 	return (1);
 }
 
-void action_for_no_valid_key(char *arg, bool *check_key)
+void	action_for_no_valid_key(char *arg, bool *check_key)
 {
 	print_cmd_perror_no_strerror(arg, "export: invalid identifier\n");
 	*check_key = true;
 }
 
-
-int get_value_and_target(char *arg, char **value, char **key)
+int	get_value_and_target(char *arg, char **value, char **key)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	while (arg[j] != '=')
@@ -112,3 +112,4 @@ bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_
 	}
 	return (check_key);
 }
+

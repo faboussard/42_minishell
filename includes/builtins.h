@@ -13,9 +13,10 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-
 # include "utils.h"
 
+# define PWD_ER "cd: error retrieving current directory: \
+getcwd: cannot access parent directories"
 
 //----------------------------------BUILTINS----------------------------------//
 int		ft_exit(t_minishell *minishell, char **cmd_table);
@@ -23,12 +24,14 @@ int		ft_env(t_minishell *minishell, char **args);
 int		ft_cd(t_minishell *m, char **cmd_table);
 int		ft_echo(char **cmd_table);
 int		ft_pwd(t_minishell *minishell);
-int ft_export(char **args, t_envp_list **env_variables, t_minishell *m);
-int export_variables(char **args, t_envp_list *env_variables, t_minishell *m);
+int		ft_export(char **args, t_envp_list **env_variables, t_minishell *m);
+int		export_variables(char **args, t_envp_list *env_variables, t_minishell *m);
 int		ft_unset(t_minishell *minishell, char **args);
 
 //-------------------------------BUILTINS UTILS-------------------------------//
 char	*ft_realpath(t_minishell *m, char *dir);
+bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key);
+bool	should_go_home(char **cmd_table);
 bool	contains_only_charset(const char *str, const char *charset);
 int		ft_atoi_long(const char *str, bool *error);
 bool	is_valid_env_var_key(char *var);
@@ -38,7 +41,5 @@ bool join_with_old(t_envp_list **cpy, char *value);
 char *join_new_value_env_with_old(t_envp_list **envp, char *value);
 void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key);
 void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key);
-
-//void	clear_path_char(char str[PATH_MAX]);
 
 #endif // BUILTINS_H
