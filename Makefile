@@ -30,6 +30,7 @@ LIST_HEADERS	= utils lexer minishell parser signals exec builtins ft_realpath
 # ------------ DIRECTORIES ------------ #
 
 DIR_BUILD		=	.build/
+SUPP_LEAK_DIR := $(shell pwd)
 SUBDIRS := .build/lexer .build/env_variables .build/parser .build/expansion \
 			.build/joiner .build/utils .build/exec .build/builtins .build/signals
 DIR_HEADERS		=	includes/
@@ -85,7 +86,7 @@ $(libft): FORCE
 	            $(MAKE) -C $(DIR_LIBFT)
 
 valgrind:       $(NAME)
-		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
+		valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=$(SUPP_LEAK_DIR)/ignore_leaks.supp ./$(NAME)
 
 debug: clean
 	$(MAKE) CFLAGS="-g"
