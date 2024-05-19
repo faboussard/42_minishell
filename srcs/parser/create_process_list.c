@@ -28,6 +28,7 @@ void define_file_token(t_token_list **in_files_list, t_minishell *minishell, con
 	new_token->e_type = iterator->e_type;
 	new_token->e_operator = iterator->e_operator;
 	new_token->is_quoted_delimiter = iterator->is_quoted_delimiter;
+	new_token->failed_expand = iterator->failed_expand;
 	add_token_to_list(in_files_list, new_token);
 }
 
