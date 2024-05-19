@@ -73,7 +73,6 @@ void	token_rework(t_minishell *minishell)
 		cmp);
 	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)DOUBLE_QUOTE,
 		cmp);
-	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)DOLLAR, cmp);
 	join_between_spaces(minishell, &minishell->list_tokens);
 	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)IS_SPACE, cmp);
 }

@@ -74,3 +74,31 @@ void	action_for_no_valid_key(char *arg, bool *check_key)
 	print_cmd_perror_no_strerror(arg, "export: invalid identifier\n");
 	*check_key = true;
 }
+
+bool add_var_or_value_to_envp_list(char **args, t_envp_list *env_variables, t_minishell *m, size_t index)
+{
+	bool check_key;
+	char **split;
+
+	split = NULL;
+	check_key = false;
+	while (args[index] != NULL)
+	{
+		if (ft_strchr(args[index], '=') == NULL)
+			process_no_equal_sign(args[index], m, &check_key);
+		else
+		{
+			split = ft_split(args[index], '=');
+			if (split == NULL)
+				exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+			if (is_valid_key_with_plus(split[0]) == false)
+				action_for_no_valid_key(args[index], &check_key);
+			else
+				process_argument_with_equal_sign(m, env_variables, split);
+			ft_free_tab(&split);
+		}
+		index++;
+	}
+	return (check_key);
+}
+

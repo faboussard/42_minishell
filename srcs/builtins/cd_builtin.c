@@ -26,7 +26,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	env->value = ft_strdup(cwd);
 	if (env->value == NULL)
 	{
-		ft_putendl_fd("Malloc error", 2);
+		ft_putendl_fd("Malloc error", ENOMEM);
 		return (ENOMEM);
 	}
 	return (0);
@@ -70,7 +70,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	target_path = ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
-		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
+		ft_putendl_fd("Malloc error in cd : go_into_directory", ENOMEM);
 		return (ENOMEM);
 	}
 	if (chdir(target_path) != 0)

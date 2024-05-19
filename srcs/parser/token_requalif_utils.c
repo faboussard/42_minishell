@@ -15,6 +15,20 @@
 #include "utils.h"
 #include <stdlib.h>
 
+
+void	dollar_to_command(t_token_list *list_tokens)
+{
+	t_token_list	*iterator;
+
+	iterator = list_tokens;
+	while (iterator)
+	{
+		if (iterator->e_operator == DOLLAR)
+			iterator->e_type = COMMAND;
+		iterator = iterator->next;
+	}
+}
+
 void	arg_to_command(t_token_list *list_tokens)
 {
 	t_token_list	*iterator;
