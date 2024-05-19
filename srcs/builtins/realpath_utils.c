@@ -105,7 +105,8 @@ char	*join_sep_safely(char *s1, char *s2, char sep, bool free_s1)
 	y = 0;
 	while (s1[++x])
 		dest[x] = (char)s1[x];
-	dest[x++] = sep;
+	if (sep)
+		dest[x++] = sep;
 	while (s2[y])
 		dest[x++] = (char)s2[y++];
 	dest[x] = '\0';

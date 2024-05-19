@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/17 23:06:47 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:34:07 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	remove_dirs_from_list(t_dir_list **list)
 			remove_node_from_list(tmp);
 			tmp = start;
 		}
-		else if (ft_strncmp(tmp->subdir, ".", 2) == 0
-			|| ft_strncmp(tmp->subdir, "..", 3) == 0)
+		else if (ft_strncmp(tmp->subdir, ".", 2) == 0 || ft_strncmp(tmp->subdir,
+				"..", 3) == 0)
 		{
 			remove_node_from_list(tmp);
 			tmp = start;
@@ -43,7 +43,7 @@ void	remove_dirs_from_list(t_dir_list **list)
 
 bool	add_root_node(t_dir_list **list)
 {
-	(*list)->prev = (t_dir_list *) malloc(sizeof(t_dir_list));
+	(*list)->prev = (t_dir_list *)malloc(sizeof(t_dir_list));
 	if (!(*list)->prev)
 	{
 		ft_free_list(*list);
@@ -84,42 +84,29 @@ t_dir_list	*prepare_list(t_minishell *m, char *dir)
 	return (list);
 }
 
-char	*replace_pts_with_path(t_minishell	*m, char *dir)
+void	write_path_from_list(char **path, t_dir_list **list)
 {
-	char		*path;
-	t_dir_list	*list;
 	t_dir_list	*start;
 
-	list = prepare_list(m, dir);
-	if (!list)
-		return (NULL);
-	remove_dirs_from_list(&list);
-	if (!list || !list->next)
-		return (ft_strdup("/"));
-	path = ft_strdup(list->subdir);
-	if (!path)
+	start = (*list);
+	while ((*list)->next)
 	{
-		ft_free_list(list);
-		return (NULL);
-	}
-	start = list;
-	while (list->next)
-	{
-		list = list->next;
-		if (ft_strncmp(path, "/", 2) == 0)
-			path = ft_strjoin(path, list->subdir);
+		(*list) = (*list)->next;
+		if (ft_strncmp((*path), "/", 2) == 0)
+			(*path) = join_sep_safely((*path), (*list)->subdir, 0, 1);
 		else
-			path = join_sep_safely(path, list->subdir, '/', 1);
-		if (!path)
+			(*path) = join_sep_safely((*path), (*list)->subdir, '/', 1);
+		if (!(*path))
 			break ;
 	}
-	list = start;
-	ft_free_list(list);
-	return (path);
+	(*list) = start;
 }
 
 char	*ft_realpath(t_minishell *m, char *dir)
 {
+	char		*path;
+	t_dir_list	*list;
+
 	if (ft_strncmp(dir, "/", 2) == 0)
 		return (ft_strdup("/"));
 	if ((dir && dir[0] == '/' && ft_strchr(dir, '.') == NULL)
@@ -128,5 +115,18 @@ char	*ft_realpath(t_minishell *m, char *dir)
 	if (contains_only_charset(dir, "./")
 		&& count_moves_to_root(m->current_path) < count_up_moves(dir))
 		return (ft_strdup("/"));
-	return (replace_pts_with_path(m, dir));
+	list = prepare_list(m, dir);
+	if (!list)
+		return (NULL);
+	remove_dirs_from_list(&list);
+	if (!list || !list->next)
+	{
+		ft_free_list(list);
+		return (ft_strdup("/"));
+	}
+	path = ft_strdup(list->subdir);
+	if (path)
+		write_path_from_list(&path, &list);
+	ft_free_list(list);
+	return (path);
 }
