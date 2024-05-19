@@ -91,6 +91,28 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 	}
 }
 
+void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count)
+{
+	if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
+		update_quote_counts(iterator->next, single_quote_count, double_quote_count);
+}
+
+void handle_dollar(t_minishell *minishell, t_token_list **iterator, int *single_quote_count, int *double_quote_count) {
+	if (is_redirect_token((*iterator)->next) && (*iterator)->next->next != NULL &&
+		(*iterator)->next->next->e_operator == IS_SPACE)
+	{
+		(*iterator)->e_operator = 0;
+		*iterator = (*iterator)->next;
+		return;
+	}
+	if ((*iterator)->next->e_operator == SINGLE_QUOTE && (*single_quote_count % 2 == 0)) {
+		*iterator = (*iterator)->next;
+		return;
+	}
+	add_quotes_count(*iterator, single_quote_count, double_quote_count);
+	process_dollar_token(minishell, iterator, *single_quote_count, *double_quote_count);
+}
+
 void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_quote_count, int *double_quote_count)
 {
 	int cheat_number;
@@ -105,23 +127,7 @@ void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_q
 		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
 			update_quote_counts(iterator, single_quote_count, double_quote_count);
 		else if (iterator->e_operator == DOLLAR && iterator->next != NULL)
-		{
-			if (is_redirect_token(iterator->next) && iterator->next->next != NULL &&
-				iterator->next->next->e_operator == IS_SPACE)
-			{
-				iterator->e_operator = 0;
-				iterator = iterator->next;
-				continue;
-			}
-			if (iterator->next->e_operator == SINGLE_QUOTE && (*single_quote_count % 2 == 0))
-			{
-				iterator = iterator->next;
-				continue;
-			}
-			if (iterator->next->e_operator == DOUBLE_QUOTE || iterator->next->e_operator == SINGLE_QUOTE)
-				update_quote_counts(iterator->next, single_quote_count, double_quote_count);
-			process_dollar_token(minishell, &iterator, *single_quote_count, *double_quote_count);
-		}
+			handle_dollar(minishell, &iterator, single_quote_count, double_quote_count);
 		if (iterator == NULL)
 			break ;
 		iterator = iterator->next;
