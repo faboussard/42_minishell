@@ -54,13 +54,14 @@ void handle_dollar_files(t_minishell *minishell, t_token_list **list)
 		(*list) = (*list)->next;
 	if (*list && (*list)->e_operator == DOLLAR)
 	{
-		(*list)->failed_expand = true;
 		expanded_string = expand_sigil((*list)->next->name, minishell);
 		if (expanded_string != (*list)->next->name)
 		{
 			change_to_expansion(minishell, list, &expanded_string);
 			return;
 		}
+		else
+			(*list)->failed_expand = true;
 	}
 }
 
