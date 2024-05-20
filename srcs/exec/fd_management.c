@@ -36,7 +36,7 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_us
 		if (pl->in_files_list->failed_expand == true)
 		{
 			print_name_and_msg(m, name, ": ambiguous redirect");
-			return (-1);
+			return (1);
 		}
 		infile_type = pl->in_files_list->e_type;
 		close_fds(*fd_to_use, 0);
