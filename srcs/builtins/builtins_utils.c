@@ -58,7 +58,7 @@ int join_with_old(t_envp_list **list, char *value)
 
 void	action_for_no_valid_key(char *arg, bool *check_key)
 {
-	print_cmd_perror_no_strerror(arg, "export: invalid identifier\n");
+	print_export_perror("export", arg);
 	*check_key = true;
 }
 

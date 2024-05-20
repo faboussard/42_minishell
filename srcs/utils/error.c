@@ -45,3 +45,13 @@ void	print_cmd_perror_no_strerror(char *cmd, char *name)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(name, 2);
 }
+
+void	print_export_perror(char *cmd, char *name)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": '", 2);
+	ft_putstr_fd(name, 2);
+	ft_putstr_fd("': ", 2);
+	ft_putendl_fd("not a valid identifier", 2);
+}
