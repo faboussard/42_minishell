@@ -20,7 +20,7 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 
 	while (iterator != NULL)
 	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
+		if (ft_strncmp(string, iterator->target, ft_strlen(string) - 1) == 0)
 		{
 			if (check_special_char_after_expand(string, iterator->target))
 				string = expand_sign(string, iterator->value);
