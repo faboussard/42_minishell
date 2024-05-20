@@ -55,9 +55,9 @@ void transform_to_token(t_minishell *minishell, char *string, t_token_list **lis
 		temp = ft_calloc(1, len);
 		if (temp == NULL)
 			exit_msg(minishell, "Malloc failed at transform_to_token", ENOMEM);
-		if ((ft_isspace(string[i]) || !ft_isalnum(string[i])) && string[i] != '_')
+		if (ft_isspace(string[i]))
 		{
-			temp[0] = string[i];
+			temp[0] = ' ';
 			create_token(minishell, temp, list);
 			i++;
 		}
