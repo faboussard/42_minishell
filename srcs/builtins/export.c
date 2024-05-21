@@ -46,7 +46,7 @@ char *join_new_value_env_with_old(t_envp_list **envp, char *value)
 }
 
 
-bool find_and_join_value(const char *tmp, t_envp_list **list, char *value)
+int find_and_join_value(const char *tmp, t_envp_list **list, char *value)
 {
 	while ((*list))
 	{
@@ -55,13 +55,13 @@ bool find_and_join_value(const char *tmp, t_envp_list **list, char *value)
 			if (!(*list)->value)
 			{
 				(*list)->value = ft_strdup(value);
-				if (!(*list)->value)
-				return (0);
+				if ((*list)->value == NULL)
+				return (MALLOC_FAILED);
 			}
 			else
 			{
-				if (!join_with_old(list, value))
-					return (0);
+				if (join_with_old(list, value) == MALLOC_FAILED)
+					return (MALLOC_FAILED);
 			}
 			break;
 		}
@@ -86,7 +86,7 @@ char *additionnal_env_content(t_minishell *m, t_envp_list **env, char *key, char
 		free_safely_str(&value);
 		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	}
-	if (!find_and_join_value(tmp, &cpy, value))
+	if (find_and_join_value(tmp, &cpy, value) == MALLOC_FAILED)
 		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
 	remove_and_add_envp(m, value, key);
 	free_safely_str(&tmp);

@@ -37,7 +37,8 @@ int		ft_atoi_long(const char *str, bool *error);
 bool	is_valid_env_var_key(char *var);
 void action_for_no_valid_key(char *arg, bool *check_key);
 bool is_valid_key_with_plus(char *key);
-bool join_with_old(t_envp_list **cpy, char *value);
+
+int join_with_old(t_envp_list **list, char *value);
 char *join_new_value_env_with_old(t_envp_list **envp, char *value);
 void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key);
 void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key);

@@ -41,17 +41,17 @@ bool	is_valid_key_with_plus(char *key)
 	return (true);
 }
 
-bool	join_with_old(t_envp_list **list, char *value)
+int join_with_old(t_envp_list **list, char *value)
 {
 	char	*temp;
 
 	temp = join_new_value_env_with_old(list, value);
 	if (temp == NULL)
-		return (0);
+		return (MALLOC_FAILED);
 	free(value);
 	value = ft_strdup(temp);
 	if (value == NULL)
-		return (0);
+		return (MALLOC_FAILED);
 	free(temp);
 	return (1);
 }

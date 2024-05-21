@@ -37,6 +37,10 @@
 #  define SHLVL_LIMIT 1000
 # endif
 
+# ifndef SHLVL
+#define ERR_INVALID_IDENTIFIER 2000
+# endif
+
 # ifndef PROMPT
 #define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
 # endif
