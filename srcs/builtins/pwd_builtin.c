@@ -35,13 +35,13 @@ int	ft_pwd(t_minishell *minishell)
 {
 	char	cwd[PATH_MAX];
 
-	if (print_env_var(minishell, "PWD="))
-		return (0);
 	if (minishell->current_path[0])
 	{
 		printf("%s\n", minishell->current_path);
 		return (0);
 	}
+	if (print_env_var(minishell, "PWD="))
+	return (0);
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("minishell: getcwd");
