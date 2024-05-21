@@ -16,7 +16,7 @@
 #include "parser.h"
 #include <readline/history.h>
 
-int export_variables(char **args, t_envp_list *env_variables, t_minishell *m)
+int make_export(char **args, t_envp_list *env_variables, t_minishell *m)
 {
 	size_t index;
 	bool one_key_not_valid_return_1;

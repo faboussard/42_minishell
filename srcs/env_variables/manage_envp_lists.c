@@ -66,22 +66,42 @@ t_envp_list	*create_new_envp(char *target, char *content)
 	return (new_envp);
 }
 
-int	remove_env_var(t_envp_list **env, char *var)
+char *trim_equal_sign(char *key)
 {
+	char *trimmed_key;
+
+	trimmed_key = NULL;
+	if (ft_strchr(key, '='))
+	{
+		trimmed_key= ft_strtrim(key, "=");
+		if (trimmed_key == NULL)
+			return (NULL);
+		return (trimmed_key);
+	}
+	else
+		return (key);
+}
+
+int	remove_env_var(t_envp_list **env, char *key)
+{
+	char 		*key_without_equal_sign;
 	char		*target_without_equal_sign;
 	t_envp_list	*cpy;
 
-	var = ft_strtrim(var, "=");
-	if (var == NULL)
+	key_without_equal_sign = trim_equal_sign(key);
+	if (key_without_equal_sign == NULL)
 		return (MALLOC_FAILED);
 	cpy = *env;
 	while (cpy)
 	{
-		target_without_equal_sign = ft_strtrim(cpy->target, "=");
+		target_without_equal_sign = trim_equal_sign(cpy->target);
 		if (target_without_equal_sign == NULL)
+		{
+			free_safely_str(&key_without_equal_sign);
 			return (MALLOC_FAILED);
-		if (ft_strncmp(var, target_without_equal_sign, ft_strlen(var)) == 0
-			|| ft_strncmp(var, target_without_equal_sign, ft_strlen(var)) == 0)
+		}
+		if (ft_strncmp(key, target_without_equal_sign, ft_strlen(key)) == 0
+			|| ft_strncmp(key_without_equal_sign, target_without_equal_sign, ft_strlen(key_without_equal_sign)) == 0)
 		{
 			remove_node_envp(env, cpy);
 			free_safely_str(&target_without_equal_sign);
@@ -91,6 +111,7 @@ int	remove_env_var(t_envp_list **env, char *var)
 			cpy = cpy->next;
 		free_safely_str(&target_without_equal_sign);
 	}
+	free_safely_str(&key_without_equal_sign);
 	return (0);
 }
 

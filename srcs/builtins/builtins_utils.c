@@ -66,14 +66,14 @@ void	action_for_no_valid_key(char *arg, bool *check_key)
 	tmp = ft_strjoin("minishell: export: '", arg);
 	if (!tmp)
 	{
-		ft_putstr_fd("Malloc failed at export_variables\n", 2);
+		ft_putstr_fd("Malloc failed at make_export\n", 2);
 		return ;
 	}
 	export_error = ft_strjoin(tmp, "': not a valid identifier\n");
 	if (!export_error)
 	{
 		free_safely_str(&tmp);
-		ft_putstr_fd("Malloc failed at export_variables\n", 2);
+		ft_putstr_fd("Malloc failed at make_export\n", 2);
 		return ;
 	}
 	ft_putstr_fd(export_error, 2);
@@ -98,10 +98,10 @@ int	get_value_and_target(char *arg, char **value, char **key)
 	return (1);
 }
 
-void	free_all(char **value, char **key)
+void	free_all(char *value, char *key)
 {
-	free_safely_str(value);
-	free_safely_str(key);
+	free_safely_str(&value);
+	free_safely_str(&key);
 }
 
 bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
@@ -121,12 +121,17 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 			return (check_key);
 		}
 		if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
-			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+		{
+			free_safely_str(&value);
+			free_safely_str(&key);
+			exit_msg(m, "Malloc failed at make_export", ENOMEM);
+		}
 		if (is_valid_key_with_plus(key) == false)
 			action_for_no_valid_key(args[index], &check_key);
 		else
 			process_argument_with_equal_sign(m, env_variables, value, key);
-		free_all(&value, &key);
+		free_safely_str(&value);
+		free_safely_str(&key);
 		index++;
 	}
 	return (check_key);

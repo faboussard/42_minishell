@@ -30,44 +30,50 @@ int ft_export(char **args, t_envp_list **env_variables, t_minishell *m)
 		print_env_variables_export(m);
 	}
 	else
-		return (export_variables(args + index, current, m));
+		return (make_export(args + index, current, m));
 	return (0);
 }
 
-int join_equal_sign(char *key)
+char *join_equal_sign(char *key)
 {
-	char *tmp;
+	char *new_key;
 
-	tmp = ft_strdup(key);
-	if (!tmp)
-		return (MALLOC_FAILED);
-	free_safely_str(&key);
-	key = ft_strjoin(tmp, "=");
-	if (!key)
-		return (MALLOC_FAILED);
-	free_safely_str(&tmp);
-	return (1);
+	new_key = ft_strjoin(key, "=");
+	if (new_key == NULL)
+		return (NULL);
+	return (new_key);
+}
+
+void free_export_strings(t_minishell *m, char **value, char **key, char **key_without_equal_sign)
+{
+	free_safely_str(key_without_equal_sign);
+	free_safely_str(key);
+	free_safely_str(value);
+	exit_msg(m, "Malloc failed at remove_and_add_envp", ENOMEM);
 }
 
 void remove_and_add_envp(t_minishell *m, char *value, char *key)
 {
-	if (join_equal_sign(key) == MALLOC_FAILED)
-		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
-	if (remove_env_var(&m->list_envp, key) == MALLOC_FAILED)
-		exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+	char 		*key_without_equal_sign;
+	char 		*key_with_equal_sign;
+
+	key_with_equal_sign = join_equal_sign(key);
+	if (key_with_equal_sign == NULL)
+		free_export_strings(m, &value, &key, &key_without_equal_sign);
+	if (remove_env_var(&m->list_envp, key_with_equal_sign) == MALLOC_FAILED)
+		free_export_strings(m, &value, &key, &key_without_equal_sign);
 	if (value[0] == '\0')
 	{
-		key = ft_strtrim(key, "=");
-		if (key == NULL)
-			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
 		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
-			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+			free_export_strings(m, &value, &key, &key_without_equal_sign);
+		free_safely_str(&key_without_equal_sign);
 	}
 	else
 	{
-		if (add_new_envp(&m->list_envp, key, value) == MALLOC_FAILED)
-			exit_msg(m, "Malloc failed at export_variables", ENOMEM);
+		if (add_new_envp(&m->list_envp, key_with_equal_sign, value) == MALLOC_FAILED)
+			free_export_strings(m, &value, &key, &key_without_equal_sign);
 	}
+	free_safely_str(&key_with_equal_sign);
 }
 
 void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key)
