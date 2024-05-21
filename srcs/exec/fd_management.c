@@ -60,9 +60,9 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 	if (pl->out_files_list != NULL)
 	{
 		if (pl->out_files_list->e_type == OUT_FILE)
-			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0664);
 		else if (pl->out_files_list->e_type == APPEND_FILE)
-			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_APPEND, 0644);
+			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_APPEND, 0664);
 	}
 	else
 		pl->fd_out = STDOUT_FILENO;
