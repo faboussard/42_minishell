@@ -38,6 +38,7 @@ int	ft_unset(t_minishell *minishell, char **args)
 	int	ret;
 
 	i = 1;
+	ret = 0;
 	while (args[i])
 	{
 		if (!is_valid_env_var_key(args[i]))

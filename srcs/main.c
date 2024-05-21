@@ -125,13 +125,13 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 		while (arg_input[i])
 		{
 			ft_bzero(&minishell, (sizeof(t_minishell)));
-			minishell.total_commands = 1;
 			set_minishell_paths(&minishell);
+			minishell.total_commands = 1;
 			set_environment(&minishell, envp);
-//			if (is_interactive(&minishell, ac, av) == true)
-//				minishell_interactive(&minishell);
-//			else
-			minishell_non_interactive(&minishell, arg_input[i]);
+			if (is_interactive(&minishell, ac, av) == true)
+				minishell_interactive(&minishell);
+			else
+				minishell_non_interactive(&minishell, arg_input[i]);
 			// Parse arg_input[i]
 			// Execute arg_input[i]
 			i++;
@@ -146,10 +146,10 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 			minishell.total_commands = 1;
 			set_minishell_paths(&minishell);
 			set_environment(&minishell, envp);
-//			if (is_interactive(&minishell, ac, av) == true)
-//				minishell_interactive(&minishell);
-//			else
-			minishell_non_interactive(&minishell, readline_input);
+			if (is_interactive(&minishell, ac, av) == true)
+				minishell_interactive(&minishell);
+			else
+				minishell_non_interactive(&minishell, readline_input);
 			//Parse readline input
 			//Execute readline input
 		}

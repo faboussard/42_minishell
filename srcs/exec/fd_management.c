@@ -30,8 +30,14 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_us
 	enum e_token_type	infile_type;
 
 	pl->dev_null = 0;
+
 	if (pl->in_files_list != NULL)
 	{
+		if (pl->in_files_list->failed_expand == true)
+		{
+			print_name_and_msg(m, name, ": ambiguous redirect");
+			return (1);
+		}
 		infile_type = pl->in_files_list->e_type;
 		close_fds(*fd_to_use, 0);
 		if (infile_type == DELIMITER)

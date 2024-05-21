@@ -23,6 +23,20 @@ void	print_name(t_minishell *m, char *name)
 	free_safely_str(&thename);
 }
 
+void print_name_and_msg(t_minishell *m, char *name, char *msg)
+{
+	char	*thename;
+	char	*the_msg;
+
+	thename = ft_strjoin("minishell: ", name);
+	if (!thename)
+		exit_msg_minishell(m, "Malloc error", ENOMEM);
+	the_msg = ft_strjoin(thename, msg);
+	free_safely_str(&thename);
+	ft_putendl_fd(the_msg, 2);
+	free_safely_str(&the_msg);
+}
+
 void	print_name_and_give_status(t_minishell *m, char *name, int err)
 {
 	print_name(m, name);
