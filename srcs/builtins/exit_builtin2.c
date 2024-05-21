@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "minishell.h"
 
 static bool check_out_of_range(int neg, unsigned long long num, bool *error)
 {

@@ -13,19 +13,38 @@
 #include "builtins.h"
 #include "utils.h"
 
-bool str_is_num(char *str)
+//bool str_is_num(char *str)
+//{
+//	int i;
+//
+//	i = 0;
+//	while (str[i])
+//	{
+//		if (ft_isalpha(str[i]))
+//			return (1);
+//		i++;
+//	}
+//	return (0);
+//}
+
+bool str_is_not_num(char *str)
 {
 	int i;
 
 	i = 0;
+	if (!str)
+		return (1);
 	while (str[i])
 	{
-		if (ft_isalpha(str[i]))
+		if (!ft_isdigit(str[i])
+			|| (!ft_isdigit(str[i]) && i == 0 && str[i] != '-' && str[i] != '+')
+			|| ((str[0] == '-' || str[0] == '+') && !str[1]))
 			return (1);
 		i++;
 	}
 	return (0);
 }
+
 
 void exit_numeric_arg(t_minishell *minishell, char *const *cmd_table, bool is_alpha)
 {
@@ -56,7 +75,7 @@ int	ft_exit(t_minishell *minishell, char **cmd_table)
 		ft_putendl_fd("exit", 2);
 	exit_no_arg(minishell, cmd_table);
 	exit_code = ft_atoi_long(cmd_table[1], &is_alpha);
-	if (str_is_num(cmd_table[1]))
+	if (str_is_not_num(cmd_table[1]))
 		is_alpha = true;
 	if (cmd_table[2] && !is_alpha)
 	{
