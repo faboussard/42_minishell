@@ -53,9 +53,16 @@ void	get_target_and_value(char **envp, t_envp_list **list_envp,
 		i++;
 		content = ft_substr(*envp, i, ft_strlen(*envp) - i);
 		if (content == NULL)
+		{
+			free_safely_str(&target);
 			exit_msg(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+		}
 		if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
+		{
+			free_safely_str(&target);
+			free_safely_str(&content);
 			exit_msg(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+		}
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
 		free_safely_str(&content);
 	}

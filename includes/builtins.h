@@ -25,7 +25,7 @@ int		ft_cd(t_minishell *m, char **cmd_table);
 int		ft_echo(char **cmd_table);
 int		ft_pwd(t_minishell *minishell);
 int		ft_export(char **args, t_envp_list **env_variables, t_minishell *m);
-int		export_variables(char **args, t_envp_list *env_variables, t_minishell *m);
+int		make_export(char **args, t_envp_list *env_variables, t_minishell *m);
 int		ft_unset(t_minishell *minishell, char **args);
 
 //-------------------------------BUILTINS UTILS-------------------------------//
