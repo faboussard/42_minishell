@@ -77,6 +77,7 @@ void	print_no_valid_key(char *arg, bool *check_key)
 		return ;
 	}
 	ft_putstr_fd(export_error, 2);
+	free_safely_str(&tmp);
 	free_safely_str(&export_error);
 	*check_key = true;
 }
