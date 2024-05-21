@@ -63,6 +63,7 @@ void	minishell_non_interactive(t_minishell *m, char *data_input)
 	{
 		if (m->pl == NULL)
 			return ;
+		ft_init_pl(m, m->pl);
 		execute_cmds(m, m->total_commands);
 	}
 }
@@ -99,7 +100,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * Le tester de mcombeau fonctionne mieux si on commente le if(is_interactive)
  * et ne laisse que le lancement du non_interactive.
  * */
-/*int	main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 	char	*readline_input;
@@ -122,16 +123,18 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 		if (!arg_input)
 			return (1);
 		i = 0;
+		ft_bzero(&minishell, (sizeof(t_minishell)));
+		set_minishell_paths(&minishell);
+		minishell.total_commands = 1;
+		set_environment(&minishell, envp);
 		while (arg_input[i])
 		{
-			ft_bzero(&minishell, (sizeof(t_minishell)));
-			set_minishell_paths(&minishell);
-			minishell.total_commands = 1;
-			set_environment(&minishell, envp);
 			if (is_interactive(&minishell, ac, av) == true)
 				minishell_interactive(&minishell);
 			else
 				minishell_non_interactive(&minishell, arg_input[i]);
+			init_before_next_prompt(&minishell);
+
 			// Parse arg_input[i]
 			// Execute arg_input[i]
 			i++;
@@ -157,9 +160,9 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	// Free data and exit minishell when done
 	free_minishell(&minishell);
 	return (minishell.status);
-}*/
+}
 
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 
@@ -174,4 +177,4 @@ int	main(int ac, char **av, char **envp)
 	//	ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
-}
+}*/
