@@ -26,6 +26,10 @@ void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl)
 	free_minishell(m);
 	exit(127);
 }
+/*
+ * Le dernier pipe doit renvoyer l erreur, le numero ne doit pas capter la premiere
+ *
+ * */
 
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
