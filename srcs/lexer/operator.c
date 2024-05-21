@@ -21,7 +21,9 @@ bool define_operator_token(t_token_list *new_token, const char *string, const ch
 	len = ft_strlen(string) + 1;
 	while (i < 13)
 	{
-		if (operator[i] != NULL && !ft_strncmp(string, operator[i], len))
+		if (operator[i] != NULL
+		&& (!ft_strncmp(string, operator[i], len)
+		|| (i == IS_SPACE && ft_isspace(string[0]))))
 		{
 			new_token->e_type = OPERATOR;
 			new_token->e_operator = i;
