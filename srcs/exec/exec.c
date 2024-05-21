@@ -57,32 +57,49 @@ bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
 	set_or_get_last_status(m->status, 0);
 	return (1);
 }
-	
+
+void close_pipes_and_fds(t_minishell *m, t_process_list *pl)
+{
+	close_pipes(m->pipe_fd);
+	close_fds(pl->fd_in, pl->fd_out);
+	close_fds(m->tmp_in, 0);
+}
+
+void	chose_exit(t_minishell *m, bool good_code, int exit_code)
+{
+	free_minishell(m);
+	if (good_code)
+		exit(exit_code);
+	if (errno == 13)
+		exit(126);
+	if (errno == 2)
+		exit(127);
+	exit(1);
+}
+
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
 	if (pl->cmd_table[0] && !is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
 	{
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
-		close_pipes(m->pipe_fd);
-		close_fds(pl->fd_in, pl->fd_out);
-		close_fds(m->tmp_in, 0);
+		close_pipes_and_fds(m, pl);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
-		if (access(pl->good_path, F_OK) == 0 || ft_strchr(pl->cmd_table[0], '/'))
+		if (contains_only_charset(pl->cmd_table[0], "./"))
+			exit_is_a_directory(m, pl->cmd_table[0], pl);
+		if ((access(pl->good_path, F_OK) == 0
+			|| ft_strchr(pl->cmd_table[0], '/'))
+			&& ft_strncmp(pl->cmd_table[0], "..", 3))
 		{
 			print_name(m, pl->cmd_table[0]);
 			ft_free_pl_paths(m, pl);
-			exit(1);
+			chose_exit(m, 0, 0);
 			//print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 		}
 		else
-		{
-//			ft_free_pl_paths(m, pl);
 			exit_command_not_found(m, pl->cmd_table[0], pl);
-		}
 	}
 	free_safely_str(&(m->paths));
-	free_minishell(m);
-	exit(m->status);
+	chose_exit(m, 1, m->status);
 }
 
 static int	check_all_infiles(t_minishell *m, t_process_list *pl)
