@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "minishell.h"
 
 int	check_n_arg(char *arg)
 {
@@ -37,6 +36,12 @@ int	ft_echo(char **cmd_table)
 
     i = 1;
     flag = 0;
+//	while (cmd_table[i])
+//	{
+//		dprintf(2, "cmd_table\t===\t%s\n", cmd_table[i]);
+//			i++;
+//	}
+//	i = 1;
     while (cmd_table[i] && check_n_arg(cmd_table[i]))
     {
         flag = 1;
@@ -44,11 +49,11 @@ int	ft_echo(char **cmd_table)
     }
 	while (cmd_table[i])
 	{
-		if (printf("%s", cmd_table[i]) == -1)
+		if (cmd_table[i] && printf("%s", cmd_table[i]) == -1)
 			return (EXIT_FAILURE);
 		i++;
 		if (cmd_table[i] && printf(" ") == -1)
-            return (EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	if (flag == 0 && printf("\n") == -1)
         return (EXIT_FAILURE);
