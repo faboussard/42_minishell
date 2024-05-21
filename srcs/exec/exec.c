@@ -84,7 +84,10 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		close_pipes_and_fds(m, pl);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
-		if (contains_only_charset(pl->cmd_table[0], "./"))
+		if (contains_only_charset(pl->cmd_table[0], "./")
+			|| ft_strncmp(pl->cmd_table[0], "/", 1)
+			|| ft_strncmp(pl->cmd_table[0], "./", 2)
+			|| ft_strncmp(pl->cmd_table[0], "..", 3))
 			exit_is_a_directory(m, pl->cmd_table[0], pl);
 		if ((access(pl->good_path, F_OK) == 0
 			|| ft_strchr(pl->cmd_table[0], '/'))
