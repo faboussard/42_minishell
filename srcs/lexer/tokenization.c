@@ -41,7 +41,6 @@ static void create_words(char *string, int *i, char **temp)
 	(*temp)[j] = '\0';
 }
 
-
 void transform_to_token(t_minishell *minishell, char *string, t_token_list **list)
 {
 	int i;
