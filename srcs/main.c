@@ -100,6 +100,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * Le tester de mcombeau fonctionne mieux si on commente le if(is_interactive)
  * et ne laisse que le lancement du non_interactive.
  * */
+
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
@@ -112,6 +113,10 @@ int	main(int ac, char **av, char **envp)
 		ft_putendl_fd("bash: -c: option requires an argument", 2);
 		exit(2);
 	}
+	ft_bzero(&minishell, (sizeof(t_minishell)));
+	minishell.total_commands = 1;
+	set_minishell_paths(&minishell);
+	set_environment(&minishell, envp);
 	if (ac == 3 && ft_strcmp(av[1], "-c") == 0 && av[2])
 	{
 		if (!av[2])
@@ -123,20 +128,10 @@ int	main(int ac, char **av, char **envp)
 		if (!arg_input)
 			return (1);
 		i = 0;
-		ft_bzero(&minishell, (sizeof(t_minishell)));
-		set_minishell_paths(&minishell);
-		minishell.total_commands = 1;
-		set_environment(&minishell, envp);
 		while (arg_input[i])
 		{
-			if (is_interactive(&minishell, ac, av) == true)
-				minishell_interactive(&minishell);
-			else
-				minishell_non_interactive(&minishell, arg_input[i]);
+			minishell_non_interactive(&minishell, arg_input[i]);
 			init_before_next_prompt(&minishell);
-
-			// Parse arg_input[i]
-			// Execute arg_input[i]
 			i++;
 		}
 	}
@@ -145,19 +140,10 @@ int	main(int ac, char **av, char **envp)
 		while (1)
 		{
 			readline_input = readline(PROMPT);
-			ft_bzero(&minishell, (sizeof(t_minishell)));
-			minishell.total_commands = 1;
-			set_minishell_paths(&minishell);
-			set_environment(&minishell, envp);
-			if (is_interactive(&minishell, ac, av) == true)
-				minishell_interactive(&minishell);
-			else
-				minishell_non_interactive(&minishell, readline_input);
-			//Parse readline input
-			//Execute readline input
+			minishell_non_interactive(&minishell, readline_input);
+			init_before_next_prompt(&minishell);
 		}
 	}
-	// Free data and exit minishell when done
 	free_minishell(&minishell);
 	return (minishell.status);
 }

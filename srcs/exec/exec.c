@@ -71,6 +71,8 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		{
 			print_name(m, pl->cmd_table[0]);
 			ft_free_pl_paths(m, pl);
+			if (errno == 13)
+				exit(126);
 			exit(1);
 			//print_name_and_exit_perror(m, pl->cmd_table[0], 1);
 		}
