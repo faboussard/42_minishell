@@ -58,7 +58,26 @@ int join_with_old(t_envp_list **list, char *value)
 
 void	action_for_no_valid_key(char *arg, bool *check_key)
 {
-	print_export_perror("export", arg);
+	char *export_error;
+	char *tmp;
+
+	export_error = NULL;
+	tmp = NULL;
+	tmp = ft_strjoin("minishell: export: '", arg);
+	if (!tmp)
+	{
+		ft_putstr_fd("Malloc failed at export_variables\n", 2);
+		return ;
+	}
+	export_error = ft_strjoin(tmp, "': not a valid identifier\n");
+	if (!export_error)
+	{
+		free_safely_str(&tmp);
+		ft_putstr_fd("Malloc failed at export_variables\n", 2);
+		return ;
+	}
+	ft_putstr_fd(export_error, 2);
+	free_safely_str(&export_error);
 	*check_key = true;
 }
 
