@@ -17,10 +17,19 @@
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
+	char *target_without_equal_sign;
+	size_t len;
 
+	len = ft_strlen(string) + 1;
 	while (iterator != NULL)
 	{
-		if (ft_strncmp(string, iterator->target, ft_strlen(iterator->target) - 1) == 0)
+		if (ft_strchr(iterator->target, '='))
+			target_without_equal_sign = trim_equal_sign(iterator->target);
+		else
+			target_without_equal_sign = ft_strdup(iterator->target);
+		if (target_without_equal_sign == NULL)
+			exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
+		if (ft_strncmp(string, target_without_equal_sign, len) == 0)
 		{
 			if (check_special_char_after_expand(string, iterator->target))
 				string = expand_sign(string, iterator->value);
@@ -30,8 +39,8 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 				if (string == NULL)
 					exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 			}
-			return (string);
 		}
+		free_safely_str(&target_without_equal_sign);
 		iterator = iterator->next;
 	}
 	return (string);
