@@ -34,8 +34,8 @@ bool print_operator_syntax_error(t_token_list *token)
 
 	error = token->e_operator;
 	if (error == PIPE && token->next != NULL)
-		print_error("syntax error: unexpected end of file");
-	else if (error == PIPE && token->next == NULL)
+		print_error("syntax error");
+	else if (error == PIPE)
 		print_error("minishell: syntax error near unexpected token `|'");
 	else if (error == INPUT_REDIRECT)
 		return (print_error("minishell: syntax error near unexpected token `<'"), 1);
