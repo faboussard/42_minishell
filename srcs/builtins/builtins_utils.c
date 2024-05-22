@@ -86,8 +86,10 @@ int	get_value_and_target(char *arg, char **value, char **key)
 {
 	int	j;
 
+	if (arg == NULL)
+		return (0);
 	j = 0;
-	while (arg[j] != '=')
+	while (arg[j] && arg[j] != '=')
 		j++;
 	*key = ft_substr(arg, 0, j);
 	if (*key == NULL)
@@ -115,6 +117,8 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 	check_key = false;
 	while (args[index] != NULL)
 	{
+		value = NULL;
+		key = NULL;
 		if (ft_strncmp(args[index], "=", 1) == 0)
 		{
 			check_key = true;
@@ -123,8 +127,7 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 		}
 		if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
 		{
-			free_safely_str(&value);
-			free_safely_str(&key);
+			free_all(value, key);
 			exit_msg(m, "Malloc failed at make_export", ENOMEM);
 		}
 		if (is_valid_key_with_plus(key) == false)
