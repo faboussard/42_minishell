@@ -60,10 +60,8 @@ void	print_error_unset(char *arg)
 int	ft_unset(t_minishell *minishell, char **args)
 {
 	int	i;
-	int	ret;
 
 	i = 1;
-	ret = 0;
 	while (args[i])
 	{
 		if (!is_valid_env_var_key(args[i]))
@@ -75,5 +73,5 @@ int	ft_unset(t_minishell *minishell, char **args)
 		}
 		i++;
 	}
-	return (ret);
+	return (0);
 }
