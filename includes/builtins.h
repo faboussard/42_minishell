@@ -35,7 +35,7 @@ bool	should_go_home(char **cmd_table);
 bool	contains_only_charset(const char *str, const char *charset);
 int		ft_atoi_long(const char *str, bool *error);
 bool	is_valid_env_var_key(char *var);
-void print_no_valid_key(char *arg, bool *check_key);
+void print_error_export(char *arg, bool *check_key);
 bool is_valid_key_with_plus(char *key);
 bool join_with_old(t_envp_list **cpy, char *value);
 char *join_new_value_env_with_old(t_envp_list **envp, char *value);
