@@ -94,6 +94,8 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 {
 	struct stat path_stat;
 
+	if (ft_strncmp(pl->cmd_table[0], "..", 3))
+		return ;
 	stat(pl->cmd_table[0], &path_stat);
 	if (S_ISREG(path_stat.st_mode))
 	{
@@ -118,7 +120,13 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		deals_with_single_point(m, pl);
 		deals_if_dir_or_file(m, pl);
-		if (access(pl->good_path, F_OK) == 0
+		if ((ft_strchr(pl->cmd_table[0], '/'))
+			&& (contains_only_charset(pl->cmd_table[0], "./")
+				|| ft_strncmp(pl->cmd_table[0], "/", 1)
+				|| ft_strncmp(pl->cmd_table[0], "./", 2)))
+			exit_is_a_directory(m, pl->cmd_table[0], pl);
+		if ((access(pl->good_path, F_OK) == 0
+			 || ft_strchr(pl->cmd_table[0], '/'))
 			&& ft_strncmp(pl->cmd_table[0], "..", 3))
 		{
 			print_name(m, pl->cmd_table[0]);
@@ -131,6 +139,31 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	free_safely_str(&(m->paths));
 	chose_exit(m, 1, m->status);
 }
+
+/*void	my_execve(t_minishell *m, t_process_list *pl)
+{
+	if (pl->cmd_table[0] && !is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+	{
+		set_good_path_cmd(m, pl, pl->cmd_table[0]);
+		close_pipes_and_fds(m, pl);
+		execve(pl->good_path, pl->cmd_table, m->envp_table);
+		deals_with_single_point(m, pl);
+		deals_if_dir_or_file(m, pl);
+		if ((access(pl->good_path, F_OK) == 0
+			&& ft_strncmp(pl->cmd_table[0], "..", 3)))
+		{
+			print_name(m, pl->cmd_table[0]);
+			ft_free_pl_paths(m, pl);
+			chose_exit(m, 0, 0);
+		}
+		else if (ft_strchr(pl->cmd_table[1], '/'))
+			no_such_file_or_directory(m, pl->cmd_table[1], pl);
+		else
+			exit_command_not_found(m, pl->cmd_table[0], pl);
+	}
+	free_safely_str(&(m->paths));
+	chose_exit(m, 1, m->status);
+}*/
 
 static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 {
