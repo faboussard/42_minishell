@@ -56,7 +56,7 @@ bool	join_with_old(t_envp_list **list, char *value)
 	return (1);
 }
 
-void	print_no_valid_key(char *arg, bool *check_key)
+void	print_error_export(char *arg, bool *check_key)
 {
 	char *export_error;
 	char *tmp;
@@ -118,7 +118,7 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 		if (ft_strncmp(args[index], "=", 1) == 0)
 		{
 			check_key = true;
-			print_no_valid_key(args[index], &check_key);
+			print_error_export(args[index], &check_key);
 			return (check_key);
 		}
 		if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
@@ -128,11 +128,10 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 			exit_msg(m, "Malloc failed at make_export", ENOMEM);
 		}
 		if (is_valid_key_with_plus(key) == false)
-			print_no_valid_key(args[index], &check_key);
+			print_error_export(args[index], &check_key);
 		else
 			process_argument_with_equal_sign(m, env_variables, value, key);
-		free_safely_str(&value);
-		free_safely_str(&key);
+		free_all(value, key);
 		index++;
 	}
 	return (check_key);
