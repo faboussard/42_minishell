@@ -82,7 +82,10 @@ int parse_input(t_minishell *m)
 	if (!tokenize_input(m, m->user_input))
 		return (0);
 	if (check_quotes(m))
+	{
+		m->status = set_or_get_last_status(2, 0);
 		return (1);
+	}
 	expander(m, &m->list_tokens, 0);
 	if (!rework_tokens(m))
 		return (0);
