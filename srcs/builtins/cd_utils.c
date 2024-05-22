@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 
 bool	ft_getenv(t_minishell *m, char dest[PATH_MAX], char *key)
 {
