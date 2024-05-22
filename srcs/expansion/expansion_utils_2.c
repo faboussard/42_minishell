@@ -14,6 +14,19 @@
 #include "utils.h"
 #include "parser.h"
 
+char *getString(char *string, t_minishell *minishell, t_envp_list *iterator)
+{
+	if (check_special_char_after_expand(string, iterator->target))
+		string = expand_sign(string, iterator->value);
+	else
+	{
+		string = ft_strdup(iterator->value);
+		if (string == NULL)
+			exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
+	}
+	return (string);
+}
+
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
 	t_envp_list *iterator = minishell->list_envp;
@@ -30,16 +43,7 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 		if (target_without_equal_sign == NULL)
 			exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 		if (ft_strncmp(string, target_without_equal_sign, len) == 0)
-		{
-			if (check_special_char_after_expand(string, iterator->target))
-				string = expand_sign(string, iterator->value);
-			else
-			{
-				string = ft_strdup(iterator->value);
-				if (string == NULL)
-					exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
-			}
-		}
+			string = getString(string, minishell, iterator);
 		free_safely_str(&target_without_equal_sign);
 		iterator = iterator->next;
 	}
