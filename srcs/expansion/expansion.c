@@ -76,7 +76,6 @@ void handle_dollar(t_minishell *minishell, t_token_list **iterator, int *single_
 		*iterator = (*iterator)->next;
 		return;
 	}
-	//cette partie gere le cas ou on a un single quote apres le dollar sans avoir dautre quote avant, il faut lenlever. et ne pas expand
 	if ((*iterator)->next->e_operator == SINGLE_QUOTE && (*single_quote_count % 2 == 0) && (*double_quote_count % 2 == 0))
 	{
 		define_to_delete_tokens(iterator);
