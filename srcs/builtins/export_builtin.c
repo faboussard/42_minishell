@@ -52,6 +52,8 @@ void free_export_strings(t_minishell *m, char **value, char **key, char **key_wi
 	exit_msg(m, "Malloc failed at remove_and_add_envp", ENOMEM);
 }
 
+
+
 void remove_and_add_envp(t_minishell *m, char *value, char *key)
 {
 	char 		*key_without_equal_sign;
