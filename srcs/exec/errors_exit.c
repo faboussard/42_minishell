@@ -32,6 +32,14 @@ void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl)
 	char *msg;
 	char	*tmp;
 
+	if (access(pl->cmd_table[0], F_OK) == 0
+		&& access(pl->cmd_table[0], X_OK) != 0)
+	{
+		print_name(m, pl->cmd_table[0]);
+		ft_free_pl_paths(m, pl);
+		free_minishell(m);
+		exit(126);
+	}
 	tmp = ft_strjoin("minishell: ", name);
 	if (!tmp)
 		malloc_error_with_exit(m);
