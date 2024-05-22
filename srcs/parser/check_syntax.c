@@ -53,6 +53,11 @@ bool check_consecutive_redirect(t_minishell *minishell)
 			print_operator_syntax_error(next_token);
 			return (1);
 		}
+		if (current_token->e_operator == PIPE && next_token->e_operator == PIPE)
+		{
+			print_operator_syntax_error(next_token);
+			return (1);
+		}
 		current_token = current_token->next;
 	}
 	return (0);
