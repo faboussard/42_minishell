@@ -101,67 +101,67 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * et ne laisse que le lancement du non_interactive.
  * */
 
-//int	main(int ac, char **av, char **envp)
-//{
-//	t_minishell	minishell;
-//	char	*readline_input;
-//	char	**arg_input;
-//	int		i;
-//
-//	if (ac > 2 && !av[2])
-//	{
-//		ft_putendl_fd("bash: -c: option requires an argument", 2);
-//		exit(2);
-//	}
-//	ft_bzero(&minishell, (sizeof(t_minishell)));
-//	minishell.total_commands = 1;
-//	set_minishell_paths(&minishell);
-//	set_environment(&minishell, envp);
-//	if (ac == 3 && ft_strcmp(av[1], "-c") == 0 && av[2])
-//	{
-//		if (!av[2])
-//		{
-//			ft_putendl_fd("bash: -c: option requires an argument", 2);
-//			exit(2);
-//		}
-//		arg_input = ft_split(av[2], ';');
-//		if (!arg_input)
-//			return (1);
-//		i = 0;
-//		while (arg_input[i])
-//		{
-//			minishell_non_interactive(&minishell, arg_input[i]);
-//			init_before_next_prompt(&minishell);
-//			i++;
-//		}
-//	}
-//	else
-//	{
-//		while (1)
-//		{
-//			readline_input = readline(PROMPT);
-//			minishell_non_interactive(&minishell, readline_input);
-//			init_before_next_prompt(&minishell);
-//		}
-//	}
-//	free_minishell(&minishell);
-//	return (minishell.status);
-//}
-
-
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
+	char	*readline_input;
+	char	**arg_input;
+	int		i;
 
+	if (ac > 2 && !av[2])
+	{
+		ft_putendl_fd("bash: -c: option requires an argument", 2);
+		exit(2);
+	}
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
 	set_minishell_paths(&minishell);
 	set_environment(&minishell, envp);
-	if (is_interactive(&minishell, ac, av) == true)
-		minishell_interactive(&minishell);
+	if (ac == 3 && ft_strcmp(av[1], "-c") == 0 && av[2])
+	{
+		if (!av[2])
+		{
+			ft_putendl_fd("bash: -c: option requires an argument", 2);
+			exit(2);
+		}
+		arg_input = ft_split(av[2], ';');
+		if (!arg_input)
+			return (1);
+		i = 0;
+		while (arg_input[i])
+		{
+			minishell_non_interactive(&minishell, arg_input[i]);
+			init_before_next_prompt(&minishell);
+			i++;
+		}
+	}
 	else
-		minishell_non_interactive(&minishell, av[2]);
-	//	ft_print_minishell(&minishell);
+	{
+		while (1)
+		{
+			readline_input = readline(PROMPT);
+			minishell_non_interactive(&minishell, readline_input);
+			init_before_next_prompt(&minishell);
+		}
+	}
 	free_minishell(&minishell);
 	return (minishell.status);
 }
+
+
+//int	main(int ac, char **av, char **envp)
+//{
+//	t_minishell	minishell;
+//
+//	ft_bzero(&minishell, (sizeof(t_minishell)));
+//	minishell.total_commands = 1;
+//	set_minishell_paths(&minishell);
+//	set_environment(&minishell, envp);
+//	if (is_interactive(&minishell, ac, av) == true)
+//		minishell_interactive(&minishell);
+//	else
+//		minishell_non_interactive(&minishell, av[2]);
+//	//	ft_print_minishell(&minishell);
+//	free_minishell(&minishell);
+//	return (minishell.status);
+//}
