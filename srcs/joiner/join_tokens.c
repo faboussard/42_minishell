@@ -15,7 +15,6 @@
 #include "utils.h"
 #include "parser.h"
 
-// KOEJN
 
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
@@ -90,29 +89,11 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
-/// OHEEEE
-
-
-
-// change ca
-
-// oheheheee
-int no_space_in_list(t_token_list *list)
-{
-	while (list != NULL)
-	{
-		if (list->e_operator == IS_SPACE)
-			return (0);
-		list = list->next;
-	}
-	return (1);
-}
-
 void join_between_spaces(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
-	if (list == NULL || *list == NULL || no_space_in_list(*list))
+	if (list == NULL || *list == NULL)
 		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
@@ -123,7 +104,7 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 		{
 			if (is_redirect_token_or_pipe((*list)->next) || is_redirect_token_or_pipe(*list))
 				*list = (*list)->next;
-			else if ((*list)->e_operator != IS_SPACE)
+			else if ((*list)->e_operator != IS_SPACE && (*list)->in_env_token == 0)
 			{
 				join_tokens(minishell, list);
 				continue ;

@@ -40,6 +40,7 @@ void create_and_insert_token(t_minishell *minishell, char *string, t_token_list 
 		free(new_token);
 		exit_msg(minishell, "Failed to define token at create_token", ENOMEM);
 	}
+	new_token->in_env_token = 1;
 	ft_lsti_insert_after(current, new_token);
 }
 
@@ -59,7 +60,7 @@ void add_tokens_and_change_to_expansion(t_minishell *m, t_token_list **list, cha
 	while (split[i])
 	{
 		create_and_insert_token(m, split[i], &current);
-		current = current->next; // Move to the newly added token
+		current = current->next;
 		i++;
 	}
 	free_safely_str(&expanded_string);
