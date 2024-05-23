@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "utils.h"
 
 int is_special_char(char c)
 {
@@ -32,17 +31,4 @@ int check_special_char_after_expand(char *string, char *string2)
 	if (string[i] == string2[j])
 		return (1);
 	return (0);
-}
-
-char *getString(char *string, t_minishell *minishell, t_envp_list *iterator)
-{
-	if (check_special_char_after_expand(string, iterator->target))
-		string = expand_sign(string, iterator->value);
-	else
-	{
-		string = ft_strdup(iterator->value);
-		if (string == NULL)
-			exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
-	}
-	return (string);
 }

@@ -96,7 +96,6 @@ void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_st
 void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count);
 void update_quote_counts(t_token_list *token, int *single_quote_count, int *double_quote_count);
 int s_quote_after_d_quote_and_dollar(t_token_list **list, int single_quote_count, int double_quote_count);
-char *getString(char *string, t_minishell *minishell, t_envp_list *iterator);
 
 /********************* check_syntax **************************/
 bool check_quotes(t_minishell *minishell);
