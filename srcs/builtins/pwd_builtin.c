@@ -41,7 +41,7 @@ int	ft_pwd(t_minishell *minishell)
 		return (0);
 	}
 	if (print_env_var(minishell, "PWD="))
-	return (0);
+		return (0);
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("minishell: getcwd");
