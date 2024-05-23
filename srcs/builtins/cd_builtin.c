@@ -62,11 +62,6 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	char	*target_path;
 
 	target_path = NULL;
-	// if (!ft_strncmp(dir, ".", 2) && getcwd(cwd, sizeof(cwd)) == NULL)
-	// {
-	// 	perror(PWD_ER);
-	// 	return (0);
-	// }
 	target_path = ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
@@ -77,6 +72,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
+			free_safely_str(&target_path);
 			perror(PWD_ER);
 			return (0);
 		}
