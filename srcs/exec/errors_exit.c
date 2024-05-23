@@ -57,6 +57,27 @@ void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl)
 	free_minishell(m);
 	exit(126);
 }
+
+/*void	exit_no_such_file_or_dir(t_minishell *m, char *name, t_process_list *pl)
+{
+	char *msg;
+	char	*tmp;
+
+	tmp = ft_strjoin("minishell: ", name);
+	if (!tmp)
+		malloc_error_with_exit(m);
+	msg = ft_strjoin(tmp, ": No such file or directory");
+	free_safely_str(&tmp);
+	if (!msg)
+		malloc_error_with_exit(m);
+	//	free_safely_str(&name);
+	ft_putendl_fd(msg, 2);
+	free_safely_str(&msg);
+	ft_free_pl_paths(m, pl);
+	free_minishell(m);
+	exit(127);
+}*/
+
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
 	ft_putendl_fd(msg, 2);

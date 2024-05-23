@@ -77,7 +77,7 @@ void	chose_exit(t_minishell *m, bool good_code, int exit_code)
 	exit(1);
 }
 
-void deals_with_single_point(t_minishell *m, t_process_list *pl)
+void deals_with_single_or_double_point(t_minishell *m, t_process_list *pl)
 {
 	if (ft_strncmp(pl->cmd_table[0], ".", 2) == 0
 		&& !pl->cmd_table[1])
@@ -85,8 +85,14 @@ void deals_with_single_point(t_minishell *m, t_process_list *pl)
 		ft_putstr_fd("minishell: .: filename argument required\n"
 					 ".: usage: . filename [arguments]\n", 2);
 		free_safely_str(&(m->paths));
-		free_minishell(m);
-		exit(2);
+		chose_exit(m, 1, 2);
+	}
+	if (ft_strncmp(m->paths, "/no_path_set", 12) == 0
+		&& ft_strncmp(pl->cmd_table[0], "..", 3) == 0)
+	{
+		ft_putstr_fd("minishell: ..: Is a directory\n", 2);
+		free_safely_str(&(m->paths));
+		chose_exit(m, 1, 126);
 	}
 }
 
@@ -94,10 +100,13 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 {
 	struct stat path_stat;
 
+	if (ft_strncmp(pl->cmd_table[0], "..", 3) == 0)
+		exit_command_not_found(m, pl->cmd_table[0], pl);
 	stat(pl->cmd_table[0], &path_stat);
 	if (S_ISREG(path_stat.st_mode))
 	{
-		if (access(pl->cmd_table[0], X_OK) != 0)
+		if (access(pl->cmd_table[0], F_OK) != 0
+			|| access(pl->cmd_table[0], X_OK) != 0)
 		{
 			print_name(m, pl->cmd_table[0]);
 			ft_free_pl_paths(m, pl);
@@ -116,10 +125,17 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		close_pipes_and_fds(m, pl);
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
-		deals_with_single_point(m, pl);
+		deals_with_single_or_double_point(m, pl);
 		deals_if_dir_or_file(m, pl);
-		if (access(pl->good_path, F_OK) == 0
-			&& ft_strncmp(pl->cmd_table[0], "..", 3))
+		if ((ft_strchr(pl->cmd_table[0], '/'))
+			&& (contains_only_charset(pl->cmd_table[0], "./")
+			|| ft_strncmp(pl->cmd_table[0], "/", 1)
+			|| ft_strncmp(pl->cmd_table[0], "./", 2)))
+			exit_is_a_directory(m, pl->cmd_table[0], pl);
+		if ((access(pl->good_path, F_OK) == 0
+			 || ft_strncmp(pl->cmd_table[0], ".", 1)
+			 || ft_strchr(pl->cmd_table[0], '/')))
+//			&& ft_strncmp(pl->cmd_table[0], "..", 3))
 		{
 			print_name(m, pl->cmd_table[0]);
 			ft_free_pl_paths(m, pl);
@@ -131,6 +147,31 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	free_safely_str(&(m->paths));
 	chose_exit(m, 1, m->status);
 }
+
+/*void	my_execve(t_minishell *m, t_process_list *pl)
+{
+	if (pl->cmd_table[0] && !is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+	{
+		set_good_path_cmd(m, pl, pl->cmd_table[0]);
+		close_pipes_and_fds(m, pl);
+		execve(pl->good_path, pl->cmd_table, m->envp_table);
+		deals_with_single_point(m, pl);
+		deals_if_dir_or_file(m, pl);
+		if ((access(pl->good_path, F_OK) == 0
+			&& ft_strncmp(pl->cmd_table[0], "..", 3)))
+		{
+			print_name(m, pl->cmd_table[0]);
+			ft_free_pl_paths(m, pl);
+			chose_exit(m, 0, 0);
+		}
+		else if (ft_strchr(pl->cmd_table[1], '/'))
+			no_such_file_or_directory(m, pl->cmd_table[1], pl);
+		else
+			exit_command_not_found(m, pl->cmd_table[0], pl);
+	}
+	free_safely_str(&(m->paths));
+	chose_exit(m, 1, m->status);
+}*/
 
 static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 {
@@ -171,7 +212,10 @@ static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
 	tmp = pl;
 	while (tmp->out_files_list && tmp->out_files_list->next)
 	{
-		fd_out = open(tmp->out_files_list->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (tmp->out_files_list->e_type== APPEND_FILE)
+			fd_out = open(tmp->out_files_list->name, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else
+			fd_out = open(tmp->out_files_list->name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out < 0)
 		{
 			print_name_and_give_status(m, tmp->out_files_list->name, 1);
