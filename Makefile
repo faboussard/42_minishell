@@ -23,9 +23,9 @@ LIST_SRCS		=  main\
 				builtins/builtins_utils builtins/echo_builtin\
 				builtins/export_print builtins/export\
 				expansion/expansion expansion/expansion_utils expansion/expansion_utils_2 expansion/add_after_special_char\
-				utils/free utils/free_utils utils/print utils/error \
+				utils/free utils/free_utils utils/error \
 				exec/exec exec/errors exec/errors_exit	exec/paths	exec/fd_management \
-                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc #exec/here_cat
+                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
 LIST_HEADERS	= utils lexer minishell parser signals exec builtins ft_realpath
 
@@ -43,7 +43,7 @@ libft			=	$(DIR_LIBFT)libft.a
 # ------------- SHORTCUTS ------------- #
 
 OBJS            = $(addprefix $(DIR_BUILD), $(addsuffix .o, $(LIST_SRCS)))
-HEADERS					= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
+HEADERS			= $(addprefix $(DIR_HEADERS), $(addsuffix .h, $(LIST_HEADERS)))
 DEPS            = ${OBJS:.o=.d}
 INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
@@ -51,7 +51,7 @@ INCLUDES        = -I $(DIR_HEADERS) -I $(DIR_LIBFT) -I $(HEADER_LIBFT)
 
 CC				=	cc
 
-CFLAGS			=	-Wall -Wextra -Werror -g3 # -fsanitize=address #-fPIE
+CFLAGS			=	-Wall -Wextra -Werror -g3 #-fsanitize=address #-fPIE
 
 DEPS_FLAGS		=	-MMD -MP
 
