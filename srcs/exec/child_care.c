@@ -63,7 +63,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 		close_and_redirect_pipe_to_stdin(m, pl);
 }
 
-static void	last_child(t_minishell *m, t_process_list *pl)
+static void	last_child(t_minishell *m, t_process_list *pl, bool *files_failed)
 {
 //	handle_in_out(m, pl, &(m->tmp_in));
 //	if (m->tmp_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
@@ -86,6 +86,7 @@ static void	last_child(t_minishell *m, t_process_list *pl)
 	}
 	else
 	{
+		*files_failed = 1;
 		close_pipes(m->pipe_fd);
 		close_fds(m->tmp_in, pl->fd_out);
 	}
@@ -119,20 +120,25 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 		close_and_redirect_pipe_to_stdin(m, pl);
 }
 
-static void	wait_children_and_give_exit_status(t_minishell *m)
+static void	wait_children_and_give_exit_status(t_minishell *m, bool files_failed)
 {
 	waitpid(m->pid2, &(m->status), 0);
 	while (waitpid(-1, NULL, 0) && errno != 10)
 		;
-	manage_interrupted_signal(m);
+	if (files_failed == 1)
+		m->status = 1;
+	else if (files_failed == 0)
+		manage_interrupted_signal(m);
 }
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 {
 	size_t			i;
 	t_process_list	*pl;
+	bool files_failed;
 
 	pl = p_list;
+	files_failed = 0;
 	if (safe_pipe(m) == 0)
 		return ;
 	first_child(m, pl);
@@ -145,8 +151,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 		middle_child(m, pl);
 		pl = pl->next;
 	}
-	last_child(m, pl);
-	wait_children_and_give_exit_status(m);
+	last_child(m, pl, &files_failed);
+	wait_children_and_give_exit_status(m, files_failed);
 	close_fds(pl->fd_in, pl->fd_out);
 }
 
