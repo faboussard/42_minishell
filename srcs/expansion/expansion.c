@@ -23,25 +23,70 @@ void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
 	(*current)->next = new_token;
 }
 
-void process_dollar_token(t_minishell *minishell, t_token_list **list, int single_quote_count, int double_quote_count)
+
+void create_and_insert_token(t_minishell *minishell, char *string, t_token_list **current)
+{
+	t_token_list *new_token;
+
+	new_token = ft_calloc(1, sizeof(t_token_list));
+	if (new_token == NULL)
+	{
+		free_safely_str(&string);
+		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
+	}
+	if (define_token(new_token, string) == 0)
+	{
+		free_safely_str(&string);
+		free(new_token);
+		exit_msg(minishell, "Failed to define token at create_token", ENOMEM);
+	}
+	ft_lsti_insert_after(current, new_token);
+}
+
+
+void add_tokens_and_change_to_expansion(t_minishell *m, t_token_list **list, char *expanded_string)
+{
+	char **split;
+	int i;
+	t_token_list *current;
+
+	i = 0;
+	split = ft_split(expanded_string, ' ');
+	if (split == NULL)
+		exit_msg(m, "Malloc failed at add_tokens_and_change_to_expansion", ENOMEM);
+
+	current = *list;
+	while (split[i])
+	{
+		create_and_insert_token(m, split[i], &current);
+		current = current->next; // Move to the newly added token
+		i++;
+	}
+	free_safely_str(&expanded_string);
+	ft_free_tab(&split);
+}
+void process_dollar_token(t_minishell *m, t_token_list **list, int squote_count, int dquote_count)
 {
 	char *expanded_string;
 
 	if (ft_strncmp((*list)->next->name, "?", 2) == 0)
-		change_name_to_status(minishell, *list);
+		change_name_to_status(m, *list);
 	else
 	{
-		if (single_quote_count % 2 != 0 && double_quote_count % 2 == 0)
+		if (squote_count % 2 != 0 && dquote_count % 2 == 0)
 			return ;
-		if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_' && double_quote_count % 2 == 0)
+		if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_' && dquote_count % 2 == 0)
 			(*list)->e_operator = 0;
 		else
 		{
 			define_to_delete_tokens(list);
-			expanded_string = expand_sigil((*list)->next->name, minishell);
+			expanded_string = expand_sigil((*list)->next->name, m);
 			if (expanded_string != (*list)->next->name)
 			{
-				change_to_expansion(minishell, list, &expanded_string);
+				if (ft_strchr(expanded_string, ' ') != NULL)
+					add_tokens_and_change_to_expansion(m, list, expanded_string);
+				else
+					change_to_expansion(m, list, &expanded_string);
 				return;
 			}
 			else
@@ -50,7 +95,7 @@ void process_dollar_token(t_minishell *minishell, t_token_list **list, int singl
 	}
 }
 
-void handle_dollar_files(t_minishell *minishell, t_token_list **list)
+void handle_dollar_files(t_minishell *m, t_token_list **list)
 {
 	char *expanded_string;
 
@@ -62,64 +107,63 @@ void handle_dollar_files(t_minishell *minishell, t_token_list **list)
 		(*list) = (*list)->next;
 	if (*list && (*list)->e_operator == DOLLAR)
 	{
-		expanded_string = expand_sigil((*list)->next->name, minishell);
+		expanded_string = expand_sigil((*list)->next->name, m);
 		if (expanded_string != (*list)->next->name)
 		{
-			change_to_expansion(minishell, list, &expanded_string);
-			return;
+			change_to_expansion(m, list, &expanded_string);
+			return ;
 		}
 		else
 			(*list)->failed_expand = true;
 	}
 }
 
-void handle_dollar(t_minishell *minishell, t_token_list **iterator, int *single_quote_count, int *double_quote_count)
+void handle_dollar(t_minishell *m, t_token_list **iterator, int *squote_count, int *dquote_count)
 {
 	if ((*iterator)->next == NULL)
-		return;
-	if ((is_redirect_token((*iterator)->next) && (*iterator)->next->next != NULL &&
-		(*iterator)->next->next->e_operator == IS_SPACE)
-	    || s_quote_after_d_quote_and_dollar(iterator, *single_quote_count, *double_quote_count))
+		return ;
+	if ((is_redirect_token((*iterator)->next) && (*iterator)->next->next != NULL
+		&& (*iterator)->next->next->e_operator == IS_SPACE)
+	    || s_quote_after_d_quote_and_dollar(iterator, *squote_count, *dquote_count))
 	{
 		*iterator = (*iterator)->next;
-		return;
+		return ;
 	}
-	//cette partie gere le cas ou on a un single quote apres le dollar sans avoir dautre quote avant, il faut lenlever. et ne pas expand
-	if ((*iterator)->next->e_operator == SINGLE_QUOTE && (*single_quote_count % 2 == 0) && (*double_quote_count % 2 == 0))
+	if ((*iterator)->next->e_operator == SINGLE_QUOTE && (*squote_count % 2 == 0) && (*dquote_count % 2 == 0))
 	{
 		define_to_delete_tokens(iterator);
 		*iterator = (*iterator)->next;
-		return;
+		return ;
 	}
-	add_quotes_count(*iterator, single_quote_count, double_quote_count);
-	process_dollar_token(minishell, iterator, *single_quote_count, *double_quote_count);
+	add_quotes_count(*iterator, squote_count, dquote_count);
+	process_dollar_token(m, iterator, *squote_count, *dquote_count);
 }
 
-void expand_tokens(t_minishell *minishell, t_token_list *iterator, int *single_quote_count, int *double_quote_count)
+void expand_tokens(t_minishell *m, t_token_list *iterator, int *squote_count, int *dquote_count)
 {
-	int cheat_number;
+	int ignore_dquote;
 
-	cheat_number= -1;
+	ignore_dquote= -1;
 	while (iterator != NULL && iterator->next != NULL)
 	{
 		if (iterator->e_operator == HERE_DOC)
 			handle_delimitor(&iterator);
-		else if (iterator->e_operator == DOUBLE_QUOTE && (*double_quote_count % 2 == 0) && (*single_quote_count % 2 != 0))
-			update_quote_counts(iterator, single_quote_count, &cheat_number);
+		else if (iterator->e_operator == DOUBLE_QUOTE && (*dquote_count % 2 == 0) && (*squote_count % 2 != 0))
+			update_quote_counts(iterator, squote_count, &ignore_dquote);
 		else if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
-			update_quote_counts(iterator, single_quote_count, double_quote_count);
+			update_quote_counts(iterator, squote_count, dquote_count);
 		else if (iterator->e_operator == INPUT_REDIRECT || iterator->e_operator == OUTPUT_REDIRECT
 		|| iterator->e_operator == APPEND)
-			handle_dollar_files(minishell, &iterator);
+			handle_dollar_files(m, &iterator);
 		else if (iterator->e_operator == DOLLAR && iterator->next != NULL)
-			handle_dollar(minishell, &iterator, single_quote_count, double_quote_count);
+			handle_dollar(m, &iterator, squote_count, dquote_count);
 		if (iterator == NULL)
 			break ;
 		iterator = iterator->next;
 	}
 }
 
-void expand_for_heredoc(t_minishell *minishell, t_token_list *iterator, int *single_quote_count, int *double_quote_count)
+void expand_for_heredoc(t_minishell *m, t_token_list *iterator, int *squote_count, int *dquote_count)
 {
 	while (iterator != NULL && iterator->next != NULL)
 	{
@@ -132,7 +176,7 @@ void expand_for_heredoc(t_minishell *minishell, t_token_list *iterator, int *sin
 				iterator = iterator->next;
 				continue;
 			}
-			process_dollar_token(minishell, &iterator, *single_quote_count, *double_quote_count);
+			process_dollar_token(m, &iterator, *squote_count, *dquote_count);
 		}
 		if (iterator == NULL)
 			break ;
@@ -144,14 +188,14 @@ void expand_for_heredoc(t_minishell *minishell, t_token_list *iterator, int *sin
 void expander(t_minishell *minishell, t_token_list **list, bool is_here_doc)
 {
 	t_token_list *iterator;
-	int single_quote_count;
-	int double_quote_count;
+	int squote_count;
+	int dquote_count;
 
-	single_quote_count = 0;
-	double_quote_count = 0;
+	squote_count = 0;
+	dquote_count = 0;
 	iterator = *list;
 	if (is_here_doc)
-		expand_for_heredoc(minishell, iterator, &single_quote_count, &double_quote_count);
+		expand_for_heredoc(minishell, iterator, &squote_count, &dquote_count);
 	else
-		expand_tokens(minishell, iterator, &single_quote_count, &double_quote_count);
+		expand_tokens(minishell, iterator, &squote_count, &dquote_count);
 }
