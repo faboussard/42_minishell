@@ -23,7 +23,7 @@ bool	contains_only_charset(const char *str, const char *charset)
 	return (1);
 }
 
-int	get_value_and_target(char *arg, char **value, char **key)
+static int	get_value_and_target(char *arg, char **value, char **key)
 {
 	int	j;
 
@@ -42,13 +42,13 @@ int	get_value_and_target(char *arg, char **value, char **key)
 	return (1);
 }
 
-void	free_all(char *value, char *key)
+static void	free_all(char *value, char *key)
 {
 	free_safely_str(&value);
 	free_safely_str(&key);
 }
 
-void free_and_exit(t_minishell *m, char *value, char *key)
+static void	free_and_exit(t_minishell *m, char *value, char *key)
 {
 	free_all(value, key);
 	exit_msg(m, "Malloc failed at make_export", ENOMEM);
@@ -66,7 +66,8 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 	{
 		value = NULL;
 		key = NULL;
-		if (!ft_strncmp(args[index], "=", 1) || !ft_strncmp(args[index], "+=", 2))
+		if (!ft_strncmp(args[index], "=", 1)
+			|| !ft_strncmp(args[index], "+=", 2))
 			return (print_error_export(args[index], &valid_key), valid_key);
 		else if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
 			free_and_exit(m, value, key);
