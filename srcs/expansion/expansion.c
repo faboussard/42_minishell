@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "parser.h"
 
+// HELLO
 void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
 {
 	if (current == NULL || *current == NULL || new_token == NULL)
