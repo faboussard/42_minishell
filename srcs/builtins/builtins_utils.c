@@ -133,7 +133,7 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 	{
 		value = NULL;
 		key = NULL;
-		if (ft_strncmp(args[index], "=", 1) == 0)
+		if (!ft_strncmp(args[index], "=", 1) || !ft_strncmp(args[index], "+=", 2))
 			return (print_error_export(args[index], &valid_key), valid_key);
 		else if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
 			free_and_exit(m, value, key);
