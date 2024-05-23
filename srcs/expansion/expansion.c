@@ -14,6 +14,13 @@
 #include "utils.h"
 #include "parser.h"
 
+void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
+{
+	if (current == NULL || *current == NULL || new_token == NULL)
+		return;
+	new_token->next = (*current)->next;
+	(*current)->next = new_token;
+}
 
 void process_dollar_token(t_minishell *minishell, t_token_list **list, int single_quote_count, int double_quote_count)
 {
