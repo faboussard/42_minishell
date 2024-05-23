@@ -96,8 +96,8 @@ int parse_input(t_minishell *m)
 	}
 	if (!requalify_tokens(m->list_tokens, m))
 		return (1);
-	create_process_list(m, &m->pl);
 	create_envp_table(m);
+	create_process_list(m, &m->pl);
 	m->total_commands += count_tokens_by_operator(m, PIPE);
 	return (0);
 }
