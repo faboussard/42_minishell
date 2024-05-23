@@ -14,7 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-// HELLO
 void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
 {
 	if (current == NULL || *current == NULL || new_token == NULL)
@@ -22,7 +21,6 @@ void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
 	new_token->next = (*current)->next;
 	(*current)->next = new_token;
 }
-
 
 void create_and_insert_token(t_minishell *minishell, char *string, t_token_list **current)
 {
