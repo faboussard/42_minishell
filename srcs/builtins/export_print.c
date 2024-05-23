@@ -12,14 +12,8 @@
 
 #include "minishell.h"
 #include "utils.h"
+#include "builtins.h"
 #include <readline/history.h>
-
-
-int ascending(char *a, char *b)
-{
-	return (ft_strcmp(a, b) <= 0);
-}
-
 
 t_envp_list *sort_envp_list(t_envp_list **lst, int (*cmp)(char *, char *))
 {
@@ -62,4 +56,30 @@ void print_env_variables_export(t_minishell *m)
 			printf("declare -x %s\"%s\"\n", current->target, current->value);
 		current = current->next;
 	}
+}
+
+void	print_error_export(char *arg, bool *check_key)
+{
+	char *export_error;
+	char *tmp;
+
+	export_error = NULL;
+	tmp = NULL;
+	tmp = ft_strjoin("minishell: export: '", arg);
+	if (!tmp)
+	{
+		ft_putstr_fd("Malloc failed at make_export\n", 2);
+		return ;
+	}
+	export_error = ft_strjoin(tmp, "': not a valid identifier\n");
+	if (!export_error)
+	{
+		free_safely_str(&tmp);
+		ft_putstr_fd("Malloc failed at make_export\n", 2);
+		return ;
+	}
+	ft_putstr_fd(export_error, 2);
+	free_safely_str(&tmp);
+	free_safely_str(&export_error);
+	*check_key = true;
 }
