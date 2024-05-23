@@ -41,19 +41,27 @@ bool	is_valid_key_with_plus(char *key)
 	return (true);
 }
 
-bool	join_with_old(t_envp_list **list, char *value)
+char *join_with_old(t_envp_list **list, char *content, t_minishell *m)
 {
 	char	*temp;
+	char *temp2;
+	char *new_content;
 
-	temp = join_new_value_env_with_old(list, value);
+	temp = ft_strdup((*list)->value);
 	if (temp == NULL)
-		return (0);
-	free(value);
-	value = ft_strdup(temp);
-	if (value == NULL)
-		return (0);
-	free(temp);
-	return (1);
+		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+	temp2 = ft_strdup(content);
+	if (temp2 == NULL)
+	{
+		free_safely_str(&temp);
+		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+	}
+	new_content = ft_strjoin(temp, temp2);
+	free_safely_str(&temp);
+	free_safely_str(&temp2);
+	if (new_content == NULL)
+		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+	return (new_content);
 }
 
 void	print_error_export(char *arg, bool *check_key)
@@ -107,35 +115,34 @@ void	free_all(char *value, char *key)
 	free_safely_str(&key);
 }
 
-bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
-		t_minishell *m, size_t index)
+void free_and_exit(t_minishell *m, char *value, char *key)
 {
-	bool	check_key;
+	free_all(value, key);
+	exit_msg(m, "Malloc failed at make_export", ENOMEM);
+}
+
+bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
+										t_minishell *m, size_t index)
+{
+	bool	valid_key;
 	char	*value;
 	char	*key;
 
-	check_key = false;
+	valid_key = false;
 	while (args[index] != NULL)
 	{
 		value = NULL;
 		key = NULL;
 		if (ft_strncmp(args[index], "=", 1) == 0)
-		{
-			check_key = true;
-			print_error_export(args[index], &check_key);
-			return (check_key);
-		}
-		if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
-		{
-			free_all(value, key);
-			exit_msg(m, "Malloc failed at make_export", ENOMEM);
-		}
+			return (print_error_export(args[index], &valid_key), valid_key);
+		else if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
+			free_and_exit(m, value, key);
 		if (is_valid_key_with_plus(key) == false)
-			print_error_export(args[index], &check_key);
+			print_error_export(args[index], &valid_key);
 		else
-			process_argument_with_equal_sign(m, env_variables, value, key);
+			add_to_env(m, env_variables, value, key);
 		free_all(value, key);
 		index++;
 	}
-	return (check_key);
+	return (valid_key);
 }
