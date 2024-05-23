@@ -112,7 +112,7 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
-	if (list == NULL || *list == NULL || no_space_in_list(*list))
+	if (no_space_in_list(*list))
 		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
