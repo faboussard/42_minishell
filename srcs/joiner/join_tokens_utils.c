@@ -14,8 +14,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-// KOEJN
-
 int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
 {
 	t_token_list *cpy;

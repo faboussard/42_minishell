@@ -50,12 +50,12 @@ void	exit_numeric_arg(t_minishell *minishell, char *const *cmd_table,
 	}
 }
 
-void	exit_no_arg(t_minishell *minishell, char *const *cmd_table)
+void	exit_no_arg(t_minishell *m, char *const *cmd_table)
 {
 	if (!cmd_table[1])
 	{
-		free_minishell(minishell);
-		exit(0);
+		free_minishell(m);
+		exit(set_or_get_last_status(-1, -1));
 	}
 }
 
