@@ -48,12 +48,12 @@ static void	check_path(t_minishell *m, t_process_list *pl, size_t i)
 	char	*cmd_name;
 
 	cmd_name = ft_strdup(pl->cmd_table[0]);
-	if (!(pl->tab_paths[i]) && !ft_strncmp("/usr", m->paths, 5))
+	if (!(pl->tab_paths[i]) && !ft_strncmp("/no_path_set", m->paths, 13))
 	{
 		ft_free_tab(&(pl->tab_paths));
 		free_safely_str(&(pl->good_path));
 		free_safely_str(&(m->paths));
-		print_name_and_exit_perror(m, cmd_name, 1);
+		print_name_and_exit_perror(m, cmd_name, 127);
 	}
 	else if (!(pl->tab_paths[i]))
 	{
@@ -89,6 +89,8 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 		pl->good_path = join_sep(m, pl->tab_paths[i], pl->cmd_table[0], '/');
 		if (pl->good_path == NULL)
 			malloc_error_with_exit(m);
+		if (access(pl->good_path, F_OK) == 0)
+			break;
 		i++;
 	}
 	check_path(m, pl, i);
