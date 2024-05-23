@@ -90,6 +90,13 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
+/// OHEEEE
+
+
+
+// change ca
+
+// oheheheee
 int no_space_in_list(t_token_list *list)
 {
 	while (list != NULL)
