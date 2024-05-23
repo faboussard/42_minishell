@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "parser.h"
 
+
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	char *joined_name;
@@ -103,7 +104,7 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 		{
 			if (is_redirect_token_or_pipe((*list)->next) || is_redirect_token_or_pipe(*list))
 				*list = (*list)->next;
-			else if ((*list)->e_operator != IS_SPACE)
+			else if ((*list)->e_operator != IS_SPACE && (*list)->in_env_token == 0)
 			{
 				join_tokens(minishell, list);
 				continue ;

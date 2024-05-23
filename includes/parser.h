@@ -52,7 +52,7 @@ void token_rework(t_minishell *minishell);
 int cmp(int op1, int op2);
 void create_process_list(t_minishell *m, t_process_list **process_list);
 void create_process_list_node(t_process_list *new_pl,
-					t_minishell *m);
+							  t_minishell *m);
 void create_cmd_table_array(t_process_list *new_process_list, size_t size, t_minishell *minishell);
 void	handle_expand(t_minishell *m, t_process_list *pl, char *input);
 void add_process_to_list(t_process_list **process_list, t_process_list *new_process);
@@ -96,11 +96,11 @@ void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_st
 void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count);
 void update_quote_counts(t_token_list *token, int *single_quote_count, int *double_quote_count);
 int s_quote_after_d_quote_and_dollar(t_token_list **list, int single_quote_count, int double_quote_count);
+char *getString(char *string, t_minishell *minishell, t_envp_list *iterator);
 
 /********************* check_syntax **************************/
 bool check_quotes(t_minishell *minishell);
 bool print_quote_syntax_error(enum e_token_operators operator);
 bool print_operator_syntax_error(t_token_list *token);
-
 
 #endif // PARSER_H
