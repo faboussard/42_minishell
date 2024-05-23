@@ -14,7 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-// HELLO
 char *expand_sign(char *string, char *temp)
 {
 	while (*string && *string != '=')
