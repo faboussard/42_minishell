@@ -148,7 +148,6 @@ int	main(int ac, char **av, char **envp)
 	return (minishell.status);
 }
 
-
 //int	main(int ac, char **av, char **envp)
 //{
 //	t_minishell	minishell;
@@ -165,3 +164,4 @@ int	main(int ac, char **av, char **envp)
 //	free_minishell(&minishell);
 //	return (minishell.status);
 //}
+
