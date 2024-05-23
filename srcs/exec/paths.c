@@ -114,7 +114,7 @@ void	set_paths(t_minishell *m, char **env)
 		i++;
 	}
 	if (m->paths == NULL)
-		m->paths = ft_strdup("/usr");
+		m->paths = ft_strdup("/no_path_set");
 	if (m->paths == NULL)
 		malloc_error_no_exit(m);
 }
