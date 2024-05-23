@@ -102,7 +102,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * */
 
 
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 	char	*readline_input;
@@ -147,26 +147,8 @@ int	main(int ac, char **av, char **envp)
 	}
 	free_minishell(&minishell);
 	return (minishell.status);
-}
+}*/
 
-<<<<<<< HEAD
-//int	main(int ac, char **av, char **envp)
-//{
-//	t_minishell	minishell;
-//
-//	ft_bzero(&minishell, (sizeof(t_minishell)));
-//	minishell.total_commands = 1;
-//	set_minishell_paths(&minishell);
-//	set_environment(&minishell, envp);
-//	if (is_interactive(&minishell, ac, av) == true)
-//		minishell_interactive(&minishell);
-//	else
-//		minishell_non_interactive(&minishell, av[2]);
-//	//	ft_print_minishell(&minishell);
-//	free_minishell(&minishell);
-//	return (minishell.status);
-//}
-=======
 
 int	main(int ac, char **av, char **envp)
 {
@@ -184,4 +166,3 @@ int	main(int ac, char **av, char **envp)
 	free_minishell(&minishell);
 	return (minishell.status);
 }
->>>>>>> origin/builtins
