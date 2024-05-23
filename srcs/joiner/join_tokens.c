@@ -90,11 +90,22 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
+int no_space_in_list(t_token_list *list)
+{
+	while (list != NULL)
+	{
+		if (list->e_operator == IS_SPACE)
+			return (0);
+		list = list->next;
+	}
+	return (1);
+}
+
 void join_between_spaces(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
-	if (list == NULL || *list == NULL)
+	if (no_space_in_list(*list))
 		return ;
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
