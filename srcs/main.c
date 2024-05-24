@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/24 08:41:44 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 08:49:17 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,12 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * et ne laisse que le lancement du non_interactive.
  * */
 
-/*int	main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 	char		*readline_input;
 	char		**arg_input;
 	int			i;
-	t_minishell	minishell;
 
 	if (ac > 2 && !av[2])
 	{
@@ -147,9 +146,12 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	}
 	free_minishell(&minishell);
 	return (minishell.status);
-}*/
-int	main(int ac, char **av, char **envp)
+}
+
+/*int	main(int ac, char **av, char **envp)
 {
+	t_minishell	minishell;
+
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
 	set_minishell_paths(&minishell);
@@ -160,4 +162,4 @@ int	main(int ac, char **av, char **envp)
 		minishell_non_interactive(&minishell, av[2]);
 	free_minishell(&minishell);
 	return (minishell.status);
-}
+}*/

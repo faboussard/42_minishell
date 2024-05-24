@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/16 21:57:14 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 09:59:38 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 		perror("minishell: heredoc file can't be opened");
 	else
 		print_name(m, pl->in_files_list->name);
-/*	if (access(pl->in_files_list->name, F_OK) == 0
-		&& access(pl->in_files_list->name, X_OK != 0))
-		m->status = 129;
-	else*/
+	/*	if (access(pl->in_files_list->name, F_OK) == 0
+			&& access(pl->in_files_list->name, X_OK != 0))
+			m->status = 129;
+		else*/
 	m->status = 1;
 	pl->dev_null = 1;
 	*fd_to_use = open("/dev/null", O_RDONLY);
@@ -29,12 +29,12 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 		ft_putendl_fd("Couldn't open /dev/null/", 2);
 }
 
-int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name, int *fd_to_use)
+int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name,
+		int *fd_to_use)
 {
 	enum e_token_type	infile_type;
 
 	pl->dev_null = 0;
-
 	if (pl->in_files_list != NULL)
 	{
 		if (pl->in_files_list->failed_expand == true)
@@ -68,6 +68,8 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 		else if (pl->out_files_list->e_type == APPEND_FILE)
 			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_APPEND, 0664);
 	}
+	else if (pl->next != NULL && ft_strncmp(out, "/dev/null", 10) == 0)
+		pl->fd_out = open("/dev/null", O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	else
 		pl->fd_out = STDOUT_FILENO;
 	if (pl->fd_out < 0)
@@ -78,10 +80,10 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 	return (0);
 }
 
-bool handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
+bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 {
-	t_token_list    *in;
-	int ret;
+	t_token_list	*in;
+	int				ret;
 
 	if (pl->in_files_list == NULL)
 	{
@@ -106,18 +108,54 @@ bool handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 	return (0);
 }
 
+bool	is_builtin(char *cmd, char **cmd_table)
+{
+	if (!cmd || !cmd_table)
+		return (0);
+	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	else if (cmd && ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	else if (cmd && ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	else if (cmd && ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	else if (cmd && ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	else if (cmd && ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	else if (cmd && ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	else
+		return (0);
+}
+
+int	deals_with_no_outfile_case(t_minishell *m, t_process_list *pl)
+{
+	if (pl->next != NULL && (pl->next->in_files_list != NULL
+			|| is_builtin(pl->next->cmd_table[0], pl->next->cmd_table)))
+	{
+		if (open_fd_outfile(m, pl, "/dev/null") == 1)
+			return (1);
+	}
+	else
+		pl->fd_out = STDOUT_FILENO;
+	return (0);
+}
+
 int	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 {
 	t_token_list	*out;
-	int	ret;
+	int				ret;
 
 	if (handle_in(m, pl, fd_in))
-		return (1);
-	if (pl->out_files_list == NULL)
-	{
-		pl->fd_out = STDOUT_FILENO;
 		return (0);
-	}
+	if (pl->out_files_list == NULL)
+		return (deals_with_no_outfile_case(m, pl));
+	// {
+	// 	pl->fd_out = STDOUT_FILENO;
+	// 	return (0);
+	// }
 	out = pl->out_files_list;
 	while (out != NULL)
 	{
@@ -128,7 +166,6 @@ int	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 		out = out->next;
 	}
 	return (0);
-	//open_fd_outfile(m, pl, pl->out_files_list->name);
 }
 
 void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
