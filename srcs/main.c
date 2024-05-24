@@ -101,7 +101,7 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * et ne laisse que le lancement du non_interactive.
  * */
 
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 	char		*readline_input;
@@ -146,9 +146,9 @@ int	main(int ac, char **av, char **envp)
 	}
 	free_minishell(&minishell);
 	return (minishell.status);
-}
+}*/
 
-/*int	main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 
@@ -162,4 +162,4 @@ int	main(int ac, char **av, char **envp)
 		minishell_non_interactive(&minishell, av[2]);
 	free_minishell(&minishell);
 	return (minishell.status);
-}*/
+}
