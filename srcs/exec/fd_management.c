@@ -57,11 +57,16 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name,
 
 int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 {
+	t_process_list tmp;
+
 	if (pl->out_files_list != NULL)
 	{
-		if (pl->out_files_list->e_type == OUT_FILE)
+		tmp = *pl;
+		while (tmp.out_files_list->next)
+			tmp.out_files_list = tmp.out_files_list->next;
+		if (tmp.out_files_list->e_type == OUT_FILE)
 			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0664);
-		else if (pl->out_files_list->e_type == APPEND_FILE)
+		else if (tmp.out_files_list->e_type == APPEND_FILE)
 			pl->fd_out = open(out, O_CREAT | O_WRONLY | O_APPEND, 0664);
 	}
 	else if (pl->next != NULL && ft_strncmp(out, "/dev/null", 10) == 0)
