@@ -6,12 +6,11 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 08:17:34 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/19 21:47:55 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:09:14 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "minishell.h"
 
 bool	contains_only_charset(const char *str, const char *charset)
 {
@@ -56,7 +55,7 @@ static void	free_and_exit(t_minishell *m, char *value, char *key)
 }
 
 bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
-										t_minishell *m, size_t index)
+		t_minishell *m, size_t index)
 {
 	bool	valid_key;
 	char	*value;
@@ -67,10 +66,11 @@ bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,
 	{
 		value = NULL;
 		key = NULL;
-		if (!ft_strncmp(args[index], "=", 1)
-			|| !ft_strncmp(args[index], "+=", 2))
+		if (!ft_strncmp(args[index], "=", 1) || !ft_strncmp(args[index], "+=",
+				2))
 			return (print_error_export(args[index], &valid_key), valid_key);
-		else if (get_value_and_target(args[index], &value, &key) == MALLOC_FAILED)
+		else if (get_value_and_target(args[index], &value,
+				&key) == MALLOC_FAILED)
 			free_and_exit(m, value, key);
 		if (is_valid_key_with_plus(key) == false)
 			print_error_export(args[index], &valid_key);
