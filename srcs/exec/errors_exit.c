@@ -81,7 +81,8 @@ void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl)
 void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
 {
 	ft_putendl_fd(msg, 2);
-	free_minishell(m);
+	if (m != NULL)
+		free_minishell(m);
 	exit(error_code);
 }
 

@@ -42,7 +42,7 @@ char *getString(char *string, t_minishell *minishell, t_envp_list *iterator)
 	{
 		string = ft_strdup(iterator->value);
 		if (string == NULL)
-			exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
+			exit_msg_minishell(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 	}
 	return (string);
 }

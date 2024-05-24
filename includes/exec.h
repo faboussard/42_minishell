@@ -54,7 +54,6 @@ void	print_name(t_minishell *m, char *name);
 void	print_name_and_msg(t_minishell *m, char *name, char *msg);
 void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl);
 void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl);
-void	exit_msg_minishell(t_minishell *m, char *msg, int error_code);
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
