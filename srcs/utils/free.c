@@ -83,7 +83,8 @@ void	free_minishell(t_minishell *minishell)
 {
 
 	free_strs(minishell);
-	ft_free_pl_paths(minishell, minishell->pl);
+	if (minishell->interactive)
+		ft_free_pl_paths(minishell, minishell->pl);
 	if (minishell->list_envp != NULL)
 		ft_lstclear_envp(&minishell->list_envp);
 	if (minishell->envp_table)

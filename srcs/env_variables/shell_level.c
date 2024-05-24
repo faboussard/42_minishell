@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:34:09 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/24 16:42:35 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:43:53 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	increment_shell_level(t_envp_list **env_vars, t_minishell *m)
 			exit_msg_minishell(m, "Shell level too high", 1);
 		new_level = ft_itoa(ft_atoi(env->value) + 1);
 		if (new_level == NULL)
-			exit_msg_minishell(m, "Malloc failed at increment_shell_level", ENOMEM);
+			exit_msg_minishell(m, "Malloc failed at shell_level", ENOMEM);
 		free_safely_str(&env->value);
 		env->value = new_level;
 		m->total_size_envp += ft_strlen(new_level);
