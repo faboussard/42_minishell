@@ -104,6 +104,6 @@ fclean: clean
 re:				fclean all
 				$(MAKE) -C ./
 
-.PHONY: all clean fclean re FORCE libft
+.PHONY: all clean fclean re FORCE libft valgrind
 
 -include $(DEPS)

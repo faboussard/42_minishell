@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:08:53 by faboussa          #+#    #+#             */
-/*   Updated: 2023/11/13 02:08:53 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:37:26 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putendl_fd(const char *s, int fd)
 {
-	char *str;
+	char	*str;
 
 	str = ft_strjoin(s, "\n");
 	if (!str)
