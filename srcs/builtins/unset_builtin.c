@@ -6,12 +6,11 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/09 18:12:22 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:27:34 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "minishell.h"
 #include "parser.h"
 #include "utils.h"
 
@@ -34,8 +33,8 @@ bool	is_valid_env_var_key(char *var)
 
 void	print_error_unset(char *arg)
 {
-	char *unset_error;
-	char *tmp;
+	char	*unset_error;
+	char	*tmp;
 
 	unset_error = NULL;
 	tmp = NULL;
@@ -66,10 +65,11 @@ int	ft_unset(t_minishell *minishell, char **args)
 	{
 		if (!is_valid_env_var_key(args[i]))
 			print_error_unset(args[i]);
-		else if (ft_strncmp(args[i], "_" , 2) != 0)
+		else if (ft_strncmp(args[i], "_", 2) != 0)
 		{
 			if (remove_env_var(&minishell->list_envp, args[i]) == MALLOC_FAILED)
-				exit_msg_minishell(minishell, "Malloc failed at ft_unset", ENOMEM);
+				exit_msg_minishell(minishell, "Malloc failed at ft_unset",
+					ENOMEM);
 		}
 		i++;
 	}

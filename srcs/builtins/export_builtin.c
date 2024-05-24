@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/24 15:40:12 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:36:00 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	remove_and_add_envp(t_minishell *m, char *value, char *key)
 
 void	add_to_env(t_minishell *m, t_envp_list *env, char *value, char *key)
 {
-	char *joined_value;
-	size_t key_len;
+	char	*joined_value;
+	size_t	key_len;
 
 	joined_value = NULL;
 	if (ft_strchr(key, '+') != NULL && value != NULL)
