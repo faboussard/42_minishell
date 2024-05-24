@@ -37,9 +37,10 @@ int		ft_atoi_long(const char *str, bool *error);
 bool	is_valid_env_var_key(char *var);
 void print_error_export(char *arg, bool *check_key);
 bool is_valid_key_with_plus(char *key);
-bool join_with_old(t_envp_list **cpy, char *value);
-char *join_new_value_env_with_old(t_envp_list **envp, char *value);
-void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key);
-void process_no_equal_sign(char *arg, t_minishell *m, bool *check_key);
+
+char * join_with_old(t_envp_list **list, char *content, t_minishell *m);
+void add_to_env(t_minishell *m, t_envp_list *env, char *value, char *key);
+char *find_and_join_value(const char *key, t_envp_list **head, char *value, t_minishell *m);
+int ascending(char *a, char *b);
 
 #endif // BUILTINS_H

@@ -16,6 +16,25 @@
 #include "parser.h"
 #include <readline/history.h>
 
+bool	is_valid_key_with_plus(char *key)
+{
+	size_t	index;
+
+	index = 0;
+	if (!ft_isalpha(key[index]) && key[index] != '_')
+		return (false);
+	while (key[index] != '\0')
+	{
+		if (key[index] == '+' && key[index + 1] == '\0')
+			return (true);
+		if (!ft_isalnum(key[index]) && key[index] != '_')
+			return (false);
+		index++;
+	}
+	return (true);
+}
+
+
 int make_export(char **args, t_envp_list *env_variables, t_minishell *m)
 {
 	size_t index;
@@ -30,65 +49,57 @@ int make_export(char **args, t_envp_list *env_variables, t_minishell *m)
 		return (0);
 }
 
-char *join_new_value_env_with_old(t_envp_list **envp, char *value)
+char *find_and_join_value(const char *key, t_envp_list **head, char *value, t_minishell *m)
 {
-	char *tmp;
 	char *new_value;
+	t_envp_list *current;
 
-	tmp = ft_strdup((*envp)->value);
-	if (!tmp)
-		return (NULL);
-	new_value = ft_strjoin(tmp, value);
-	if (!new_value)
-		return (NULL);
-	free_safely_str(&tmp);
-	return (new_value);
-}
-
-
-bool find_and_join_value(const char *tmp, t_envp_list **list, char *value)
-{
-	while ((*list))
+	current = *head;
+	new_value = NULL;
+	while (current)
 	{
-		if (ft_strncmp(tmp, (*list)->target, ft_strlen(tmp)) == 0)
+		if (ft_strncmp(key, current->target, ft_strlen(key)) == 0)
 		{
-			if (!(*list)->value)
+			if (!current->value)
 			{
-				(*list)->value = ft_strdup(value);
-				if (!(*list)->value)
-				return (0);
+				new_value = ft_strdup(value);
+				if (new_value)
+					exit_msg(m, "Malloc failed at find_and_join_value", ENOMEM);
 			}
 			else
-			{
-				if (!join_with_old(list, value))
-					return (0);
-			}
+				new_value = join_with_old(head, value, m);
 			break;
 		}
 		else
-			(*list) = (*list)->next;
+			current= current->next;
 	}
-	return (1);
+	return (new_value);
 }
 
-char *additionnal_env_content(t_minishell *m, t_envp_list **env, char *key, char *value)
+char *join_with_old(t_envp_list **list, char *content, t_minishell *m)
 {
-	char	*tmp;
-	t_envp_list *cpy;
+	char	*temp;
+	char *temp2;
+	char *new_content;
 
-	cpy = *env;
-	key = ft_memmove(key, key, ft_strlen(key) - 1);
-	key[ft_strlen(key) - 1] = '\0';
-	tmp = ft_strjoin(key, "=");
-	if (!tmp)
+	temp = ft_strdup((*list)->value);
+	if (temp == NULL)
+		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+	temp2 = ft_strdup(content);
+	if (temp2 == NULL)
 	{
-		free_safely_str(&key);
-		free_safely_str(&value);
-		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
+		free_safely_str(&temp);
+		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
 	}
-	if (!find_and_join_value(tmp, &cpy, value))
-		exit_msg(m, "Malloc failed at get_env_var_index", ENOMEM);
-	remove_and_add_envp(m, value, key);
-	free_safely_str(&tmp);
-	return (NULL);
+	new_content = ft_strjoin(temp, temp2);
+	free_safely_str(&temp);
+	free_safely_str(&temp2);
+	if (new_content == NULL)
+		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+	return (new_content);
+}
+
+int ascending(char *a, char *b)
+{
+	return (ft_strcmp(a, b) <= 0);
 }

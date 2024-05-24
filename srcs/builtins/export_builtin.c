@@ -75,10 +75,19 @@ void remove_and_add_envp(t_minishell *m, char *value, char *key)
 	free_safely_str(&key_with_equal_sign);
 }
 
-void process_argument_with_equal_sign(t_minishell *m, t_envp_list *env, char *value, char *key)
+void add_to_env(t_minishell *m, t_envp_list *env, char *value, char *key)
 {
+	char *joined_value;
+
+	joined_value = NULL;
 	if (ft_strchr(key, '+') != NULL && value != NULL)
-		additionnal_env_content(m, &env, key, value);
+	{
+		key = ft_memmove(key, key, ft_strlen(key) - 1);
+		key[ft_strlen(key) - 1] = '\0';
+		joined_value = find_and_join_value(key, &env, value, m);
+		remove_and_add_envp(m, joined_value, key);
+		free_safely_str(&joined_value);
+	}
 	else
 		remove_and_add_envp(m, value, key);
 }

@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/23 14:25:33 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 08:41:44 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	minishell_non_interactive(t_minishell *m, char *data_input)
 		exit_msg(m, "bash: -c: option requires an argument", 2);
 	m->user_input = ft_strdup(data_input);
 	if (m->user_input == NULL)
-		exit_msg(m,
-				 "Fatal : malloc failed at minishell_non_interactive", ENOMEM);
+		exit_msg(m, "Fatal : malloc failed at minishell_non_interactive",
+			ENOMEM);
 	if (set_signals_noninteractive() == -1)
 		m->status = set_or_get_last_status(-1, -1);
 	if (parse_input(m) == 0)
@@ -85,10 +85,10 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	else
 	{
 		exit_msg(minishell,
-				 "Wrong arguments.\nUsage:\nNon_interactive mode\
+					"Wrong arguments.\nUsage:\nNon_interactive mode\
 						-./ minishell - c \"input line\" \nInteractive mode \
 						-./ minishell ",
-				 -1);
+					-1);
 	}
 	return (2);
 }
@@ -101,13 +101,13 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
  * et ne laisse que le lancement du non_interactive.
  * */
 
-
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
-	char	*readline_input;
-	char	**arg_input;
-	int		i;
+	char		*readline_input;
+	char		**arg_input;
+	int			i;
+	t_minishell	minishell;
 
 	if (ac > 2 && !av[2])
 	{
@@ -147,13 +147,9 @@ int	main(int ac, char **av, char **envp)
 	}
 	free_minishell(&minishell);
 	return (minishell.status);
-}
-
-/*
+}*/
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell	minishell;
-
 	ft_bzero(&minishell, (sizeof(t_minishell)));
 	minishell.total_commands = 1;
 	set_minishell_paths(&minishell);
@@ -162,8 +158,6 @@ int	main(int ac, char **av, char **envp)
 		minishell_interactive(&minishell);
 	else
 		minishell_non_interactive(&minishell, av[2]);
-	//	ft_print_minishell(&minishell);
 	free_minishell(&minishell);
 	return (minishell.status);
 }
-*/
