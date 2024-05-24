@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/19 14:07:42 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:21:25 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	env->value = ft_strdup(cwd);
 	if (env->value == NULL)
 	{
-		ft_putendl_fd("Malloc error", ENOMEM);
+		ft_putendl_fd("Malloc error in cd : fill_env_value_and_path", 2);
 		return (ENOMEM);
 	}
 	return (0);
@@ -61,11 +61,10 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	char	cwd[PATH_MAX];
 	char	*target_path;
 
-	target_path = NULL;
 	target_path = ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
-		ft_putendl_fd("Malloc error in cd : go_into_directory", ENOMEM);
+		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
 		return (ENOMEM);
 	}
 	if (chdir(target_path) != 0)
