@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:36:40 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "minishell.h"
 #include "utils.h"
 
-int ft_env(t_minishell *minishell, char **args)
+int	ft_env(t_minishell *minishell, char **args)
 {
 	t_envp_list	*current;
 
