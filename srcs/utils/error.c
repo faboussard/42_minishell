@@ -20,14 +20,6 @@ void	print_error(const char *error)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-void	exit_msg(t_minishell *minishell, char *msg, int error_code)
-{
-	ft_putendl_fd(msg, 2);
-	if (minishell != NULL)
-		free_minishell(minishell);
-	exit(error_code);
-}
-
 void	print_cmd_perror(char *cmd, char *name, int err)
 {
 	ft_putstr_fd("minishell: ", 2);

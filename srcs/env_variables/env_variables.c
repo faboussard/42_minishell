@@ -47,7 +47,7 @@ void	get_target_and_value(char **envp, t_envp_list **list_envp,
 		i++;
 	target = ft_substr(*envp, 0, i + 1);
 	if (target == NULL)
-		exit_msg(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+		exit_msg_minishell(minishell, "Malloc failed at get_target_and_value", ENOMEM);
 	else if ((*envp)[i] == '=')
 	{
 		i++;
@@ -55,13 +55,13 @@ void	get_target_and_value(char **envp, t_envp_list **list_envp,
 		if (content == NULL)
 		{
 			free_safely_str(&target);
-			exit_msg(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+			exit_msg_minishell(minishell, "Malloc failed at get_target_and_value", ENOMEM);
 		}
 		if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
 		{
 			free_safely_str(&target);
 			free_safely_str(&content);
-			exit_msg(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+			exit_msg_minishell(minishell, "Malloc failed at get_target_and_value", ENOMEM);
 		}
 		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
 		free_safely_str(&content);

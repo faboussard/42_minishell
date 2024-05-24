@@ -64,7 +64,7 @@ void create_process_list(t_minishell *m, t_process_list **pl)
 	{
 		new_pl = ft_calloc(1, sizeof(t_process_list));
 		if (new_pl == NULL)
-			exit_msg(m, "malloc failed at create_process_list", ENOMEM);
+			exit_msg_minishell(m, "malloc failed at create_process_list", ENOMEM);
 		create_process_list_node(new_pl, m);
 		add_process_to_list(pl, new_pl);
 		iterate_until_next_pipe(&m->list_tokens);

@@ -20,10 +20,10 @@ void define_file_token(t_token_list **in_files_list, t_minishell *minishell, con
 
 	new_token = ft_calloc(1, sizeof(t_token_list));
 	if (new_token == NULL)
-		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
+		exit_msg_minishell(minishell, "Malloc failed at create_token", ENOMEM);
 	new_token->name = ft_strdup(iterator->name);
 	if (new_token->name == NULL)
-		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
+		exit_msg_minishell(minishell, "Malloc failed at create_token", ENOMEM);
 	new_token->next = NULL;
 	new_token->e_type = iterator->e_type;
 	new_token->e_operator = iterator->e_operator;

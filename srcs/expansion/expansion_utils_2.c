@@ -28,7 +28,7 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 		else
 			target_without_equal_sign = ft_strdup(iterator->target);
 		if (target_without_equal_sign == NULL)
-			exit_msg(minishell, "Malloc failed at identify_envp_string", ENOMEM);
+			exit_msg_minishell(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 		if (ft_strncmp(string, target_without_equal_sign, len) == 0)
 			string = getString(string, minishell, iterator);
 		free_safely_str(&target_without_equal_sign);

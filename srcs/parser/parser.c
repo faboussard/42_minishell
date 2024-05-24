@@ -45,7 +45,7 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 			iterator = iterator->next;
 			new_list_name = ft_strdup("''");
 			if (new_list_name == NULL)
-				exit_msg(m, "Malloc failed at join between spaces", ENOMEM);
+				exit_msg_minishell(m, "Malloc failed at join between spaces", ENOMEM);
 			free_safely_str(&(iterator->name));
 			iterator->name = new_list_name;
 		}

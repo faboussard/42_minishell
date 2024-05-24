@@ -64,7 +64,7 @@ char *find_and_join_value(const char *key, t_envp_list **head, char *value, t_mi
 			{
 				new_value = ft_strdup(value);
 				if (new_value)
-					exit_msg(m, "Malloc failed at find_and_join_value", ENOMEM);
+					exit_msg_minishell(m, "Malloc failed at find_and_join_value", ENOMEM);
 			}
 			else
 				new_value = join_with_old(head, value, m);
@@ -84,18 +84,18 @@ char *join_with_old(t_envp_list **list, char *content, t_minishell *m)
 
 	temp = ft_strdup((*list)->value);
 	if (temp == NULL)
-		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+		exit_msg_minishell(m, "Malloc failed at join_with_old", ENOMEM);
 	temp2 = ft_strdup(content);
 	if (temp2 == NULL)
 	{
 		free_safely_str(&temp);
-		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+		exit_msg_minishell(m, "Malloc failed at join_with_old", ENOMEM);
 	}
 	new_content = ft_strjoin(temp, temp2);
 	free_safely_str(&temp);
 	free_safely_str(&temp2);
 	if (new_content == NULL)
-		exit_msg(m, "Malloc failed at join_with_old", ENOMEM);
+		exit_msg_minishell(m, "Malloc failed at join_with_old", ENOMEM);
 	return (new_content);
 }
 

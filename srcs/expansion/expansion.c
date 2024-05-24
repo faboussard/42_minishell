@@ -30,13 +30,13 @@ void create_and_insert_token(t_minishell *minishell, char *string, t_token_list 
 	if (new_token == NULL)
 	{
 		free_safely_str(&string);
-		exit_msg(minishell, "Malloc failed at create_token", ENOMEM);
+		exit_msg_minishell(minishell, "Malloc failed at create_token", ENOMEM);
 	}
 	if (define_token(new_token, string) == 0)
 	{
 		free_safely_str(&string);
 		free(new_token);
-		exit_msg(minishell, "Failed to define token at create_token", ENOMEM);
+		exit_msg_minishell(minishell, "Failed to define token at create_token", ENOMEM);
 	}
 	new_token->in_env_token = 1;
 	ft_lsti_insert_after(current, new_token);
@@ -52,8 +52,7 @@ void add_tokens_and_change_to_expansion(t_minishell *m, t_token_list **list, cha
 	i = 0;
 	split = ft_split(expanded_string, ' ');
 	if (split == NULL)
-		exit_msg(m, "Malloc failed at add_tokens_and_change_to_expansion", ENOMEM);
-
+		exit_msg_minishell(m, "Malloc failed at add_tokens_and_change_to_expansion", ENOMEM);
 	current = *list;
 	while (split[i])
 	{
