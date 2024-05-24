@@ -23,5 +23,6 @@ int signal_interrupt();
 int set_signals_heredoc();
 void	ignore_sigint(void);
 void	ignore_sigquit(void);
+void ignore_signals();
 
 #endif // SIGNALS_H
