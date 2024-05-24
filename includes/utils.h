@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 16:25:33 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/07 08:18:48 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 22:09:44 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void			print_error(const char *error);
 bool			print_operator_syntax_error(t_token_list *token);
 void			print_cmd_perror(char *cmd, char *name, int err);
 void			print_cmd_perror_no_strerror(char *cmd, char *name);
-void	exit_msg_minishell(t_minishell *m, char *msg, int error_code);
+void			exit_msg_minishell(t_minishell *m, char *msg, int error_code);
 
 /******************** TOKEN LIST *****************/
 int				ft_lstsize_token(t_token_list *lst);
@@ -66,7 +66,6 @@ void			add_token_to_list(t_token_list **list_tokens,
 void			set_current_path_with_cwd(t_minishell *m);
 bool			set_env_var(t_minishell *m, char **var, char *target);
 void			set_minishell_paths(t_minishell *m);
-void	increment_shell_level(t_envp_list **env_vars, t_minishell *m);
-
+void			increment_shell_level(t_envp_list **env_vars, t_minishell *m);
 
 #endif // UTILS_H
