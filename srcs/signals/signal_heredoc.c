@@ -14,24 +14,32 @@
 #include "utils.h"
 #include <signal.h>
 
-void	sigint_handler_interrupt(int signo)
+void ignore_signals()
 {
-	(void)signo;
-	set_or_get_last_status(130, 0);
+	ignore_sigquit();
+	ignore_sigint();
 }
 
-void	sigquit_handler_interrupt(int signo)
+void	sigint_handler_heredoc(int signo)
 {
 	(void)signo;
-	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-	set_or_get_last_status(131, 0);
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_redisplay();
+	exit(130);
 }
 
-int signal_interrupt()
+void	sigquit_handler_heredoc(int signo)
+{
+	(void)signo;
+}
+
+
+int set_signals_heredoc()
 {
 	struct sigaction	action;
 
-	action.sa_handler = &sigint_handler_interrupt;
+	action.sa_handler = &sigint_handler_heredoc;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &action, NULL) < 0)
@@ -39,7 +47,7 @@ int signal_interrupt()
 		print_error("sigaction() failed");
 		return (-1);
 	}
-	action.sa_handler = &sigquit_handler_interrupt;
+	action.sa_handler = &sigquit_handler_heredoc;
 	if (sigaction(SIGQUIT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
@@ -49,20 +57,3 @@ int signal_interrupt()
 	return (0);
 }
 
-void	ignore_sigquit(void)
-{
-	struct sigaction	act;
-
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
-}
-
-void	ignore_sigint(void)
-{
-	struct sigaction	act;
-
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGINT, &act, NULL);
-}

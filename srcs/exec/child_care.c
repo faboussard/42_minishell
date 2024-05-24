@@ -40,6 +40,7 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 {
 	if (handle_in_out(m, pl, &(pl->fd_in)) == 0 && pl->dev_null == 0)
 	{
+		signal_interrupt();
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
 		{
@@ -65,6 +66,7 @@ static void	last_child(t_minishell *m, t_process_list *pl, bool *files_failed)
 {
 	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
+		signal_interrupt();
 		m->pid2 = m_safe_fork(m);
 		if (m->pid2 == 0)
 		{
@@ -92,6 +94,7 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 {
 	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
+		signal_interrupt();
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
 		{

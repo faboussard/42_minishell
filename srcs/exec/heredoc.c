@@ -13,6 +13,7 @@
 #include "exec.h"
 #include "parser.h"
 #include "utils.h"
+#include "signals.h"
 
 char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 {
@@ -50,6 +51,7 @@ static void close_and_clear_heredoc(t_minishell *m, t_process_list *pl, char **i
 	exit(0);
 }
 
+
 static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		t_token_list *limiter, int *fd_to_use)
 {
@@ -57,12 +59,13 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	size_t	input_len;
 	char	*input;
 
+	set_signals_heredoc();
 	limiter_len = ft_strlen(limiter->name);
 	while (1)
 	{
 		input = get_next_line(STDIN_FILENO);
 		if (input == NULL)
-			exit_msg_minishell(m, "leaving heredoc", 0);
+			exit_msg_minishell(m, "minishell: warning: leaving heredoc", 0);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
@@ -89,13 +92,18 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_l
 		perror("No /tmp/ directory found");
 		return ;
 	}
+	ignore_signals();
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
+	{
+		set_signals_heredoc();
 		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
+	}
 	else
 	{
 		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
 			exit_msg_minishell(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
+	manage_interrupted_signal(m);
 }
