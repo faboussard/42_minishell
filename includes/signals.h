@@ -20,5 +20,8 @@ void	signal_print_newline(int signal);
 int set_signals_noninteractive(void);
 void manage_interrupted_signal(t_minishell *m);
 int signal_interrupt();
+int set_signals_heredoc();
+void	ignore_sigint(void);
+void	ignore_sigquit(void);
 
 #endif // SIGNALS_H

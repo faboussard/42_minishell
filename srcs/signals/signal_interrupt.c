@@ -48,3 +48,21 @@ int signal_interrupt()
 	sigaction(SIGQUIT, &action, NULL);
 	return (0);
 }
+
+void	ignore_sigquit(void)
+{
+	struct sigaction	act;
+
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
+}
+
+void	ignore_sigint(void)
+{
+	struct sigaction	act;
+
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &act, NULL);
+}
