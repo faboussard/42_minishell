@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include "parser.h"
 
 bool	contains_only_charset(const char *str, const char *charset)
 {
@@ -40,12 +41,6 @@ static int	get_value_and_target(char *arg, char **value, char **key)
 	if (*value == NULL)
 		return (MALLOC_FAILED);
 	return (1);
-}
-
-static void	free_all(char *value, char *key)
-{
-	free_safely_str(&value);
-	free_safely_str(&key);
 }
 
 static void	free_and_exit(t_minishell *m, char *value, char *key)
