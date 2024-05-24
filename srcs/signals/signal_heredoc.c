@@ -14,28 +14,32 @@
 #include "utils.h"
 #include <signal.h>
 
-void	signal_print_newline(int signal)
+void ignore_signals()
 {
-	(void)signal;
-	rl_on_new_line();
+	ignore_sigquit();
+	ignore_sigint();
 }
 
-void	sigint_handler(int signo)
+void	sigint_handler_heredoc(int signo)
 {
 	(void)signo;
 	printf("\n");
-	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	set_or_get_last_status(130, 0);
+	exit(130);
 }
 
-int set_signals_interactive()
+void	sigquit_handler_heredoc(int signo)
+{
+	(void)signo;
+}
+
+
+int set_signals_heredoc()
 {
 	struct sigaction	action;
 
-	ignore_sigquit();
-	action.sa_handler = &sigint_handler;
+	action.sa_handler = &sigint_handler_heredoc;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &action, NULL) < 0)
@@ -43,26 +47,13 @@ int set_signals_interactive()
 		print_error("sigaction() failed");
 		return (-1);
 	}
-	return (0);
-}
-
-int set_signals_noninteractive(void)
-{
-	struct sigaction	action;
-
-	ft_memset(&action, 0, sizeof(action));
-	action.sa_handler = &signal_print_newline;
-	sigaction(SIGINT, &action, NULL);
-	if (sigaction(SIGINT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return (-1);
-	}
-	sigaction(SIGQUIT, &action, NULL);
+	action.sa_handler = &sigquit_handler_heredoc;
 	if (sigaction(SIGQUIT, &action, NULL) < 0)
 	{
 		print_error("sigaction() failed");
 		return (-1);
 	}
+	sigaction(SIGQUIT, &action, NULL);
 	return (0);
 }
+

@@ -8,7 +8,7 @@ vpath %c srcs lexer joiner env_variables parser expansion utils exec builtins
 # --------------- FILES --------------- #
 
 LIST_SRCS		=  main\
-                signals/signal signals/signal_interrupt\
+                signals/signal signals/signal_interrupt signals/signal_heredoc\
 				lexer/tokenization lexer/operator lexer/builtin lexer/count_tokens \
 				lexer/token_list lexer/token_utils \
 				joiner/join_tokens joiner/join_tokens_utils \

@@ -94,6 +94,7 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 {
 	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
+		signal_interrupt();
 		m->pid1 = m_safe_fork(m);
 		if (m->pid1 == 0)
 		{
