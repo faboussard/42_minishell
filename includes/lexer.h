@@ -15,7 +15,6 @@
 
 # include "minishell.h"
 
-
 typedef struct s_minishell	t_minishell;
 
 enum						e_token_type
@@ -73,30 +72,35 @@ typedef struct s_token
 
 /********************* tokenization.c *********************/
 
-void transform_to_token(t_minishell *minishell, char *string, t_token_list **list);
-void create_token(t_minishell *minishell, char *string, t_token_list **list);
-void				define_token_types(enum e_token_type type,
-						enum e_token_builtin builtin,
-						enum e_token_operators operator,
-						t_token_list *token);
-bool				get_builtin_token(t_token_list *new_token,
-						char *string);
-bool	char_is_operator(char c);
-bool	is_redirect_token_or_pipe(t_token_list *token);
+void						transform_to_token(t_minishell *minishell,
+								char *string, t_token_list **list);
+void						create_token(t_minishell *minishell, char *string,
+								t_token_list **list);
+void						define_token_types(enum e_token_type type,
+								enum e_token_builtin builtin,
+								enum e_token_operators operator,
+								t_token_list *token);
+bool						get_builtin_token(t_token_list *new_token,
+								char *string);
+bool						char_is_operator(char c);
+bool						is_redirect_token_or_pipe(t_token_list *token);
 
 /********************* token_utils.c *********************/
-void del_next_token(t_token_list **token);
-void remove_node_token(t_token_list **begin_list, t_token_list *node_to_remove);
-int define_token(t_token_list *new_token, char *string);
+void						del_next_token(t_token_list **token);
+void						remove_node_token(t_token_list **begin_list,
+								t_token_list *node_to_remove);
+int							define_token(t_token_list *new_token, char *string);
 
 /********************* count_tokens.c *********************/
 
-int count_tokens_by_operator(t_minishell *minishell, enum e_token_operators operator_type);
-size_t				count_letters_until_pipe(t_token_list *head);
-void add_quote_count(t_token_list *iterator, int *s_count, int *d_count);
+int							count_tokens_by_operator(t_minishell *minishell,
+								enum e_token_operators operator_type);
+size_t						count_letters_until_pipe(t_token_list *head);
+void						add_quote_count(t_token_list *iterator,
+								int *s_count, int *d_count);
 
 /********************** check syntax *********************/
 
-bool check_syntax(t_minishell *minishell);
+bool						check_syntax(t_minishell *minishell);
 
 #endif // LEXER_H
