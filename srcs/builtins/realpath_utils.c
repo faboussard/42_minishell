@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:07:43 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/18 22:55:22 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:07:56 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ char	*join_sep_safely(char *s1, char *s2, char sep, bool free_s1)
 		return (NULL);
 	total_len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	dest = (char *)malloc(sizeof(char) * (total_len + 1));
+	if (!dest && free_s1)
+		free_safely_str(&s1);
 	if (!dest)
 		return (NULL);
 	x = -1;
