@@ -28,6 +28,7 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list);
 void join_between_spaces(t_minishell *minishell, t_token_list **list);
 void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op);
 char *join_all(t_minishell *minishell, t_token_list **list);
+void do_join_not_spaces(t_minishell *minishell, t_token_list **list);
 
 /************************* join_tokens_utils.c **************************/
 
