@@ -42,6 +42,14 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 		ft_putstr_fd(input, pl->fd_in);
 }
 
+static void close_and_clear_heredoc(t_minishell *m, t_process_list *pl, char **input)
+{
+	free_safely_str(&(*input));
+	close_all_fds(m, pl);
+	free_minishell(m);
+	exit(0);
+}
+
 static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		t_token_list *limiter, int *fd_to_use)
 {
@@ -53,15 +61,12 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	while (1)
 	{
 		input = get_next_line(STDIN_FILENO);
+		if (input == NULL)
+			exit_msg(m, "leaving heredoc", 0);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
-		{
-			free_safely_str(&(input));
-			close_all_fds(m, pl);
-			free_minishell(m);
-			exit(0);
-		}
+			close_and_clear_heredoc(m, pl, &input);
 		if (limiter->is_quoted_delimiter == 1)
 			ft_putstr_fd(input, *fd_to_use);
 		else
