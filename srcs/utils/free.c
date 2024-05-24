@@ -81,7 +81,6 @@ void	ft_free_process_list(t_process_list **process_list)
 
 void	free_minishell(t_minishell *minishell)
 {
-
 	free_strs(minishell);
 	if (minishell->interactive && minishell->pl != NULL)
 		ft_free_pl_paths(minishell, minishell->pl);
