@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/07 08:47:24 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 22:19:35 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,9 @@
 #  define ARG_MAX 2097152
 # endif
 
-# ifndef SHLVL
-#  define SHLVL_LIMIT 1000
-# endif
-
 # ifndef PROMPT
-#define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 Minishell>$ \001\e[0m\002"
+#  define PROMPT "\001\e[27m\002>>> \001\e[0m\e[45m\002 \
+Minishell>$ \001\e[0m\002"
 # endif
 
 # include "libft.h"

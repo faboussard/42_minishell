@@ -13,16 +13,16 @@
 #ifndef SIGNALS_H
 # define SIGNALS_H
 
-#include "minishell.h"
+# include "minishell.h"
 
-int set_signals_interactive();
+int		set_signals_interactive(void);
 void	signal_print_newline(int signal);
-int set_signals_noninteractive(void);
-void manage_interrupted_signal(t_minishell *m);
-int signal_interrupt();
-int set_signals_heredoc();
+int		set_signals_noninteractive(void);
+void	manage_interrupted_signal(t_minishell *m);
+int		signal_interrupt(void);
+int		set_signals_heredoc(void);
 void	ignore_sigint(void);
 void	ignore_sigquit(void);
-void ignore_signals();
+void	ignore_signals(void);
 
 #endif // SIGNALS_H
