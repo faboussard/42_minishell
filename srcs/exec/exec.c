@@ -15,28 +15,6 @@
 #include "signal.h"
 #include "signals.h"
 
-static int	create_all_outfiles(t_minishell *m, t_process_list *pl);
-static int	check_all_infiles(t_minishell *m, t_process_list *pl);
-
-void	close_pipes_and_fds(t_minishell *m, t_process_list *pl)
-{
-	close_pipes(m->pipe_fd);
-	close_fds(pl->fd_in, pl->fd_out);
-	close_fds(m->tmp_in, 0);
-}
-
-void	chose_exit(t_minishell *m, bool good_code, int exit_code)
-{
-	free_minishell(m);
-	if (good_code)
-		exit(exit_code);
-	if (errno == 13)
-		exit(126);
-	if (errno == 2)
-		exit(127);
-	exit(1);
-}
-
 void	deals_with_single_or_double_point(t_minishell *m, t_process_list *pl)
 {
 	if (ft_strncmp(pl->cmd_table[0], ".", 2) == 0)
@@ -99,92 +77,6 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	close_pipes_and_fds(m, pl);
 	free_safely_str(&(m->paths));
 	chose_exit(m, 1, m->status);
-}
-
-static int	check_all_infiles(t_minishell *m, t_process_list *pl)
-{
-	t_process_list	tmp;
-	int				fd_in;
-
-	if (pl->in_files_list == NULL)
-		return (0);
-	tmp = *pl;
-	fd_in = 0;
-	while (tmp.in_files_list && tmp.in_files_list->next)
-	{
-		if (tmp.in_files_list->e_type == DELIMITER)
-			here_doc(m, tmp.in_files_list, &fd_in, &tmp);
-		if (open_fd_infile(m, &tmp, tmp.in_files_list->name, &fd_in) == 0)
-			close(fd_in);
-		else
-			return (1);
-		tmp.in_files_list = tmp.in_files_list->next;
-	}
-	if (tmp.in_files_list)
-	{
-		if (tmp.in_files_list->e_type == DELIMITER)
-			here_doc(m, tmp.in_files_list, &(pl->fd_in), &tmp);
-		if (open_fd_infile(m, &tmp, tmp.in_files_list->name, &(pl->fd_in)))
-			return (1);
-	}
-	return (0);
-}
-
-static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
-{
-	t_process_list	tmp;
-	int				fd_out;
-
-	if (pl->out_files_list == NULL)
-		return (0);
-	tmp = *pl;
-	while (tmp.out_files_list && tmp.out_files_list->next)
-	{
-		if (tmp.out_files_list->e_type == APPEND_FILE)
-			fd_out = open(tmp.out_files_list->name,
-					O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else
-			fd_out = open(tmp.out_files_list->name,
-					O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd_out < 0)
-		{
-			print_name_and_give_status(m, tmp.out_files_list->name, 1);
-			return (1);
-		}
-		close(fd_out);
-		tmp.out_files_list = tmp.out_files_list->next;
-	}
-	if (tmp.out_files_list)
-	{
-		if (open_fd_outfile(m, pl, tmp.out_files_list->name) == 1)
-			return (1);
-	}
-	return (0);
-}
-
-static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
-{
-	if (pl->in_files_list != NULL)
-	{
-		m_safe_dup2(m, pl->fd_in, STDIN_FILENO);
-		close(pl->fd_in);
-	}
-	if (pl->out_files_list != NULL)
-	{
-		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-		close(pl->fd_out);
-	}
-	return (0);
-}
-
-void	manage_interrupted_signal(t_minishell *m)
-{
-	if (WIFSIGNALED(m->status))
-		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
-	else if (WIFEXITED(m->status))
-		m->status = WEXITSTATUS(m->status);
-	else
-		m->status = set_or_get_last_status(m->status, 0);
 }
 
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
