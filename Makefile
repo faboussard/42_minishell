@@ -24,7 +24,8 @@ LIST_SRCS		=  main\
 				builtins/export_print builtins/export\
 				expansion/expansion expansion/expansion_utils expansion/expansion_utils_2 expansion/add_after_special_char\
 				utils/free utils/free_utils utils/error utils/utils \
-				exec/exec exec/errors exec/errors_exit	exec/paths	exec/fd_management \
+				exec/exec exec/exec_bool exec/errors exec/errors_exit \
+				exec/paths	exec/fd_management \
                 exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
 
 LIST_HEADERS	= utils lexer minishell parser signals exec builtins ft_realpath

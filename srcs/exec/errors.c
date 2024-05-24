@@ -23,7 +23,7 @@ void	print_name(t_minishell *m, char *name)
 	free_safely_str(&thename);
 }
 
-void print_name_and_msg(t_minishell *m, char *name, char *msg)
+void	print_name_and_msg(t_minishell *m, char *name, char *msg)
 {
 	char	*thename;
 	char	*the_msg;
@@ -45,6 +45,6 @@ void	print_name_and_give_status(t_minishell *m, char *name, int err)
 
 void	malloc_error_no_exit(t_minishell *m)
 {
-	ft_putstr_fd("Malloc error", ENOMEM);
-	m->status = -1;
+	ft_putstr_fd("Malloc error\n", 2);
+	m->status = ENONEM;
 }

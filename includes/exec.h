@@ -47,16 +47,17 @@ void	init_before_next_prompt(t_minishell *m);
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list);
 //--------------------------- EXEC ------------------------------------//
 void	my_execve(t_minishell *m, t_process_list *pl);
-bool	exec_builtin(t_minishell *m, char *cmd, char **cmd_table);
 int		handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in);
+//--------------------------- EXEC BOOL ------------------------------------//
+bool	is_one_arg_builtin(t_minishell *m);
+bool	exec_builtin(t_minishell *m, char *cmd, char **cmd_table);
+bool	is_builtin(char *cmd, char **cmd_table);
 //--------------------------- ERRORS ------------------------------------//
 void	print_name(t_minishell *m, char *name);
 void	print_name_and_msg(t_minishell *m, char *name, char *msg);
 void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl, bool to_free);
 void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl);
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
-void	print_name_and_exit_msg(t_minishell *m, char *name, char *msg, int err);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
-void	malloc_error_with_exit(t_minishell *m);
 void	malloc_error_no_exit(t_minishell *m);
 #endif

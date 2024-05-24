@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 09:18:22 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/24 09:59:38 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 20:00:44 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name,
 
 int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 {
-	t_process_list tmp;
+	t_process_list	tmp;
 
 	if (pl->out_files_list != NULL)
 	{
@@ -109,35 +109,15 @@ bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 	return (0);
 }
 
-bool	is_builtin(char *cmd, char **cmd_table)
+int	deals_with_no_outfile_case(t_minishell *m, t_process_list *pl)
 {
-	if (!cmd || !cmd_table)
-		return (0);
-	if (cmd && ft_strncmp(cmd, "echo", 5) == 0)
-		return (1);
-	else if (cmd && ft_strncmp(cmd, "cd", 3) == 0)
-		return (1);
-	else if (cmd && ft_strncmp(cmd, "pwd", 4) == 0)
-		return (1);
-	else if (cmd && ft_strncmp(cmd, "exit", 5) == 0)
-		return (1);
-	else if (cmd && ft_strncmp(cmd, "env", 4) == 0)
-		return (1);
-	else if (cmd && ft_strncmp(cmd, "unset", 6) == 0)
-		return (1);
-	else if (cmd && ft_strncmp(cmd, "export", 7) == 0)
-		return (1);
-	else
-		return (0);
-}
-
-int	deals_with_no_outfile_case(t_minishell *m, t_process_list *pl) {
 	if (pl->next != NULL && (pl->next->in_files_list != NULL
-							 || is_builtin(pl->next->cmd_table[0],
-										   pl->next->cmd_table))) {
+			|| is_builtin(pl->next->cmd_table[0], pl->next->cmd_table)))
+	{
 		if (open_fd_outfile(m, pl, "/dev/null") == 1)
 			return (1);
-	} else
+	}
+	else
 		pl->fd_out = STDOUT_FILENO;
 	return (0);
 }
@@ -157,10 +137,10 @@ int	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 	{
 		if (out.out_files_list->e_type == APPEND_FILE)
 			fd_out = open(out.out_files_list->name,
-						  O_CREAT | O_WRONLY | O_APPEND, 0644);
+					O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else
 			fd_out = open(out.out_files_list->name,
-						  O_CREAT | O_WRONLY | O_TRUNC, 0644);
+					O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out < 0)
 		{
 			print_name_and_give_status(m, out.out_files_list->name, 1);
