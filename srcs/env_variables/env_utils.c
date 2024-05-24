@@ -13,6 +13,25 @@
 #include "parser.h"
 #include "utils.h"
 
+void	add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
+{
+	if (new_envp == NULL)
+		return ;
+	new_envp->next = *list_envp;
+	*list_envp = new_envp;
+}
+
+int	add_new_envp(t_envp_list **list_envp, char *target, char *content)
+{
+	t_envp_list	*new_envp;
+
+	new_envp = create_new_envp(target, content);
+	if (new_envp == NULL)
+		return (MALLOC_FAILED);
+	add_envp_to_list(list_envp, new_envp);
+	return (SUCCESSFULLY_ADDED);
+}
+
 void	set_current_path_with_cwd(t_minishell *m)
 {
 	char	cwd[PATH_MAX];
@@ -56,29 +75,3 @@ void	set_minishell_paths(t_minishell *m)
 	if (set_env_var(m, &old_pwd, "OLDPWD=") == 0)
 		ft_strlcpy(m->old_pwd, m->current_path, ft_strlen(m->current_path) + 1);
 }
-/*
-bool	set_env_var(t_minishell *m, char *var, char *target)
-{
-	t_envp_list	*env;
-	size_t		var_len;
-
-	env = m->list_envp;
-	var_len = ft_strlen(target);
-	while (env && env->next)
-	{
-		if (ft_strncmp(env->target, target, var_len) == 0)
-		{
-			m->current_path = ft_strdup(env->value);
-			if (m->current_path == NULL)
-			{
-				ft_putendl_fd("minishell : malloc error", 2);
-				return (0);
-			}
-			ft_putendl_fd(m->current_path, 2);
-			return (1);
-		}
-		env = env->next;
-	}
-	return (0);
-}
-*/

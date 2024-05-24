@@ -26,3 +26,35 @@ int	ft_lstsize_envp(t_envp_list *lst)
 	list_size = i;
 	return (list_size);
 }
+
+char	*trim_equal_sign(char *key)
+{
+	char	*trimmed_key;
+
+	trimmed_key = ft_strtrim(key, "=");
+	if (trimmed_key == NULL)
+		return (NULL);
+	return (trimmed_key);
+}
+
+void	remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove)
+{
+	t_envp_list	*current;
+	t_envp_list	*previous_node;
+
+	current = *begin_list;
+	previous_node = NULL;
+	while (current != NULL && current != node_to_remove)
+	{
+		previous_node = current;
+		current = current->next;
+	}
+	if (current == node_to_remove)
+	{
+		if (previous_node != NULL)
+			previous_node->next = current->next;
+		else
+			*begin_list = current->next;
+		free_envp(current);
+	}
+}
