@@ -235,13 +235,14 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 		close_fds(pl->fd_in, pl->fd_out);
 		return ;
 	}
-	signal_interrupt();
+	ignore_signals();
 	if (is_one_arg_builtin(m) && exec_builtin(m, pl->cmd_table[0],
 											  pl->cmd_table))
 		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
+		signal_interrupt();
 		handle_infile_outfile(m, pl);
 		my_execve(m, pl);
 	}
