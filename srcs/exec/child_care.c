@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:22:26 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/06 14:38:22 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 09:52:07 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
 
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
-//	handle_in_out(m, pl, &(pl->fd_in));
-//	if (pl->fd_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
 	if (handle_in_out(m, pl, &(pl->fd_in)) == 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
@@ -65,8 +63,6 @@ static void	first_child(t_minishell *m, t_process_list *pl)
 
 static void	last_child(t_minishell *m, t_process_list *pl, bool *files_failed)
 {
-//	handle_in_out(m, pl, &(m->tmp_in));
-//	if (m->tmp_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
 	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
 		m->pid2 = m_safe_fork(m);
@@ -94,8 +90,6 @@ static void	last_child(t_minishell *m, t_process_list *pl, bool *files_failed)
 
 static void	middle_child(t_minishell *m, t_process_list *pl)
 {
-//	handle_in_out(m, pl, &(m->tmp_in));
-//	if (pl->fd_in >= 0 && pl->fd_out >= 1 && pl->dev_null == 0)
 	if (handle_in_out(m, pl, &(m->tmp_in)) == 0 && pl->dev_null == 0)
 	{
 		m->pid1 = m_safe_fork(m);
@@ -120,7 +114,8 @@ static void	middle_child(t_minishell *m, t_process_list *pl)
 		close_and_redirect_pipe_to_stdin(m, pl);
 }
 
-static void	wait_children_and_give_exit_status(t_minishell *m, bool files_failed)
+static void	wait_children_and_give_exit_status(t_minishell *m,
+		bool files_failed)
 {
 	waitpid(m->pid2, &(m->status), 0);
 	while (waitpid(-1, NULL, 0) && errno != 10)
@@ -135,7 +130,7 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 {
 	size_t			i;
 	t_process_list	*pl;
-	bool files_failed;
+	bool			files_failed;
 
 	pl = p_list;
 	files_failed = 0;
