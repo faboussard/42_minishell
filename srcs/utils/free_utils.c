@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
 #include "exec.h"
+#include "utils.h"
 
 void	close_all_fds(t_minishell *m, t_process_list *pl)
 {
