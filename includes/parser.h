@@ -59,6 +59,7 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input);
 void add_process_to_list(t_process_list **process_list, t_process_list *new_process);
 void create_envp_table(t_minishell *minishell);
 void skip_operator(t_token_list **list, enum e_token_operators op);
+void	free_all(char *value, char *key);
 
 /****************** OPERATORS ******************/
 
