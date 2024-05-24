@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   export_print.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:06:59 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/30 18:06:59 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/24 15:46:09 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtins.h"
 #include "minishell.h"
 #include "utils.h"
-#include "builtins.h"
 #include <readline/history.h>
 
-t_envp_list *sort_envp_list(t_envp_list **lst, int (*cmp)(char *, char *))
+t_envp_list	*sort_envp_list(t_envp_list **lst, int (*cmp)(char *, char *))
 {
-	char *swap_target;
-	char *swap_value;
+	char		*swap_target;
+	char		*swap_value;
 	t_envp_list	*tmp;
 
 	tmp = *lst;
-	while((*lst)->next != NULL)
+	while ((*lst)->next != NULL)
 	{
 		if (((*cmp)((*lst)->target, (*lst)->next->target)) == 0)
 		{
@@ -41,10 +41,10 @@ t_envp_list *sort_envp_list(t_envp_list **lst, int (*cmp)(char *, char *))
 	return ((*lst));
 }
 
-void print_env_variables_export(t_minishell *m)
+void	print_env_variables_export(t_minishell *m)
 {
 	t_envp_list	*current;
-	char	*equal;
+	char		*equal;
 
 	current = sort_envp_list(&m->list_envp, ascending);
 	while (current != NULL)
@@ -60,8 +60,8 @@ void print_env_variables_export(t_minishell *m)
 
 void	print_error_export(char *arg, bool *check_key)
 {
-	char *export_error;
-	char *tmp;
+	char	*export_error;
+	char	*tmp;
 
 	export_error = NULL;
 	tmp = NULL;

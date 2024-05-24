@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:36:07 by mbernard          #+#    #+#             */
-/*   Updated: 2024/05/24 14:21:25 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/24 15:38:27 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	fill_env_value_and_current_path(t_minishell *m, t_envp_list *env, char *cwd)
 	env->value = ft_strdup(cwd);
 	if (env->value == NULL)
 	{
-		ft_putendl_fd("Malloc error in cd : fill_env_value_and_path", 2);
+		ft_putstr_fd("Malloc error in cd : fill_env_value_and_path\n", 2);
 		return (ENOMEM);
 	}
 	return (0);
@@ -64,7 +64,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 	target_path = ft_realpath(m, dir);
 	if (target_path == NULL)
 	{
-		ft_putendl_fd("Malloc error in cd : go_into_directory", 2);
+		ft_putstr_fd("Malloc error in cd : go_into_directory\n", 2);
 		return (ENOMEM);
 	}
 	if (chdir(target_path) != 0)
@@ -94,7 +94,7 @@ static int	get_home(t_minishell *m)
 	dir_cpy[0] = '\0';
 	if (ft_getenv(m, dir_cpy, "HOME=") == 0)
 	{
-		ft_putendl_fd("minishell: cd: HOME not set", 2);
+		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 		return (1);
 	}
 	home_dir_len = ft_strlen(dir_cpy);
@@ -109,7 +109,7 @@ int	ft_cd(t_minishell *m, char **cmd_table)
 
 	if (cmd_table[1] != NULL && cmd_table[2] != NULL)
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (1);
 	}
 	if (should_go_home(cmd_table))

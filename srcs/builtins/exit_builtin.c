@@ -66,7 +66,7 @@ int	ft_exit(t_minishell *minishell, char **cmd_table)
 
 	is_alpha = false;
 	if (minishell->interactive)
-		ft_putendl_fd("exit", 2);
+		ft_putstr_fd("exit\n", 2);
 	exit_no_arg(minishell, cmd_table);
 	if (!cmd_table[1])
 		exit_numeric_arg(minishell, cmd_table, is_alpha);
@@ -75,7 +75,7 @@ int	ft_exit(t_minishell *minishell, char **cmd_table)
 		is_alpha = true;
 	if (cmd_table[2] && !is_alpha)
 	{
-		print_error("minishell: exit: too many arguments");
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		minishell->status = set_or_get_last_status(1, 0);
 		return (1);
 	}
