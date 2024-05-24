@@ -24,7 +24,6 @@ int tokenize_input(t_minishell *m, char *string)
 	return (1);
 }
 
-
 void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 {
 	t_token_list	*iterator;

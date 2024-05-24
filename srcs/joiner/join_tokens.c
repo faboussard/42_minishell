@@ -15,11 +15,6 @@
 #include "utils.h"
 #include "parser.h"
 
-
-void skip_operator(t_token_list **list, enum e_token_operators op);
-
-void do_join_not_spaces(t_minishell *minishell, t_token_list **list);
-
 void join_tokens(t_minishell *minishell, t_token_list **list)
 {
 	char *joined_name;
@@ -101,31 +96,6 @@ void join_between_spaces(t_minishell *minishell, t_token_list **list)
 	do_join_not_spaces(minishell, list);
 	*list = cpy;
 }
-
-void do_join_not_spaces(t_minishell *minishell, t_token_list **list)
-{
-	while (*list != NULL && (*list)->next != NULL)
-	{
-		skip_operator(list, IS_SPACE);
-		if ((*list) != NULL && (*list)->next != NULL && (*list)->next->e_operator != IS_SPACE)
-		{
-			if (is_redirect_token_or_pipe((*list)->next) || is_redirect_token_or_pipe(*list))
-			{
-				*list = (*list)->next;
-				continue ;
-			}
-			else if ((*list)->e_operator != IS_SPACE && (*list)->in_env_token == 0)
-			{
-				join_tokens(minishell, list);
-				continue ;
-			}
-		}
-		if ((*list) == NULL)
-			break ;
-		*list = (*list)->next;
-	}
-}
-
 
 char *join_all(t_minishell *minishell, t_token_list **list)
 {
