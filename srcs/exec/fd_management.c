@@ -83,7 +83,7 @@ int	open_fd_outfile(t_minishell *m, t_process_list *pl, char *out)
 
 bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 {
-	t_token_list	*in;
+	t_process_list	tmp;
 	int				ret;
 
 	if (pl->in_files_list == NULL)
@@ -91,20 +91,20 @@ bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 		pl->fd_in = STDIN_FILENO;
 		return (0);
 	}
-	in = pl->in_files_list;
-	while (in != NULL)
+	tmp = *pl;
+	while (tmp.in_files_list != NULL)
 	{
 		close_fds(*fd_in, 0);
-		if (in->e_type == DELIMITER)
+		if (tmp.in_files_list->e_type == DELIMITER)
 		{
 			here_doc(m, pl->in_files_list, fd_in, pl);
 			ret = open_fd_infile(m, pl, HERE_DOC_TMP_FILE, fd_in);
 		}
 		else
-			ret = open_fd_infile(m, pl, in->name, fd_in);
+			ret = open_fd_infile(m, pl, tmp.in_files_list->name, fd_in);
 		if (ret == 1)
 			return (1);
-		in = in->next;
+		tmp.in_files_list = tmp.in_files_list->next;
 	}
 	return (0);
 }
@@ -131,36 +131,51 @@ bool	is_builtin(char *cmd, char **cmd_table)
 		return (0);
 }
 
-int	deals_with_no_outfile_case(t_minishell *m, t_process_list *pl)
-{
+int	deals_with_no_outfile_case(t_minishell *m, t_process_list *pl) {
 	if (pl->next != NULL && (pl->next->in_files_list != NULL
-			|| is_builtin(pl->next->cmd_table[0], pl->next->cmd_table)))
-	{
+							 || is_builtin(pl->next->cmd_table[0],
+										   pl->next->cmd_table))) {
 		if (open_fd_outfile(m, pl, "/dev/null") == 1)
 			return (1);
-	}
-	else
+	} else
 		pl->fd_out = STDOUT_FILENO;
 	return (0);
 }
 
 int	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 {
-	t_token_list	*out;
+	t_process_list	out;
+	int				fd_out;
 	int				ret;
 
 	if (handle_in(m, pl, fd_in))
 		return (0);
 	if (pl->out_files_list == NULL)
 		return (deals_with_no_outfile_case(m, pl));
-	out = pl->out_files_list;
-	while (out != NULL)
+	out = *pl;
+	while (out.out_files_list && out.out_files_list->next)
+	{
+		if (out.out_files_list->e_type == APPEND_FILE)
+			fd_out = open(out.out_files_list->name,
+						  O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else
+			fd_out = open(out.out_files_list->name,
+						  O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd_out < 0)
+		{
+			print_name_and_give_status(m, out.out_files_list->name, 1);
+			return (1);
+		}
+		close(fd_out);
+		out.out_files_list = out.out_files_list->next;
+	}
+	if (out.out_files_list != NULL)
 	{
 		close_fds(pl->fd_out, 0);
-		ret = open_fd_outfile(m, pl, out->name);
+		ret = open_fd_outfile(m, pl, out.out_files_list->name);
 		if (ret == 1)
 			return (1);
-		out = out->next;
+		out.out_files_list = out.out_files_list->next;
 	}
 	return (0);
 }
