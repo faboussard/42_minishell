@@ -80,7 +80,7 @@ void	chose_exit(t_minishell *m, bool good_code, int exit_code)
 void	deals_with_single_or_double_point(t_minishell *m, t_process_list *pl)
 {
 	if (ft_strncmp(pl->cmd_table[0], ".", 2) == 0)
-		exit_command_not_found(m, ".", pl);
+		exit_command_not_found(m, ".", pl, 0);
 	if (ft_strncmp(m->paths, "/no_path_set", 12) == 0
 		&& ft_strncmp(pl->cmd_table[0], "..", 3) == 0)
 	{
@@ -95,7 +95,7 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 	struct stat	path_stat;
 
 	if (ft_strncmp(pl->cmd_table[0], "..", 3) == 0)
-		exit_command_not_found(m, pl->cmd_table[0], pl);
+		exit_command_not_found(m, pl->cmd_table[0], pl, 0);
 	stat(pl->cmd_table[0], &path_stat);
 	if (S_ISREG(path_stat.st_mode))
 	{
@@ -134,7 +134,7 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 			chose_exit(m, 0, 0);
 		}
 		else
-			exit_command_not_found(m, pl->cmd_table[0], pl);
+			exit_command_not_found(m, pl->cmd_table[0], pl, 0);
 	}
 	close_pipes_and_fds(m, pl);
 	free_safely_str(&(m->paths));
