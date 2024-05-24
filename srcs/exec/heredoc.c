@@ -62,7 +62,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	{
 		input = get_next_line(STDIN_FILENO);
 		if (input == NULL)
-			exit_msg_minishell(m, "leaving heredoc", 0);
+			exit_msg_minishell(m, "minishell: warning: leaving heredoc", 0);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
