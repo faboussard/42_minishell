@@ -20,15 +20,6 @@ void	signal_print_newline(int signal)
 	rl_on_new_line();
 }
 
-int	set_or_get_last_status(int status, int flag)
-{
-	static int	last_status;
-
-	if (flag == 0)
-		last_status = status;
-	return (last_status);
-}
-
 void	sigint_handler(int signo)
 {
 	(void)signo;
@@ -43,6 +34,7 @@ int set_signals_interactive()
 {
 	struct sigaction	action;
 
+	ignore_sigquit();
 	action.sa_handler = &sigint_handler;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = SA_RESTART;
@@ -51,16 +43,8 @@ int set_signals_interactive()
 		print_error("sigaction() failed");
 		return (-1);
 	}
-	action.sa_handler = SIG_IGN;
-    if (sigaction(SIGQUIT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return (-1);
-	}
-//	signal(SIGTSTP, SIG_IGN);
 	return (0);
 }
-
 
 int set_signals_noninteractive(void)
 {
