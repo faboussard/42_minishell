@@ -16,27 +16,21 @@
 #include "utils.h"
 #include <stdlib.h>
 
-void	add_envp_to_list(t_envp_list **list_envp, t_envp_list *new_envp)
+
+char *extract_target(char **envp, size_t i, t_minishell *minishell)
 {
-	if (new_envp == NULL)
-		return ;
-	new_envp->next = *list_envp;
-	*list_envp = new_envp;
+	char *target;
+
+	target = ft_substr(*envp, 0, i + 1);
+	if (target == NULL) {
+		exit_msg_minishell(minishell, "Malloc failed at extract_target", ENOMEM);
+	}
+	return (target);
 }
 
-int	add_new_envp(t_envp_list **list_envp, char *target, char *content)
-{
-	t_envp_list	*new_envp;
-
-	new_envp = create_new_envp(target, content);
-	if (new_envp == NULL)
-		return (MALLOC_FAILED);
-	add_envp_to_list(list_envp, new_envp);
-	return (SUCCESSFULLY_ADDED);
-}
 
 void	get_target_and_value(char **envp, t_envp_list **list_envp,
-		t_minishell *minishell)
+		t_minishell *m)
 {
 	size_t	i;
 	char	*content;
@@ -45,25 +39,22 @@ void	get_target_and_value(char **envp, t_envp_list **list_envp,
 	i = 0;
 	while ((*envp)[i] && (*envp)[i] != '=')
 		i++;
-	target = ft_substr(*envp, 0, i + 1);
-	if (target == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at get_target_and_value", ENOMEM);
-	else if ((*envp)[i] == '=')
+	target = extract_target(envp, i, m);
+	if ((*envp)[i] == '=')
 	{
 		i++;
 		content = ft_substr(*envp, i, ft_strlen(*envp) - i);
 		if (content == NULL)
 		{
 			free_safely_str(&target);
-			exit_msg_minishell(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+			exit_msg_minishell(m, "Malloc failed at get_target_and_value", ENOMEM);
 		}
 		if (add_new_envp(list_envp, target, content) == MALLOC_FAILED)
 		{
-			free_safely_str(&target);
-			free_safely_str(&content);
-			exit_msg_minishell(minishell, "Malloc failed at get_target_and_value", ENOMEM);
+			free_all(target, content);
+			exit_msg_minishell(m, "Malloc failed at get_target_and_value", ENOMEM);
 		}
-		minishell->total_size_envp += ft_strlen(target) + ft_strlen(content);
+		m->total_size_envp += ft_strlen(target) + ft_strlen(content);
 		free_safely_str(&content);
 	}
 	free_safely_str(&target);
