@@ -18,10 +18,6 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 		perror("minishell: heredoc file can't be opened");
 	else
 		print_name(m, pl->in_files_list->name);
-	/*	if (access(pl->in_files_list->name, F_OK) == 0
-			&& access(pl->in_files_list->name, X_OK != 0))
-			m->status = 129;
-		else*/
 	m->status = 1;
 	pl->dev_null = 1;
 	*fd_to_use = open("/dev/null", O_RDONLY);
@@ -152,10 +148,6 @@ int	handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in)
 		return (0);
 	if (pl->out_files_list == NULL)
 		return (deals_with_no_outfile_case(m, pl));
-	// {
-	// 	pl->fd_out = STDOUT_FILENO;
-	// 	return (0);
-	// }
 	out = pl->out_files_list;
 	while (out != NULL)
 	{

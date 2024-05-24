@@ -34,7 +34,7 @@ bool	is_one_arg_builtin(t_minishell *m)
 	return (0);
 }
 
-bool	is_a_builtin(t_minishell *m, char *cmd, char **cmd_table)
+bool	exec_builtin(t_minishell *m, char *cmd, char **cmd_table)
 {
 	if (!cmd || !cmd_table)
 		return (0);
@@ -114,7 +114,7 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	if (pl->cmd_table[0] && !is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))
+	if (pl->cmd_table[0] && !exec_builtin(m, pl->cmd_table[0], pl->cmd_table))
 	{
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		close_pipes_and_fds(m, pl);
@@ -143,28 +143,28 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 
 static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 {
-	t_process_list	*tmp;
+	t_process_list	tmp;
 	int				fd_in;
 
 	if (pl->in_files_list == NULL)
 		return (0);
-	tmp = pl;
+	tmp = *pl;
 	fd_in = 0;
-	while (tmp->in_files_list && tmp->in_files_list->next)
+	while (tmp.in_files_list && tmp.in_files_list->next)
 	{
-		if (tmp->in_files_list->e_type == DELIMITER)
-			here_doc(m, tmp->in_files_list, &fd_in, tmp);
-		if (open_fd_infile(m, tmp, tmp->in_files_list->name, &fd_in) == 0)
+		if (tmp.in_files_list->e_type == DELIMITER)
+			here_doc(m, tmp.in_files_list, &fd_in, &tmp);
+		if (open_fd_infile(m, &tmp, tmp.in_files_list->name, &fd_in) == 0)
 			close(fd_in);
 		else
 			return (1);
-		tmp->in_files_list = tmp->in_files_list->next;
+		tmp.in_files_list = tmp.in_files_list->next;
 	}
-	if (tmp->in_files_list)
+	if (tmp.in_files_list)
 	{
-		if (tmp->in_files_list->e_type == DELIMITER)
-			here_doc(m, tmp->in_files_list, &(pl->fd_in), tmp);
-		if (open_fd_infile(m, tmp, tmp->in_files_list->name, &(pl->fd_in)))
+		if (tmp.in_files_list->e_type == DELIMITER)
+			here_doc(m, tmp.in_files_list, &(pl->fd_in), &tmp);
+		if (open_fd_infile(m, &tmp, tmp.in_files_list->name, &(pl->fd_in)))
 			return (1);
 	}
 	return (0);
@@ -172,31 +172,31 @@ static int	check_all_infiles(t_minishell *m, t_process_list *pl)
 
 static int	create_all_outfiles(t_minishell *m, t_process_list *pl)
 {
-	t_process_list	*tmp;
+	t_process_list	tmp;
 	int				fd_out;
 
 	if (pl->out_files_list == NULL)
 		return (0);
-	tmp = pl;
-	while (tmp->out_files_list && tmp->out_files_list->next)
+	tmp = *pl;
+	while (tmp.out_files_list && tmp.out_files_list->next)
 	{
-		if (tmp->out_files_list->e_type == APPEND_FILE)
-			fd_out = open(tmp->out_files_list->name,
-					O_CREAT | O_WRONLY | O_APPEND, 0644);
+		if (tmp.out_files_list->e_type == APPEND_FILE)
+			fd_out = open(tmp.out_files_list->name,
+						  O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else
-			fd_out = open(tmp->out_files_list->name,
-					O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd_out = open(tmp.out_files_list->name,
+						  O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out < 0)
 		{
-			print_name_and_give_status(m, tmp->out_files_list->name, 1);
+			print_name_and_give_status(m, tmp.out_files_list->name, 1);
 			return (1);
 		}
 		close(fd_out);
-		tmp->out_files_list = tmp->out_files_list->next;
+		tmp.out_files_list = tmp.out_files_list->next;
 	}
-	if (tmp->out_files_list)
+	if (tmp.out_files_list)
 	{
-		if (open_fd_outfile(m, tmp, tmp->out_files_list->name) == 1)
+		if (open_fd_outfile(m, pl, tmp.out_files_list->name) == 1)
 			return (1);
 	}
 	return (0);
@@ -211,6 +211,7 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	}
 	if (pl->out_files_list != NULL)
 	{
+		dprintf(2, "pl->out_files_list->name : %s\n", pl->out_files_list->name);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 		close(pl->fd_out);
 	}
@@ -235,8 +236,8 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 		close_fds(pl->fd_in, pl->fd_out);
 		return ;
 	}
-	if (is_one_arg_builtin(m) && is_a_builtin(m, pl->cmd_table[0],
-			pl->cmd_table))
+	if (is_one_arg_builtin(m) && exec_builtin(m, pl->cmd_table[0],
+											  pl->cmd_table))
 		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
