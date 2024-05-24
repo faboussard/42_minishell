@@ -46,5 +46,5 @@ void	print_name_and_give_status(t_minishell *m, char *name, int err)
 void	malloc_error_no_exit(t_minishell *m)
 {
 	ft_putstr_fd("Malloc error\n", 2);
-	m->status = ENONEM;
+	m->status = ENOMEM;
 }
