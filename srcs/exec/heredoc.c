@@ -12,8 +12,8 @@
 
 #include "exec.h"
 #include "parser.h"
-#include "utils.h"
 #include "signals.h"
+#include "utils.h"
 
 char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 {
@@ -43,14 +43,14 @@ void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 		ft_putstr_fd(input, pl->fd_in);
 }
 
-static void close_and_clear_heredoc(t_minishell *m, t_process_list *pl, char **input)
+static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
+		char **input)
 {
 	free_safely_str(&(*input));
 	close_all_fds(m, pl);
 	free_minishell(m);
 	exit(0);
 }
-
 
 static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		t_token_list *limiter, int *fd_to_use)
@@ -78,14 +78,14 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	}
 }
 
-void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use, t_process_list *pl)
+void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
+		t_process_list *pl)
 {
 	int	here_doc_pid;
 
 	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
 	close_fds(*fd_to_use, m->tmp_in);
 	close_fds(pl->fd_in, pl->fd_out);
-
 	*fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (*fd_to_use < 0)
 	{
