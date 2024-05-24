@@ -262,6 +262,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
 	{
 		m->status = 1;
+		close_fds(pl->fd_in, pl->fd_out);
 		return ;
 	}
 	if (is_one_arg_builtin(m) && is_a_builtin(m, pl->cmd_table[0], pl->cmd_table))

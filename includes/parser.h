@@ -73,7 +73,7 @@ void remove_node_envp(t_envp_list **begin_list, t_envp_list *node_to_remove);
 void	free_envp(t_envp_list *envp);
 int	ft_lstsize_envp(t_envp_list *lst);
 void create_env_variable(char **envp, t_envp_list **list_envp, t_minishell *minishell);
-char *additionnal_env_content(t_minishell *m, t_envp_list **env, char *key, char *value);
+char *modify_env_content(t_minishell *m, t_envp_list **env, char *key, char *value);
 int add_new_envp(t_envp_list **list_envp, char *target, char *content);
 bool add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables, t_minishell *m, size_t index);
 char * join_equal_sign(char *key);
