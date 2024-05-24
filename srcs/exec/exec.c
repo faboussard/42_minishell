@@ -211,7 +211,6 @@ static int	handle_infile_outfile(t_minishell *m, t_process_list *pl)
 	}
 	if (pl->out_files_list != NULL)
 	{
-		dprintf(2, "pl->out_files_list->name : %s\n", pl->out_files_list->name);
 		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
 		close(pl->fd_out);
 	}
