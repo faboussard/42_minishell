@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/02 18:02:37 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/24 15:50:26 by mbernard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "minishell.h"
-#include "utils.h"
 #include "parser.h"
+#include "utils.h"
 #include <readline/history.h>
 
 bool	is_valid_key_with_plus(char *key)
@@ -34,25 +33,26 @@ bool	is_valid_key_with_plus(char *key)
 	return (true);
 }
 
-
-int make_export(char **args, t_envp_list *env_variables, t_minishell *m)
+int	make_export(char **args, t_envp_list *env_variables, t_minishell *m)
 {
-	size_t index;
-	bool one_key_not_valid_return_1;
+	size_t	index;
+	bool	one_key_not_valid_return_1;
 
 	one_key_not_valid_return_1 = false;
 	index = 0;
-	one_key_not_valid_return_1 = add_value_to_envp_list_if_valid(args, env_variables, m, index);
+	one_key_not_valid_return_1 = add_value_to_envp_list_if_valid(args,
+			env_variables, m, index);
 	if (one_key_not_valid_return_1 == true)
 		return (1);
 	else
 		return (0);
 }
 
-char *find_and_join_value(const char *key, t_envp_list **head, char *value, t_minishell *m)
+char	*find_and_join_value(const char *key, t_envp_list **head, char *value,
+		t_minishell *m)
 {
-	char *new_value;
-	t_envp_list *current;
+	char		*new_value;
+	t_envp_list	*current;
 
 	current = *head;
 	new_value = NULL;
@@ -64,23 +64,24 @@ char *find_and_join_value(const char *key, t_envp_list **head, char *value, t_mi
 			{
 				new_value = ft_strdup(value);
 				if (new_value)
-					exit_msg_minishell(m, "Malloc failed at find_and_join_value", ENOMEM);
+					exit_msg_minishell(m,
+						"Malloc failed at find_and_join_value", ENOMEM);
 			}
 			else
 				new_value = join_with_old(head, value, m);
-			break;
+			break ;
 		}
 		else
-			current= current->next;
+			current = current->next;
 	}
 	return (new_value);
 }
 
-char *join_with_old(t_envp_list **list, char *content, t_minishell *m)
+char	*join_with_old(t_envp_list **list, char *content, t_minishell *m)
 {
 	char	*temp;
-	char *temp2;
-	char *new_content;
+	char	*temp2;
+	char	*new_content;
 
 	temp = ft_strdup((*list)->value);
 	if (temp == NULL)
@@ -99,7 +100,7 @@ char *join_with_old(t_envp_list **list, char *content, t_minishell *m)
 	return (new_content);
 }
 
-int ascending(char *a, char *b)
+int	ascending(char *a, char *b)
 {
 	return (ft_strcmp(a, b) <= 0);
 }
