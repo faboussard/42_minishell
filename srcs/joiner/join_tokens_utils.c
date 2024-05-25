@@ -28,19 +28,6 @@ int check_if_more_tokens(t_token_list **list, enum e_token_operators op)
 	return (0);
 }
 
-//void change_token_name(t_minishell *minishell, t_token_list **list, char *new_name)
-//{
-//	char *new_list_name;
-//
-//	new_list_name = ft_strdup(new_name);
-//	if (new_list_name == NULL)
-//		exit_msg_minishell(minishell, "Malloc failed at join between spaces", ENOMEM);
-//	free_safely_str(&((*list)->name));
-//	(*list)->name = new_list_name;
-//	(*list)->e_type = COMMAND;
-//	(*list)->e_operator = 0;
-//}
-
 void change_token_name(t_token_list **list, char *new_name)
 {
 	free_safely_str(&((*list)->name));
