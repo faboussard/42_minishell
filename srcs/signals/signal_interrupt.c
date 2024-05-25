@@ -22,7 +22,6 @@ void	sigint_handler_interrupt(int signo)
 void	sigquit_handler_interrupt(int signo)
 {
 	(void)signo;
-	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 }
 
 int signal_interrupt()
