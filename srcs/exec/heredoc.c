@@ -13,7 +13,6 @@
 #include "exec.h"
 #include "parser.h"
 #include "signals.h"
-#include "utils.h"
 
 char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 {
