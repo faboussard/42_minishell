@@ -13,29 +13,6 @@
 #include "exec.h"
 #include "signals.h"
 
-/*
-close(m->fd_in); qui était dans first child dégage car cat | cat
-
-void	fill_fd_with_emptiness(t_minishell *m, int *sad_fd)
-{
-	if (*sad_fd >= 0)
-		close(*sad_fd);
-	*sad_fd = open("/dev/null", O_RDONLY);
-	if (*sad_fd < 0)
-	{
-		ft_putendl_fd("No /dev/null/ found", 2);
-		m->status = 1;
-	}
-}
-	if (pl->fd_out != STDOUT_FILENO)
-	{
-		m_safe_dup2(m, pl->fd_out, STDOUT_FILENO);
-		close(pl->fd_out);
-		close(m->pipe_fd[READ_END]);
-		fill_fd_with_emptiness(m, pl->tmp_in);
-	}
-*/
-
 static void	first_child(t_minishell *m, t_process_list *pl)
 {
 	if (handle_in_out(m, pl, &(pl->fd_in)) == 0 && pl->dev_null == 0)
@@ -153,27 +130,3 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 	wait_children_and_give_exit_status(m, files_failed);
 	close_fds(pl->fd_in, pl->fd_out);
 }
-
-//	if (safe_pipe(m) == 0)
-//		return ;
-// --> pas besoin de safe_pipe dans le dernier enfant
-/*
- *         if (pl->in_files_token->e_type== DELIMITER)
-			here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->tmp_in));
- * */
-
-/*
-void	handle_out(t_minishell *m, t_process_list *pl, int stdout, int *fd_out)
-{
-	enum e_token_type	outfile_token;
-
-	outfile_token = pl->out_files_token->e_type;
-	if (open_fd_outfile(m, pl, pl->out_files_token->name))
-			return ;
-		m_safe_dup2(m, *fd_out, stdout);
-}
-if (pl->in_files_token->e_type== DELIMITER)
-		here_doc(m, pl->in_files_token->name, STDIN_FILENO, &(m->fd_in));
-	if (open_fd_infile(m, pl->in_files_token))
-		return ;
-*/

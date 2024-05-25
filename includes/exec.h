@@ -72,5 +72,4 @@ void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl,
 void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl);
 void	print_name_and_exit_perror(t_minishell *m, char *name, int error_code);
 void	print_name_and_give_status(t_minishell *m, char *name, int err);
-void	malloc_error_no_exit(t_minishell *m);
 #endif
