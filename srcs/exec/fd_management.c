@@ -22,7 +22,7 @@ static void	manage_fd_error(t_minishell *m, t_process_list *pl, int *fd_to_use)
 	pl->dev_null = 1;
 	*fd_to_use = open("/dev/null", O_RDONLY);
 	if (*fd_to_use < 0)
-		ft_putendl_fd("Couldn't open /dev/null/", 2);
+		ft_putstr_fd("Couldn't open /dev/null/\n", 2);
 }
 
 int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name,
