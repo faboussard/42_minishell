@@ -35,7 +35,11 @@ void	chose_exit(t_minishell *m, bool good_code, int exit_code)
 void	manage_interrupted_signal(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
+	{
 		m->status = set_or_get_last_status(128 + WTERMSIG(m->status), 0);
+		if (m->status == 131)
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	}
 	else if (WIFEXITED(m->status))
 		m->status = WEXITSTATUS(m->status);
 	else
