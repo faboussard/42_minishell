@@ -87,14 +87,13 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 		close_fds(pl->fd_in, pl->fd_out);
 		return ;
 	}
-	ignore_signals();
+	signal_interrupt();
 	if (is_one_arg_builtin(m) && exec_builtin(m, pl->cmd_table[0],
 			pl->cmd_table))
 		return ;
 	m->pid2 = m_safe_fork(m);
 	if (m->pid2 == 0)
 	{
-		signal_interrupt();
 		handle_infile_outfile(m, pl);
 		my_execve(m, pl);
 	}
@@ -108,6 +107,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
+	ignore_signals();
 	if (nb_cmds < 1)
 		return ;
 	set_paths(m, m->envp_table);
