@@ -29,16 +29,11 @@ void	sigint_handler_heredoc(int signo)
 	exit(130);
 }
 
-void	sigquit_handler_heredoc(int signo)
-{
-	(void)signo;
-}
-
-
 int set_signals_heredoc()
 {
 	struct sigaction	action;
 
+	ignore_sigquit();
 	action.sa_handler = &sigint_handler_heredoc;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = SA_RESTART;
@@ -47,13 +42,6 @@ int set_signals_heredoc()
 		print_error("sigaction() failed");
 		return (-1);
 	}
-	action.sa_handler = &sigquit_handler_heredoc;
-	if (sigaction(SIGQUIT, &action, NULL) < 0)
-	{
-		print_error("sigaction() failed");
-		return (-1);
-	}
-	sigaction(SIGQUIT, &action, NULL);
 	return (0);
 }
 
