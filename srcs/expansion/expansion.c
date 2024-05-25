@@ -14,55 +14,6 @@
 #include "utils.h"
 #include "parser.h"
 
-void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
-{
-	if (current == NULL || *current == NULL || new_token == NULL)
-		return;
-	new_token->next = (*current)->next;
-	(*current)->next = new_token;
-}
-
-void create_and_insert_token(t_minishell *minishell, char *string, t_token_list **current)
-{
-	t_token_list *new_token;
-
-	new_token = ft_calloc(1, sizeof(t_token_list));
-	if (new_token == NULL)
-	{
-		free_safely_str(&string);
-		exit_msg_minishell(minishell, "Malloc failed at create_token", ENOMEM);
-	}
-	if (define_token(new_token, string) == 0)
-	{
-		free_safely_str(&string);
-		free(new_token);
-		exit_msg_minishell(minishell, "Failed to define token at create_token", ENOMEM);
-	}
-	new_token->in_env_token = 1;
-	ft_lsti_insert_after(current, new_token);
-}
-
-
-void add_tokens_and_change_to_expansion(t_minishell *m, t_token_list **list, char *expanded_string)
-{
-	char **split;
-	int i;
-	t_token_list *current;
-
-	i = 0;
-	split = ft_split(expanded_string, ' ');
-	if (split == NULL)
-		exit_msg_minishell(m, "Malloc failed at add_tokens_and_change_to_expansion", ENOMEM);
-	current = *list;
-	while (split[i])
-	{
-		create_and_insert_token(m, split[i], &current);
-		current = current->next;
-		i++;
-	}
-	free_safely_str(&expanded_string);
-	ft_free_tab(&split);
-}
 void process_dollar_token(t_minishell *m, t_token_list **list, int squote_count, int dquote_count)
 {
 	char *expanded_string;

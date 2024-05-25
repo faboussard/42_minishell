@@ -24,7 +24,7 @@ void create_token(t_minishell *minishell, char *string, t_token_list **list)
 		free_safely_str(&string);
 		exit_msg_minishell(minishell, "Malloc failed at create_token", ENOMEM);
 	}
-	if (define_token(new_token, string) == 0)
+	if (define_token(new_token, string) == MALLOC_FAILED)
 	{
 		free_safely_str(&string);
 		free(new_token);

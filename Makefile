@@ -22,7 +22,8 @@ LIST_SRCS		=  main\
 				builtins/pwd_builtin \
 				builtins/builtins_utils builtins/echo_builtin\
 				builtins/export_print builtins/export\
-				expansion/expansion expansion/expansion_utils expansion/expansion_utils_2 expansion/add_after_special_char\
+				expansion/expansion expansion/utils expansion/utils_2\
+				expansion/parse_env_var expansion/add_after_special_char\
 				utils/free utils/free_utils utils/error utils/utils \
 				exec/exec exec/exec_utils exec/exec_bool exec/errors exec/errors_exit \
 				exec/paths	exec/fd_management exec/fd_in_out exec/one_cmd_in_out \
