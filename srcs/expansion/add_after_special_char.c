@@ -39,10 +39,8 @@ char *getString(char *string, t_minishell *minishell, t_envp_list *iterator)
 	if (check_special_char_after_expand(string, iterator->target))
 		string = expand_sign(string, iterator->value);
 	else
-	{
 		string = ft_strdup(iterator->value);
-		if (string == NULL)
-			exit_msg_minishell(minishell, "Malloc failed at identify_envp_string", ENOMEM);
-	}
+	if (string == NULL)
+		exit_msg_minishell(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 	return (string);
 }
