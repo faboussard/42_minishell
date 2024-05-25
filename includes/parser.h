@@ -122,6 +122,9 @@ char		*getString(char *string, t_minishell *minishell,
 				t_envp_list *iterator);
 void add_tokens_and_change_to_expansion(t_minishell *m,
 										t_token_list **list, char *expanded_string);
+void process_dollar_token(t_minishell *m, t_token_list **list, int squote_count, int dquote_count);
+void handle_dollar_files(t_minishell *m, t_token_list **list);
+void handle_dollar(t_minishell *m, t_token_list **iterator, int *squote_count, int *dquote_count);
 
 /********************* check_syntax **************************/
 bool		check_quotes(t_minishell *minishell);

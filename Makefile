@@ -22,7 +22,7 @@ LIST_SRCS		=  main\
 				builtins/pwd_builtin \
 				builtins/builtins_utils builtins/echo_builtin\
 				builtins/export_print builtins/export\
-				expansion/expansion expansion/utils expansion/utils_2\
+				expansion/expansion expansion/utils expansion/utils_2 expansion/process_dollar\
 				expansion/parse_env_var expansion/add_after_special_char\
 				utils/free utils/free_utils utils/error utils/utils \
 				exec/exec exec/exec_utils exec/exec_bool exec/errors exec/errors_exit \
