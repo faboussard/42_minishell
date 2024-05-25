@@ -120,6 +120,8 @@ int			s_quote_after_d_quote_and_dollar(t_token_list **list,
 				int single_quote_count, int double_quote_count);
 char		*getString(char *string, t_minishell *minishell,
 				t_envp_list *iterator);
+void add_tokens_and_change_to_expansion(t_minishell *m,
+										t_token_list **list, char *expanded_string);
 
 /********************* check_syntax **************************/
 bool		check_quotes(t_minishell *minishell);
