@@ -31,7 +31,7 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 
 	iterator = list_tokens;
 	if (ft_strncmp(iterator->name, "\0", 1) == 0)
-		change_token_name(m, &list_tokens, "''");
+		change_token_name(&list_tokens, "''");
 	while (iterator && iterator->next != NULL)
 	{
 		if (iterator->e_type == COMMAND)

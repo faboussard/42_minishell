@@ -35,8 +35,7 @@ void		do_join_not_spaces(t_minishell *minishell, t_token_list **list);
 
 /************************* join_tokens_utils.c **************************/
 
-void		change_token_name(t_minishell *minishell, t_token_list **list,
-				char *new_name);
+void change_token_name(t_token_list **list, char *new_name);
 int			check_if_more_tokens(t_token_list **list,
 				enum e_token_operators op);
 void		join_token_name(t_minishell *minishell, char *temp,
