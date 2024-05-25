@@ -20,7 +20,9 @@ pid_t	m_safe_fork(t_minishell *minishell)
 	if (my_pid == -1)
 	{
 		close_pipes(minishell->pipe_fd);
-		print_name_and_exit_perror(minishell, "fork", errno);
+		print_name(minishell, "fork failed");
+		free_minishell(minishell);
+		exit(errno);
 	}
 	return (my_pid);
 }
@@ -31,14 +33,18 @@ void	m_safe_dup2(t_minishell *minishell, int old_fd, int new_fd)
 
 	my_dup = dup2(old_fd, new_fd);
 	if (my_dup == -1)
-		print_name_and_exit_perror(minishell, "dup2", errno);
+	{
+		print_name(minishell, "dup2 failed");
+		free_minishell(minishell);
+		exit(errno);
+	}
 }
 
 bool	safe_pipe(t_minishell *m)
 {
 	if (pipe(m->pipe_fd) == -1)
 	{
-		ft_putendl_fd("Error creating the pipe", 2);
+		ft_putstr_fd("Error creating the pipe\n", 2);
 		m->status = -1;
 		return (0);
 	}
