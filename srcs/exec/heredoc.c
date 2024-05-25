@@ -95,10 +95,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 	ignore_signals();
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
-	{
-		set_signals_heredoc();
 		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
-	}
 	else
 	{
 		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
