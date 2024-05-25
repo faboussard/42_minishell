@@ -17,12 +17,14 @@
 void	sigint_handler_interrupt(int signo)
 {
 	(void)signo;
+	set_or_get_last_status(130, 0);
 }
 
 void	sigquit_handler_interrupt(int signo)
 {
 	(void)signo;
 	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	set_or_get_last_status(131, 0);
 }
 
 int signal_interrupt()
