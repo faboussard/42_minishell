@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "parser.h"
+#include "utils.h"
 #include <stdlib.h>
 
 void skip_operator(t_token_list **list, enum e_token_operators op)
@@ -34,7 +35,8 @@ void do_join_not_spaces(t_minishell *minishell, t_token_list **list)
 			}
 			else if ((*list)->e_operator != IS_SPACE && (*list)->in_env_token == 0)
 			{
-				join_tokens(minishell, list);
+				if (join_tokens(list) == MALLOC_FAILED)
+					exit_msg_minishell(minishell, "Malloc failed at join_tokens", ENOMEM);
 				continue ;
 			}
 		}

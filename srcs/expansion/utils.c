@@ -61,7 +61,8 @@ void handle_delimitor(t_token_list **iterator)
 
 void change_name_to_status(t_minishell *minishell, t_token_list *iterator)
 {
-	join_tokens(minishell, &iterator);
+	if (join_tokens(&iterator) == MALLOC_FAILED)
+		exit_msg_minishell(minishell, "join_tokens", ENOMEM);
 	free_safely_str(&(iterator->name));
 	iterator->name = ft_itoa(minishell->status);
 	if (iterator->name == NULL)
