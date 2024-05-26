@@ -102,5 +102,5 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 			exit_msg_minishell(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
-	manage_interrupted_signal(m);
+	manage_signal_code(m);
 }
