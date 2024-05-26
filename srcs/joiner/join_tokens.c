@@ -10,77 +10,66 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
+#include "utils.h"
+#include <stdlib.h>
 
-void join_tokens(t_minishell *minishell, t_token_list **list)
+static int	skip_op(t_token_list **list, int count)
 {
-	char *joined_name;
-	t_token_list *t2;
-	t_token_list *t1;
-
-	t1 = (*list);
-	t2 = (*list)->next;
-	joined_name = ft_strjoin(t1->name, t2->name);
-	if (joined_name == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at tokenization", ENOMEM);
-	free_safely_str(&(t1->name));
-	t1->name = ft_strdup(joined_name);
-	if (t1->name == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at tokenization", ENOMEM);
-	free_safely_str(&joined_name);
-	if (t1->name == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at tokenization", ENOMEM);
-	del_next_token(&t1);
-	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
+	{
+		define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, (*list));
+		(*list) = (*list)->next;
+		(*list) = (*list)->next;
+		count++;
+	}
+	return (count);
 }
 
-void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
+void	join_between_quotes_handler(t_token_list **list,
+		enum e_token_operators op, t_minishell *m)
 {
-	int count;
+	int				count;
+	t_token_list	*cpy;
 
 	count = 1;
+	cpy = *list;
 	if (*list == NULL || (*list)->next == NULL || (*list)->next->next == NULL)
-		return;
+		return ;
 	(*list) = (*list)->next;
 	while ((*list) && (*list)->next)
 	{
 		if ((*list)->next->e_operator == op)
-		{
-			define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, (*list));
-			(*list) = (*list)->next;
-			(*list) = (*list)->next;
-			count++;
-		}
+			count = skip_op(list, count);
 		if (count == 2)
-			return;
+			return ;
 		else if (count == 1)
-			join_tokens(minishell, list);
+			join_tokens_safely(m, list, cpy);
 	}
 }
 
-void join_between_quotes(t_minishell *minishell, t_token_list **list)
+void	join_between_quotes(t_minishell *m, t_token_list **list)
 {
-	t_token_list *cpy;
-	int quote_type;
+	t_token_list	*cpy;
+	int				quote_type;
 
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
 		quote_type = (*list)->e_operator;
-		if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && quote_type == (int)(*list)->next->e_operator)
+		if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE)
+			&& quote_type == (int)(*list)->next->e_operator)
 		{
-			join_tokens(minishell, list);
-			change_token_name(minishell, list, "\0");
+			join_tokens_safely(m, list, cpy);
+			change_token_name(list, "\0");
 			continue ;
 		}
-		else if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && check_if_more_tokens(list, quote_type))
+		else if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE)
+				&& check_if_more_tokens(list, quote_type))
 		{
-			join_between_quotes_handler(minishell, list, quote_type);
+			join_between_quotes_handler(list, quote_type, m);
 			if ((*list) == NULL)
-				break;
+				break ;
 		}
 		else
 			(*list) = (*list)->next;
@@ -88,24 +77,24 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
-void join_between_spaces(t_minishell *minishell, t_token_list **list)
+void	join_between_spaces(t_minishell *minishell, t_token_list **list)
 {
-	t_token_list *cpy;
+	t_token_list	*cpy;
 
 	cpy = *list;
 	do_join_not_spaces(minishell, list);
 	*list = cpy;
 }
 
-char *join_all(t_minishell *minishell, t_token_list **list)
+char	*join_all(t_minishell *minishell, t_token_list **list)
 {
-	t_token_list *iterator;
-	char *new_table;
-	char *temp;
-	size_t total_length;
+	t_token_list	*iterator;
+	char			*new_name;
+	char			*temp;
+	size_t			total_length;
 
 	temp = NULL;
-	new_table = NULL;
+	new_name = NULL;
 	total_length = 0;
 	iterator = *list;
 	while (iterator)
@@ -113,12 +102,12 @@ char *join_all(t_minishell *minishell, t_token_list **list)
 		total_length += ft_strlen(iterator->name);
 		iterator = iterator->next;
 	}
-	new_table = ft_calloc(total_length + 1, sizeof(char));
-	if (new_table == NULL)
-		exit_msg_minishell(minishell, "Memory allocation failed for command table array", ENOMEM);
+	new_name = ft_calloc(total_length + 1, sizeof(char));
+	if (new_name == NULL)
+		exit_msg_minishell(minishell,
+				"Memory allocation failed at join_all", ENOMEM);
 	iterator = *list;
 	while (iterator)
-		join_token_name(minishell, temp, &iterator, &new_table);
-	return (new_table);
+		join_token_name(minishell, temp, &iterator, &new_name);
+	return (new_name);
 }
-

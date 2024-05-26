@@ -16,10 +16,11 @@
 
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
-	t_envp_list *iterator = minishell->list_envp;
+	t_envp_list *iterator;
 	char *target_without_equal_sign;
 	size_t len;
 
+	iterator = minishell->list_envp;
 	len = ft_strlen(string) + 1;
 	while (iterator != NULL)
 	{
@@ -30,7 +31,10 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 		if (target_without_equal_sign == NULL)
 			exit_msg_minishell(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 		if (ft_strncmp(string, target_without_equal_sign, len) == 0)
+		{
+			free_safely_str(&target_without_equal_sign);
 			string = getString(string, minishell, iterator);
+		}
 		free_safely_str(&target_without_equal_sign);
 		iterator = iterator->next;
 	}
@@ -47,9 +51,12 @@ void update_quote_counts(t_token_list *token, int *single_quote_count, int *doub
 
 void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_string)
 {
-	join_tokens(m, list);
-	change_token_name(m, list, (*expanded_string));
-	free_safely_str(expanded_string);
+	if (join_tokens(list) == MALLOC_FAILED)
+	{
+		free_safely_str(expanded_string);
+		exit_msg_minishell(m, "Malloc failed at join_tokens", ENOMEM);
+	}
+	change_token_name(list, (*expanded_string));
 }
 
 void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count)

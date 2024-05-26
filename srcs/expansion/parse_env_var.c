@@ -65,6 +65,5 @@ void add_tokens_and_change_to_expansion(t_minishell *m, t_token_list **list, cha
 		current = current->next;
 		i++;
 	}
-	free_safely_str(&expanded_string);
 	ft_free_tab(&split);
 }

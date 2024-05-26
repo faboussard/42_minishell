@@ -18,6 +18,7 @@ void process_dollar_token(t_minishell *m, t_token_list **list, int squote_count,
 {
 	char *expanded_string;
 
+	expanded_string = NULL;
 	if (ft_strncmp((*list)->next->name, "?", 2) == 0)
 		change_name_to_status(m, *list);
 	else
@@ -36,6 +37,7 @@ void process_dollar_token(t_minishell *m, t_token_list **list, int squote_count,
 					add_tokens_and_change_to_expansion(m, list, expanded_string);
 				else
 					change_to_expansion(m, list, &expanded_string);
+				free_safely_str(&expanded_string);
 				return;
 			}
 			else
