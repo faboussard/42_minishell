@@ -36,8 +36,6 @@ int check_special_char_after_expand(char *string, char *string2)
 
 char *getString(char *string, t_minishell *minishell, t_envp_list *iterator)
 {
-	if (iterator == NULL)
-		return NULL;
 	if (check_special_char_after_expand(string, iterator->target))
 		string = expand_sign(string, iterator->value);
 	else

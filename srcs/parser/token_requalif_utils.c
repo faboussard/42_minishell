@@ -109,13 +109,15 @@ void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 	{
 		if ((*list)->e_operator == INPUT_REDIRECT && (*list)->next->e_operator == INPUT_REDIRECT)
 		{
-			join_tokens(minishell, list);
+			if (join_tokens(list) == MALLOC_FAILED)
+				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
 			(*list)->e_type = OPERATOR;
 			(*list)->e_operator = HERE_DOC;
 		}
 		if ((*list)->e_operator == OUTPUT_REDIRECT && (*list)->next->e_operator == OUTPUT_REDIRECT)
 		{
-			join_tokens(minishell, list);
+			if (join_tokens(list) == MALLOC_FAILED)
+				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
 			(*list)->e_type = OPERATOR;
 			(*list)->e_operator = APPEND;
 		}

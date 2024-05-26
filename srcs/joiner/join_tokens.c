@@ -15,7 +15,7 @@
 #include "utils.h"
 #include "parser.h"
 
-void join_tokens(t_minishell *minishell, t_token_list **list)
+int join_tokens(t_token_list **list)
 {
 	char *joined_name;
 	t_token_list *t2;
@@ -23,21 +23,22 @@ void join_tokens(t_minishell *minishell, t_token_list **list)
 
 	t1 = (*list);
 	t2 = (*list)->next;
+	if (t2 == NULL)
+		return 0;
 	joined_name = ft_strjoin(t1->name, t2->name);
 	if (joined_name == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at tokenization", ENOMEM);
+		return (MALLOC_FAILED);
 	free_safely_str(&(t1->name));
 	t1->name = ft_strdup(joined_name);
-	if (t1->name == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at tokenization", ENOMEM);
 	free_safely_str(&joined_name);
 	if (t1->name == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at tokenization", ENOMEM);
+		return (MALLOC_FAILED);
 	del_next_token(&t1);
 	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
+	return (0);
 }
 
-void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, enum e_token_operators op)
+void join_between_quotes_handler(t_token_list **list, enum e_token_operators op, t_minishell *m)
 {
 	int count;
 
@@ -57,11 +58,14 @@ void join_between_quotes_handler(t_minishell *minishell, t_token_list **list, en
 		if (count == 2)
 			return;
 		else if (count == 1)
-			join_tokens(minishell, list);
+		{
+			if (join_tokens(list) == MALLOC_FAILED)
+				exit_msg_minishell(m, "Malloc failed at join_tokens", ENOMEM);
+		}
 	}
 }
 
-void join_between_quotes(t_minishell *minishell, t_token_list **list)
+void join_between_quotes(t_minishell *m, t_token_list **list)
 {
 	t_token_list *cpy;
 	int quote_type;
@@ -72,13 +76,14 @@ void join_between_quotes(t_minishell *minishell, t_token_list **list)
 		quote_type = (*list)->e_operator;
 		if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && quote_type == (int)(*list)->next->e_operator)
 		{
-			join_tokens(minishell, list);
+			if (join_tokens(list) == MALLOC_FAILED)
+				exit_msg_minishell(m, "Malloc failed at join_tokens", ENOMEM);
 			change_token_name(list, "\0");
 			continue ;
 		}
 		else if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE) && check_if_more_tokens(list, quote_type))
 		{
-			join_between_quotes_handler(minishell, list, quote_type);
+			join_between_quotes_handler(list, quote_type,m);
 			if ((*list) == NULL)
 				break;
 		}

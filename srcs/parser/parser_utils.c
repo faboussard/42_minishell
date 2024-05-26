@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "parser.h"
+#include "utils.h"
 #include <stdlib.h>
 
 int	cmp(int op1, int op2)
@@ -52,7 +53,8 @@ void	supress_two_consecutive_empty_names(t_minishell *minishell,
 		if (ft_strcmp((*list)->name, "\0") == 0 && strcmp((*list)->next->name,
 				"\0") == 0)
 		{
-			join_tokens(minishell, list);
+			if (join_tokens(list) == MALLOC_FAILED)
+				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
 			continue ;
 		}
 		*list = (*list)->next;

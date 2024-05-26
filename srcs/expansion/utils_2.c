@@ -51,7 +51,11 @@ void update_quote_counts(t_token_list *token, int *single_quote_count, int *doub
 
 void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_string)
 {
-	join_tokens(m, list);
+	if (join_tokens(list) == MALLOC_FAILED)
+	{
+		free_safely_str(expanded_string);
+		exit_msg_minishell(m, "Malloc failed at join_tokens", ENOMEM);
+	}
 	change_token_name(list, (*expanded_string));
 }
 
