@@ -31,7 +31,10 @@ char *identify_envp_string(char *string, t_minishell *minishell)
 		if (target_without_equal_sign == NULL)
 			exit_msg_minishell(minishell, "Malloc failed at identify_envp_string", ENOMEM);
 		if (ft_strncmp(string, target_without_equal_sign, len) == 0)
+		{
+			free_safely_str(&target_without_equal_sign);
 			string = getString(string, minishell, iterator);
+		}
 		free_safely_str(&target_without_equal_sign);
 		iterator = iterator->next;
 	}
