@@ -35,14 +35,16 @@ int join_tokens(t_token_list **list)
 		return (MALLOC_FAILED);
 	del_next_token(&t1);
 	define_token_types(COMMAND, NO_BUILTIN, NO_OPERATOR, t1);
-	return (0);
+	return (MALLOC_FAILED);
 }
 
 void join_between_quotes_handler(t_token_list **list, enum e_token_operators op, t_minishell *m)
 {
 	int count;
+	t_token_list *cpy;
 
 	count = 1;
+	cpy = *list;
 	if (*list == NULL || (*list)->next == NULL || (*list)->next->next == NULL)
 		return;
 	(*list) = (*list)->next;
@@ -60,7 +62,10 @@ void join_between_quotes_handler(t_token_list **list, enum e_token_operators op,
 		else if (count == 1)
 		{
 			if (join_tokens(list) == MALLOC_FAILED)
+			{
+				*list = cpy;
 				exit_msg_minishell(m, "Malloc failed at join_tokens", ENOMEM);
+			}
 		}
 	}
 }
