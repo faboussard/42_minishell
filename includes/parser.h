@@ -25,21 +25,19 @@ int			ft_lstsize_token(t_token_list *lst);
 
 /************************* join_tokens.c **************************/
 
-void		join_tokens(t_minishell *minishell, t_token_list **list);
+int join_tokens(t_token_list **list);
 void		join_between_quotes(t_minishell *minishell, t_token_list **list);
 void		join_between_spaces(t_minishell *minishell, t_token_list **list);
-void		join_between_quotes_handler(t_minishell *minishell,
-				t_token_list **list, enum e_token_operators op);
+void join_between_quotes_handler(t_token_list **list, enum e_token_operators op, t_minishell *m);
 char		*join_all(t_minishell *minishell, t_token_list **list);
 void		do_join_not_spaces(t_minishell *minishell, t_token_list **list);
 
 /************************* join_tokens_utils.c **************************/
 
-void		change_token_name(t_minishell *minishell, t_token_list **list,
-				char *new_name);
+void change_token_name(t_token_list **list, char *new_name);
 int			check_if_more_tokens(t_token_list **list,
 				enum e_token_operators op);
-void		join_token_name(t_minishell *minishell, char *temp,
+void		join_token_name(t_minishell *minishell, char *new_name,
 				t_token_list **iterator, char **new_table);
 
 /************************* token_requlif.c **************************/
@@ -68,6 +66,8 @@ void		add_process_to_list(t_process_list **process_list,
 void		create_envp_table(t_minishell *minishell);
 void		skip_operator(t_token_list **list, enum e_token_operators op);
 void		free_all(char *value, char *key);
+void        join_tokens_safely(t_minishell *m, t_token_list **list, t_token_list *cpy);
+int         join_tokens(t_token_list **list);
 
 /****************** OPERATORS ******************/
 

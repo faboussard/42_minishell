@@ -32,7 +32,7 @@ void	chose_exit(t_minishell *m, bool good_code, int exit_code)
 	exit(1);
 }
 
-void	manage_interrupted_signal(t_minishell *m)
+void	manage_signal_code(t_minishell *m)
 {
 	if (WIFSIGNALED(m->status))
 	{

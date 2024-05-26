@@ -103,7 +103,7 @@ static void	wait_children_and_give_exit_status(t_minishell *m,
 	if (files_failed == 1)
 		m->status = 1;
 	else if (files_failed == 0)
-		manage_interrupted_signal(m);
+		manage_signal_code(m);
 }
 
 void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
