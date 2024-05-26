@@ -85,7 +85,7 @@ void remove_node_token(t_token_list **begin_list, t_token_list *node_to_remove)
 		previous_node = current;
 		current = current->next;
 	}
-	if (current == node_to_remove)
+	if (current == node_to_remove && current)
 	{
 		if (previous_node != NULL)
 			previous_node->next = current->next;
