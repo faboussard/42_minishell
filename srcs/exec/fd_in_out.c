@@ -17,7 +17,7 @@ static bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 	t_process_list	tmp;
 	int				ret;
 
-	if (pl->in_files_list == NULL)
+	if (pl && pl->in_files_list == NULL)
 	{
 		pl->fd_in = STDIN_FILENO;
 		return (0);
@@ -29,7 +29,7 @@ static bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 		if (tmp.in_files_list->e_type == DELIMITER)
 		{
 			here_doc(m, pl->in_files_list, fd_in, pl);
-			ret = open_fd_infile(m, pl, HERE_DOC_TMP_FILE, fd_in);
+			ret = open_fd_infile(m, pl, pl->here_doc_file, fd_in);
 		}
 		else
 			ret = open_fd_infile(m, pl, tmp.in_files_list->name, fd_in);

@@ -77,15 +77,41 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	}
 }
 
+static void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
+{
+	int		num;
+	char	*str_num;
+
+	if (pl->here_doc_file != NULL)
+	{
+		check_and_delete_if_tmp_file_exists(pl);
+		free_safely_str(&(pl->here_doc_file));
+	}
+	num = INT_MIN;
+	while (pl->here_doc_file == NULL || access(pl->here_doc_file, F_OK) == 0)
+	{
+		free_safely_str(&(pl->here_doc_file));
+		str_num = ft_itoa(num);
+		if (str_num == NULL)
+			exit_msg_minishell(m, "Malloc failed at heredoc", ENOMEM);
+		pl->here_doc_file = ft_strjoin("/tmp/.tmp_heredoc", str_num);
+		free_safely_str(&str_num);
+		if (pl->here_doc_file == NULL)
+			exit_msg_minishell(m, "Malloc failed at heredoc", ENOMEM);
+		num++;
+	}
+}
+
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 		t_process_list *pl)
 {
 	int	here_doc_pid;
 
-	check_and_delete_if_tmp_file_exists(HERE_DOC_TMP_FILE);
+	fill_heredoc_file_name(m, pl);
+//	check_and_delete_if_tmp_file_exists(pl);
 	close_fds(*fd_to_use, m->tmp_in);
 	close_fds(pl->fd_in, pl->fd_out);
-	*fd_to_use = open(HERE_DOC_TMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	*fd_to_use = open(pl->here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (*fd_to_use < 0)
 	{
 		perror("No /tmp/ directory found");
