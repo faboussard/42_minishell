@@ -49,7 +49,6 @@ void change_to_expansion(t_minishell *m, t_token_list **list, char **expanded_st
 {
 	join_tokens(m, list);
 	change_token_name(list, (*expanded_string));
-	free_safely_str(expanded_string);
 }
 
 void add_quotes_count(t_token_list *iterator, int *single_quote_count, int *double_quote_count)

@@ -16,12 +16,14 @@
 
 char *expand_sign(char *string, char *temp)
 {
+	char *new_string;
+
 	while (*string && *string != '=')
 		string++;
-	string = ft_strjoin(temp, string);
-	if (string == NULL)
+	new_string = ft_strjoin(temp, string);
+	if (new_string == NULL)
 		exit_msg_minishell(NULL, "Malloc failed at expand_sign", ENOMEM);
-	return (string);
+	return (new_string);
 }
 
 void treat_in_delimitor(t_token_list **iterator)
@@ -71,10 +73,12 @@ char *expand_sigil(char *string, t_minishell *m)
 	char *final_string;
 
 	if (ft_isdigit(*string))
+	{
 		final_string = ft_strdup(string + 1);
+		if (final_string == NULL)
+			exit_msg_minishell(m, "Malloc failed at expand_sigil", ENOMEM);
+	}
 	else
 		final_string = identify_envp_string(string, m);
-	if (final_string == NULL)
-		exit_msg_minishell(m, "Malloc failed at expand_sigil", ENOMEM);
 	return (final_string);
 }
