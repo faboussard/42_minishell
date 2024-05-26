@@ -21,9 +21,9 @@
 #  define SUCCESSFULLY_ADDED 0
 # endif
 
-# ifndef HERE_DOC_TMP_FILE
-#  define HERE_DOC_TMP_FILE "/tmp/.tmp_heredoc"
-# endif
+//# ifndef HERE_DOC_TMP_FILE
+//#  define HERE_DOC_TMP_FILE "/tmp/.tmp_heredoc"
+//# endif
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
@@ -98,6 +98,7 @@ typedef struct s_process_list
 	char						*good_path;
 	char						**tab_paths;
 	char						**cmd_table;
+	char						*here_doc_file;
 	bool						dev_null;
 	struct s_process_list		*next;
 }								t_process_list;

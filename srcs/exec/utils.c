@@ -12,13 +12,16 @@
 
 #include "exec.h"
 
-void	check_and_delete_if_tmp_file_exists(char *tmp_file)
+void	check_and_delete_if_tmp_file_exists(t_process_list *pl)
 {
-	if (access(tmp_file, F_OK) == 0)
+	if (!pl || pl->here_doc_file == NULL)
+		return ;
+	if (access(pl->here_doc_file, F_OK) == 0)
 	{
-		if (unlink(tmp_file) == -1)
+		if (unlink(pl->here_doc_file) == -1)
 			perror("");
 	}
+	free_safely_str(&(pl->here_doc_file));
 }
 
 void	init_before_next_prompt(t_minishell *m)
@@ -39,6 +42,7 @@ void	ft_init_pl(t_minishell *m, t_process_list *pl)
 	pl->paths = NULL;
 	pl->good_path = NULL;
 	pl->tab_paths = NULL;
+	pl->here_doc_file = NULL;
 }
 
 void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
@@ -48,4 +52,6 @@ void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
 	ft_free_tab(&(pl->tab_paths));
 	ft_free_tab(&(pl->cmd_table));
 	ft_free_tab(&(minishell->envp_table));
+	check_and_delete_if_tmp_file_exists(pl);
+//	free_safely_str(&pl->here_doc_file); free dans le check
 }

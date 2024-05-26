@@ -43,7 +43,8 @@ void			ft_free_tab(char ***tab);
 void			ft_lstclear_envp(t_envp_list **lst);
 void			ft_lstclear_token(t_token_list **lst);
 void			ft_free_process_list(t_process_list **process_list);
-void			check_and_delete_if_tmp_file_exists(char *tmp_file);
+void			check_and_delete_if_tmp_file_exists(t_process_list *pl);
+//void			check_and_delete_if_tmp_file_exists(char *tmp_file);
 /*** FREE  UTILS *****/
 void			free_strs(t_minishell *m);
 void			close_all_fds(t_minishell *m, t_process_list *pl);

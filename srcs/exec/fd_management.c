@@ -41,7 +41,7 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name,
 		infile_type = pl->in_files_list->e_type;
 		close_fds(*fd_to_use, 0);
 		if (infile_type == DELIMITER)
-			*fd_to_use = open(HERE_DOC_TMP_FILE, O_RDONLY);
+			*fd_to_use = open(pl->here_doc_file, O_RDONLY);
 		else if (infile_type == IN_FILE)
 			*fd_to_use = open(name, O_RDONLY);
 	}
