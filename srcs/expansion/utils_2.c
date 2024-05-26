@@ -16,10 +16,11 @@
 
 char *identify_envp_string(char *string, t_minishell *minishell)
 {
-	t_envp_list *iterator = minishell->list_envp;
+	t_envp_list *iterator;
 	char *target_without_equal_sign;
 	size_t len;
 
+	iterator = minishell->list_envp;
 	len = ft_strlen(string) + 1;
 	while (iterator != NULL)
 	{
