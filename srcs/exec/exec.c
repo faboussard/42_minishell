@@ -103,7 +103,7 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 		waitpid(m->pid2, &(m->status), 0);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	manage_interrupted_signal(m);
+	manage_signal_code(m);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
