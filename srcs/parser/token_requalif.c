@@ -85,35 +85,3 @@ void	define_operators(t_token_list *list_tokens)
 		iterator = iterator->next;
 	}
 }
-
-void	define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
-{
-	t_token_list *cpy;
-
-	if (list == NULL || *list == NULL)
-		return ;
-	cpy = *list;
-	while (*list != NULL && (*list)->next != NULL)
-	{
-		if ((*list)->e_operator == INPUT_REDIRECT
-			&& (*list)->next->e_operator == INPUT_REDIRECT)
-		{
-			if (join_tokens(list) == MALLOC_FAILED)
-				join_tokens_safely(minishell, list, cpy);
-			(*list)->e_type = OPERATOR;
-			(*list)->e_operator = HERE_DOC;
-		}
-		if ((*list)->e_operator == OUTPUT_REDIRECT
-			&& (*list)->next->e_operator == OUTPUT_REDIRECT)
-		{
-			if (join_tokens(list) == MALLOC_FAILED)
-				join_tokens_safely(minishell, list, cpy);
-			(*list)->e_type = OPERATOR;
-			(*list)->e_operator = APPEND;
-		}
-		if ((*list) == NULL)
-			break ;
-		*list = (*list)->next;
-	}
-	*list = cpy;
-}
