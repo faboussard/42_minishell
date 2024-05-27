@@ -25,21 +25,18 @@ int			ft_lstsize_token(t_token_list *lst);
 
 /************************* join_tokens.c **************************/
 
-int join_tokens(t_token_list **list);
+int			join_tokens(t_token_list **list);
 void		join_between_quotes(t_minishell *minishell, t_token_list **list);
 void		join_between_spaces(t_minishell *minishell, t_token_list **list);
-void join_between_quotes_handler(t_token_list **list, enum e_token_operators op, t_minishell *m);
-//char *join_in_heredoc(t_minishell *m, t_token_list **list);
-char *join_in_heredoc(t_token_list **list);
-void		do_join_not_spaces(t_minishell *minishell, t_token_list **list);
+void		join_between_quotes_handler(t_token_list **list, enum e_token_operators op, t_minishell *m);
+char		*join_in_heredoc(t_token_list **list);
+void		do_join_not_spaces(t_minishell *m, t_token_list **list);
 
 /************************* join_tokens_utils.c **************************/
 
-void change_token_name(t_token_list **list, char *new_name);
+void		change_token_name(t_token_list **list, char *new_name);
 int			check_if_more_tokens(t_token_list **list,
 				enum e_token_operators op);
-void		join_token_name(t_minishell *minishell, char *new_name,
-				t_token_list **iterator, char **new_table);
 
 /************************* token_requlif.c **************************/
 
@@ -55,12 +52,12 @@ void		dollar_to_command(t_token_list *list_tokens);
 
 int			parse_input(t_minishell *m);
 void		*ft_free_all_alloc(char **strs_array, size_t start);
-void		token_rework(t_minishell *minishell);
+void		token_rework(t_minishell *m);
 int			cmp(int op1, int op2);
 void		create_process_list(t_minishell *m, t_process_list **process_list);
 void		create_process_list_node(t_process_list *new_pl, t_minishell *m);
-void		create_cmd_table_array(t_process_list *new_process_list,
-				size_t size, t_minishell *minishell);
+void		create_cmd_table(t_process_list *new_pl,
+							 size_t size, t_minishell *m);
 void		handle_expand(t_minishell *m, t_process_list *pl, char *input);
 void		add_process_to_list(t_process_list **process_list,
 				t_process_list *new_process);
@@ -68,7 +65,7 @@ void		create_envp_table(t_minishell *minishell);
 void		skip_operator(t_token_list **list, enum e_token_operators op);
 void		free_all(char *value, char *key);
 void        join_tokens_safely(t_minishell *m, t_token_list **list, t_token_list *cpy);
-int         join_tokens(t_token_list **list);
+void		replace_empty_name(t_minishell *m, t_token_list *iterator);
 
 /****************** OPERATORS ******************/
 
@@ -87,8 +84,6 @@ void		free_envp(t_envp_list *envp);
 int			ft_lstsize_envp(t_envp_list *lst);
 void		create_env_variable(char **envp, t_envp_list **list_envp,
 				t_minishell *minishell);
-char		*modify_env_content(t_minishell *m, t_envp_list **env, char *key,
-				char *value);
 int			add_new_envp(t_envp_list **list_envp, char *target, char *content);
 bool		add_value_to_envp_list_if_valid(char **args,
 				t_envp_list *env_variables, t_minishell *m, size_t index);

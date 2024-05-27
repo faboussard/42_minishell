@@ -21,7 +21,7 @@ void	skip_operator(t_token_list **list, enum e_token_operators op)
 		*list = (*list)->next;
 }
 
-void	do_join_not_spaces(t_minishell *minishell, t_token_list **list)
+void	do_join_not_spaces(t_minishell *m, t_token_list **list)
 {
 	t_token_list	*cpy;
 
@@ -38,11 +38,9 @@ void	do_join_not_spaces(t_minishell *minishell, t_token_list **list)
 				*list = (*list)->next;
 				continue ;
 			}
-			else if ((*list)->e_operator != IS_SPACE
-					&& (*list)->in_env_token == 0)
+			else if ((*list)->e_operator != IS_SPACE && (*list)->parsed == 0)
 			{
-				if (join_tokens(list) == MALLOC_FAILED)
-					join_tokens_safely(minishell, list, cpy);
+				join_tokens_safely(m, list, cpy);
 				continue ;
 			}
 		}

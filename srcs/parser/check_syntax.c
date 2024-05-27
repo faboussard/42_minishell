@@ -43,21 +43,12 @@ bool	check_consecutive_redirect(t_minishell *minishell)
 	{
 		next_token = current_token->next;
 		if (is_redirect_token(current_token) && is_redirect_token(next_token))
-		{
-			print_operator_syntax_error(next_token);
-			return (1);
-		}
+			return (print_operator_syntax_error(next_token), 1);
 		if (is_redirect_token(current_token)
 			&& is_redirect_token_or_pipe(next_token))
-		{
-			print_operator_syntax_error(next_token);
-			return (1);
-		}
+			return (print_operator_syntax_error(next_token), 1);
 		if (current_token->e_operator == PIPE && next_token->e_operator == PIPE)
-		{
-			print_operator_syntax_error(next_token);
-			return (1);
-		}
+			return (print_operator_syntax_error(next_token), 1);
 		current_token = current_token->next;
 	}
 	return (0);
