@@ -53,5 +53,4 @@ void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl)
 	ft_free_tab(&(pl->cmd_table));
 	ft_free_tab(&(minishell->envp_table));
 	check_and_delete_if_tmp_file_exists(pl);
-//	free_safely_str(&pl->here_doc_file); free dans le check
 }
