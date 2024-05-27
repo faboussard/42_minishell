@@ -48,18 +48,6 @@ void	change_token_name(t_token_list **list, char *new_name)
 	(*list)->e_operator = 0;
 }
 
-void	join_token_name(t_minishell *minishell, char *new_name,
-		t_token_list **iterator, char **new_table)
-{
-	new_name = ft_strjoin((*new_table), (*iterator)->name);
-	if (new_name == NULL)
-		exit_msg_minishell(minishell,
-				"Memory allocation failed at tokenization", ENOMEM);
-	free_safely_str(&(*new_table));
-	(*new_table) = new_name;
-	(*iterator) = (*iterator)->next;
-}
-
 int	join_tokens(t_token_list **list)
 {
 	char			*joined_name;
