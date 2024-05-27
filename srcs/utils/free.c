@@ -65,6 +65,8 @@ void	ft_free_process_list(t_process_list **process_list)
 	while (*process_list != NULL)
 	{
 		next = (*process_list)->next;
+		check_and_delete_if_tmp_file_exists(*process_list);
+
 //		if ((*process_list)->here_doc_file)
 //		{
 //			check_and_delete_if_tmp_file_exists(*process_list);
