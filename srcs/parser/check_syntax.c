@@ -15,9 +15,9 @@
 #include "utils.h"
 #include <stdlib.h>
 
-bool check_last_token_redirect_or_pipe(t_minishell *minishell)
+bool	check_last_token_redirect_or_pipe(t_minishell *minishell)
 {
-	t_token_list *last_token;
+	t_token_list	*last_token;
 
 	last_token = ft_lstlast_token(minishell->list_tokens);
 	if (last_token->e_operator == PIPE)
@@ -33,37 +33,28 @@ bool check_last_token_redirect_or_pipe(t_minishell *minishell)
 	return (0);
 }
 
-
-bool check_consecutive_redirect(t_minishell *minishell)
+bool	check_consecutive_redirect(t_minishell *minishell)
 {
-	t_token_list *next_token;
-	t_token_list *current_token;
+	t_token_list	*next_token;
+	t_token_list	*current_token;
 
 	current_token = minishell->list_tokens;
 	while (current_token != NULL && current_token->next != NULL)
 	{
 		next_token = current_token->next;
 		if (is_redirect_token(current_token) && is_redirect_token(next_token))
-		{
-			print_operator_syntax_error(next_token);
-			return (1);
-		}
-		if (is_redirect_token(current_token) && is_redirect_token_or_pipe(next_token))
-		{
-			print_operator_syntax_error(next_token);
-			return (1);
-		}
+			return (print_operator_syntax_error(next_token), 1);
+		if (is_redirect_token(current_token)
+			&& is_redirect_token_or_pipe(next_token))
+			return (print_operator_syntax_error(next_token), 1);
 		if (current_token->e_operator == PIPE && next_token->e_operator == PIPE)
-		{
-			print_operator_syntax_error(next_token);
-			return (1);
-		}
+			return (print_operator_syntax_error(next_token), 1);
 		current_token = current_token->next;
 	}
 	return (0);
 }
 
-bool check_syntax(t_minishell *minishell)
+bool	check_syntax(t_minishell *minishell)
 {
 	if (minishell->list_tokens == NULL)
 		return (0);

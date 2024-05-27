@@ -41,7 +41,7 @@ void	remove_empty_in_words(t_token_list **list)
 }
 
 void	supress_two_consecutive_empty_names(t_minishell *minishell,
-		t_token_list **list)
+											t_token_list **list)
 {
 	t_token_list	*cpy;
 
@@ -53,8 +53,7 @@ void	supress_two_consecutive_empty_names(t_minishell *minishell,
 		if (ft_strcmp((*list)->name, "\0") == 0 && strcmp((*list)->next->name,
 				"\0") == 0)
 		{
-			if (join_tokens(list) == MALLOC_FAILED)
-				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
+			join_tokens_safely(minishell, list, cpy);
 			continue ;
 		}
 		*list = (*list)->next;
@@ -62,21 +61,29 @@ void	supress_two_consecutive_empty_names(t_minishell *minishell,
 	*list = cpy;
 }
 
-void	token_rework(t_minishell *minishell)
+void	token_rework(t_minishell *m)
 {
-	if (minishell->list_tokens == NULL)
+	if (m->list_tokens == NULL)
 		return ;
-	ft_list_remove_if_same_type(&minishell->list_tokens, (void *)TO_DELETE,
-		cmp);
-	join_between_quotes(minishell, &minishell->list_tokens);
-	supress_two_consecutive_empty_names(minishell, &minishell->list_tokens);
-	remove_empty_in_words(&minishell->list_tokens);
-	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)SINGLE_QUOTE,
-		cmp);
-	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)DOUBLE_QUOTE,
-		cmp);
-	if (minishell->list_tokens == NULL)
+	ft_list_remove_if_same_type(&m->list_tokens, (void *)TO_DELETE, cmp);
+	join_between_quotes(m, &m->list_tokens);
+	supress_two_consecutive_empty_names(m, &m->list_tokens);
+	remove_empty_in_words(&m->list_tokens);
+	ft_list_remove_if_same_op(&m->list_tokens, (void *)SINGLE_QUOTE, cmp);
+	ft_list_remove_if_same_op(&m->list_tokens, (void *)DOUBLE_QUOTE, cmp);
+	if (m->list_tokens == NULL)
 		return ;
-	join_between_spaces(minishell, &minishell->list_tokens);
-	ft_list_remove_if_same_op(&minishell->list_tokens, (void *)IS_SPACE, cmp);
+	join_between_spaces(m, &m->list_tokens);
+	ft_list_remove_if_same_op(&m->list_tokens, (void *)IS_SPACE, cmp);
+}
+
+void	replace_empty_name(t_minishell *m, t_token_list *iterator)
+{
+	char			*new_list_name;
+
+	new_list_name = ft_strdup("''");
+	if (new_list_name == NULL)
+		exit_msg(m, "Malloc failed at join between spaces", ENOMEM);
+	free_safely_str(&(iterator->name));
+	iterator->name = new_list_name;
 }

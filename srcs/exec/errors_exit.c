@@ -21,7 +21,7 @@ void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl,
 	if (to_free)
 		free_safely_str(&name);
 	if (!msg)
-		exit_msg_minishell(m, "Malloc error in error exit", ENOMEM);
+		exit_msg(m, "Malloc error in error exit", ENOMEM);
 	ft_putendl_fd(msg, 2);
 	free_safely_str(&msg);
 	ft_free_pl_paths(m, pl);
@@ -46,11 +46,11 @@ void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl)
 	}
 	tmp = ft_strjoin("minishell: ", name);
 	if (!tmp)
-		exit_msg_minishell(m, "Malloc error in error exit", ENOMEM);
+		exit_msg(m, "Malloc error in error exit", ENOMEM);
 	msg = ft_strjoin(tmp, ": Is a directory");
 	free_safely_str(&tmp);
 	if (!msg)
-		exit_msg_minishell(m, "Malloc error in error exit", ENOMEM);
+		exit_msg(m, "Malloc error in error exit", ENOMEM);
 	ft_putendl_fd(msg, 2);
 	free_safely_str(&msg);
 	ft_free_pl_paths(m, pl);
@@ -58,7 +58,7 @@ void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl)
 	exit(126);
 }
 
-void	exit_msg_minishell(t_minishell *m, char *msg, int error_code)
+void	exit_msg(t_minishell *m, char *msg, int error_code)
 {
 	ft_putendl_fd(msg, 2);
 	if (m != NULL)

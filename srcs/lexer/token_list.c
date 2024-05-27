@@ -6,16 +6,16 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/14 12:49:34 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:28:26 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
+#include "utils.h"
+#include <stdlib.h>
 
-void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
+void	add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 {
 	t_token_list	*last;
 
@@ -30,10 +30,11 @@ void add_token_to_list(t_token_list **list_tokens, t_token_list *new_token)
 	new_token->next = NULL;
 }
 
-void ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref, int (*cmp)())
+void	ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref,
+		int (*cmp)())
 {
-	t_token_list *current;
-	t_token_list *temp;
+	t_token_list	*current;
+	t_token_list	*temp;
 
 	if (begin_list == NULL || *begin_list == NULL)
 		return ;
@@ -51,10 +52,11 @@ void ft_list_remove_if_same_op(t_token_list **begin_list, void *data_ref, int (*
 	}
 }
 
-void ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref, int (*cmp)())
+void	ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref,
+		int (*cmp)())
 {
-	t_token_list *current;
-	t_token_list *temp;
+	t_token_list	*current;
+	t_token_list	*temp;
 
 	if (begin_list == NULL || *begin_list == NULL)
 		return ;
@@ -72,11 +74,11 @@ void ft_list_remove_if_same_type(t_token_list **begin_list, void *data_ref, int 
 	}
 }
 
-
-void remove_node_token(t_token_list **begin_list, t_token_list *node_to_remove)
+void	remove_node_token(t_token_list **begin_list,
+		t_token_list *node_to_remove)
 {
-	t_token_list *current;
-	t_token_list *previous_node;
+	t_token_list	*current;
+	t_token_list	*previous_node;
 
 	current = *begin_list;
 	previous_node = NULL;

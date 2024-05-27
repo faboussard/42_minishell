@@ -30,7 +30,7 @@ void	sigint_handler(int signo)
 	set_or_get_last_status(130, 0);
 }
 
-int set_signals_interactive()
+int	set_signals_interactive(void)
 {
 	struct sigaction	action;
 
@@ -46,7 +46,7 @@ int set_signals_interactive()
 	return (0);
 }
 
-int set_signals_noninteractive(void)
+int	set_signals_noninteractive(void)
 {
 	struct sigaction	action;
 

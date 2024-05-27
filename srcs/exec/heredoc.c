@@ -23,8 +23,15 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	transform_to_token(m, original_input, &heredoc_token_list);
 	expander(m, &heredoc_token_list, 1);
 	ft_list_remove_if_same_type(&heredoc_token_list, (void *)TO_DELETE, cmp);
-	input_after_expand = join_all(m, &heredoc_token_list);
+	if (heredoc_token_list == NULL)
+		return (NULL);
+	input_after_expand = join_in_heredoc(&heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
+	if (input_after_expand == NULL)
+	{
+		free_safely_str(&original_input);
+		exit_msg(m, "Malloc failed at heredoc. Child process exited.", ENOMEM);
+	}
 	return (input_after_expand);
 }
 
@@ -64,7 +71,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	{
 		input = get_next_line(STDIN_FILENO);
 		if (input == NULL)
-			exit_msg_minishell(m, "minishell: warning: leaving heredoc", 0);
+			exit_msg(m, "minishell: warning: leaving heredoc", 0);
 		input_len = ft_strlen(input) - 1;
 		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
 				limiter_len))
@@ -117,14 +124,13 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 		perror("No /tmp/ directory found");
 		return ;
 	}
-	ignore_signals();
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
 		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
 	else
 	{
 		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
-			exit_msg_minishell(m, "waitpid error", 1);
+			exit_msg(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
 	manage_signal_code(m);
