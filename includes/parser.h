@@ -104,7 +104,7 @@ char		*expand_sign(char *string, char *temp);
 int			check_special_char_after_expand(char *string, char *string2);
 void		change_to_status(t_minishell *minishell,
 							 t_token_list *iterator);
-char		*identify_envp_string(char *string, t_minishell *minishell);
+char		*identify_envp_string(char *string, t_minishell *m);
 void		define_to_delete_tokens(t_token_list *const *list);
 void		change_to_expansion(t_minishell *m, t_token_list **list,
 				char **expanded_string);

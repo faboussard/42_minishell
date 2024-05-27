@@ -64,8 +64,7 @@ char	*find_and_join_value(const char *key, t_envp_list **head, char *value,
 			{
 				new_value = ft_strdup(value);
 				if (new_value)
-					exit_msg(m,
-							 "Malloc failed at find_and_join_value", ENOMEM);
+					exit_msg(m, "Malloc failed at find_and_join_value", ENOMEM);
 			}
 			else
 				new_value = join_with_old(head, value, m);
