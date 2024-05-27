@@ -14,13 +14,13 @@
 #include "parser.h"
 #include "utils.h"
 
-char	*identify_envp_string(char *string, t_minishell *minishell)
+char	*identify_envp_string(char *string, t_minishell *m)
 {
 	t_envp_list	*iterator;
 	char		*target_without_equal_sign;
 	size_t		len;
 
-	iterator = minishell->list_envp;
+	iterator = m->list_envp;
 	len = ft_strlen(string) + 1;
 	while (iterator != NULL)
 	{
@@ -29,13 +29,11 @@ char	*identify_envp_string(char *string, t_minishell *minishell)
 		else
 			target_without_equal_sign = ft_strdup(iterator->target);
 		if (target_without_equal_sign == NULL)
-			exit_msg(minishell,
-					 "Malloc failed at identify_envp_string",
-					 ENOMEM);
+			exit_msg(m, "Malloc failed at identify_envp_string", ENOMEM);
 		if (ft_strncmp(string, target_without_equal_sign, len) == 0)
 		{
 			free_safely_str(&target_without_equal_sign);
-			string = get_string(string, minishell, iterator);
+			string = get_string(string, m, iterator);
 		}
 		free_safely_str(&target_without_equal_sign);
 		iterator = iterator->next;

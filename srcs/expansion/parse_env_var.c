@@ -6,7 +6,7 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/27 10:00:48 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:29:27 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void	free_for_add_tokens(t_minishell *m, char *string, char ***split)
 {
 	ft_free_tab(split);
 	free(string);
-	exit_msg(m,
-			 "Malloc failed at add_tokens", ENOMEM);
+	exit_msg(m, "Malloc failed at add_tokens", ENOMEM);
 }
 
 void	split_and_expand(t_minishell *m, t_token_list **list, char *string)
@@ -58,8 +57,7 @@ void	split_and_expand(t_minishell *m, t_token_list **list, char *string)
 	if (split == NULL)
 	{
 		free(string);
-		exit_msg(m,
-				 "Malloc failed at add_tokens", ENOMEM);
+		exit_msg(m, "Malloc failed at add_tokens", ENOMEM);
 	}
 	current = *list;
 	while (split[i])

@@ -26,12 +26,12 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	ft_list_remove_if_same_type(&heredoc_token_list, (void *)TO_DELETE, cmp);
 	if (heredoc_token_list == NULL)
 		return (NULL);
-	input_after_expand = join_in_heredoc( &heredoc_token_list);
+	input_after_expand = join_in_heredoc(&heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
 	if (input_after_expand == NULL)
 	{
 		free_safely_str(&original_input);
-		exit_msg(m, "Malloc failed at parse_input_for_heredoc. Child process exited.", ENOMEM);
+		exit_msg(m, "Malloc failed at heredoc. Child process exited.", ENOMEM);
 	}
 	return (input_after_expand);
 }
