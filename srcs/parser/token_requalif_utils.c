@@ -74,18 +74,6 @@ void	to_infile_or_outfile(t_token_list *list_tokens)
 	}
 }
 
-void	define_builtins(t_token_list *list_tokens)
-{
-	t_token_list	*iterator;
-
-	iterator = list_tokens;
-	while (iterator)
-	{
-		get_builtin_token(iterator, iterator->name);
-		iterator = iterator->next;
-	}
-}
-
 void	define_operators(t_token_list *list_tokens)
 {
 	t_token_list	*iterator;
@@ -110,14 +98,14 @@ void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 		if ((*list)->e_operator == INPUT_REDIRECT && (*list)->next->e_operator == INPUT_REDIRECT)
 		{
 			if (join_tokens(list) == MALLOC_FAILED)
-				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
+				join_tokens_safely(minishell, list, cpy);
 			(*list)->e_type = OPERATOR;
 			(*list)->e_operator = HERE_DOC;
 		}
 		if ((*list)->e_operator == OUTPUT_REDIRECT && (*list)->next->e_operator == OUTPUT_REDIRECT)
 		{
 			if (join_tokens(list) == MALLOC_FAILED)
-				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
+				join_tokens_safely(minishell, list, cpy);
 			(*list)->e_type = OPERATOR;
 			(*list)->e_operator = APPEND;
 		}

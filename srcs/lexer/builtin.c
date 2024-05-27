@@ -42,3 +42,15 @@ bool	get_builtin_token(t_token_list *new_token, char *string)
 
 	return (define_builtin_token(new_token, string, builtins));
 }
+
+void	define_builtins(t_token_list *list_tokens)
+{
+	t_token_list	*iterator;
+
+	iterator = list_tokens;
+	while (iterator)
+	{
+		get_builtin_token(iterator, iterator->name);
+		iterator = iterator->next;
+	}
+}

@@ -31,7 +31,7 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	if (input_after_expand == NULL)
 	{
 		free_safely_str(&original_input);
-		exit_msg_minishell(m, "Malloc failed at parse_input_for_heredoc", ENOMEM);
+		exit_msg_minishell(m, "Malloc failed at parse_input_for_heredoc. Child process exited.", ENOMEM);
 	}
 	return (input_after_expand);
 }
