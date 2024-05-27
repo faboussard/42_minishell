@@ -92,6 +92,6 @@ void	close_and_redirect_pipe_to_stdin(t_minishell *m, t_process_list *pl)
 	if (m->tmp_in >= 3)
 		close(m->tmp_in);
 	m->tmp_in = m->pipe_fd[READ_END];
-	if (pl->fd_out != STDOUT_FILENO)
+	if (pl->fd_out != STDOUT_FILENO && pl->fd_out >= 3)
 		close(pl->fd_out);
 }
