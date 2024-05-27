@@ -21,20 +21,6 @@ enum			e_bool
 	TRUE = 1,
 };
 
-/******************** UTILS ********************/
-
-t_token_list	*return_last_token(t_token_list *list_tokens);
-void			exit_msg(t_minishell *minishell, char *msg, int error_code);
-
-/******************** PRINT ********************/
-
-void			print_token_list(t_token_list *list_tokens);
-void			print_array(char **array);
-void			print_list_envp(t_minishell *minishell);
-void			print_process_list(t_process_list *process_list);
-void			print_env_variables_export(t_minishell *m);
-void			ft_print_minishell(t_minishell *minishell);
-
 /******************** FREE ********************/
 
 void			free_token(t_token_list *token);
@@ -55,7 +41,7 @@ void			print_error(const char *error);
 bool			print_operator_syntax_error(t_token_list *token);
 void			print_cmd_perror(char *cmd, char *name, int err);
 void			print_cmd_perror_no_strerror(char *cmd, char *name);
-void			exit_msg_minishell(t_minishell *m, char *msg, int error_code);
+void			exit_msg(t_minishell *m, char *msg, int error_code);
 
 /******************** TOKEN LIST *****************/
 int				ft_lstsize_token(t_token_list *lst);

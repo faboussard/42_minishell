@@ -44,5 +44,6 @@ void	add_to_env(t_minishell *m, t_envp_list *env, char *value, char *key);
 char	*find_and_join_value(const char *key, t_envp_list **head, char *value,
 			t_minishell *m);
 int		ascending(char *a, char *b);
+void	print_env_variables_export(t_minishell *m);
 
 #endif // BUILTINS_H

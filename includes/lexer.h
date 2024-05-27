@@ -66,13 +66,13 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 	bool					is_quoted_delimiter;
 	bool					failed_expand;
-	bool					in_env_token;
+	bool					parsed;
 	struct s_token			*next;
 }							t_token_list;
 
 /********************* tokenization.c *********************/
 
-void						transform_to_token(t_minishell *minishell,
+void						transform_to_token(t_minishell *m,
 								char *string, t_token_list **list);
 void						create_token(t_minishell *minishell, char *string,
 								t_token_list **list);
@@ -96,8 +96,6 @@ int							define_token(t_token_list *new_token, char *string);
 int							count_tokens_by_operator(t_minishell *minishell,
 								enum e_token_operators operator_type);
 size_t						count_letters_until_pipe(t_token_list *head);
-void						add_quote_count(t_token_list *iterator,
-								int *s_count, int *d_count);
 
 /********************** check syntax *********************/
 
