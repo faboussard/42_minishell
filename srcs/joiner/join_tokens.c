@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenization.c                                     :+:      :+:    :+:   */
+/*   join_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/02 09:50:06 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:18:59 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static int	skip_op(t_token_list **list, int count)
 }
 
 void	join_between_quotes_handler(t_token_list **list,
-		enum e_token_operators op, t_minishell *m)
+									enum e_token_operators op,
+									t_minishell *m)
 {
 	int				count;
 	t_token_list	*cpy;
@@ -65,7 +66,7 @@ void	join_between_quotes(t_minishell *m, t_token_list **list)
 			continue ;
 		}
 		else if ((quote_type == DOUBLE_QUOTE || quote_type == SINGLE_QUOTE)
-				&& check_if_more_tokens(list, quote_type))
+			&& check_if_more_tokens(list, quote_type))
 		{
 			join_between_quotes_handler(list, quote_type, m);
 			if ((*list) == NULL)
@@ -86,7 +87,7 @@ void	join_between_spaces(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
-char *join_in_heredoc(t_token_list **list)
+char	*join_in_heredoc(t_token_list **list)
 {
 	t_token_list	*iterator;
 	char			*new_name;

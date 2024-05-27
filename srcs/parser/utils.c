@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
-
+#include "utils.h"
 
 void	free_envp(t_envp_list *envp)
 {

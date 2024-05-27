@@ -10,20 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
+#include "utils.h"
+#include <stdlib.h>
 
-void define_token_types(enum e_token_type type, enum e_token_builtin builtin, enum e_token_operators operator,
-						t_token_list *token)
+void	define_token_types(enum e_token_type type, enum e_token_builtin builtin,
+		enum e_token_operators operator, t_token_list *token)
 {
 	token->e_type = type;
 	token->e_builtin = builtin;
 	token->e_operator = operator;
 }
 
-int define_token(t_token_list *new_token, char *string)
+int	define_token(t_token_list *new_token, char *string)
 {
 	new_token->name = ft_strdup(string);
 	if (new_token->name == NULL)
@@ -35,10 +35,10 @@ int define_token(t_token_list *new_token, char *string)
 	return (0);
 }
 
-void del_next_token(t_token_list **token)
+void	del_next_token(t_token_list **token)
 {
-	t_token_list *t2;
-	t_token_list *t1;
+	t_token_list	*t2;
+	t_token_list	*t1;
 
 	t1 = (*token);
 	t2 = (*token)->next;
@@ -59,7 +59,7 @@ t_token_list	*ft_lstlast_token(t_token_list *lst)
 	return (lst);
 }
 
-void define_to_delete_tokens(t_token_list *const *list)
+void	define_to_delete_tokens(t_token_list *const *list)
 {
 	(*list)->e_type = TO_DELETE;
 	(*list)->next->e_type = TO_DELETE;

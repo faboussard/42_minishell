@@ -46,7 +46,7 @@ static int	get_value_and_target(char *arg, char **value, char **key)
 static void	free_and_exit(t_minishell *m, char *value, char *key)
 {
 	free_all(value, key);
-	exit_msg_minishell(m, "Malloc failed at make_export", ENOMEM);
+	exit_msg(m, "Malloc failed at make_export", ENOMEM);
 }
 
 bool	add_value_to_envp_list_if_valid(char **args, t_envp_list *env_variables,

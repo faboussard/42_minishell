@@ -15,7 +15,7 @@
 #include "utils.h"
 #include <stdlib.h>
 
-int tokenize_input(t_minishell *m, char *string)
+int	tokenize_input(t_minishell *m, char *string)
 {
 	transform_to_token(m, string, &m->list_tokens);
 	if (m->list_tokens == NULL)
@@ -27,7 +27,7 @@ int tokenize_input(t_minishell *m, char *string)
 void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 {
 	t_token_list	*iterator;
-	char *new_list_name;
+	char			*new_list_name;
 
 	iterator = list_tokens;
 	if (ft_strncmp(iterator->name, "\0", 1) == 0)
@@ -40,12 +40,15 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 			while (iterator && iterator->e_type == ARGUMENT)
 				iterator = iterator->next;
 		}
-		if (iterator && iterator->next && iterator->e_type != COMMAND && !is_redirect_token(iterator) && ft_strncmp(iterator->next->name, "\0", 1) == 0)
+		if (iterator && iterator->next && iterator->e_type != COMMAND
+			&& !is_redirect_token(iterator) && ft_strncmp(iterator->next->name,
+				"\0", 1) == 0)
 		{
 			iterator = iterator->next;
 			new_list_name = ft_strdup("''");
 			if (new_list_name == NULL)
-				exit_msg_minishell(m, "Malloc failed at join between spaces", ENOMEM);
+				exit_msg(m, "Malloc failed at join between spaces",
+						 ENOMEM);
 			free_safely_str(&(iterator->name));
 			iterator->name = new_list_name;
 		}
@@ -54,7 +57,7 @@ void	redefine_empty_command(t_minishell *m, t_token_list *list_tokens)
 	}
 }
 
-int requalify_tokens(t_token_list *list_tokens, t_minishell *m)
+int	requalify_tokens(t_token_list *list_tokens, t_minishell *m)
 {
 	if (list_tokens == NULL)
 		return (0);
@@ -67,13 +70,13 @@ int requalify_tokens(t_token_list *list_tokens, t_minishell *m)
 	return (1);
 }
 
-int rework_tokens(t_minishell *m)
+int	rework_tokens(t_minishell *m)
 {
 	token_rework(m);
 	return (m->list_tokens != NULL);
 }
 
-int parse_input(t_minishell *m)
+int	parse_input(t_minishell *m)
 {
 	if (m->list_envp == NULL)
 		return (1);
@@ -99,4 +102,3 @@ int parse_input(t_minishell *m)
 	m->total_commands += count_tokens_by_operator(m, PIPE);
 	return (0);
 }
-

@@ -15,7 +15,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-
 void	dollar_to_command(t_token_list *list_tokens)
 {
 	t_token_list	*iterator;
@@ -42,7 +41,8 @@ void	arg_to_command(t_token_list *list_tokens)
 		while (iterator && iterator->next != NULL)
 		{
 			next_token = iterator->next;
-			if (iterator->e_type == COMMAND && !is_redirect_token_or_pipe(iterator->next)
+			if (iterator->e_type == COMMAND
+				&& !is_redirect_token_or_pipe(iterator->next)
 				&& next_token->e_type != IN_FILE
 				&& next_token->e_type != OUT_FILE)
 				next_token->e_type = ARGUMENT;
@@ -86,7 +86,7 @@ void	define_operators(t_token_list *list_tokens)
 	}
 }
 
-void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
+void	define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 {
 	t_token_list *cpy;
 
@@ -95,14 +95,16 @@ void define_heredoc_and_append(t_minishell *minishell, t_token_list **list)
 	cpy = *list;
 	while (*list != NULL && (*list)->next != NULL)
 	{
-		if ((*list)->e_operator == INPUT_REDIRECT && (*list)->next->e_operator == INPUT_REDIRECT)
+		if ((*list)->e_operator == INPUT_REDIRECT
+			&& (*list)->next->e_operator == INPUT_REDIRECT)
 		{
 			if (join_tokens(list) == MALLOC_FAILED)
 				join_tokens_safely(minishell, list, cpy);
 			(*list)->e_type = OPERATOR;
 			(*list)->e_operator = HERE_DOC;
 		}
-		if ((*list)->e_operator == OUTPUT_REDIRECT && (*list)->next->e_operator == OUTPUT_REDIRECT)
+		if ((*list)->e_operator == OUTPUT_REDIRECT
+			&& (*list)->next->e_operator == OUTPUT_REDIRECT)
 		{
 			if (join_tokens(list) == MALLOC_FAILED)
 				join_tokens_safely(minishell, list, cpy);

@@ -72,7 +72,7 @@ typedef struct s_token
 
 /********************* tokenization.c *********************/
 
-void						transform_to_token(t_minishell *minishell,
+void						transform_to_token(t_minishell *m,
 								char *string, t_token_list **list);
 void						create_token(t_minishell *minishell, char *string,
 								t_token_list **list);
