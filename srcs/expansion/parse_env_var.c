@@ -34,7 +34,7 @@ int	insert_env_token(char *string, t_token_list **current)
 		free(new_token);
 		return (MALLOC_FAILED);
 	}
-	new_token->in_env_token = 1;
+	new_token->parsed = 1;
 	ft_lsti_insert_after(current, new_token);
 	return (0);
 }

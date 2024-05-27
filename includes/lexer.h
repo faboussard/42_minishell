@@ -66,7 +66,7 @@ typedef struct s_token
 	enum e_token_operators	e_operator;
 	bool					is_quoted_delimiter;
 	bool					failed_expand;
-	bool					in_env_token;
+	bool					parsed;
 	struct s_token			*next;
 }							t_token_list;
 

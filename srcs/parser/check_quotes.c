@@ -32,9 +32,9 @@ void	check_open_quote(bool *open_quote, int *opened_quote_type,
 
 bool	check_quotes(t_minishell *minishell)
 {
-	bool open_quote;
-	int opened_quote_type;
-	t_token_list *iterator;
+	bool			open_quote;
+	int				opened_quote_type;
+	t_token_list	*iterator;
 
 	iterator = minishell->list_tokens;
 	opened_quote_type = -1;

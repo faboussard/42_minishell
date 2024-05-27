@@ -39,17 +39,13 @@ int	fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 	return (1);
 }
 
-void	create_cmd_table_array(t_process_list *new_process_list, size_t size,
-		t_minishell *minishell)
+void	create_cmd_table(t_process_list *new_pl, size_t size, t_minishell *m)
 {
-	new_process_list->cmd_table = (char **)ft_calloc(size + 1, sizeof(char *));
-	if (new_process_list->cmd_table == NULL)
-		exit_msg(minishell,
-				 "Memory allocation failed for command table array", ENOMEM);
-	if (fill_cmds_and_args_array(minishell->list_tokens,
-			new_process_list->cmd_table) == 0)
-		exit_msg(minishell,
-				 "Memory allocation failed at tokenization", ENOMEM);
+	new_pl->cmd_table = (char **)ft_calloc(size + 1, sizeof(char *));
+	if (new_pl->cmd_table == NULL)
+		exit_msg(m, "Malloc failed for command table array", ENOMEM);
+	if (fill_cmds_and_args_array(m->list_tokens, new_pl->cmd_table) == 0)
+		exit_msg(m, "Malloc failed at tokenization", ENOMEM);
 }
 
 void	create_envp_table(t_minishell *minishell)
@@ -61,8 +57,7 @@ void	create_envp_table(t_minishell *minishell)
 	minishell->envp_table = (char **)ft_calloc(minishell->total_size_envp + 1,
 			sizeof(char *));
 	if (minishell->envp_table == NULL)
-		exit_msg(minishell, "Malloc failed at create_envp_table",
-				 ENOMEM);
+		exit_msg(minishell, "Malloc failed at create_envp_table", ENOMEM);
 	current = minishell->list_envp;
 	while (current != NULL)
 	{
@@ -72,8 +67,7 @@ void	create_envp_table(t_minishell *minishell)
 			minishell->envp_table[i] = ft_strjoin(current->target,
 					current->value);
 		if (minishell->envp_table[i] == NULL)
-			exit_msg(minishell, "Malloc failed at create_envp_table",
-					 ENOMEM);
+			exit_msg(minishell, "Malloc failed at create_envp_table", ENOMEM);
 		current = current->next;
 		i++;
 	}

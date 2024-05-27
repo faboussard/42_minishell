@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pl.c                                     :+:      :+:    :+:   */
+/*   process_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 09:43:37 by faboussa          #+#    #+#             */
-/*   Updated: 2024/03/19 09:43:37 by faboussa         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:55:27 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,15 @@ void	add_process_to_list(t_process_list **process_list,
 
 void	create_process_list(t_minishell *m, t_process_list **pl)
 {
-	t_token_list *temp;
-	t_process_list *new_pl;
+	t_token_list	*temp;
+	t_process_list	*new_pl;
 
 	temp = m->list_tokens;
 	while (m->list_tokens != NULL)
 	{
 		new_pl = ft_calloc(1, sizeof(t_process_list));
 		if (new_pl == NULL)
-			exit_msg(m, "malloc failed at create_process_list",
-					 ENOMEM);
+			exit_msg(m, "malloc failed at create_pl", ENOMEM);
 		create_process_list_node(new_pl, m);
 		add_process_to_list(pl, new_pl);
 		iterate_until_next_pipe(&m->list_tokens);
