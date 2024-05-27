@@ -24,8 +24,12 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	transform_to_token(m, original_input, &heredoc_token_list);
 	expander(m, &heredoc_token_list, 1);
 	ft_list_remove_if_same_type(&heredoc_token_list, (void *)TO_DELETE, cmp);
-	input_after_expand = join_all(m, &heredoc_token_list);
+	if (heredoc_token_list == NULL)
+		return (NULL);
+	input_after_expand = join_in_heredoc( &heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
+	if (input_after_expand == NULL)
+		exit_msg_minishell(m, "Malloc failed at parse_input_for_heredoc", ENOMEM);
 	return (input_after_expand);
 }
 

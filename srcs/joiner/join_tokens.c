@@ -86,28 +86,25 @@ void	join_between_spaces(t_minishell *minishell, t_token_list **list)
 	*list = cpy;
 }
 
-char	*join_all(t_minishell *minishell, t_token_list **list)
+char *join_in_heredoc(t_token_list **list)
 {
 	t_token_list	*iterator;
 	char			*new_name;
 	char			*temp;
-	size_t			total_length;
 
-	temp = NULL;
 	new_name = NULL;
-	total_length = 0;
 	iterator = *list;
+	temp = ft_calloc(1, sizeof(char));
+	if (temp == NULL)
+		return (NULL);
 	while (iterator)
 	{
-		total_length += ft_strlen(iterator->name);
+		new_name = ft_strjoin(temp, iterator->name);
+		free_safely_str(&temp);
+		if (new_name == NULL)
+			return (NULL);
+		temp = new_name;
 		iterator = iterator->next;
 	}
-	new_name = ft_calloc(total_length + 1, sizeof(char));
-	if (new_name == NULL)
-		exit_msg_minishell(minishell,
-				"Memory allocation failed at join_all", ENOMEM);
-	iterator = *list;
-	while (iterator)
-		join_token_name(minishell, temp, &iterator, &new_name);
 	return (new_name);
 }
