@@ -14,14 +14,15 @@
 #include "parser.h"
 #include <stdlib.h>
 
-void check_open_quote(bool *open_quote, int *opened_quote_type, t_token_list **iterator)
+void	check_open_quote(bool *open_quote, int *opened_quote_type,
+		t_token_list **iterator)
 {
-	(*opened_quote_type) = (int) (*iterator)->e_operator;
+	(*opened_quote_type) = (int)(*iterator)->e_operator;
 	(*open_quote) = true;
 	while ((*open_quote) && (*iterator) != NULL)
 	{
 		(*iterator) = (*iterator)->next;
-		if ((*iterator) && (int) (*iterator)->e_operator == (*opened_quote_type))
+		if ((*iterator) && (int)(*iterator)->e_operator == (*opened_quote_type))
 		{
 			(*open_quote) = false;
 			(*iterator) = (*iterator)->next;
@@ -29,18 +30,19 @@ void check_open_quote(bool *open_quote, int *opened_quote_type, t_token_list **i
 	}
 }
 
-bool check_quotes(t_minishell *minishell)
+bool	check_quotes(t_minishell *minishell)
 {
-	bool open_quote;
-	int opened_quote_type;
-	t_token_list *iterator;
+	bool			open_quote;
+	int				opened_quote_type;
+	t_token_list	*iterator;
 
 	iterator = minishell->list_tokens;
 	opened_quote_type = -1;
 	open_quote = false;
 	while (iterator != NULL)
 	{
-		if (iterator->e_operator == DOUBLE_QUOTE || iterator->e_operator == SINGLE_QUOTE)
+		if (iterator->e_operator == DOUBLE_QUOTE
+			|| iterator->e_operator == SINGLE_QUOTE)
 			check_open_quote(&open_quote, &opened_quote_type, &iterator);
 		else
 			iterator = iterator->next;
