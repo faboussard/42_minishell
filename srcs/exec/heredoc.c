@@ -100,11 +100,11 @@ static void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
 		free_safely_str(&(pl->here_doc_file));
 		str_num = ft_itoa(num);
 		if (str_num == NULL)
-			exit_msg_minishell(m, "Malloc failed at heredoc", ENOMEM);
+			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
 		pl->here_doc_file = ft_strjoin("/tmp/.tmp_heredoc", str_num);
 		free_safely_str(&str_num);
 		if (pl->here_doc_file == NULL)
-			exit_msg_minishell(m, "Malloc failed at heredoc", ENOMEM);
+			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
 		num++;
 	}
 }
