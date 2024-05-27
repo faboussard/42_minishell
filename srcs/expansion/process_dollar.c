@@ -69,6 +69,7 @@ void	handle_dollar_files(t_minishell *m, t_token_list **list)
 		if (expanded_string != (*list)->next->name)
 		{
 			change_to_expansion(m, list, &expanded_string);
+			free_safely_str(&expanded_string);
 			return ;
 		}
 		else
