@@ -41,7 +41,7 @@ int fill_cmds_and_args_array(t_token_list *list_tokens, char **array)
 
 void create_cmd_table_array(t_process_list *new_process_list, size_t size, t_minishell *minishell)
 {
-	new_process_list->cmd_table = ft_calloc(size + 1, sizeof(char **));
+	new_process_list->cmd_table = (char **)ft_calloc(size + 1, sizeof(char *));
 	if (new_process_list->cmd_table == NULL)
 		exit_msg_minishell(minishell, "Memory allocation failed for command table array", ENOMEM);
 	if (fill_cmds_and_args_array(minishell->list_tokens, new_process_list->cmd_table) == 0)

@@ -54,7 +54,7 @@ void	supress_two_consecutive_empty_names(t_minishell *minishell,
 				"\0") == 0)
 		{
 			if (join_tokens(list) == MALLOC_FAILED)
-				exit_msg_minishell(minishell, "malloc failed at join_tokens", ENOMEM);
+				join_tokens_safely(minishell, list, cpy);
 			continue ;
 		}
 		*list = (*list)->next;

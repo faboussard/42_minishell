@@ -44,10 +44,3 @@ int count_tokens_by_operator(t_minishell *minishell, enum e_token_operators oper
 	return (i);
 }
 
-void add_quote_count(t_token_list *iterator, int *s_count, int *d_count)
-{
-	if (iterator->e_operator == DOUBLE_QUOTE)
-		(*d_count)++;
-	if (iterator->e_operator == SINGLE_QUOTE)
-		(*s_count)++;
-}
