@@ -6,7 +6,7 @@
 /*   By: faboussa <faboussa@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 08:46:22 by faboussa          #+#    #+#             */
-/*   Updated: 2024/05/07 08:50:20 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:36:52 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int			ft_lstsize_token(t_token_list *lst);
 int			join_tokens(t_token_list **list);
 void		join_between_quotes(t_minishell *minishell, t_token_list **list);
 void		join_between_spaces(t_minishell *minishell, t_token_list **list);
-void		join_between_quotes_handler(t_token_list **list, enum e_token_operators op, t_minishell *m);
+void		join_between_quotes_handler(t_token_list **list,
+				enum e_token_operators op, t_minishell *m);
 char		*join_in_heredoc(t_token_list **list);
 void		do_join_not_spaces(t_minishell *m, t_token_list **list);
 
@@ -57,14 +58,15 @@ int			cmp(int op1, int op2);
 void		create_process_list(t_minishell *m, t_process_list **process_list);
 void		create_process_list_node(t_process_list *new_pl, t_minishell *m);
 void		create_cmd_table(t_process_list *new_pl,
-							 size_t size, t_minishell *m);
+				size_t size, t_minishell *m);
 void		handle_expand(t_minishell *m, t_process_list *pl, char *input);
 void		add_process_to_list(t_process_list **process_list,
 				t_process_list *new_process);
 void		create_envp_table(t_minishell *minishell);
 void		skip_operator(t_token_list **list, enum e_token_operators op);
 void		free_all(char *value, char *key);
-void        join_tokens_safely(t_minishell *m, t_token_list **list, t_token_list *cpy);
+void		join_tokens_safely(t_minishell *m,
+				t_token_list **list, t_token_list *cpy);
 void		replace_empty_name(t_minishell *m, t_token_list *iterator);
 
 /****************** OPERATORS ******************/
@@ -103,7 +105,7 @@ char		*expand_sigil(char *string, t_minishell *minishell);
 char		*expand_sign(char *string, char *temp);
 int			check_special_char_after_expand(char *string, char *string2);
 void		change_to_status(t_minishell *minishell,
-							 t_token_list *iterator);
+				t_token_list *iterator);
 char		*identify_envp_string(char *string, t_minishell *m);
 void		define_to_delete_tokens(t_token_list *const *list);
 void		change_to_expansion(t_minishell *m, t_token_list **list,
@@ -115,12 +117,14 @@ void		update_quote_counts(t_token_list *token, int *single_quote_count,
 int			s_quote_after_d_quote_and_dollar(t_token_list **list,
 				int single_quote_count, int double_quote_count);
 char		*get_string(char *string, t_minishell *minishell,
-						t_envp_list *iterator);
-void split_and_expand(t_minishell *m,
-					  t_token_list **list, char *string);
-void process_dollar(t_minishell *m, t_token_list **list, int squote_count, int dquote_count);
-void handle_dollar_files(t_minishell *m, t_token_list **list);
-void handle_dollar(t_minishell *m, t_token_list **iterator, int *squote_count, int *dquote_count);
+				t_envp_list *iterator);
+void		split_and_expand(t_minishell *m,
+				t_token_list **list, char *string);
+void		process_dollar(t_minishell *m,
+				t_token_list **list, int squote_count, int dquote_count);
+void		handle_dollar_files(t_minishell *m, t_token_list **list);
+void		handle_dollar(t_minishell *m, t_token_list **iterator,
+				int *squote_count, int *dquote_count);
 
 /********************* check_syntax **************************/
 bool		check_quotes(t_minishell *minishell);
