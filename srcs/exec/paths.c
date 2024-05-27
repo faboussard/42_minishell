@@ -24,7 +24,7 @@ char	*join_sep(t_minishell *m, char *s1, char *s2, char sep)
 	total_len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	dest = (char *)malloc(sizeof(char) * (total_len + 1));
 	if (!dest)
-		exit_msg_minishell(m, "Malloc error in paths", ENOMEM);
+		exit_msg(m, "Malloc error in paths", ENOMEM);
 	i = -1;
 	j = 0;
 	while (s1[++i])
@@ -66,7 +66,7 @@ static size_t	search_the_right_path(t_minishell *m, t_process_list *pl)
 		free_safely_str(&(pl->good_path));
 		pl->good_path = join_sep(m, pl->tab_paths[i], pl->cmd_table[0], '/');
 		if (pl->good_path == NULL)
-			exit_msg_minishell(m, "Malloc error in paths", ENOMEM);
+			exit_msg(m, "Malloc error in paths", ENOMEM);
 		if (access(pl->good_path, F_OK) == 0)
 			break ;
 		i++;
@@ -83,15 +83,15 @@ void	set_good_path_cmd(t_minishell *m, t_process_list *pl, char *cmd)
 	{
 		m->pl->good_path = ft_strdup(m->pl->cmd_table[0]);
 		if (m->pl->good_path == NULL)
-			exit_msg_minishell(m, "Malloc error in paths", ENOMEM);
+			exit_msg(m, "Malloc error in paths", ENOMEM);
 		return ;
 	}
 	pl->tab_paths = ft_split(m->paths, ':');
 	if (pl->tab_paths == NULL || pl->cmd_table == NULL)
-		exit_msg_minishell(m, "Malloc error in paths", ENOMEM);
+		exit_msg(m, "Malloc error in paths", ENOMEM);
 	pl->good_path = join_sep(m, pl->tab_paths[0], pl->cmd_table[0], '/');
 	if (pl->good_path == NULL)
-		exit_msg_minishell(m, "Malloc error in paths", ENOMEM);
+		exit_msg(m, "Malloc error in paths", ENOMEM);
 	i = search_the_right_path(m, pl);
 	check_path(m, pl, i);
 }
