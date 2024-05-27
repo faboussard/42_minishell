@@ -98,7 +98,6 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 		perror("No /tmp/ directory found");
 		return ;
 	}
-	ignore_signals();
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
 		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
