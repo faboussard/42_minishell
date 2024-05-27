@@ -27,7 +27,7 @@ void	sigint_handler(int signo)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	exit(130);
+	set_or_get_last_status(130, 0);
 }
 
 int	set_signals_interactive(void)
