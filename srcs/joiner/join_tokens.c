@@ -93,6 +93,8 @@ char *join_in_heredoc(t_token_list **list)
 	char			*temp;
 
 	new_name = NULL;
+	if (list == NULL)
+		return (NULL);
 	iterator = *list;
 	temp = ft_calloc(1, sizeof(char));
 	if (temp == NULL)

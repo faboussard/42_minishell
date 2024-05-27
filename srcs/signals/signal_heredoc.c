@@ -26,7 +26,7 @@ void	sigint_handler_heredoc(int signo)
 	printf("\n");
 	rl_replace_line("", 0);
 	rl_redisplay();
-	exit(130);
+	set_or_get_last_status(130, 0);
 }
 
 int set_signals_heredoc()

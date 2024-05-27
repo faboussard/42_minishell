@@ -29,7 +29,10 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	input_after_expand = join_in_heredoc( &heredoc_token_list);
 	ft_lstclear_token(&heredoc_token_list);
 	if (input_after_expand == NULL)
+	{
+		free_safely_str(&original_input);
 		exit_msg_minishell(m, "Malloc failed at parse_input_for_heredoc", ENOMEM);
+	}
 	return (input_after_expand);
 }
 
