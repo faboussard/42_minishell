@@ -42,7 +42,7 @@ static void	check_path(t_minishell *m, t_process_list *pl, size_t i)
 
 	cmd_name = ft_strdup(pl->cmd_table[0]);
 	if (cmd_name == NULL)
-		exit_msg_minishell(m, "Malloc error in paths", ENOMEM);
+		exit_msg(m, "Malloc error in paths", ENOMEM);
 	if (!(pl->tab_paths[i]) && !ft_strncmp("/no_path_set", m->paths, 13))
 	{
 		ft_free_tab(&(pl->tab_paths));
@@ -107,7 +107,7 @@ void	set_paths(t_minishell *m, char **env)
 		{
 			m->paths = ft_strdup(env[i] + 5);
 			if (m->paths == NULL)
-				exit_msg_minishell(m, "Malloc error in set_paths", ENOMEM);
+				exit_msg(m, "Malloc error in set_paths", ENOMEM);
 			break ;
 		}
 		i++;
@@ -115,5 +115,5 @@ void	set_paths(t_minishell *m, char **env)
 	if (m->paths == NULL)
 		m->paths = ft_strdup("/no_path_set");
 	if (m->paths == NULL)
-		exit_msg_minishell(m, "Malloc error in set_paths", ENOMEM);
+		exit_msg(m, "Malloc error in set_paths", ENOMEM);
 }
