@@ -13,34 +13,34 @@
 #include "parser.h"
 #include "utils.h"
 
-int is_special_char(char c)
+int	is_special_char(char c)
 {
 	if (c == '$' || c == '`' || c == '=')
 		return (1);
 	return (0);
 }
 
-int check_special_char_after_expand(char *string, char *string2)
+int	check_special_char_after_expand(char *string1, char *string2)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = ft_strlen(string2);
-	while (string[i] && string[i] != is_special_char(string2[j - 1]))
+	while (string1[i] && string1[i] != is_special_char(string2[j - 1]))
 		i++;
-	if (string[i] == string2[j])
+	if (string1[i] == string2[j])
 		return (1);
 	return (0);
 }
 
-char *getString(char *string, t_minishell *minishell, t_envp_list *iterator)
+char	*get_string(char *string, t_minishell *minishell, t_envp_list *iterator)
 {
 	if (check_special_char_after_expand(string, iterator->target))
 		string = expand_sign(string, iterator->value);
 	else
 		string = ft_strdup(iterator->value);
 	if (string == NULL)
-		exit_msg_minishell(minishell, "Malloc failed at getString", ENOMEM);
+		exit_msg(minishell, "Malloc failed at get_string", ENOMEM);
 	return (string);
 }

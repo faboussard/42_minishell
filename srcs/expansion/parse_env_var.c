@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   parse_env_var.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/11 17:01:49 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:00:48 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
+#include "utils.h"
 
-void ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
+void	ft_lsti_insert_after(t_token_list **current, t_token_list *new_token)
 {
 	if (current == NULL || *current == NULL || new_token == NULL)
-		return;
+		return ;
 	new_token->next = (*current)->next;
 	(*current)->next = new_token;
 }
 
-int insert_env_token(char *string, t_token_list **current)
+int	insert_env_token(char *string, t_token_list **current)
 {
-	t_token_list *new_token;
+	t_token_list	*new_token;
 
 	new_token = ft_calloc(1, sizeof(t_token_list));
 	if (new_token == NULL)
@@ -39,29 +39,33 @@ int insert_env_token(char *string, t_token_list **current)
 	return (0);
 }
 
-
-void add_tokens_and_change_to_expansion(t_minishell *m, t_token_list **list, char *expanded_string)
+void	free_for_add_tokens(t_minishell *m, char *string, char ***split)
 {
-	char **split;
-	int i;
-	t_token_list *current;
+	ft_free_tab(split);
+	free(string);
+	exit_msg(m,
+			 "Malloc failed at add_tokens", ENOMEM);
+}
+
+void	split_and_expand(t_minishell *m, t_token_list **list, char *string)
+{
+	char			**split;
+	int				i;
+	t_token_list	*current;
 
 	i = 0;
-	split = ft_split(expanded_string, ' ');
+	split = ft_split(string, ' ');
 	if (split == NULL)
 	{
-		free(expanded_string);
-		exit_msg_minishell(m, "Malloc failed at add_tokens_and_change_to_expansion", ENOMEM);
+		free(string);
+		exit_msg(m,
+				 "Malloc failed at add_tokens", ENOMEM);
 	}
 	current = *list;
 	while (split[i])
 	{
 		if (insert_env_token(split[i], &current) == MALLOC_FAILED)
-		{
-			ft_free_tab(&split);
-			free(expanded_string);
-			exit_msg_minishell(m, "Malloc failed at add_tokens_and_change_to_expansion", ENOMEM);
-		}
+			free_for_add_tokens(m, string, &split);
 		current = current->next;
 		i++;
 	}

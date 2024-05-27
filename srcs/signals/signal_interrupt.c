@@ -24,7 +24,7 @@ void	sigquit_handler_interrupt(int signo)
 	(void)signo;
 }
 
-int signal_interrupt()
+int	signal_interrupt(void)
 {
 	struct sigaction	action;
 

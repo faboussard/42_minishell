@@ -6,12 +6,12 @@
 /*   By: mbernard <mbernard@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 12:49:34 by faboussa          #+#    #+#             */
-/*   Updated: 2024/04/22 10:58:07 by mbernard         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:26:36 by faboussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
 #include "lexer.h"
+#include <stdbool.h>
 
 bool	define_builtin_token(t_token_list *new_token, const char *string,
 		const char *builtins[8])
@@ -37,8 +37,8 @@ bool	define_builtin_token(t_token_list *new_token, const char *string,
 bool	get_builtin_token(t_token_list *new_token, char *string)
 {
 	const char	*builtins[8] = {[ECHO] = "echo", [CD] = "cd", [PWD] = "pwd",
-			[EXIT] = "exit", [ENV] = "env", [EXPORT] = "export",
-			[UNSET] = "unset"};
+	[EXIT] = "exit", [ENV] = "env",
+	[EXPORT] = "export", [UNSET] = "unset"};
 
 	return (define_builtin_token(new_token, string, builtins));
 }

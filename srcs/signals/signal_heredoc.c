@@ -14,7 +14,7 @@
 #include "utils.h"
 #include <signal.h>
 
-void ignore_signals()
+void	ignore_signals(void)
 {
 	ignore_sigquit();
 	ignore_sigint();
@@ -29,7 +29,7 @@ void	sigint_handler_heredoc(int signo)
 	set_or_get_last_status(130, 0);
 }
 
-int set_signals_heredoc()
+int	set_signals_heredoc(void)
 {
 	struct sigaction	action;
 
@@ -44,4 +44,3 @@ int set_signals_heredoc()
 	}
 	return (0);
 }
-

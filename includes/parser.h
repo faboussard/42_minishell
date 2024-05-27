@@ -107,8 +107,8 @@ void		handle_delimitor(t_token_list **iterator);
 char		*expand_sigil(char *string, t_minishell *minishell);
 char		*expand_sign(char *string, char *temp);
 int			check_special_char_after_expand(char *string, char *string2);
-void		change_name_to_status(t_minishell *minishell,
-				t_token_list *iterator);
+void		change_to_status(t_minishell *minishell,
+							 t_token_list *iterator);
 char		*identify_envp_string(char *string, t_minishell *minishell);
 void		define_to_delete_tokens(t_token_list *const *list);
 void		change_to_expansion(t_minishell *m, t_token_list **list,
@@ -119,11 +119,11 @@ void		update_quote_counts(t_token_list *token, int *single_quote_count,
 				int *double_quote_count);
 int			s_quote_after_d_quote_and_dollar(t_token_list **list,
 				int single_quote_count, int double_quote_count);
-char		*getString(char *string, t_minishell *minishell,
-				t_envp_list *iterator);
-void add_tokens_and_change_to_expansion(t_minishell *m,
-										t_token_list **list, char *expanded_string);
-void process_dollar_token(t_minishell *m, t_token_list **list, int squote_count, int dquote_count);
+char		*get_string(char *string, t_minishell *minishell,
+						t_envp_list *iterator);
+void split_and_expand(t_minishell *m,
+					  t_token_list **list, char *string);
+void process_dollar(t_minishell *m, t_token_list **list, int squote_count, int dquote_count);
 void handle_dollar_files(t_minishell *m, t_token_list **list);
 void handle_dollar(t_minishell *m, t_token_list **iterator, int *squote_count, int *dquote_count);
 

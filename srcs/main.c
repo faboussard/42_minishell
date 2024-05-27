@@ -20,7 +20,7 @@ void	set_environment(t_minishell *m, char **envp)
 	if (m->list_envp == NULL)
 		create_3_env_variables(m);
 	if (m->list_envp == NULL)
-		exit_msg_minishell(m, "Malloc failed at main", ENOMEM);
+		exit_msg(m, "Malloc failed at main", ENOMEM);
 }
 
 void	minishell_interactive(t_minishell *m)
@@ -53,11 +53,11 @@ void	minishell_interactive(t_minishell *m)
 void	minishell_non_interactive(t_minishell *m, char *data_input)
 {
 	if (!data_input)
-		exit_msg_minishell(m, "bash: -c: option requires an argument", 2);
+		exit_msg(m, "bash: -c: option requires an argument", 2);
 	m->user_input = ft_strdup(data_input);
 	if (m->user_input == NULL)
-		exit_msg_minishell(m,
-			"Fatal : malloc failed at minishell_non_interactive", ENOMEM);
+		exit_msg(m,
+				 "Fatal : malloc failed at minishell_non_interactive", ENOMEM);
 	if (set_signals_noninteractive() == -1)
 		m->status = set_or_get_last_status(-1, -1);
 	if (parse_input(m) == 0)
@@ -79,20 +79,20 @@ bool	is_interactive(t_minishell *minishell, int argc, char **argv)
 	else if (argc > 2 && ft_strncmp(argv[1], "-c", 2) == 0)
 	{
 		if (!argv[2] || ft_strncmp(argv[2], "$@", 3) == 0)
-			exit_msg_minishell(minishell,
-								"bash:-c: option requires\
+			exit_msg(minishell,
+					 "bash:-c: option requires\
 				an argument",
-								2);
+					 2);
 		minishell->interactive = false;
 		return (false);
 	}
 	else
 	{
-		exit_msg_minishell(minishell,
-							"Wrong arguments.\nUsage:\nNon_interactive mode\
+		exit_msg(minishell,
+				 "Wrong arguments.\nUsage:\nNon_interactive mode\
 						-./ minishell - c \"input line\" \nInteractive mode \
 						-./ minishell ",
-							-1);
+				 -1);
 	}
 	return (2);
 }
@@ -153,7 +153,7 @@ int	main(int ac, char **av, char **envp)
 	return (minishell.status);
 }
 
-
+//
 //int	main(int ac, char **av, char **envp)
 //{
 //	t_minishell	minishell;
