@@ -28,8 +28,11 @@ static bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 		close_fds(*fd_in, 0);
 		if (tmp.in_files_list->e_type == DELIMITER)
 		{
-			here_doc(m, pl->in_files_list, fd_in, pl);
-			ret = open_fd_infile(m, pl, pl->here_doc_file, fd_in);
+			here_doc(m, tmp.in_files_list, fd_in, pl);
+			// here_doc(m, pl->in_files_list, fd_in, pl);
+			// ret = open_fd_infile(m, pl, pl->here_doc_file, fd_in);
+			ret = open_fd_infile(m, pl, tmp.here_doc_file, fd_in);
+			pl->here_doc_file = tmp.here_doc_file;
 		}
 		else
 			ret = open_fd_infile(m, pl, tmp.in_files_list->name, fd_in);
