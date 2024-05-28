@@ -53,6 +53,9 @@ static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
 		char **input)
 {
 	free_safely_str(&(*input));
+	dprintf(2, "close and clear heredoc file: %s\n", pl->here_doc_file);
+	free_safely_str(&(pl->here_doc_file));
+	dprintf(2, "close and clear heredoc file: %s\n", pl->here_doc_file);
 	close_all_fds(m, pl);
 	free_minishell(m);
 	exit(0);
@@ -90,10 +93,7 @@ static void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
 	char	*str_num;
 
 	if (pl->here_doc_file != NULL)
-	{
 		check_and_delete_if_tmp_file_exists(pl);
-		free_safely_str(&(pl->here_doc_file));
-	}
 	num = INT_MIN;
 	while (pl->here_doc_file == NULL || access(pl->here_doc_file, F_OK) == 0)
 	{
@@ -115,7 +115,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 	int	here_doc_pid;
 
 	fill_heredoc_file_name(m, pl);
-//	check_and_delete_if_tmp_file_exists(pl);
+	dprintf(2, "AFTER FILL heredoc file: %s\n", pl->here_doc_file);
 	close_fds(*fd_to_use, m->tmp_in);
 	close_fds(pl->fd_in, pl->fd_out);
 	*fd_to_use = open(pl->here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
@@ -126,12 +126,14 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 	}
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
-		writing_in_heredoc(m, m->pl, limiter, fd_to_use);
+		writing_in_heredoc(m, pl, limiter, fd_to_use);
 	else
 	{
 		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
 			exit_msg(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
+	dprintf(2, "END OF HEREDOCheredoc file: %s\n", pl->here_doc_file);
+
 	manage_signal_code(m);
 }
