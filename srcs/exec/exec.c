@@ -121,6 +121,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	ft_free_pl_paths(m, m->pl);
-	check_and_delete_if_tmp_file_exists(m->pl);
+	//check_and_delete_if_tmp_file_exists(m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
 }
