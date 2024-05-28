@@ -23,14 +23,6 @@ void	close_all_fds(t_minishell *m, t_process_list *pl)
 		close_pipes(m->pipe_fd);
 	}
 }
-/*	if (STDIN_FILENO >= 0)
-		close(STDIN_FILENO);
-	if (STDOUT_FILENO >= 0)
-		close(STDOUT_FILENO);
-	if (STDERR_FILENO >= 0)
-		close(STDERR_FILENO);
-	Les entrees sorties standard ne doivent pas être fermées
-*/
 
 void	free_strs(t_minishell *minishell)
 {

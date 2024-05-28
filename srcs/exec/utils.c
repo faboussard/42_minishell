@@ -16,6 +16,7 @@ void	check_and_delete_if_tmp_file_exists(t_process_list *pl)
 {
 	if (!pl || pl->here_doc_file == NULL)
 		return ;
+	close_fds(pl->fd_in, 0);
 	if (access(pl->here_doc_file, F_OK) == 0)
 	{
 		if (unlink(pl->here_doc_file) == -1)
