@@ -26,6 +26,8 @@ void	increment_shell_level(t_envp_list **env_vars, t_minishell *m)
 		m->total_size_envp -= ft_strlen(env->value);
 		if (ft_atoi(env->value) == 999)
 			exit_msg(m, "Shell level too high", 1);
+		if (ft_atoi(env->value) < 0)
+			exit_msg(m, "Shell level too low", 1);
 		new_level = ft_itoa(ft_atoi(env->value) + 1);
 		if (new_level == NULL)
 			exit_msg(m, "Malloc failed at shell_level", ENOMEM);

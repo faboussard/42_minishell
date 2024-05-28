@@ -53,9 +53,7 @@ static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
 		char **input)
 {
 	free_safely_str(&(*input));
-	dprintf(2, "close and clear heredoc file: %s\n", pl->here_doc_file);
 	free_safely_str(&(pl->here_doc_file));
-	dprintf(2, "close and clear heredoc file: %s\n", pl->here_doc_file);
 	close_all_fds(m, pl);
 	free_minishell(m);
 	exit(0);
@@ -115,7 +113,6 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 	int	here_doc_pid;
 
 	fill_heredoc_file_name(m, pl);
-	dprintf(2, "AFTER FILL heredoc file: %s\n", pl->here_doc_file);
 	close_fds(*fd_to_use, m->tmp_in);
 	close_fds(pl->fd_in, pl->fd_out);
 	*fd_to_use = open(pl->here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
@@ -133,7 +130,5 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 			exit_msg(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
-	dprintf(2, "END OF HEREDOCheredoc file: %s\n", pl->here_doc_file);
-
 	manage_signal_code(m);
 }

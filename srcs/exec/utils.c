@@ -21,7 +21,6 @@ void	check_and_delete_if_tmp_file_exists(t_process_list *pl)
 		if (unlink(pl->here_doc_file) == -1)
 			perror("");
 	}
-	dprintf(2, "CHECK heredoc file: %s\n", pl->here_doc_file);
 	free_safely_str(&(pl->here_doc_file));
 }
 
