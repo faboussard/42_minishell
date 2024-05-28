@@ -83,6 +83,7 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	ignore_signals();
+
 	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
 	{
 		m->status = 1;
@@ -102,12 +103,9 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-		// free_safely_str(&(pl->here_doc_file));
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	dprintf(2, "exec one cmd m->pl->here_doc_file: %s\n", pl->here_doc_file);
 	check_and_delete_if_tmp_file_exists(pl);
-	// free_safely_str(&(pl->here_doc_file));
 	manage_signal_code(m);
 }
 
@@ -123,9 +121,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	ft_free_pl_paths(m, m->pl);
-	// free_safely_str(&(m->pl->here_doc_file));
-
-	dprintf(2, "m->pl->here_doc_file: %s\n", m->pl->here_doc_file);
 	check_and_delete_if_tmp_file_exists(m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
 }

@@ -33,13 +33,14 @@ int	check_all_infiles(t_minishell *m, t_process_list *pl)
 			return (1);
 		tmp.in_files_list = tmp.in_files_list->next;
 	}
-	if (tmp.in_files_list)
+	if (tmp.in_files_list && tmp.in_files_list->e_type == DELIMITER)
 	{
-		if (tmp.in_files_list->e_type == DELIMITER)
-			here_doc(m, tmp.in_files_list, &(pl->fd_in), &tmp);
-		if (open_fd_infile(m, &tmp, tmp.in_files_list->name, &(pl->fd_in)))
-			return (1);
+		here_doc(m, tmp.in_files_list, &(pl->fd_in), &tmp);
+		pl->here_doc_file = tmp.here_doc_file;
 	}
+	if (tmp.in_files_list
+		&& open_fd_infile(m, &tmp, tmp.in_files_list->name, &(pl->fd_in)))
+		return (1);
 	return (0);
 }
 
