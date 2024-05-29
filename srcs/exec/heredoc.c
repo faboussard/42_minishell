@@ -14,7 +14,7 @@
 #include "parser.h"
 #include "signals.h"
 
-char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
+static char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 {
 	char			*input_after_expand;
 	t_token_list	*heredoc_token_list;
@@ -35,7 +35,7 @@ char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	return (input_after_expand);
 }
 
-void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
+static void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 {
 	char	*input_after_expand;
 
@@ -53,7 +53,6 @@ static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
 		char **input, int fd_to_use)
 {
 	free_safely_str(&(*input));
-//	free_safely_str(&(pl->here_doc_file));
 	close(fd_to_use);
 	close_all_fds(m, pl);
 	free_minishell(m);
@@ -86,51 +85,13 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	}
 }
 
-//static void add_name_to_here_doc_list(t_minishell *m, char *file)
-//{
-//	size_t			i;
-//
-//	i = 0;
-//	while (m->here_doc_list[i][0] != '\0')
-//		i++;
-//	dprintf(2, "file : %s\n", file);
-//	ft_strlcpy(m->here_doc_list[i], file, 28);
-//	dprintf(2, "file : %s\n", m->here_doc_list[i]);
-//}
-
-static void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
-{
-	int		num;
-	char	*str_num;
-	char 	*str_joined;
-
-	if (pl->here_doc_file[0] != 0)
-		check_and_delete_if_tmp_file_exists(pl);
-	num = INT_MIN;
-	while (pl->here_doc_file[0] == 0 || access(pl->here_doc_file, F_OK) == 0)
-	{
-//		free_safely_str(&(pl->here_doc_file));
-		str_num = ft_itoa(num);
-		if (str_num == NULL)
-			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
-		str_joined = ft_strjoin("/tmp/.tmp_heredoc", str_num);
-		free_safely_str(&str_num);
-		if (str_joined == NULL)
-			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
-		ft_strlcpy(pl->here_doc_file, str_joined, 28);
-		free_safely_str(&(str_joined));
-		num++;
-		if (num == INT_MIN)
-			exit_msg(m, "Heredoc error : couldn't create the tmp file", 1);
-	}
-//	add_name_to_here_doc_list(m, pl->here_doc_file);
-}
-
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 		t_process_list *pl)
 {
 	int	here_doc_pid;
 
+	if (m->interrupted_here_doc == 1)
+		return ;
 	fill_heredoc_file_name(m, pl);
 	close_fds(*fd_to_use, m->tmp_in);
 	close_fds(pl->fd_in, pl->fd_out);
@@ -149,5 +110,5 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 			exit_msg(m, "waitpid error", 1);
 		close(*fd_to_use);
 	}
-	manage_signal_code(m);
+	manage_signal_code(m, 1);
 }

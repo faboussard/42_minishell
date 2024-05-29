@@ -32,7 +32,7 @@ void	chose_exit(t_minishell *m, bool good_code, int exit_code)
 	exit(1);
 }
 
-void	manage_signal_code(t_minishell *m)
+void	manage_signal_code(t_minishell *m, bool is_heredoc)
 {
 	if (WIFSIGNALED(m->status))
 	{
@@ -44,4 +44,11 @@ void	manage_signal_code(t_minishell *m)
 		m->status = WEXITSTATUS(m->status);
 	else
 		m->status = set_or_get_last_status(m->status, 0);
+	if (is_heredoc)
+	{
+		if (m->status != 0)
+			m->interrupted_here_doc = 1;
+		else
+			m->interrupted_here_doc = 0;
+	}
 }

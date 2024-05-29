@@ -23,7 +23,6 @@ void	check_and_delete_if_tmp_file_exists(t_process_list *pl)
 			perror("");
 	}
 	pl->here_doc_file[0] = 0;
-//	free_safely_str(&(pl->here_doc_file));
 }
 
 void	init_before_next_prompt(t_minishell *m)
@@ -38,6 +37,7 @@ void	ft_init_pl(t_minishell *m, t_process_list *pl)
 {
 	m->status = 0;
 	m->tmp_in = 0;
+	m->interrupted_here_doc = 0;
 	pl->fd_in = -1;
 	pl->fd_out = -1;
 	pl->dev_null = 0;
