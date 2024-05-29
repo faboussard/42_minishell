@@ -103,9 +103,9 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
+		//check_and_delete_if_tmp_file_exists(pl);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	check_and_delete_if_tmp_file_exists(pl);
 	manage_signal_code(m);
 }
 
