@@ -56,7 +56,7 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 	{
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		close_pipes_and_fds(m, pl);
-		free_safely_str(&(pl->here_doc_file));
+//		free_safely_str(&(pl->here_doc_file));
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		deals_with_single_or_double_point(m, pl);
 		deals_if_dir_or_file(m, pl);
@@ -109,6 +109,18 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	manage_signal_code(m);
 }
 
+void delete_here_doc_files(t_minishell *m)
+{
+	t_process_list *tmp;
+
+	tmp = m->pl;
+	while (tmp != NULL)
+	{
+		check_and_delete_if_tmp_file_exists(tmp);
+		tmp = tmp->next;
+	}
+}
+
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
 {
 	if (nb_cmds < 1)
@@ -122,5 +134,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 		exec_several_cmds(m, m->pl);
 	ft_free_pl_paths(m, m->pl);
 	//check_and_delete_if_tmp_file_exists(m->pl);
+	delete_here_doc_files(m);
 	m->status = set_or_get_last_status(m->status, 0);
 }

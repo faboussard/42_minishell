@@ -53,7 +53,7 @@ static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
 		char **input, int fd_to_use)
 {
 	free_safely_str(&(*input));
-	free_safely_str(&(pl->here_doc_file));
+//	free_safely_str(&(pl->here_doc_file));
 	close(fd_to_use);
 	close_all_fds(m, pl);
 	free_minishell(m);
@@ -86,31 +86,44 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 	}
 }
 
+//static void add_name_to_here_doc_list(t_minishell *m, char *file)
+//{
+//	size_t			i;
+//
+//	i = 0;
+//	while (m->here_doc_list[i][0] != '\0')
+//		i++;
+//	dprintf(2, "file : %s\n", file);
+//	ft_strlcpy(m->here_doc_list[i], file, 28);
+//	dprintf(2, "file : %s\n", m->here_doc_list[i]);
+//}
+
 static void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
 {
 	int		num;
 	char	*str_num;
+	char 	*str_joined;
 
-	if (pl->here_doc_file != NULL)
+	if (pl->here_doc_file[0] != 0)
 		check_and_delete_if_tmp_file_exists(pl);
 	num = INT_MIN;
-	while (pl->here_doc_file == NULL || access(pl->here_doc_file, F_OK) == 0)
+	while (pl->here_doc_file[0] == 0 || access(pl->here_doc_file, F_OK) == 0)
 	{
-		free_safely_str(&(pl->here_doc_file));
+//		free_safely_str(&(pl->here_doc_file));
 		str_num = ft_itoa(num);
 		if (str_num == NULL)
 			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
-		pl->here_doc_file = ft_strjoin("/tmp/.tmp_heredoc", str_num);
+		str_joined = ft_strjoin("/tmp/.tmp_heredoc", str_num);
 		free_safely_str(&str_num);
-		if (pl->here_doc_file == NULL)
+		if (str_joined == NULL)
 			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
+		ft_strlcpy(pl->here_doc_file, str_joined, 28);
+		free_safely_str(&(str_joined));
 		num++;
 		if (num == INT_MIN)
-		{
-			free_safely_str(&(pl->here_doc_file));
 			exit_msg(m, "Heredoc error : couldn't create the tmp file", 1);
-		}
 	}
+//	add_name_to_here_doc_list(m, pl->here_doc_file);
 }
 
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,

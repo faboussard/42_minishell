@@ -52,7 +52,7 @@ int	open_fd_infile(t_minishell *m, t_process_list *pl, char *name,
 	if (*fd_to_use < 0)
 	{
 		manage_fd_error(m, pl, fd_to_use);
-		return (1);
+			return (1);
 	}
 	return (0);
 }

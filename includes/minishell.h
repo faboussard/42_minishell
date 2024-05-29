@@ -21,10 +21,6 @@
 #  define SUCCESSFULLY_ADDED 0
 # endif
 
-//# ifndef HERE_DOC_TMP_FILE
-//#  define HERE_DOC_TMP_FILE "/tmp/.tmp_heredoc"
-//# endif
-
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
 # endif
@@ -57,6 +53,7 @@ typedef struct s_envp			t_envp_list;
 typedef struct s_token			t_token_list;
 typedef struct s_minishell		t_minishell;
 typedef struct s_process_list	t_process_list;
+typedef struct s_here_doc_list	t_here_doc_list;
 
 typedef struct s_minishell
 {
@@ -67,7 +64,6 @@ typedef struct s_minishell
 	int							pipe_fd[2];
 	int							tmp_in;
 	char						*user_input;
-//	char						target_path[PATH_MAX];
 	char						current_path[PATH_MAX];
 	char						old_pwd[PATH_MAX];
 	char						*paths;
@@ -98,7 +94,9 @@ typedef struct s_process_list
 	char						*good_path;
 	char						**tab_paths;
 	char						**cmd_table;
-	char						*here_doc_file;
+	char						here_doc_file[28];
+//	char						*here_doc_file;
+	// CHANGER HERE_DOC_FILE POUR UN FICHIER DE TAILLE 28 ! NO MALLOC !
 	bool						dev_null;
 	struct s_process_list		*next;
 }								t_process_list;

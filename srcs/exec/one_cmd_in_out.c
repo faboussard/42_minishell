@@ -36,7 +36,8 @@ int	check_all_infiles(t_minishell *m, t_process_list *pl)
 	if (tmp.in_files_list && tmp.in_files_list->e_type == DELIMITER)
 	{
 		here_doc(m, tmp.in_files_list, &(pl->fd_in), &tmp);
-		pl->here_doc_file = tmp.here_doc_file;
+		ft_strlcpy(pl->here_doc_file, tmp.here_doc_file, 28);
+//		pl->here_doc_file = tmp.here_doc_file;
 	}
 	if (tmp.in_files_list
 		&& open_fd_infile(m, &tmp, tmp.in_files_list->name, &(pl->fd_in)))
