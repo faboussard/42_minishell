@@ -73,6 +73,7 @@ typedef struct s_minishell
 	t_process_list				*pl;
 	size_t						total_commands;
 	size_t						total_size_envp;
+	bool						interrupted_here_doc;
 }								t_minishell;
 
 typedef struct s_envp
@@ -95,8 +96,6 @@ typedef struct s_process_list
 	char						**tab_paths;
 	char						**cmd_table;
 	char						here_doc_file[28];
-//	char						*here_doc_file;
-	// CHANGER HERE_DOC_FILE POUR UN FICHIER DE TAILLE 28 ! NO MALLOC !
 	bool						dev_null;
 	struct s_process_list		*next;
 }								t_process_list;

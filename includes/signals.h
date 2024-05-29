@@ -18,7 +18,7 @@
 int		set_signals_interactive(void);
 void	signal_print_newline(int signal);
 int		set_signals_noninteractive(void);
-void	manage_signal_code(t_minishell *m);
+void	manage_signal_code(t_minishell *m, bool is_heredoc);
 int		signal_interrupt(void);
 int		set_signals_heredoc(void);
 void	ignore_sigint(void);

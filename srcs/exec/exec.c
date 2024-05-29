@@ -48,23 +48,23 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 	}
 	else if (S_ISDIR(path_stat.st_mode))
 		exit_is_a_directory(m, pl->cmd_table[0], pl);
+	if ((ft_strchr(pl->cmd_table[0], '/'))
+		&& (contains_only_charset(pl->cmd_table[0], "./")
+			|| ft_strncmp(pl->cmd_table[0], "/", 1)
+			|| ft_strncmp(pl->cmd_table[0], "./", 2)))
+		exit_is_a_directory(m, pl->cmd_table[0], pl);
 }
 
 void	my_execve(t_minishell *m, t_process_list *pl)
 {
-	if (pl->cmd_table[0] && !exec_builtin(m, pl->cmd_table[0], pl->cmd_table))
+	if (pl->cmd_table[0] && !exec_builtin(m, pl->cmd_table[0], pl->cmd_table)
+		&& m->interrupted_here_doc == 0)
 	{
 		set_good_path_cmd(m, pl, pl->cmd_table[0]);
 		close_pipes_and_fds(m, pl);
-//		free_safely_str(&(pl->here_doc_file));
 		execve(pl->good_path, pl->cmd_table, m->envp_table);
 		deals_with_single_or_double_point(m, pl);
 		deals_if_dir_or_file(m, pl);
-		if ((ft_strchr(pl->cmd_table[0], '/'))
-			&& (contains_only_charset(pl->cmd_table[0], "./")
-				|| ft_strncmp(pl->cmd_table[0], "/", 1)
-				|| ft_strncmp(pl->cmd_table[0], "./", 2)))
-			exit_is_a_directory(m, pl->cmd_table[0], pl);
 		if ((access(pl->good_path, F_OK) == 0 || ft_strncmp(pl->cmd_table[0],
 					".", 1) || ft_strchr(pl->cmd_table[0], '/')))
 		{
@@ -83,7 +83,6 @@ void	my_execve(t_minishell *m, t_process_list *pl)
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	ignore_signals();
-
 	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
 	{
 		m->status = 1;
@@ -103,22 +102,9 @@ static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 	else
 	{
 		waitpid(m->pid2, &(m->status), 0);
-		//check_and_delete_if_tmp_file_exists(pl);
 		close_fds(pl->fd_in, pl->fd_out);
 	}
-	manage_signal_code(m);
-}
-
-void delete_here_doc_files(t_minishell *m)
-{
-	t_process_list *tmp;
-
-	tmp = m->pl;
-	while (tmp != NULL)
-	{
-		check_and_delete_if_tmp_file_exists(tmp);
-		tmp = tmp->next;
-	}
+	manage_signal_code(m, 0);
 }
 
 void	execute_cmds(t_minishell *m, size_t nb_cmds)
@@ -133,7 +119,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	ft_free_pl_paths(m, m->pl);
-	//check_and_delete_if_tmp_file_exists(m->pl);
 	delete_here_doc_files(m);
 	m->status = set_or_get_last_status(m->status, 0);
 }

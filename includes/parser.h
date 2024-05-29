@@ -59,7 +59,6 @@ void		create_process_list(t_minishell *m, t_process_list **process_list);
 void		create_process_list_node(t_process_list *new_pl, t_minishell *m);
 void		create_cmd_table(t_process_list *new_pl,
 				size_t size, t_minishell *m);
-void		handle_expand(t_minishell *m, t_process_list *pl, char *input);
 void		add_process_to_list(t_process_list **process_list,
 				t_process_list *new_process);
 void		create_envp_table(t_minishell *minishell);
