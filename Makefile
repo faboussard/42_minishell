@@ -27,7 +27,7 @@ LIST_SRCS		=  main\
 				utils/free utils/free_utils utils/error utils/utils \
 				exec/exec exec/exec_utils exec/exec_bool exec/errors exec/errors_exit \
 				exec/paths	exec/fd_management exec/fd_in_out exec/one_cmd_in_out \
-                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc
+                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc exec/heredoc_utils
 
 LIST_HEADERS	= utils lexer minishell parser signals exec builtins ft_realpath
 
