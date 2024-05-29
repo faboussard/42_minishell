@@ -31,8 +31,14 @@ static bool	handle_in(t_minishell *m, t_process_list *pl, int *fd_in)
 			here_doc(m, tmp.in_files_list, fd_in, pl);
 			// here_doc(m, pl->in_files_list, fd_in, pl);
 			// ret = open_fd_infile(m, pl, pl->here_doc_file, fd_in);
-			ret = open_fd_infile(m, pl, tmp.here_doc_file, fd_in);
-			pl->here_doc_file = tmp.here_doc_file;
+		//	dprintf(2, "HANDLE IN here_doc_file: %s\n", pl->here_doc_file);
+		//	dprintf(2, "HANDLE IN TMP here_doc_file: %s\n", tmp.here_doc_file);
+			ret = open_fd_infile(m, pl, pl->here_doc_file, fd_in);
+//			if (tmp.in_files_list->next != NULL)
+//				check_and_delete_if_tmp_file_exists(pl);
+//			pl->here_doc_file = tmp.here_doc_file;
+		//	dprintf(2, "HANDLE IN here_doc_file: %s\n", pl->here_doc_file);
+			//dprintf(2, "HANDLE IN TMP here_doc_file: %s\n", tmp.here_doc_file);
 		}
 		else
 			ret = open_fd_infile(m, pl, tmp.in_files_list->name, fd_in);

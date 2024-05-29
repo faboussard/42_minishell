@@ -105,6 +105,11 @@ static void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
 		if (pl->here_doc_file == NULL)
 			exit_msg(m, "Malloc failed at heredoc", ENOMEM);
 		num++;
+		if (num == INT_MIN)
+		{
+			free_safely_str(&(pl->here_doc_file));
+			exit_msg(m, "Heredoc error : couldn't create the tmp file", 1);
+		}
 	}
 }
 
