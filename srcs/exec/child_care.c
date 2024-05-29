@@ -117,7 +117,6 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 	if (safe_pipe(m) == 0)
 		return ;
 	first_child(m, pl);
-	check_and_delete_if_tmp_file_exists(pl);
 	pl = pl->next;
 	i = 1;
 	while (++i < m->total_commands)
@@ -125,10 +124,8 @@ void	exec_several_cmds(t_minishell *m, t_process_list *p_list)
 		if (safe_pipe(m) == 0)
 			return ;
 		middle_child(m, pl);
-		check_and_delete_if_tmp_file_exists(pl);
 		pl = pl->next;
 	}
-	check_and_delete_if_tmp_file_exists(pl);
 	last_child(m, pl, &files_failed);
 	wait_children_and_give_exit_status(m, files_failed);
 	close_fds(pl->fd_in, pl->fd_out);
