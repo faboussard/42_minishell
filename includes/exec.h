@@ -46,6 +46,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 			t_process_list *pl);
 void	delete_here_doc_files(t_minishell *m);
 void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl);
+void	perror_exit_heredoc(t_minishell *m, t_process_list *pl, char **input);
 //--------------------------- UTILS -----------------------------------//
 void	ft_init_pl(t_minishell *m, t_process_list *pl);
 void	ft_free_pl_paths(t_minishell *minishell, t_process_list *pl);

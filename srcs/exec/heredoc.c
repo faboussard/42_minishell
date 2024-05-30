@@ -50,10 +50,9 @@ static void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
 }
 
 static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
-		char **input, int fd_to_use)
+		char **input)
 {
 	free_safely_str(&(*input));
-	close(fd_to_use);
 	close_all_fds(m, pl);
 	free_minishell(m);
 	exit(0);
@@ -63,8 +62,8 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		t_token_list *limiter, int *fd_to_use)
 {
 	size_t	limiter_len;
-	size_t	input_len;
 	char	*input;
+	int		fd;
 
 	set_signals_heredoc();
 	limiter_len = ft_strlen(limiter->name);
@@ -73,14 +72,17 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		input = get_next_line(STDIN_FILENO);
 		if (input == NULL)
 			exit_msg(m, "minishell: warning: leaving heredoc", 0);
-		input_len = ft_strlen(input) - 1;
-		if (input_len == limiter_len && !ft_strncmp(input, limiter->name,
-				limiter_len))
-			close_and_clear_heredoc(m, pl, &input, *fd_to_use);
+		if (ft_strlen(input) - 1 == limiter_len
+			&& !ft_strncmp(input, limiter->name, limiter_len))
+			close_and_clear_heredoc(m, pl, &input);
+		fd = open(pl->here_doc_file, O_CREAT | O_WRONLY | O_APPEND, 0666);
+		if (fd < 0)
+			perror_exit_heredoc(m, pl, &input);
 		if (limiter->is_quoted_delimiter == 1)
 			ft_putstr_fd(input, *fd_to_use);
 		else
 			handle_expand(m, pl, input);
+		close(fd);
 		free_safely_str(&(input));
 	}
 }
@@ -101,6 +103,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 		perror("No /tmp/ directory found");
 		return ;
 	}
+	close(*fd_to_use);
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
 		writing_in_heredoc(m, pl, limiter, fd_to_use);
@@ -108,7 +111,6 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 	{
 		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
 			exit_msg(m, "waitpid error", 1);
-		close(*fd_to_use);
 	}
 	manage_signal_code(m, 1);
 }

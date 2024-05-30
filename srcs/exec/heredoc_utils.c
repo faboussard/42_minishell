@@ -51,3 +51,12 @@ void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl)
 			exit_msg(m, "Heredoc error : couldn't create the tmp file", 1);
 	}
 }
+
+void	perror_exit_heredoc(t_minishell *m, t_process_list *pl, char **input)
+{
+	free_safely_str(&(*input));
+	perror("Can't write in heredoc file");
+	close_all_fds(m, pl);
+	free_minishell(m);
+	exit(errno);
+}
