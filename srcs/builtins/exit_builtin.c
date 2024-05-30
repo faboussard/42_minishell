@@ -43,7 +43,7 @@ void	exit_numeric_arg(t_minishell *minishell, char *const *cmd_table,
 {
 	if (is_alpha)
 	{
-		print_cmd_perror_no_strerror(cmd_table[1],
+		print_cmd_perror_no_strerror(minishell, cmd_table[1],
 			"exit: numeric argument required\n");
 		free_minishell(minishell);
 		exit(2);

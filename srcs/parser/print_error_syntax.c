@@ -20,12 +20,12 @@ bool	print_quote_syntax_error(enum e_token_operators operator)
 	if (operator == SINGLE_QUOTE)
 		return (print_error(
 				"minishell: unexpected EOF while looking"
-				"for matching `''\nminishell:"
+				" for matching `''\nminishell:"
 				"syntax error: unexpected end of file"), 1);
 	else if (operator == DOUBLE_QUOTE)
 		return (print_error(
 				"minishell: unexpected EOF while"
-				"looking for matching `\"'\nminishell:"
+				" looking for matching `\"'\nminishell:"
 				"syntax error: unexpected end of file"), 1);
 	return (0);
 }

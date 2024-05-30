@@ -75,7 +75,7 @@ static int	go_into_directory(t_minishell *m, char *dir)
 			perror(PWD_ER);
 			return (0);
 		}
-		print_cmd_perror("cd", dir, errno);
+		print_cmd_perror(m, "cd", dir);
 		free_safely_str(&target_path);
 		return (1);
 	}
