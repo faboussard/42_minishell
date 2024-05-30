@@ -34,6 +34,11 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 
 	if (ft_strncmp(pl->cmd_table[0], "..", 3) == 0)
 		exit_command_not_found(m, pl->cmd_table[0], pl, 0);
+	if ((ft_strchr(pl->cmd_table[0], '/'))
+		&& (contains_only_charset(pl->cmd_table[0], "./")
+			|| ft_strncmp(pl->cmd_table[0], "/", 1)
+			|| ft_strncmp(pl->cmd_table[0], "./", 2)))
+		exit_is_a_directory(m, pl->cmd_table[0], pl);
 	stat(pl->cmd_table[0], &path_stat);
 	if (S_ISREG(path_stat.st_mode))
 	{
@@ -47,11 +52,6 @@ void	deals_if_dir_or_file(t_minishell *m, t_process_list *pl)
 		chose_exit(m, 1, 0);
 	}
 	else if (S_ISDIR(path_stat.st_mode))
-		exit_is_a_directory(m, pl->cmd_table[0], pl);
-	if ((ft_strchr(pl->cmd_table[0], '/'))
-		&& (contains_only_charset(pl->cmd_table[0], "./")
-			|| ft_strncmp(pl->cmd_table[0], "/", 1)
-			|| ft_strncmp(pl->cmd_table[0], "./", 2)))
 		exit_is_a_directory(m, pl->cmd_table[0], pl);
 }
 
