@@ -100,10 +100,6 @@ typedef struct s_process_list
 	struct s_process_list		*next;
 }								t_process_list;
 
-/********************************** INIT MINISHELL ***************************/
-
-bool			is_interactive(t_minishell *minishell, int argc, char **argv);
-
 /********************************** CREATE TABLES ***************************/
 
 void			execute_cmds(t_minishell *minishell, size_t nb_cmds);

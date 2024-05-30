@@ -58,7 +58,6 @@ void	my_execve(t_minishell *m, t_process_list *pl);
 //--------------------------- EXEC UTILS ------------------------------//
 void	close_pipes_and_fds(t_minishell *m, t_process_list *pl);
 void	chose_exit(t_minishell *m, bool good_code, int exit_code);
-//void	manage_signal_code(t_minishell *m, bool is_heredoc);
 //--------------------------- ONE CMD IN OUT---------------------------//
 int		create_all_outfiles(t_minishell *m, t_process_list *pl);
 int		check_all_infiles(t_minishell *m, t_process_list *pl);
