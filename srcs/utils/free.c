@@ -65,8 +65,6 @@ void	ft_free_process_list(t_process_list **process_list)
 	while (*process_list != NULL)
 	{
 		next = (*process_list)->next;
-//		free_safely_str(&((*process_list)->here_doc_file));
-		//check_and_delete_if_tmp_file_exists(*process_list);
 		if ((*process_list)->cmd_table)
 			ft_free_tab(&((*process_list)->cmd_table));
 		if ((*process_list)->in_files_list)

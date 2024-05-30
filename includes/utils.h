@@ -38,8 +38,9 @@ void			free_safely_str(char **str_to_free);
 /******************** ERROR ********************/
 void			print_error(const char *error);
 bool			print_operator_syntax_error(t_token_list *token);
-void			print_cmd_perror(char *cmd, char *name, int err);
-void			print_cmd_perror_no_strerror(char *cmd, char *name);
+void			print_cmd_perror(t_minishell *m, char *cmd, char *name);
+void			print_cmd_perror_no_strerror(t_minishell *m, char *cmd,
+					char *name);
 void			exit_msg(t_minishell *m, char *msg, int error_code);
 
 /******************** TOKEN LIST *****************/
