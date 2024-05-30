@@ -25,9 +25,10 @@ LIST_SRCS		=  main\
 				expansion/expansion expansion/utils expansion/utils_2 expansion/process_dollar\
 				expansion/parse_env_var expansion/add_after_special_char\
 				utils/free utils/free_utils utils/error utils/utils \
-				exec/exec exec/exec_utils exec/exec_bool exec/errors exec/errors_exit \
-				exec/paths	exec/fd_management exec/fd_in_out exec/one_cmd_in_out \
-                exec/safe_utils	exec/utils	exec/child_care	exec/heredoc exec/heredoc_utils
+				exec/exec exec/my_execve exec/child_care exec/exec_bool \
+				exec/errors exec/errors_exit exec/paths	\
+				exec/fd_management exec/fd_in_out exec/one_cmd_in_out \
+                exec/safe_utils	exec/utils exec/exec_utils exec/heredoc exec/heredoc_utils
 
 LIST_HEADERS	= utils lexer minishell parser signals exec builtins ft_realpath
 
