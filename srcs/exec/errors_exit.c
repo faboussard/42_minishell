@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtins.h"
 #include "exec.h"
 
 void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl,
@@ -29,13 +30,25 @@ void	exit_command_not_found(t_minishell *m, char *name, t_process_list *pl,
 	exit(127);
 }
 
+static void	handle_if_exist_but_not_exec(t_minishell *m, t_process_list *pl)
+{
+	if (access(pl->cmd_table[0], F_OK) == 0
+		&& access(pl->cmd_table[0], X_OK) != 0)
+	{
+		print_name(m, pl->cmd_table[0]);
+		ft_free_pl_paths(m, pl);
+		free_minishell(m);
+		exit(126);
+	}
+}
+
 void	exit_is_a_directory(t_minishell *m, char *name, t_process_list *pl)
 {
 	char	*msg;
 	char	*tmp;
 
-	if (access(pl->cmd_table[0], F_OK) != 0 || (access(pl->cmd_table[0],
-				F_OK) == 0 && access(pl->cmd_table[0], X_OK) != 0))
+	handle_if_exist_but_not_exec(m, pl);
+	if (access(pl->cmd_table[0], F_OK) != 0)
 	{
 		print_name(m, pl->cmd_table[0]);
 		ft_free_pl_paths(m, pl);
