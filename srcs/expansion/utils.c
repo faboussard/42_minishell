@@ -30,6 +30,7 @@ void	erase_dollar_operator(t_token_list **iterator)
 {
 	if ((*iterator)->e_operator == DOLLAR)
 		(*iterator)->e_operator = 0;
+	(*iterator)->is_quoted_delimiter = true;
 	(*iterator) = (*iterator)->next;
 }
 
