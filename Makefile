@@ -74,7 +74,7 @@ $(NAME): $(OBJS) $(libft) Makefile
 
 # ---------- COMPILED RULES ----------- #
 
-$(DIR_BUILD)%.o: %.c Makefile | $(SUBDIRS)
+$(DIR_BUILD)%.o: %.c $(HEADERS) Makefile | $(SUBDIRS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 #---------- CREATE REPO OBJS ---------#
