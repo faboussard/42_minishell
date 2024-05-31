@@ -29,6 +29,7 @@ static void	minishell_interactive(t_minishell *m)
 	{
 		if (set_signals_interactive() == -1)
 			m->status = set_or_get_last_status(-1, -1);
+		free_safely_str(&m->user_input);
 		m->user_input = readline(PROMPT);
 		if (m->user_input == NULL)
 		{
