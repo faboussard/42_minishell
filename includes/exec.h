@@ -43,9 +43,9 @@ int		handle_in_out(t_minishell *m, t_process_list *pl, int *fd_in);
 bool	handle_out(t_minishell *m, t_process_list *out);
 //--------------------------- HEREDOC && HEREDOC UTILS-----------------//
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
-			t_process_list *pl);
-void	delete_here_doc_files(t_minishell *m);
-void	fill_heredoc_file_name(t_minishell *m, t_process_list *pl);
+			t_process_list **pl);
+void	delete_here_doc_files(t_process_list *pl);
+void	fill_heredoc_file_name(t_minishell *m, t_process_list **pl);
 void	perror_exit_heredoc(t_minishell *m, t_process_list *pl, char **input);
 //--------------------------- UTILS -----------------------------------//
 void	ft_init_pl(t_minishell *m, t_process_list *pl);
@@ -60,7 +60,7 @@ void	close_pipes_and_fds(t_minishell *m, t_process_list *pl);
 void	chose_exit(t_minishell *m, bool good_code, int exit_code);
 //--------------------------- ONE CMD IN OUT---------------------------//
 int		create_all_outfiles(t_minishell *m, t_process_list *pl);
-int		check_all_infiles(t_minishell *m, t_process_list *pl);
+int		check_all_infiles(t_minishell *m, t_process_list **pl);
 int		handle_infile_outfile(t_minishell *m, t_process_list *pl);
 //--------------------------- EXEC BOOL -------------------------------//
 bool	is_one_arg_builtin(t_minishell *m);

@@ -88,7 +88,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 }
 
 void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
-		t_process_list *pl)
+		t_process_list **pl)
 {
 	int	here_doc_pid;
 
@@ -96,8 +96,8 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 		return ;
 	fill_heredoc_file_name(m, pl);
 	close_fds(*fd_to_use, m->tmp_in);
-	close_fds(pl->fd_in, pl->fd_out);
-	*fd_to_use = open(pl->here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	close_fds((*pl)->fd_in, (*pl)->fd_out);
+	*fd_to_use = open((*pl)->here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (*fd_to_use < 0)
 	{
 		perror("No /tmp/ directory found");
@@ -106,7 +106,7 @@ void	here_doc(t_minishell *m, t_token_list *limiter, int *fd_to_use,
 	close(*fd_to_use);
 	here_doc_pid = m_safe_fork(m);
 	if (here_doc_pid == 0)
-		writing_in_heredoc(m, pl, limiter, fd_to_use);
+		writing_in_heredoc(m, *pl, limiter, fd_to_use);
 	else
 	{
 		if (waitpid(here_doc_pid, &(m->status), 0) == -1)
