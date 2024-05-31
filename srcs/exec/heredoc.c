@@ -35,18 +35,18 @@ static char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	return (input_after_expand);
 }
 
-static void	handle_expand(t_minishell *m, t_process_list *pl, char *input)
+static void handle_expand(t_minishell *m, char *input, int *fd_to_use)
 {
 	char	*input_after_expand;
 
 	input_after_expand = parse_input_for_heredoc(m, input);
 	if (input_after_expand != NULL)
 	{
-		ft_putstr_fd(input_after_expand, pl->fd_in);
+		ft_putstr_fd(input_after_expand, *fd_to_use);
 		free_safely_str(&(input_after_expand));
 	}
 	else
-		ft_putstr_fd(input, pl->fd_in);
+		ft_putstr_fd(input, *fd_to_use);
 }
 
 static void	close_and_clear_heredoc(t_minishell *m, t_process_list *pl,
@@ -81,7 +81,7 @@ static void	writing_in_heredoc(t_minishell *m, t_process_list *pl,
 		if (limiter->is_quoted_delimiter == 1)
 			ft_putstr_fd(input, *fd_to_use);
 		else
-			handle_expand(m, pl, input);
+			handle_expand(m, input, fd_to_use);
 		close(fd);
 		free_safely_str(&(input));
 	}
