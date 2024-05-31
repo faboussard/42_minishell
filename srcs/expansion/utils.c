@@ -26,11 +26,10 @@ char	*expand_sign(char *string, char *temp)
 	return (new_string);
 }
 
-void	treat_in_delimitor(t_token_list **iterator)
+void	erase_dollar_operator(t_token_list **iterator)
 {
 	if ((*iterator)->e_operator == DOLLAR)
 		(*iterator)->e_operator = 0;
-	(*iterator)->is_quoted_delimiter = true;
 	(*iterator) = (*iterator)->next;
 }
 
@@ -57,7 +56,7 @@ void	handle_delimitor(t_token_list **iterator)
 			}
 		}
 		if ((*iterator))
-			treat_in_delimitor(iterator);
+			erase_dollar_operator(iterator);
 	}
 }
 
