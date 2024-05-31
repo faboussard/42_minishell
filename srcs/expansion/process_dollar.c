@@ -29,27 +29,24 @@ void	process_dollar(t_minishell *m, t_token_list **list,
 	char	*exp_string;
 
 	exp_string = NULL;
+	if (squote_count % 2 != 0 && dquote_count % 2 == 0)
+		return ;
 	if (ft_strncmp((*list)->next->name, "?", 2) == 0)
 		change_to_status(m, *list);
+	else if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_'
+	&& dquote_count % 2 == 0)
+		(*list)->e_operator = 0;
 	else
 	{
-		if (squote_count % 2 != 0 && dquote_count % 2 == 0)
-			return ;
-		if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_'
-			&& dquote_count % 2 == 0)
-			(*list)->e_operator = 0;
-		else
+		define_to_delete_tokens(list);
+		exp_string = expand_sigil((*list)->next->name, m);
+		if (exp_string != (*list)->next->name)
 		{
-			define_to_delete_tokens(list);
-			exp_string = expand_sigil((*list)->next->name, m);
-			if (exp_string != (*list)->next->name)
-			{
-				process_expand(m, list, &exp_string);
-				return ;
-			}
-			else
-				define_to_delete_tokens(list);
+			process_expand(m, list, &exp_string);
+			return ;
 		}
+		else
+			define_to_delete_tokens(list);
 	}
 }
 
