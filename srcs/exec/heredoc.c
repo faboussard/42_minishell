@@ -35,7 +35,7 @@ static char	*parse_input_for_heredoc(t_minishell *m, char *original_input)
 	return (input_after_expand);
 }
 
-static void handle_expand(t_minishell *m, char *input, int *fd_to_use)
+static void	handle_expand(t_minishell *m, char *input, int *fd_to_use)
 {
 	char	*input_after_expand;
 
