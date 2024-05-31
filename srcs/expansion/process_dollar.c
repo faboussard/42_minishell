@@ -33,8 +33,9 @@ void	process_dollar(t_minishell *m, t_token_list **list,
 		return ;
 	if (ft_strncmp((*list)->next->name, "?", 2) == 0)
 		change_to_status(m, *list);
-	else if (!ft_isalnum((*list)->next->name[0]) && (*list)->next->name[0] != '_'
-	&& dquote_count % 2 == 0)
+	else if (!ft_isalnum((*list)->next->name[0])
+		&& (*list)->next->name[0] != '_'
+		&& dquote_count % 2 == 0)
 		(*list)->e_operator = 0;
 	else
 	{
