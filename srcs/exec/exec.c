@@ -17,7 +17,7 @@
 static void	exec_one_cmd(t_minishell *m, t_process_list *pl)
 {
 	ignore_signals();
-	if (check_all_infiles(m, pl) == 1 || create_all_outfiles(m, pl) == 1)
+	if (check_all_infiles(m, &pl) == 1 || create_all_outfiles(m, pl) == 1)
 	{
 		m->status = 1;
 		close_fds(pl->fd_in, pl->fd_out);
@@ -53,6 +53,6 @@ void	execute_cmds(t_minishell *m, size_t nb_cmds)
 	else
 		exec_several_cmds(m, m->pl);
 	ft_free_pl_paths(m, m->pl);
-	delete_here_doc_files(m);
+	delete_here_doc_files(m->pl);
 	m->status = set_or_get_last_status(m->status, 0);
 }
